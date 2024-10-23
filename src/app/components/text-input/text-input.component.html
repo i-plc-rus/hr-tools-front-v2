@@ -1,0 +1,9 @@
+<label class="block relative h-14">
+  @if (formControl) {
+    <input placeholder="s" [class]="class" [disabled]="!!disabled" [formControl]="formControl">
+  } @else {
+    <input placeholder="s" [class]="class" [disabled]="!!disabled">
+  }
+  <span class="fake-label">{{label}}</span>
+  <ng-content></ng-content>
+</label>

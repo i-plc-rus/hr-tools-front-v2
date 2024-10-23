@@ -1,0 +1,10 @@
+:host {
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+::ng-deep {
+  .active-link .icon-container {
+    background-color: var(--background-main);
+  }
+}

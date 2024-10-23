@@ -1,0 +1,19 @@
+input {
+  @apply px-4 leading-6 h-full w-full outline-0 border rounded border-[var(--outline)] duration-200;
+
+  &::placeholder {
+    @apply text-transparent
+  }
+}
+
+.fake-label {
+  @apply absolute bg-white top-4 left-4 leading-6 text-[var(--on-surface)] duration-200;
+}
+
+input:not(:placeholder-shown) {
+  @apply border-[3px] border-[var(--link-default)]
+}
+
+input:not(:placeholder-shown) + .fake-label, input:focus + .fake-label {
+  @apply -top-3 left-3 text-xs tracking-[0.4px] px-1 text-[var(--link-default)];
+}

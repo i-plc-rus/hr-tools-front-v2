@@ -1,0 +1,81 @@
+<app-layout>
+  <app-sidebar>
+    <div class="flex items-center justify-center w-14 h-14 bg-[--link-default] rounded-2xl cursor-pointer">
+      <mat-icon svgIcon="add"></mat-icon>
+    </div>
+    <div class="pt-6 flex flex-col items-center gap-y-4">
+      <a [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="request"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Заявки</span>
+      </a>
+      <a [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+            <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+              <mat-icon svgIcon="bag"></mat-icon>
+            </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Вакансии</span>
+      </a>
+      <a [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="people"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
+      </a>
+      <a [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="note"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Офферы</span>
+      </a>
+      <a [routerLink]="['/user', 'calendar']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="calendar"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Календарь</span>
+      </a>
+      <a [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="z-arrow"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Аналитика</span>
+      </a>
+    </div>
+    <div class="mt-16 flex flex-col items-center gap-y-4">
+      <a [routerLink]="['/user', 'add-candidate']" class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="add-person"></mat-icon>
+        </span>
+        <span class="text-center tracking-[0.5px] font-[500] text-xs">Добавить кандидата</span>
+      </a>
+      <span
+        matTooltip="Уведомления"
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+        <mat-icon svgIcon="notifications"></mat-icon>
+      </span>
+      <span
+        matTooltip="Настройки"
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+        <mat-icon svgIcon="settings"></mat-icon>
+      </span>
+      <span
+        matTooltip="Профиль"
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+        <mat-icon svgIcon="profile"></mat-icon>
+      </span>
+      <span
+        matTooltip="Помощь"
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+        <mat-icon svgIcon="support"></mat-icon>
+      </span>
+    </div>
+  </app-sidebar>
+  <router-outlet></router-outlet>
+</app-layout>
+

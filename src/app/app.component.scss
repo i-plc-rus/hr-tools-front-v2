@@ -1,0 +1,9 @@
+::ng-deep {
+  router-outlet {
+    display: none;
+  }
+
+  * {
+    @apply box-border;
+  }
+}

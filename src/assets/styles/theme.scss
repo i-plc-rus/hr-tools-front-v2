@@ -1,0 +1,16 @@
+// Файл с CSS переменными, на будущее если будет планироваться внедрение тем
+// просто переопределять переменные в зависимости от темы
+:root {
+  --text-main: #111826;
+  --text-alter: #625B71;
+  --link-default: #5368A6;
+  --link-hover: #5B74BF;
+  --link-active: #475A93;
+  --link-disabled: #D9D9D9;
+  --background-main: #F0F4F9;
+  --background-alter: #F8FBFF;
+  --overlay: rgba(237, 240, 245, 0.6);
+  --error: #B3261E;
+  --on-surface: #49454F;
+  --outline: #79747E;
+}

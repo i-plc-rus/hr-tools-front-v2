@@ -1,0 +1,7 @@
+@import "../../../assets/styles/functions";
+
+:host {
+  display: grid;
+  grid-template-columns: toRem(80) 1fr;
+  background-color: var(--background-main);
+}

@@ -1,0 +1,6 @@
+$base-font-value: 16;
+
+@function toRem($px) {
+  $remValue: $px / $base-font-value + rem;
+  @return $remValue;
+}

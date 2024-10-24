@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {CdkPortalOutlet} from '@angular/cdk/portal';
-import {MobileMenuService} from './services/mobile-menu.service';
 import {CdkConnectedOverlay} from '@angular/cdk/overlay';
+import {ScreenWidthService} from './services/screen-width.service';
 
 @Component({
   selector: 'app-root',
@@ -17,14 +17,19 @@ import {CdkConnectedOverlay} from '@angular/cdk/overlay';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'hr-platform';
   private svgPath: string = 'assets/icons';
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.screenWidth.isMobile = window.innerWidth < 768;
+  }
 
   constructor(
     private domSanitizer: DomSanitizer,
     private matIconRegistry: MatIconRegistry,
-    public menuService: MobileMenuService
+    private screenWidth: ScreenWidthService,
   ) {
     this.matIconRegistry
       .addSvgIcon('add', this.setPath(`${this.svgPath}/ic-add.svg`))
@@ -41,6 +46,11 @@ export class AppComponent {
       .addSvgIcon('z-arrow', this.setPath(`${this.svgPath}/ic-z-arrow.svg`))
       .addSvgIcon('hr', this.setPath(`${this.svgPath}/ic-hr.svg`))
       .addSvgIcon('error', this.setPath(`${this.svgPath}/ic-error.svg`))
+      .addSvgIcon('cross-circle', this.setPath(`${this.svgPath}/ic-cross-circle.svg`))
+  }
+
+  ngOnInit() {
+    this.screenWidth.isMobile = window.innerWidth < 768;
   }
 
   private setPath(url: string): SafeResourceUrl {

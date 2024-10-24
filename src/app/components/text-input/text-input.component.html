@@ -1,9 +1,25 @@
-<label class="block relative h-14">
+<label class="block relative h-14" [class.skip-effects]="!!skipEffects">
   @if (formControl) {
-    <input placeholder="s" [class]="class" [disabled]="!!disabled" [formControl]="formControl">
+    <input
+      placeholder="s"
+      (change)="change($event)"
+      [class]="class + ' h-14'"
+      [disabled]="!!disabled"
+      [class.input-error]="!formControl.valid && !formControl.untouched"
+      [formControl]="formControl">
+    <span
+      class="fake-label"
+      [ngClass]="{
+        '!text-[var(--error)]' : !formControl.valid && !formControl.untouched && !skipEffects,
+        'fake-label-with-icon': !formControl.valid && !formControl.untouched || clear && formControl.value
+      }"
+    >{{ label }}</span>
   } @else {
-    <input placeholder="s" [class]="class" [disabled]="!!disabled">
+    <input
+      placeholder="s"
+      (change)="change($event)"
+      [class]="class" [disabled]="!!disabled">
+    <span class="fake-label">{{ label }}</span>
   }
-  <span class="fake-label">{{label}}</span>
   <ng-content></ng-content>
 </label>

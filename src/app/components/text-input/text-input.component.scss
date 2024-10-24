@@ -7,13 +7,31 @@ input {
 }
 
 .fake-label {
-  @apply absolute bg-white top-4 left-4 leading-6 text-[var(--on-surface)] duration-200;
+  @apply absolute max-w-[calc(100%_-_2rem)] bg-white top-4 left-4 leading-6 text-[var(--on-surface)] duration-200 truncate;
+
+  &-with-icon {
+    @apply max-w-[calc(100%_-_3.5rem)];
+  }
 }
 
-input:not(:placeholder-shown) {
-  @apply border-[3px] border-[var(--link-default)]
+input:not(:placeholder-shown), input:focus {
+  @apply border-[3px] border-[var(--link-default)];
 }
 
 input:not(:placeholder-shown) + .fake-label, input:focus + .fake-label {
-  @apply -top-3 left-3 text-xs tracking-[0.4px] px-1 text-[var(--link-default)];
+  @apply -top-2 left-3 text-xs tracking-[0.4px] px-1 text-[var(--link-default)];
+}
+
+input.input-error {
+  @apply border-[1px] border-[var(--error)];
+}
+
+.skip-effects {
+  & input:not(:placeholder-shown) + .fake-label, input:focus + .fake-label {
+    @apply text-[var(--on-surface)];
+  }
+
+  & input:not(:placeholder-shown), input:focus, input.input-error {
+    @apply border-[1px] border-[var(--outline)];
+  }
 }

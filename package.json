@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "generate-api": "node generate-api.js"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +21,10 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@archeion/swagger-angular-api": "^1.0.0-alpha.0",
+    "ngx-device-detector": "^8.0.0",
     "rxjs": "~7.8.0",
+    "swagger-typescript-api": "^13.0.22",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },

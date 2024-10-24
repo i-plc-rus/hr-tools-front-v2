@@ -1,0 +1,58 @@
+<mat-icon class="!w-[54px] !h-16 md:absolute md:top-40" svgIcon="hr"></mat-icon>
+<div
+  class="bg-[white] mt-10 md:mt-0 flex justify-center items-stretch flex-col min-w-full md:min-w-[688px] md:py-16 md:rounded-[28px]">
+  <p class="text-[2rem] leading-10 lg:text-[45px] lg:leading-[52px] text-center m-0 p-0"
+  >{{orgs ? 'Результаты поиска' :'Регистрация'}}</p>
+  <div class="flex justify-start items-center flex-col mt-8 md:mt-6">
+    <div class="flex items-center flex-col w-full box-border">
+      <app-text-input
+        dropdown
+        [dropdownBackdrop]="true"
+        [showOnClick]="orgs && !!orgs.length"
+        [showDropdown]="orgs && !!orgs.length"
+        [offsetY]="screen.isMobile ? 16 : 6"
+        [dropdownContentRef]="results"
+        label="Введите ИНН, ОГРН или название организации"
+        class="tracking-[0.25px] w-full md:w-[400px]"
+        [formControl]="idInput"
+        [skipEffects]="true"
+      >
+        <div class="absolute right-0 top-1">
+          @if (idInput.value) {
+            <span (click)="idInput.reset()" class="w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="cross-circle"></mat-icon>
+              </span>
+          }
+        </div>
+      </app-text-input>
+      <ng-template #results>
+        @if (orgs && orgs.length) {
+          <div class="pr-2 py-6 pl-4 shadow-custom bg-white h-72 w-[calc(100vw_-_32px)] md:w-[400px]">
+            <div class="scroll-container overflow-y-scroll h-full">
+              @for (org of orgs; track $index) {
+                <div [class.mt-3]="$index > 0">
+                  <p (click)="chooseOrganization(org)" class="cursor-pointer tracking-[0.5px]  leading-6 duration-200 hover:text-[var(--link-default)]">{{org?.fullName}}</p>
+                  <p class="text-[var(--text-alter)] mt-0.5 tracking-[0.25px] leading-6 text-sm">
+                    <span>ИНН: {{org?.INN}}</span>
+                    <br>
+                    <span>ОГРН: {{org?.OGRN}}</span>
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </ng-template>
+      <button
+        class="mt-4"
+        mat-flat-button
+        [disabled]="idInput.invalid"
+        (click)="searchOrganization()"
+      >Найти
+      </button>
+      <p class="mt-10 md:mt-12 tracking-[0.5px] leading-6">Не нашли организацию?</p>
+      <a [routerLink]="['/auth', 'org-creation']" class="text-[var(--link-default)] px-3 py-2 tracking-[0.5px] leading-6 mt-1">Заполните данные вручную</a>
+    </div>
+  </div>
+</div>
+

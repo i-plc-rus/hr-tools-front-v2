@@ -5,6 +5,9 @@
 @import "assets/styles/vars";
 @import "assets/styles/theme";
 @import "assets/styles/normalize";
+// AG Data Grid CSS
+@import 'ag-grid-community/styles/ag-grid.css';
+@import "ag-grid-community/styles/ag-theme-material.css";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.

@@ -141,6 +141,10 @@ export enum ModelsApprovalStatus {
 
 export enum ModelsUserRole {
   UserRoleSuperAdmin = "SUPER_ADMIN",
+  UserRoleAdmin = "ADMIN",
+  UserRoleManager = "MANAGER",
+  UserRolrHrDirector = "HR_DIRECTOR",
+  UserRoleUser = "USER",
 }
 
 export enum ModelsVRSelectionType {

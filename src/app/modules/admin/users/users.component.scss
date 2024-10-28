@@ -1,0 +1,41 @@
+:host {
+  @apply py-8 px-4;
+  --status-color-success-text: #00701F;
+  --status-color-success-bg: #00c43714;
+
+  --status-color-danger-text: #700000;
+  --status-color-danger-bg: #c4000014;
+}
+
+.search-rounded-input {
+  @apply block relative p-3 px-4 h-14 rounded-full bg-white;
+
+  input {
+    @apply pr-10 leading-6 h-full w-full outline-0;
+  
+    &::placeholder {
+      @apply text-[var(--on-surface)];
+    }
+  }
+
+  button {
+    @apply absolute right-1 top-1 p-2 w-12 h-12 flex justify-center items-center;
+  }
+}
+
+.mat-icon {
+  @apply w-5 h-5
+}
+
+.ag-theme-material {
+  --ag-font-size: 14px;
+  --ag-row-height: 56px;
+  --ag-row-border-color: transparent;
+  --ag-range-selection-border-color: transparent;
+  --ag-row-hover-color: var(--background-alter);
+  --ag-column-hover-color: var(--background-alter);
+
+  --ag-header-cell-hover-background-color: var(--background-alter);
+  --ag-header-foreground-color: var(--text-alter);
+  --ag-foreground-color: var(--text-main);
+}

@@ -1,10 +1,106 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AdminModalService} from '../../../services/admin-modal.service';
+import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams} from 'ag-grid-community';
+import {TableButtonComponent} from './table-button/table-button.component';
+import {TableSpinnerComponent} from './table-spinner/table-spinner.component';
+import {User} from '../models/User';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
+  private gridApi!: GridApi<User>;
+  searchValue: string = '';
+
+  usersList: User[] = [];
+  colDefs: ColDef<User>[] = [
+    {
+      field: 'fullName',
+      headerName: 'Имя',
+      headerClass: 'font-medium',
+      flex: 2
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      headerClass: 'font-medium',
+      flex: 1
+    },
+    {
+      field: 'roleName',
+      headerName: 'Роль',
+      headerClass: 'font-medium',
+      flex: 1
+    },
+    {
+      field: 'is_active',
+      headerName: 'Статус',
+      headerClass: 'font-medium',
+      flex: 1,
+      cellRenderer: (params: ICellRendererParams<User>) => {
+        if (params.value === true) {
+          return `<span class="bg-[var(--status-color-success-bg)] text-[var(--status-color-success-text)] text-[12px] leading-4 px-2 py-1 rounded-lg">Работает</span>`;
+        } else {
+          return `<span class="bg-[var(--status-color-danger-bg)] text-[var(--status-color-danger-text)] text-[12px] leading-4 px-2 py-1 rounded-lg">Уволен</span>`;
+        }
+      }
+    },
+    {
+      headerName: '',
+      cellClass: 'flex justify-center items-center',
+      width: 150,
+      sortable: false,
+      cellRenderer: TableButtonComponent,
+      cellRendererParams: {
+        onEdit: this.openEditUserModal.bind(this),
+        onDelete: this.openDeleteUserModal.bind(this),
+      }
+    }
+  ];
+  gridOptions: GridOptions = {
+    onGridReady: this.onGridReady.bind(this),
+    columnDefs: this.colDefs,
+    rowData: this.usersList,
+    overlayNoRowsTemplate: 'Нет записей',
+    loadingOverlayComponent: TableSpinnerComponent,
+    loading: true,
+  }
+
+  constructor(private modalService: AdminModalService) { }
+
+  ngOnInit() {
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.getUsers();
+  }
+
+  getUsers() {
+    this.gridApi.setGridOption("loading", true);
+    this.modalService.getUsers().subscribe((res) => {
+      this.usersList = res;
+      this.gridApi.setGridOption("rowData", this.usersList);
+      this.gridApi.setGridOption("loading", false);
+    });
+  }
+
+  openAddUserModal() {
+    console.log('openAddUserModal');
+  }
+
+  openEditUserModal(user: User) {
+    console.log('openEditUserModal', user);
+  }
+
+  openDeleteUserModal(user: User) {
+    console.log('openDeleteUserModal', user);
+  }
+
+  onSearch() {
+    this.gridApi.setGridOption("quickFilterText", this.searchValue);
+  }
 
 }

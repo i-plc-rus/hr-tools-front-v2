@@ -88,15 +88,24 @@ export class UsersComponent implements OnInit {
   }
 
   openAddUserModal() {
-    console.log('openAddUserModal');
+    this.modalService.addUserModal().subscribe(() => {
+      console.log('user added');
+      this.getUsers();
+    });
   }
 
   openEditUserModal(user: User) {
-    console.log('openEditUserModal', user);
+    this.modalService.editUserModal(user).subscribe(() => {
+      console.log('user edited');
+      this.getUsers();
+    });
   }
 
   openDeleteUserModal(user: User) {
-    console.log('openDeleteUserModal', user);
+    this.modalService.deleteUserModal(user).subscribe(() => {
+      console.log('user deleted');
+      this.getUsers();
+    });
   }
 
   onSearch() {

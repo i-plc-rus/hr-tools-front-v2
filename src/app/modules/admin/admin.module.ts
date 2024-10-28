@@ -6,6 +6,8 @@ import {RouterModule} from '@angular/router';
 import {routes} from './admin.routes';
 import {LayoutComponent} from '../../components/layout/layout.component';
 import {SidebarComponent} from '../../components/sidebar/sidebar.component';
+import {AddUserModalComponent} from './users/add-user-modal/add-user-modal.component';
+import {DeleteUserModalComponent} from './users/delete-user-modal/delete-user-modal.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AgGridAngular} from 'ag-grid-angular';
 import {TableButtonComponent} from './users/table-button/table-button.component';
@@ -13,6 +15,10 @@ import {TableSpinnerComponent} from './users/table-spinner/table-spinner.compone
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
@@ -20,7 +26,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AdminComponent,
     UsersComponent,
     TableButtonComponent,
-    TableSpinnerComponent
+    TableSpinnerComponent,
+    AddUserModalComponent,
+    DeleteUserModalComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +43,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
-]
+    MatTooltip,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+  ]
 })
 export class AdminModule {
 }

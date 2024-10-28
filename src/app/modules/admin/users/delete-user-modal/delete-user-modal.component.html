@@ -1,0 +1,16 @@
+<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] max-h-[348px] lg:max-w-[748px]">
+  <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Удаление сотрудника</h2>
+    <p class="text-[16px] text-center leading-[24px] mt-3">Вы действительно хотите удалить сотрудника?</p>
+    <p class="text-[16px] text-center leading-[24px] mt-3">{{ user?.fullName }}</p>
+
+    <div class="flex justify-center mt-6">
+      <div
+        class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
+        <button mat-flat-button class="btn-danger" [disabled]="isLoading" (click)="deleteUser()">Удалить</button>
+        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отменить</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -47,6 +47,10 @@ export class AppComponent implements OnInit {
       .addSvgIcon('hr', this.setPath(`${this.svgPath}/ic-hr.svg`))
       .addSvgIcon('error', this.setPath(`${this.svgPath}/ic-error.svg`))
       .addSvgIcon('cross-circle', this.setPath(`${this.svgPath}/ic-cross-circle.svg`))
+      .addSvgIcon('employees', this.setPath(`${this.svgPath}/ic-employees.svg`))
+      .addSvgIcon('search', this.setPath(`${this.svgPath}/ic-search.svg`))
+      .addSvgIcon('edit', this.setPath(`${this.svgPath}/ic-edit.svg`))
+      .addSvgIcon('delete', this.setPath(`${this.svgPath}/ic-delete.svg`))
   }
 
   ngOnInit() {

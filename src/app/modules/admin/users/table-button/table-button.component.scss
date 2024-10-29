@@ -1,0 +1,11 @@
+:host {
+  @apply gap-10 items-center leading-5 row-actions;
+}
+
+.row-actions {
+  @apply hidden;
+}
+
+.ag-row-hover .row-actions {
+  @apply flex;
+}

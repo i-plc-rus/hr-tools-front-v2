@@ -5,6 +5,9 @@
 @import "assets/styles/vars";
 @import "assets/styles/theme";
 @import "assets/styles/normalize";
+// AG Data Grid CSS
+@import 'ag-grid-community/styles/ag-grid.css';
+@import "ag-grid-community/styles/ag-theme-material.css";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -44,3 +47,26 @@ $hr-platform-theme: mat.define-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+button.btn-primary {
+  --mdc-filled-button-label-text-color: var(--background-alter);
+  --mdc-filled-button-container-color: var(--link-default);
+}
+
+button.btn-secondary {
+  --mdc-filled-button-label-text-color: var(--link-default);
+  --mdc-filled-button-container-color: var(--background-main);
+  --mat-filled-button-state-layer-color: var(--link-hover);
+}
+
+button.btn-danger {
+  --mdc-filled-button-label-text-color: var(--background-alter);
+  --mdc-filled-button-container-color: #E23329;
+  --mat-filled-button-state-layer-color: var(--link-hover);
+}
+
+//fix: Material input floating label outline bug
+//more info: https://github.com/angular/components/issues/26102
+.mdc-notched-outline__notch {
+  border-right: none; 
+}

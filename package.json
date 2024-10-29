@@ -23,6 +23,7 @@
     "@angular/router": "^18.2.0",
     "@archeion/swagger-angular-api": "^1.0.0-alpha.0",
     "ngx-device-detector": "^8.0.0",
+    "ag-grid-angular": "^32.3.0",
     "rxjs": "~7.8.0",
     "swagger-typescript-api": "^13.0.22",
     "tslib": "^2.3.0",

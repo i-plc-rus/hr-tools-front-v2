@@ -1,2 +1,17 @@
-<p>admin works!</p>
-<router-outlet></router-outlet>
+<app-layout>
+  <app-sidebar>
+    <div class="flex items-center justify-center w-14 h-14 bg-[--link-default] rounded-2xl cursor-pointer">
+      <mat-icon svgIcon="add"></mat-icon>
+    </div>
+    <div class="pt-6 flex flex-col items-center gap-y-4">
+      <a [routerLink]="['/admin', 'users']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="employees"></mat-icon>
+        </span>
+        <span class="tracking-[0.5px] font-[500] text-xs">Сотрудники</span>
+      </a>
+    </div>
+  </app-sidebar>
+  <router-outlet></router-outlet>
+</app-layout>

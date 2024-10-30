@@ -1,0 +1,4 @@
+.notification-bubble {
+  @apply flex justify-center items-center rounded-full bg-[var(--notification-color-bg)] h-5 p-1;
+  @apply text-[11px] leading-4 text-[var(--notification-color-text)] text-center;
+}

@@ -52,6 +52,10 @@ export class AppComponent implements OnInit {
       .addSvgIcon('search', this.setPath(`${this.svgPath}/ic-search.svg`))
       .addSvgIcon('edit', this.setPath(`${this.svgPath}/ic-edit.svg`))
       .addSvgIcon('delete', this.setPath(`${this.svgPath}/ic-delete.svg`))
+      .addSvgIcon('account-box', this.setPath(`${this.svgPath}/ic-account-box.svg`))
+      .addSvgIcon('add-bag', this.setPath(`${this.svgPath}/ic-add-bag.svg`))
+      .addSvgIcon('extension', this.setPath(`${this.svgPath}/ic-extension.svg`))
+      .addSvgIcon('logout', this.setPath(`${this.svgPath}/ic-logout.svg`))
   }
 
   ngOnInit() {

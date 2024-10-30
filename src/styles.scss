@@ -48,6 +48,14 @@ $hr-platform-theme: mat.define-theme((
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+//fix: Material input floating label outline bug
+//more info: https://github.com/angular/components/issues/26102
+.mdc-notched-outline__notch {
+  border-right: none; 
+}
+
+//material filled button styles
+
 button.btn-primary {
   --mdc-filled-button-label-text-color: var(--background-alter);
   --mdc-filled-button-container-color: var(--link-default);
@@ -61,12 +69,18 @@ button.btn-secondary {
 
 button.btn-danger {
   --mdc-filled-button-label-text-color: var(--background-alter);
-  --mdc-filled-button-container-color: #E23329;
+  --mdc-filled-button-container-color: var(--error-alter);
   --mat-filled-button-state-layer-color: var(--link-hover);
 }
 
-//fix: Material input floating label outline bug
-//more info: https://github.com/angular/components/issues/26102
-.mdc-notched-outline__notch {
-  border-right: none; 
+//material-menu
+
+:root {
+  --mat-menu-container-shape: 12px;
+  --mat-menu-container-color: white;
+  --mat-menu-item-label-text-color: var(--text-main);
+  --mat-menu-item-icon-color: var(--text-main);
+
+  --mat-menu-item-focus-state-layer-color: var(--background-main);
+  --mat-menu-item-hover-state-layer-color: var(--background-main);
 }

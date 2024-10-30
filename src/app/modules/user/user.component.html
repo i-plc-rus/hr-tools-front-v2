@@ -1,46 +1,70 @@
 <app-layout>
   <app-sidebar>
-    <div class="flex items-center justify-center w-14 h-14 bg-[var(--link-default)] rounded-2xl cursor-pointer">
+    <div (click)="addMenuTrigger.openMenu()"
+      class="flex items-center justify-center w-14 h-14 bg-[var(--link-default)] rounded-2xl cursor-pointer sidebtn-with-menu">
       <mat-icon svgIcon="add"></mat-icon>
+      <div #addMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="addMenu"></div>
     </div>
+    <mat-menu #addMenu="matMenu" xPosition="after">
+      <button mat-menu-item [matMenuTriggerFor]="createRequestMenu">
+        <mat-icon svgIcon="request"></mat-icon>
+        Создать заявку
+      </button>
+      <button mat-menu-item>
+        <mat-icon svgIcon="add-bag"></mat-icon>
+        Создать вакансию
+      </button>
+      <button mat-menu-item [routerLink]="['/user', 'add-candidate']">
+        <mat-icon svgIcon="add-person"></mat-icon>
+        Создать кандидата
+      </button>
+    </mat-menu>
+    <mat-menu #createRequestMenu="matMenu">
+      <button mat-menu-item>
+        Массовая
+      </button>
+      <button mat-menu-item>
+        Профессиональная
+      </button>
+    </mat-menu>
     <div class="pt-6 flex flex-col items-center gap-y-4">
       <a [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="request"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Заявки</span>
       </a>
       <a [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
-            <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-              <mat-icon svgIcon="bag"></mat-icon>
-            </span>
+        class="flex flex-col items-center justify-center">
+        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+          <mat-icon svgIcon="bag"></mat-icon>
+        </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Вакансии</span>
       </a>
       <a [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="people"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
       </a>
       <a [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="note"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Офферы</span>
       </a>
       <a [routerLink]="['/user', 'calendar']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="calendar"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Календарь</span>
       </a>
       <a [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="z-arrow"></mat-icon>
         </span>
@@ -48,27 +72,38 @@
       </a>
     </div>
     <div class="mt-16 flex flex-col items-center gap-y-4">
-      <a [routerLink]="['/user', 'add-candidate']" class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="add-person"></mat-icon>
-        </span>
-        <span class="text-center tracking-[0.5px] font-[500] text-xs">Добавить кандидата</span>
-      </a>
-      <span
-        matTooltip="Уведомления"
-        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
-        <mat-icon svgIcon="notifications"></mat-icon>
-      </span>
       <span
         matTooltip="Настройки"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
         <mat-icon svgIcon="settings"></mat-icon>
       </span>
-      <span
+      <span (click)="profileMenuTrigger.openMenu()"
         matTooltip="Профиль"
-        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer sidebtn-with-menu">
         <mat-icon svgIcon="profile"></mat-icon>
+      <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
       </span>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon svgIcon="account-box"></mat-icon>
+          Личный кабинет
+        </button>
+        <button mat-menu-item>
+          <mat-icon svgIcon="extension"></mat-icon>
+          Расширение
+        </button>
+        <button mat-menu-item>
+          <mat-icon svgIcon="notifications"></mat-icon>
+          <div class="flex justify-between items-center gap-9">
+            <span>Уведомления</span>
+            <app-notification-bubble [value]="1"></app-notification-bubble>
+          </div>
+        </button>
+        <button mat-menu-item>
+          <mat-icon class="!text-[var(--status-color-danger-text)]" svgIcon="logout"></mat-icon>
+          <span class="text-[var(--status-color-danger-text)]">Выйти</span>
+        </button>
+      </mat-menu>
       <span
         matTooltip="Помощь"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
@@ -78,4 +113,3 @@
   </app-sidebar>
   <router-outlet></router-outlet>
 </app-layout>
-

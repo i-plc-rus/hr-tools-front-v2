@@ -1,5 +1,5 @@
 input {
-  @apply px-4 leading-6 h-full w-full outline-0 border rounded border-[var(--outline)] duration-200;
+  @apply px-4 leading-6 h-full w-full outline-0 border rounded border-[var(--outline)] duration-75;
 
   &::placeholder {
     @apply text-transparent
@@ -7,7 +7,7 @@ input {
 }
 
 .fake-label {
-  @apply absolute max-w-[calc(100%_-_2rem)] bg-white top-4 left-4 leading-6 text-[var(--on-surface)] duration-200 truncate;
+  @apply absolute max-w-[calc(100%_-_2rem)] bg-white top-4 left-4 leading-6 text-[var(--on-surface)] duration-75 truncate;
 
   &-with-icon {
     @apply max-w-[calc(100%_-_3.5rem)];

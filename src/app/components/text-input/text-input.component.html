@@ -1,25 +1,48 @@
 <label class="block relative h-14" [class.skip-effects]="!!skipEffects">
-  @if (formControl) {
+  @if (mask && prefix) {
     <input
       placeholder="s"
-      (change)="change($event)"
+      [mask]="mask"
+      [prefix]="prefix"
+      [type]="type"
+      (blur)="onTouched($event)"
+      (input)="changeInputValue($event)"
+      (change)="changeInputValue($event)"
+      [value]="value"
       [class]="class + ' h-14'"
       [disabled]="!!disabled"
-      [class.input-error]="!formControl.valid && !formControl.untouched"
-      [formControl]="formControl">
-    <span
-      class="fake-label"
-      [ngClass]="{
-        '!text-[var(--error)]' : !formControl.valid && !formControl.untouched && !skipEffects,
-        'fake-label-with-icon': !formControl.valid && !formControl.untouched || clear && formControl.value
-      }"
-    >{{ label }}</span>
+      [class.input-error]="showError">
+  } @else if (mask && !prefix) {
+    <input
+      placeholder="s"
+      [mask]="mask"
+      [type]="type"
+      (blur)="onTouched($event)"
+      (input)="changeInputValue($event)"
+      (change)="changeInputValue($event)"
+      [value]="value"
+      [class]="class + ' h-14'"
+      [disabled]="!!disabled"
+      [class.input-error]="showError">
   } @else {
     <input
       placeholder="s"
-      (change)="change($event)"
-      [class]="class" [disabled]="!!disabled">
-    <span class="fake-label">{{ label }}</span>
+      [type]="type"
+      (blur)="onTouched($event)"
+      (input)="changeInputValue($event)"
+      (change)="changeInputValue($event)"
+      [value]="value"
+      [class]="class + ' h-14'"
+      [disabled]="!!disabled"
+      [class.input-error]="showError">
   }
+
+    <span
+      class="fake-label"
+      [ngClass]="{
+        '!text-[var(--error)]' : showError && !skipEffects,
+        'fake-label-with-icon': showError || clear && value
+      }"
+    >{{ label }}</span>
   <ng-content></ng-content>
 </label>

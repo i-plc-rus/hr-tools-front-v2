@@ -1,16 +1,16 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
-import {AddUserModalComponent} from '../modules/admin/users/add-user-modal/add-user-modal.component';
-import {DeleteUserModalComponent} from '../modules/admin/users/delete-user-modal/delete-user-modal.component';
+import {AddUserModalComponent} from '../modules/user/users-list/add-user-modal/add-user-modal.component';
+import {DeleteUserModalComponent} from '../modules/user/users-list/delete-user-modal/delete-user-modal.component';
 import {Observable} from 'rxjs';
 import {ModelsUserRole} from '../api/data-contracts';
-import {User} from '../modules/admin/models/User';
+import {User} from '../models/User';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminModalService {
+export class UsersModalService {
   overlayRef?: OverlayRef;
   portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent>;
 

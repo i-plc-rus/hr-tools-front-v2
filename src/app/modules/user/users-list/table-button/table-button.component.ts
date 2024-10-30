@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 import {ICellRendererParams} from 'ag-grid-community';
-import {User} from '../../models/User';
+import {User} from '../../../../models/User';
+
 
 type Params = ICellRendererParams<User> & {
   onEdit: (user: User) => void;

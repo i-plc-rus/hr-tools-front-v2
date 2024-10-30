@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {UserComponent} from './user.component';
+import {UsersListComponent} from './users-list/users-list.component';
 import {VacancyListComponent} from './vacancy-list/vacancy-list.component';
 import {RequestListComponent} from './request-list/request-list.component';
 import {RequestCreationComponent} from './request-creation/request-creation.component';
@@ -12,6 +13,10 @@ export const routes: Routes = [
     path: '',
     component: UserComponent,
     children: [
+      {
+        path: 'employees',
+        component: UsersListComponent,
+      },
       {
         path: 'vacancy',
         component: VacancyListComponent,

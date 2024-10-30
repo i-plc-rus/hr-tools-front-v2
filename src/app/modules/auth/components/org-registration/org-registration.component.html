@@ -1,0 +1,93 @@
+<div
+  class="bg-[white] mt-10 md:mt-0 flex justify-center flex-col w-full md:w-[748px] p-4 md:p-16 md:rounded-[28px]">
+  <p class="text-[2rem] leading-10 lg:text-[45px] lg:leading-[52px] text-center m-0 p-0"
+  >Создание вашей организации</p>
+  @if (form) {
+    <div [formGroup]="form" class="flex justify-start items-center flex-col gap-4 mt-8 md:mt-6">
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="full_name"
+        label="Полное наименование">
+        @if (form.get('full_name')?.hasError('required') && !form.get('full_name')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="organization_name"
+        label="Краткое наименование">
+        @if (form.get('organization_name')?.hasError('required') && !form.get('organization_name')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="inn"
+        label="ИНН">
+        @if (form.get('inn')?.hasError('required') && !form.get('inn')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="kpp"
+        label="КПП">
+        @if (form.get('kpp')?.hasError('required') && !form.get('kpp')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="ogrn"
+        label="ОГРН">
+        @if (form.get('ogrn')?.hasError('required') && !form.get('ogrn')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="organization_address"
+        label="Адрес">
+        @if (form.get('organization_address')?.hasError('required') && !form.get('organization_address')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        [skipEffects]="true"
+        class="w-full md:w-[400px]"
+        formControlName="director_name"
+        label="ФИО руководителя">
+        @if (form.get('director_name')?.hasError('required') && !form.get('director_name')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <button
+        class="mt-4"
+        mat-flat-button
+        [disabled]="form.invalid"
+        (click)="toOrgRegistration()"
+      >Создать организацию
+      </button>
+    </div>
+  }
+</div>

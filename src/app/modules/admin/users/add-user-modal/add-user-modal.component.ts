@@ -15,9 +15,9 @@ export class AddUserModalComponent implements OnInit {
 
   roles: {name: string, value: ModelsUserRole}[] = [
     {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
-    {name: 'Администратор', value: ModelsUserRole.UserRoleAdmin},
-    {name: 'Менеджер', value: ModelsUserRole.UserRoleManager},
-    {name: 'Пользователь', value: ModelsUserRole.UserRoleUser},
+    {name: 'Администратор', value: ModelsUserRole.UserRoleSuperAdmin},
+    {name: 'Менеджер', value: ModelsUserRole.UserRoleSuperAdmin},
+    {name: 'Пользователь', value: ModelsUserRole.UserRoleSuperAdmin},
   ];
   isEdit = false;
   isLoading = false;

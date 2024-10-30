@@ -1,0 +1,77 @@
+<div
+  class="bg-[white] mt-10 md:mt-0 flex justify-center flex-col w-full md:w-[748px] p-4 md:p-16 md:rounded-[28px]">
+  <p class="text-[2rem] leading-10 lg:text-[45px] lg:leading-[52px] text-center m-0 p-0"
+  >Создание аккаунта администратора</p>
+  @if (form) {
+    <div [formGroup]="form" class="flex justify-start items-center flex-col gap-4 mt-8 md:mt-6">
+      <app-text-input
+        [skipEffects]="true"
+        [disabled]="true"
+        class="w-full md:w-[400px] opacity-60"
+        formControlName="email"
+        label="Email">
+      </app-text-input>
+      <app-text-input
+        type="password"
+        class="w-full md:w-[400px]"
+        formControlName="password"
+        label="Пароль">
+        @if (form.get('password')?.invalid && !form.get('password')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        type="password"
+        class="w-full md:w-[400px]"
+        formControlName="password_confirm"
+        label="Подтверждение пароля">
+        @if (form.get('password_confirm')?.invalid && !form.get('password_confirm')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        class="w-full md:w-[400px]"
+        formControlName="first_name"
+        label="Имя">
+        @if (form.get('first_name')?.invalid && !form.get('first_name')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        class="w-full md:w-[400px]"
+        formControlName="last_name"
+        label="Фамилия">
+        @if (form.get('last_name')?.invalid && !form.get('last_name')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <app-text-input
+        mask="(000) 000 00 00"
+        prefix="+7"
+        class="w-full md:w-[400px]"
+        formControlName="phone_number"
+        label="Телефон">
+        @if (form.get('phone_number')?.invalid && !form.get('phone_number')?.untouched) {
+          <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                <mat-icon svgIcon="error"></mat-icon>
+              </span>
+        }
+      </app-text-input>
+      <button
+        class="mt-4"
+        mat-flat-button
+        [disabled]="form.invalid"
+        (click)="createOrgData()"
+      >Создать аккаунт
+      </button>
+    </div>
+  }
+</div>

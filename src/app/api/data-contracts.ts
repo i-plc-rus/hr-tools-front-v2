@@ -133,6 +133,16 @@ export interface DictapimodelsJobTitleData {
   name?: string;
 }
 
+export interface GptmodelsGenVacancyDescRequest {
+  /** Текст, на основе которого необходимо сгенерировать описание */
+  text?: string;
+}
+
+export interface GptmodelsGenVacancyDescResponse {
+  /** сгенерированное описание вакансии */
+  description?: string;
+}
+
 export enum ModelsApprovalStatus {
   AStatusApproved = "Согласованно",
   AStatusRejected = "Не согласованно",
@@ -186,7 +196,6 @@ export interface SpaceapimodelsCreateOrganization {
   kpp?: string;
   ogrn?: string;
   organization_name?: string;
-  organization_type?: string;
 }
 
 export interface SpaceapimodelsCreateUser {
@@ -199,6 +208,19 @@ export interface SpaceapimodelsCreateUser {
   space_id?: string;
 }
 
+export interface SpaceapimodelsSpaceSettingView {
+  /** Код настройки */
+  code?: string;
+  /** идентификтор Настройки */
+  id?: string;
+  /** Название настройки */
+  name?: string;
+  /** идентификатор пространства, которому принадлежит настройка */
+  space_id?: string;
+  /** Значение настройки */
+  value?: string;
+}
+
 export interface SpaceapimodelsSpaceUser {
   email?: string;
   first_name?: string;
@@ -207,6 +229,11 @@ export interface SpaceapimodelsSpaceUser {
   last_name?: string;
   phone_number?: string;
   space_id?: string;
+}
+
+export interface SpaceapimodelsUpdateSpaceSettingValue {
+  /** Новое значение настройки */
+  value?: string;
 }
 
 export interface SpaceapimodelsUpdateUser {

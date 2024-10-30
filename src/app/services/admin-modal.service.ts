@@ -75,7 +75,7 @@ export class AdminModalService {
         password: '12345678',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleAdmin,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
       new User({
@@ -85,7 +85,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleAdmin,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
       new User({
@@ -105,7 +105,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleManager,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
       new User({
@@ -115,7 +115,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleManager,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
       new User({
@@ -125,7 +125,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleManager,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: false,
       }),
       new User({
@@ -135,7 +135,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleManager,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
       new User({
@@ -145,7 +145,7 @@ export class AdminModalService {
         password: '12345',
         email: 'p4hJG@example.com',
         phone_number: '89999999999',
-        role: ModelsUserRole.UserRoleUser,
+        role: ModelsUserRole.UserRoleSuperAdmin,
         is_active: true,
       }),
 

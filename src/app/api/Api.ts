@@ -10,7 +10,7 @@
  */
 
 import { HttpClient, HttpResponse } from "@angular/common/http";
-import {inject, Injectable} from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { RequestOptions } from "./http-client";
@@ -34,9 +34,13 @@ import {
   DictapimodelsDepartmentFind,
   DictapimodelsDepartmentView,
   DictapimodelsJobTitleData,
+  GptmodelsGenVacancyDescRequest,
+  GptmodelsGenVacancyDescResponse,
   SpaceapimodelsCreateOrganization,
   SpaceapimodelsCreateUser,
+  SpaceapimodelsSpaceSettingView,
   SpaceapimodelsSpaceUser,
+  SpaceapimodelsUpdateSpaceSettingValue,
   SpaceapimodelsUpdateUser,
   VacancyapimodelsApprovalStages,
   VacancyapimodelsVacancyData,
@@ -50,11 +54,9 @@ import {API_BASE_URL} from '../tokens/api.token';
   providedIn: 'root',
 })
 export class ApiService {
-  baseUrl = inject(API_BASE_URL);
-  // baseUrl = 'https://api-hr.bnbhost.ru';
-
   constructor(
     private readonly http: HttpClient,
+    @Inject(API_BASE_URL) private readonly baseUrl: string = "",
   ) {}
   /**
    * @description Аутентификация пользователя
@@ -1227,6 +1229,54 @@ export class ApiService {
     });
   }
   /**
+   * @description Сгенерировать описание вакансии
+   *
+   * @tags GPT
+   * @name V1GptGenerateVacancyDescriptionCreate
+   * @summary Сгенерировать описание вакансии
+   * @request POST:/api/v1/gpt/generate_vacancy_description
+   */
+  public v1GptGenerateVacancyDescriptionCreate(
+    body: GptmodelsGenVacancyDescRequest,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: GptmodelsGenVacancyDescResponse;
+    }
+  >;
+  public v1GptGenerateVacancyDescriptionCreate(
+    body: GptmodelsGenVacancyDescRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: GptmodelsGenVacancyDescResponse;
+      }
+    >
+  >;
+  public v1GptGenerateVacancyDescriptionCreate(
+    body: GptmodelsGenVacancyDescRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: GptmodelsGenVacancyDescResponse;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: GptmodelsGenVacancyDescResponse;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: GptmodelsGenVacancyDescResponse;
+      }
+    >("POST", this.baseUrl + `/api/v1/gpt/generate_vacancy_description`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Создание организации
    *
    * @tags Организации
@@ -1313,6 +1363,74 @@ export class ApiService {
   ): Observable<HttpResponse<void> | void> {
     return this.http.request<void>("GET", this.baseUrl + `/api/v1/organizations/suggest`, {
       params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Список настроек
+   *
+   * @tags Настройки space
+   * @name V1SpaceSettingsListList
+   * @summary Список настроек
+   * @request GET:/api/v1/space/settings/list
+   */
+  public v1SpaceSettingsListList(options?: RequestOptions): Observable<
+    ApimodelsResponse & {
+      data?: SpaceapimodelsSpaceSettingView[];
+    }
+  >;
+  public v1SpaceSettingsListList(options?: RequestOptions & { observe: "response" }): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceSettingView[];
+      }
+    >
+  >;
+  public v1SpaceSettingsListList(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SpaceapimodelsSpaceSettingView[];
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceSettingView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceSettingView[];
+      }
+    >("GET", this.baseUrl + `/api/v1/space/settings/list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Обновить значение настройки пространства
+   *
+   * @tags Настройки space
+   * @name V1SpaceSettingsUpdate
+   * @summary Обновить значение настройки пространства
+   * @request PUT:/api/v1/space/settings/{code}
+   */
+  public v1SpaceSettingsUpdate(
+    code: string,
+    body: SpaceapimodelsUpdateSpaceSettingValue,
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1SpaceSettingsUpdate(
+    code: string,
+    body: SpaceapimodelsUpdateSpaceSettingValue,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceSettingsUpdate(
+    code: string,
+    body: SpaceapimodelsUpdateSpaceSettingValue,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/space/settings/${code}`, {
+      body: body,
       ...(options as unknown as { observe: "response" }),
     });
   }

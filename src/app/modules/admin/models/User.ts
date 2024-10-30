@@ -22,14 +22,15 @@ export class User implements IUser {
   is_active: boolean = true;
   get roleName(): string {
     switch (this.role) {
-      case ModelsUserRole.UserRoleAdmin:
-        return 'Администратор';
-      case ModelsUserRole.UserRoleUser:
-        return 'Пользователь';
-      case ModelsUserRole.UserRoleManager:
-        return 'Менеджер';
-      case ModelsUserRole.UserRolrHrDirector:
-        return 'HR-директор';
+      // todo закомментил так как бэки поменяли модель, после генерации апи исчезли эти значения
+      // case ModelsUserRole.UserRoleAdmin:
+      //   return 'Администратор';
+      // case ModelsUserRole.UserRoleUser:
+      //   return 'Пользователь';
+      // case ModelsUserRole.UserRoleManager:
+      //   return 'Менеджер';
+      // case ModelsUserRole.UserRolrHrDirector:
+      //   return 'HR-директор';
       case ModelsUserRole.UserRoleSuperAdmin:
         return 'Супер администратор';
       default:

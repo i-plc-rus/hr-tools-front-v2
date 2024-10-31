@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AdminModalService} from '../../../../services/admin-modal.service';
-import {User} from '../../models/User';
+import {UsersModalService} from '../../../../services/users-modal.service';
+import { User } from '../../../../models/User';
 
 @Component({
   selector: 'app-delete-add-user-modal',
@@ -12,7 +12,7 @@ export class DeleteUserModalComponent {
   @Output() onSubmit = new EventEmitter<boolean>();
   isLoading = false;
 
-  constructor(private modalService: AdminModalService) { }
+  constructor(private modalService: UsersModalService) { }
 
   deleteUser() {
     if (this.user?.id) {

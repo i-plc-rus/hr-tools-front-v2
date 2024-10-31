@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AdminModalService} from '../../../../services/admin-modal.service';
+import {UsersModalService} from '../../../../services/users-modal.service';
 import {ModelsUserRole} from '../../../../api/data-contracts';
-import {User} from '../../models/User';
+import {User} from '../../../../models/User';
 
 @Component({
   selector: 'app-add-user-modal',
@@ -31,7 +31,7 @@ export class AddUserModalComponent implements OnInit {
     phone_number: new FormControl('', [Validators.required]),
     role: new FormControl<ModelsUserRole | null>(null, [Validators.required]),
   });
-  constructor(private modalService: AdminModalService) {
+  constructor(private modalService: UsersModalService) {
   }
 
   ngOnInit(): void {

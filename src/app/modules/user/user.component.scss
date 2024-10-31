@@ -1,0 +1,7 @@
+.sidebtn-with-menu {
+  @apply relative;
+
+  .mat-mdc-menu-trigger {
+    @apply absolute top-1/2 right-[-20px];
+  }
+}

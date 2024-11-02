@@ -20,3 +20,4 @@ COPY --from=0 /app/dist/hr-platform/browser /usr/share/nginx/html
 # Открываем порт для приложения
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+

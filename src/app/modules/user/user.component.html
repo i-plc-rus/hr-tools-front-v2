@@ -106,7 +106,7 @@
             <app-notification-bubble [value]="1"></app-notification-bubble>
           </div>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="logout()">
           <mat-icon class="!text-[var(--status-color-danger-text)]" svgIcon="logout"></mat-icon>
           <span class="text-[var(--status-color-danger-text)]">Выйти</span>
         </button>

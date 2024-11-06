@@ -4,7 +4,7 @@ const path = require('path');
 generateApi({
   name: 'MyAPI',
   output: path.resolve(__dirname, './src/app/api'),
-  url: 'https://api.hr-tools.pro/docs/swagger.json',
+  url: 'https://a.hr-tools.pro/docs/swagger.json',
   templates: path.resolve(__dirname, './node_modules/@archeion/swagger-angular-api/templates/angular'),
   // Currently only modular mode is supported.
   modular: true,

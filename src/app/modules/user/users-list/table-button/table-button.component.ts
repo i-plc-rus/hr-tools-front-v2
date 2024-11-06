@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 import {ICellRendererParams} from 'ag-grid-community';
-import {User} from '../../../../models/User';
+import {SpaceUser as User} from '../../../../models/SpaceUser';
 
 
 type Params = ICellRendererParams<User> & {

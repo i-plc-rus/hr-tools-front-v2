@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersModalService} from '../../../services/users-modal.service';
-import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams} from 'ag-grid-community';
+import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams} from 'ag-grid-community';
 import {TableButtonComponent} from './table-button/table-button.component';
 import {TableSpinnerComponent} from './table-spinner/table-spinner.component';
-import {User} from '../../../models/User';
+import {SpaceUser as User} from '../../../models/SpaceUser';
+import {ApiService} from '../../../api/Api';
+import {SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
 
 
 @Component({
@@ -30,18 +32,24 @@ export class UsersListComponent implements OnInit {
       flex: 1
     },
     {
-      field: 'roleName',
       headerName: 'Роль',
       headerClass: 'font-medium',
-      flex: 1
+      flex: 1,
+      valueGetter: (params: ValueGetterParams<User>) => {
+        if (params.data?.is_admin === true) {
+          return 'Администратор';
+        } else {
+          return 'Пользователь';
+        }
+      }
     },
     {
-      field: 'is_active',
+      // field: 'is_active',  //todo проверка на работает или уволен
       headerName: 'Статус',
       headerClass: 'font-medium',
       flex: 1,
       cellRenderer: (params: ICellRendererParams<User>) => {
-        if (params.value === true) {
+        if (true) {
           return `<span class="bg-[var(--status-color-success-bg)] text-[var(--status-color-success-text)] text-[12px] leading-4 px-2 py-1 rounded-lg">Работает</span>`;
         } else {
           return `<span class="bg-[var(--status-color-danger-bg)] text-[var(--status-color-danger-text)] text-[12px] leading-4 px-2 py-1 rounded-lg">Уволен</span>`;
@@ -69,7 +77,10 @@ export class UsersListComponent implements OnInit {
     loading: true,
   }
 
-  constructor(private modalService: UsersModalService) { }
+  constructor(
+    private modalService: UsersModalService,
+    private api: ApiService
+  ) { }
 
   ngOnInit() {
   }
@@ -81,10 +92,18 @@ export class UsersListComponent implements OnInit {
 
   getUsers() {
     this.gridApi.setGridOption("loading", true);
-    this.modalService.getUsers().subscribe((res) => {
-      this.usersList = res;
-      this.gridApi.setGridOption("rowData", this.usersList);
-      this.gridApi.setGridOption("loading", false);
+    this.api.v1UsersListCreate({}).subscribe({
+      next: (res: any) => {
+        if (res.body.data) {
+          this.usersList = res.body.data.map((user: SpaceapimodelsSpaceUser) => new User(user));
+          this.gridApi.setGridOption("rowData", this.usersList);
+          this.gridApi.setGridOption("loading", false);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.gridApi.setGridOption("loading", false);
+      }
     });
   }
 

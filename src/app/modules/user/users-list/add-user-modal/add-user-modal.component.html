@@ -1,4 +1,4 @@
-<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:max-w-[748px] lg:max-h-[748px]">
+<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:max-w-[748px] lg:max-h-[800px]">
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">
       {{ isEdit ? 'Редактирование сотрудника' : 'Добавить нового сотрудника' }}
@@ -46,8 +46,10 @@
 
           @let isConfirmPasswordErrorRequired = userForm.controls['confirm_password'].hasError('required') &&
           !userForm.controls['confirm_password'].untouched;
+          @let isPasswordMatch = userForm.controls['confirm_password'].hasError('matching') &&
+          !userForm.controls['confirm_password'].untouched;
 
-          @if (isConfirmPasswordErrorRequired || !isPasswordMatch()) {
+          @if (isConfirmPasswordErrorRequired || isPasswordMatch) {
           <mat-icon matSuffix
             [matTooltip]="isConfirmPasswordErrorRequired ? 'Обязательное поле' : 'Пароли должны совпадать'"
             svgIcon="error"></mat-icon>
@@ -92,14 +94,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Выберите роль</mat-label>
-          <mat-select [formControl]="userForm.controls['role']">
+          <mat-select [formControl]="userForm.controls['is_admin']">
             @for (role of roles; track $index) {
-            <mat-option value="{{ role.value }}">{{ role.name }}</mat-option>
+            <mat-option [value]="role.value">{{ role.name }}</mat-option>
             }
           </mat-select>
 
-          @let isRoleErrorRequired = userForm.controls['role'].hasError('required') &&
-          !userForm.controls['role'].untouched;
+          @let isRoleErrorRequired = userForm.controls['is_admin'].hasError('required') &&
+          !userForm.controls['is_admin'].untouched;
 
           @if (isRoleErrorRequired) {
           <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
@@ -110,7 +112,7 @@
 
       <div
         class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
-        <button mat-flat-button class="btn-primary" [disabled]="userForm.invalid || isLoading || !isPasswordMatch()" (click)="submit()">
+        <button mat-flat-button class="btn-primary" [disabled]="userForm.invalid || isLoading" (click)="submit()">
           {{ isEdit ? 'Сохранить' : 'Создать аккаунт' }}
         </button>
         <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отменить</button>

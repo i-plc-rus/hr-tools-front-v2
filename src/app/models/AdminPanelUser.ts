@@ -11,7 +11,7 @@ interface IUser extends AdminpanelapimodelsUserView {
   is_active?: boolean;
 }
 
-export class User implements IUser {
+export class AdminPanelUser implements IUser {
   id?: string;
   email?: string;
   password?: string;

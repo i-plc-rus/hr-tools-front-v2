@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {UsersModalService} from '../../../../services/users-modal.service';
-import { User } from '../../../../models/User';
+import {SpaceUser as User} from '../../../../models/SpaceUser';
+import {ApiService} from '../../../../api/Api';
 
 @Component({
   selector: 'app-delete-add-user-modal',
@@ -9,19 +10,28 @@ import { User } from '../../../../models/User';
 })
 export class DeleteUserModalComponent {
   @Input() user?: User;
-  @Output() onSubmit = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<boolean>();
   isLoading = false;
 
-  constructor(private modalService: UsersModalService) { }
+  constructor(
+    private modalService: UsersModalService,
+    private api: ApiService,
+  ) { }
 
   deleteUser() {
     if (this.user?.id) {
       this.isLoading = true;
-      // this.apiService.deleteUser(this.user.id).subscribe(() => {
-      this.onSubmit.emit(true);
-      this.isLoading = false;
-      this.modalService.closeModal();
-      // });
+      this.api.v1UsersDelete(this.user.id, {}).subscribe({
+        next: () => {
+          this.onSubmit.emit(true);
+          this.isLoading = false;
+          this.modalService.closeModal();
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        }
+      });
     }
   }
 

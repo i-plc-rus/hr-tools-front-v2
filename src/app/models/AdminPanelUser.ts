@@ -1,4 +1,4 @@
-import {AdminpanelapimodelsUserView, ModelsUserRole} from "../api/data-contracts";
+import {AdminpanelapimodelsUserView, ModelsUserRole} from '../api/data-contracts';
 
 interface IUser extends AdminpanelapimodelsUserView {
   id?: string;
@@ -11,7 +11,7 @@ interface IUser extends AdminpanelapimodelsUserView {
   is_active?: boolean;
 }
 
-export class User implements IUser {
+export class AdminPanelUser implements IUser {
   id?: string;
   email?: string;
   password?: string;

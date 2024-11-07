@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {MobileMenuService} from '../../services/mobile-menu.service';
-import {TokenService} from '../../services/token.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -11,7 +11,7 @@ export class UserComponent {
 
   constructor(
     private menuService: MobileMenuService,
-    private tokenService: TokenService
+    private userService: UserService
   ) { }
 
   openMobileMenu() {
@@ -19,6 +19,6 @@ export class UserComponent {
   }
 
   logout() {
-    this.tokenService.logout();
+    this.userService.logout();
   }
 }

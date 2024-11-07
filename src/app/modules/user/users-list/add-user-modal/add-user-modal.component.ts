@@ -13,7 +13,7 @@ import {matchValidator} from '../../../../validators/match';
 })
 export class AddUserModalComponent implements OnInit {
   @Input() user?: User;
-  @Output() onSubmit = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<boolean>();
 
   roles: {name: string, value: boolean}[] = [
     {name: 'Администратор', value: true},
@@ -35,7 +35,7 @@ export class AddUserModalComponent implements OnInit {
   constructor(
     private modalService: UsersModalService,
     private api: ApiService,
-  ) { 
+  ) {
 
     this.spaceId = localStorage.getItem('spaceId') || '';
   }
@@ -55,9 +55,9 @@ export class AddUserModalComponent implements OnInit {
   }
 
   submit() {
-    this.isEdit ?
+    if (this.isEdit)
       this.editUser()
-      :
+    else
       this.createUser();
   }
 
@@ -77,7 +77,6 @@ export class AddUserModalComponent implements OnInit {
 
     this.api.v1UsersCreate(newUser).subscribe({
       next: () => {
-        console.log(newUser);
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.modalService.closeModal();
@@ -102,11 +101,16 @@ export class AddUserModalComponent implements OnInit {
       is_admin: this.userForm.controls.is_admin.value || undefined
     };
 
-    this.api.v1UsersUpdate(this.user.id, updatedUser).subscribe(() => {
-      console.log(this.user?.id, updatedUser);
-      this.onSubmit.emit(true);
-      this.isLoading = false;
-      this.modalService.closeModal();
+    this.api.v1UsersUpdate(this.user.id, updatedUser).subscribe({
+      next: () => {
+        this.onSubmit.emit(true);
+        this.isLoading = false;
+        this.modalService.closeModal();
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
     });
   }
 

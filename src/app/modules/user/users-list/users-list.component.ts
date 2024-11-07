@@ -91,18 +91,18 @@ export class UsersListComponent implements OnInit {
   }
 
   getUsers() {
-    this.gridApi.setGridOption("loading", true);
+    this.gridApi.setGridOption('loading', true);
     this.api.v1UsersListCreate({}).subscribe({
       next: (res: any) => {
         if (res.body.data) {
           this.usersList = res.body.data.map((user: SpaceapimodelsSpaceUser) => new User(user));
-          this.gridApi.setGridOption("rowData", this.usersList);
-          this.gridApi.setGridOption("loading", false);
+          this.gridApi.setGridOption('rowData', this.usersList);
+          this.gridApi.setGridOption('loading', false);
         }
       },
       error: (error) => {
         console.log(error);
-        this.gridApi.setGridOption("loading", false);
+        this.gridApi.setGridOption('loading', false);
       }
     });
   }
@@ -129,7 +129,7 @@ export class UsersListComponent implements OnInit {
   }
 
   onSearch() {
-    this.gridApi.setGridOption("quickFilterText", this.searchValue);
+    this.gridApi.setGridOption('quickFilterText', this.searchValue);
   }
 
 }

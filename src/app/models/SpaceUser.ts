@@ -1,4 +1,4 @@
-import { SpaceapimodelsSpaceUser} from "../api/data-contracts";
+import {SpaceapimodelsSpaceUser} from '../api/data-contracts';
 
 export class SpaceUser implements SpaceapimodelsSpaceUser {
   id?: string;

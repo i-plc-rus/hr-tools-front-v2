@@ -10,7 +10,7 @@ import {ApiService} from '../../../../api/Api';
 })
 export class DeleteUserModalComponent {
   @Input() user?: User;
-  @Output() onSubmit = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<boolean>();
   isLoading = false;
 
   constructor(

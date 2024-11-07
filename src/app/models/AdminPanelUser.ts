@@ -1,4 +1,4 @@
-import {AdminpanelapimodelsUserView, ModelsUserRole} from "../api/data-contracts";
+import {AdminpanelapimodelsUserView, ModelsUserRole} from '../api/data-contracts';
 
 interface IUser extends AdminpanelapimodelsUserView {
   id?: string;

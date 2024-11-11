@@ -19,6 +19,8 @@ import {SidebarComponent} from '../../components/sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
 import {StatusTagComponent} from '../../components/status-tag/status-tag.component';
+import {FilterComponent} from '../../components/filter/filter.component';
+import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
@@ -28,7 +30,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-
+import {MatChipsModule} from '@angular/material/chips';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -54,6 +57,8 @@ import {MatSelectModule} from '@angular/material/select';
     AgGridAngular,
     StatusTagComponent,
     LoaderComponent,
+    FilterComponent,
+    FilterToggleComponent,
     SearchInputComponent,
 
     MatIcon,
@@ -64,6 +69,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatChipsModule,
+    MatExpansionModule,
   ]
 })
 export class UserModule { }

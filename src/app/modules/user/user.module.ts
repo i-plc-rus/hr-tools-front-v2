@@ -15,12 +15,13 @@ import {RequestCreationComponent} from './request-creation/request-creation.comp
 import {RequestApprovalComponent} from './request-approval/request-approval.component';
 import {RequestDetailComponent} from './request-detail/request-detail.component';
 import {LayoutComponent} from '../../components/layout/layout.component';
-import {SidebarComponent} from "../../components/sidebar/sidebar.component";
+import {SidebarComponent} from '../../components/sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
+import {SearchInputComponent} from '../../components/search-input/search-input.component';
 
-import {MatIcon, MatIconModule} from "@angular/material/icon";
-import {MatTooltip} from "@angular/material/tooltip";
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -52,6 +53,7 @@ import {MatSelectModule} from '@angular/material/select';
     ReactiveFormsModule,
     NotificationBubbleComponent,
     AgGridAngular,
+    SearchInputComponent,
 
     MatIcon,
     MatIconModule,

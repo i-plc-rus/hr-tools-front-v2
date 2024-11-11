@@ -1,0 +1,15 @@
+<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:max-w-[748px] lg:max-h-[800px]">
+  <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Комментарий по вакансии</h2>
+    <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6">
+      <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+        <mat-label>Комментарий</mat-label>
+        <textarea matInput [value]="comment" rows="4" readonly></textarea>
+      </mat-form-field>
+      <div
+        class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
+        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Вернуться назад</button>
+      </div>
+    </div>
+  </div>
+</div>

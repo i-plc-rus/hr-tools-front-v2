@@ -11,6 +11,7 @@ import {AddUserModalComponent} from './users-list/add-user-modal/add-user-modal.
 import {DeleteUserModalComponent} from './users-list/delete-user-modal/delete-user-modal.component';
 import {VacancyListComponent} from './vacancy-list/vacancy-list.component';
 import {RequestListComponent} from './request-list/request-list.component';
+import {ViewCommentModalComponent} from './view-comment-modal/view-comment-modal.component';
 import {RequestCreationComponent} from './request-creation/request-creation.component';
 import {RequestApprovalComponent} from './request-approval/request-approval.component';
 import {RequestDetailComponent} from './request-detail/request-detail.component';
@@ -42,6 +43,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     DeleteUserModalComponent,
     VacancyListComponent,
     RequestListComponent,
+    ViewCommentModalComponent,
     RequestCreationComponent,
     RequestApprovalComponent,
     RequestDetailComponent,

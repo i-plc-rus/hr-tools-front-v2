@@ -18,6 +18,7 @@ import {LayoutComponent} from '../../components/layout/layout.component';
 import {SidebarComponent} from '../../components/sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
+import {StatusTagComponent} from '../../components/status-tag/status-tag.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
@@ -51,6 +52,7 @@ import {MatSelectModule} from '@angular/material/select';
     ReactiveFormsModule,
     NotificationBubbleComponent,
     AgGridAngular,
+    StatusTagComponent,
     LoaderComponent,
     SearchInputComponent,
 

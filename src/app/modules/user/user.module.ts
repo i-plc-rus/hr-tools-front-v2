@@ -6,7 +6,7 @@ import {AgGridAngular} from 'ag-grid-angular';
 import {UserComponent} from './user.component';
 import {UsersListComponent} from './users-list/users-list.component';
 import {TableButtonComponent} from './users-list/table-button/table-button.component';
-import {TableSpinnerComponent} from './users-list/table-spinner/table-spinner.component';
+import {LoaderComponent} from '../../components/loader/loader.component';
 import {AddUserModalComponent} from './users-list/add-user-modal/add-user-modal.component';
 import {DeleteUserModalComponent} from './users-list/delete-user-modal/delete-user-modal.component';
 import {VacancyListComponent} from './vacancy-list/vacancy-list.component';
@@ -24,7 +24,6 @@ import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
@@ -35,7 +34,6 @@ import {MatSelectModule} from '@angular/material/select';
     UserComponent,
     UsersListComponent,
     TableButtonComponent,
-    TableSpinnerComponent,
     AddUserModalComponent,
     DeleteUserModalComponent,
     VacancyListComponent,
@@ -53,6 +51,7 @@ import {MatSelectModule} from '@angular/material/select';
     ReactiveFormsModule,
     NotificationBubbleComponent,
     AgGridAngular,
+    LoaderComponent,
     SearchInputComponent,
 
     MatIcon,
@@ -60,7 +59,6 @@ import {MatSelectModule} from '@angular/material/select';
     MatButtonModule,
     MatTooltip,
     MatMenuModule,
-    MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

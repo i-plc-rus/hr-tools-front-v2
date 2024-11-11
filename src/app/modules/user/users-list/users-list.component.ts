@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UsersModalService} from '../../../services/users-modal.service';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams} from 'ag-grid-community';
 import {TableButtonComponent} from './table-button/table-button.component';
-import {TableSpinnerComponent} from './table-spinner/table-spinner.component';
+import {LoaderComponent} from '../../../components/loader/loader.component';
 import {SpaceUser as User} from '../../../models/SpaceUser';
 import {ApiService} from '../../../api/Api';
 import {SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
@@ -73,7 +73,7 @@ export class UsersListComponent implements OnInit {
     columnDefs: this.colDefs,
     rowData: this.usersList,
     overlayNoRowsTemplate: 'Нет записей',
-    loadingOverlayComponent: TableSpinnerComponent,
+    loadingOverlayComponent: LoaderComponent,
     loading: true,
   }
 

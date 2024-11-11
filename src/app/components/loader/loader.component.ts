@@ -1,12 +1,15 @@
 import {Component} from '@angular/core';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import type {ILoadingOverlayComp, ILoadingOverlayParams} from 'ag-grid-community';
 
 @Component({
-  selector: 'app-table-spinner',
-  templateUrl: './table-spinner.component.html',
-  styleUrl: './table-spinner.component.scss',
+  selector: 'app-loader',
+  standalone: true,
+  imports: [MatProgressSpinnerModule],
+  templateUrl: './loader.component.html',
+  styleUrl: './loader.component.scss',
 })
-export class TableSpinnerComponent implements ILoadingOverlayComp {
+export class LoaderComponent implements ILoadingOverlayComp {
   eGui!: HTMLElement;
 
   agInit(params: ILoadingOverlayParams): void {

@@ -1,0 +1,21 @@
+::ng-deep {
+  .filter {
+    /** чеклист */
+    mat-chip-listbox.mat-mdc-chip-set-stacked {
+      --mdc-chip-elevated-selected-container-color: transparent;
+      --mdc-chip-selected-label-text-color: var(--text-main);
+      --mdc-chip-label-text-color: var(--text-main);
+      --mdc-chip-outline-color: transparent;
+      --mdc-chip-container-height: auto;
+
+      .mdc-evolution-chip__text-label {
+        @apply whitespace-normal py-1.5;
+      }
+    }
+
+    /** раскрывающаяся панель */
+    .mat-expansion-panel {
+      @apply bg-transparent;
+    }
+  }
+}

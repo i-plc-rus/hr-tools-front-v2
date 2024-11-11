@@ -1,3 +1,15 @@
-:root {
-  background: #000;
+:host {
+  @apply flex overflow-hidden;
 }
+
+@tailwind utilities;
+
+@layer utilities {
+  .description-dots {
+    span:not(:last-child):after {
+      @apply ml-2;
+      content: '•';
+    }
+  }
+}
+

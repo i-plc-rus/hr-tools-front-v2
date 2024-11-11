@@ -1,0 +1,1 @@
+export type StatusTag = 'success' | 'danger' | 'warning' | 'info' | 'default';

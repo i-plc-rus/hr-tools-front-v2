@@ -1,1 +1,174 @@
-<p>request-list works!</p>
+<app-filter [opened]="toggleFilter.checked">
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button>
+        <mat-icon class="text-[var(--text-main)]">refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="flex items-center">
+        <mat-icon class="text-[var(--text-main)]">close</mat-icon>
+      </button>
+    </div>
+  </div>
+</app-filter>
+
+<div class="py-8 px-4 w-full h-full">
+  <div class="w-full flex items-center gap-3">
+    <app-search-input class="w-[380px]" placeholder="Поиск заявки" [(ngModel)]="searchValue" (onSearch)="search()">
+    </app-search-input>
+    <app-filter-toggle #toggleFilter />
+  </div>
+
+  <div class="w-full mt-4 bg-white rounded-3xl">
+    <div class="p-6 pb-4 flex gap-4 justify-between items-center">
+      <div class="flex gap-12 items-center">
+        <h1 class="text-[22px]">Заявки</h1>
+        <mat-chip-listbox hideSingleSelectionIndicator [selectable]="false">
+          <mat-chip-option selected>Все</mat-chip-option>
+          <mat-chip-option>Согласовано</mat-chip-option>
+          <mat-chip-option>На согласовании</mat-chip-option>
+          <mat-chip-option>Не согласовано</mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div class="flex gap-4">
+        <button mat-icon-button>
+          <mat-icon class="text-[var(--text-main)]">filter_list</mat-icon>
+        </button>
+        <button mat-flat-button class="btn-secondary">
+          <mat-icon>add</mat-icon>
+          <span>Создать заявку</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 pt-4 flex flex-col gap-4 w-full">
+      @for (request of requestList; track $index) {
+        <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex gap-4 w-full items-center justify-between">
+              <div class="flex gap-4">
+                <app-status-tag
+                  [matMenuTriggerFor]="statusContent"
+                  class="cursor-pointer"
+                  [status]="request.statusClass">
+                  <span>{{ request.status }}</span>
+                  <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+                </app-status-tag>
+                <mat-menu #statusContent="matMenu">
+                  @for (status of statuses; track $index) {
+                    @if (request.status !== status.value && status.value !== 'Создана') {
+                      <button mat-menu-item (click)="changeStatus(request.id, status.value)">
+                        <app-status-tag [status]="status.className">
+                          {{ status.value }}
+                        </app-status-tag>
+                      </button>
+                    }
+                  }
+                </mat-menu>
+
+                @if (request.urgency === 'Срочно') {
+                  <div class="h-6 text-[var(--error-alter)]">
+                    <mat-icon>alarm</mat-icon>
+                  </div>
+                }
+              </div>
+              <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn">
+                <mat-icon class="text-[var(--link-default)]">more_horiz</mat-icon>
+              </button>
+              <mat-menu #optionsContent="matMenu">
+                <button mat-menu-item>Настройки</button>
+                <button mat-menu-item>Дублировать заявку</button>
+                <button mat-menu-item>Отменить</button>
+              </mat-menu>
+            </div>
+            <div class="flex flex-col lg:flex-row justify-between gap-3 mt-1">
+              <h2 class="text-[32px] leading-10">{{ request.vacancy_name }}</h2>
+              <span class="text-[22px] leading-7 lg:min-w-[200px] lg:text-right">
+                {{ request.city }}
+              </span>
+            </div>
+          </div>
+
+          <div class="w-full flex flex-col gap-4">
+            <div
+              class="flex flex-col gap-2 lg:flex-row text-[16px] leading-6 text-[var(--text-alter)] description-dots">
+              <span>{{ request.company_name }}</span>
+              <span>{{ request.company_struct_name }}</span>
+              <span>{{ request.chief_fio }}</span>
+            </div>
+            <div class="flex flex-col lg:flex-row justify-between gap-4">
+              <div class="flex gap-5 flex-grow flex-shrink flex-nowrap overflow-x-auto">
+                @for (stage of request.approval_stages; track $index) {
+                  <div class="flex gap-3 items-center">
+                    <div class="flex justify-center items-center rounded-full bg-white w-14 h-14">
+                      @switch (stage.approval_status) {
+                        @case ('Согласованно') {
+                          <mat-icon svgIcon="check-circle"></mat-icon>
+                        }
+                        @case ('Не согласованно') {
+                          <mat-icon svgIcon="block-circle"></mat-icon>
+                        }
+                        @case ('Ждет согласования') {
+                          <mat-icon svgIcon="hourglass"></mat-icon>
+                        }
+                        @default {
+                          <mat-icon svgIcon="avg-pace"></mat-icon>
+                        }
+                      }
+                    </div>
+                    <div class="flex flex-col gap-0.5 text-[16px] leading-6">
+                      <span class="text-[var(--text-main)] text-nowrap">{{ stage.space_user_name }}</span>
+                      <span class="text-[var(--text-alter)] text-nowrap">{{ stage.approval_status }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+              @if (request.status === 'Согласована') {
+                <button mat-flat-button class="btn-primary text-nowrap">Создать вакансию</button>
+              }
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div class="flex gap-4">
+                <!-- <button mat-icon-button>
+                <mat-icon class="text-[var(--link-default)]" svgIcon="pin-outline"></mat-icon>
+              </button> -->
+                <!-- <button mat-icon-button>
+                <mat-icon class="text-[var(--link-default)]">bookmark_outline</mat-icon>
+              </button> -->
+                <div class="relative">
+                  <button
+                    mat-icon-button
+                    [disabled]="request.description"
+                    #commentBtn
+                    (click)="openComment(request.description)">
+                    <mat-icon
+                      class="{{ commentBtn.disabled ? '' : 'text-[var(--link-default)]' }}"
+                      svgIcon="chat-outline" />
+                    <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
+                  </button>
+                </div>
+              </div>
+              <div class="text-[16px] leading-6 text-[var(--text-alter)] text-right">
+                {{ request.creation_date | date: 'dd.MM.yyyy' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (!requestList.length && !isLoading) {
+        <div class="w-full h-full flex items-center justify-center">
+          <div class="text-center py-3">
+            <h3 class="text-[22px] leading-7">Заявки не найдены</h3>
+          </div>
+        </div>
+      }
+      @if (isLoading) {
+        <div class="w-full h-full flex items-center justify-center">
+          <app-loader></app-loader>
+        </div>
+      }
+    </div>
+  </div>
+</div>

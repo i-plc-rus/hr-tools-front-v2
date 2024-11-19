@@ -18,6 +18,7 @@ import {LayoutComponent} from '../../components/layout/layout.component';
 import {SidebarComponent} from "../../components/sidebar/sidebar.component";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
+import { QuillModule } from 'ngx-quill';
 
 import {MatIcon, MatIconModule} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
@@ -27,6 +28,13 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import { TextInputComponent } from "../../components/text-input/text-input.component";
+import {DropdownDirective} from "../../directives/dropdown.directive";
+import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
+import {MatStepperModule} from '@angular/material/stepper';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 
 @NgModule({
@@ -52,7 +60,7 @@ import {MatSelectModule} from '@angular/material/select';
     ReactiveFormsModule,
     NotificationBubbleComponent,
     AgGridAngular,
-
+    QuillModule.forRoot(),
     MatIcon,
     MatIconModule,
     MatButtonModule,
@@ -62,6 +70,12 @@ import {MatSelectModule} from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-  ]
+    TextInputComponent,
+    DropdownDirective,
+    DropdownContentDirective,
+    MatStepperModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+]
 })
 export class UserModule { }

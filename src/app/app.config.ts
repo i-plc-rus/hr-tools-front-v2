@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     ])),
     {
       provide: API_BASE_URL,
-      useValue: 'https://api.hr-tools.pro'
+      useValue: 'https://a.hr-tools.pro'
     },
     TokenService,
     CookieService,

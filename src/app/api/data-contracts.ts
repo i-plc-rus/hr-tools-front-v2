@@ -72,6 +72,11 @@ export interface AuthapimodelsSendEmail {
   email?: string;
 }
 
+export interface AvitoapimodelsVacancyAttach {
+  /** идентификатор вакансии в виде: 3364561973 */
+  id?: number;
+}
+
 export interface DbmodelsVacancyFilter {
   author_id?: string;
   city_id?: string;
@@ -90,6 +95,15 @@ export interface DbmodelsVacancyFilter {
 export interface DbmodelsVacancySort {
   /** порядок сортировки false = ASC/ true = DESC */
   created_at_desc?: boolean;
+}
+
+export interface DictapimodelsCityData {
+  address?: string;
+}
+
+export interface DictapimodelsCityView {
+  address?: string;
+  id?: string;
 }
 
 export interface DictapimodelsCompanyData {
@@ -111,18 +125,18 @@ export interface DictapimodelsCompanyView {
 }
 
 export interface DictapimodelsDepartmentData {
-  company_id?: string;
+  company_struct_id?: string;
   name?: string;
   parent_id?: string;
 }
 
 export interface DictapimodelsDepartmentFind {
-  company_id?: string;
+  company_struct_id?: string;
   name?: string;
 }
 
 export interface DictapimodelsDepartmentView {
-  company_id?: string;
+  company_struct_id?: string;
   id?: string;
   name?: string;
   parent_id?: string;
@@ -143,10 +157,38 @@ export interface GptmodelsGenVacancyDescResponse {
   description?: string;
 }
 
+export interface HhapimodelsVacancyAttach {
+  /** ссылка на вакансию в виде: https://izhevsk.hh.ru/vacancy/108984166 */
+  url?: string;
+}
+
 export enum ModelsApprovalStatus {
   AStatusApproved = "Согласованно",
   AStatusRejected = "Не согласованно",
   AStatusAwaiting = "Ждет согласования",
+}
+
+export enum ModelsEmployment {
+  EmploymentTemporary = "temporary",
+  EmploymentFull = "full",
+  EmploymentInternship = "internship",
+  EmploymentPartial = "partial",
+}
+
+export enum ModelsExperience {
+  ExperienceNoMatter = "noMatter",
+  ExperienceMoreThan1 = "moreThan1",
+  ExperienceMoreThan3 = "moreThan3",
+  ExperienceMoreThan5 = "moreThan5",
+  ExperienceMoreThan10 = "moreThan10",
+}
+
+export enum ModelsSchedule {
+  ScheduleFlyInFlyOut = "flyInFlyOut",
+  SchedulePartTime = "partTime",
+  ScheduleFullDay = "fullDay",
+  ScheduleFlexible = "flexible",
+  ScheduleShift = "shift",
 }
 
 export enum ModelsUserRole {
@@ -175,6 +217,14 @@ export enum ModelsVRType {
 export enum ModelsVRUrgency {
   VRTypeUrgent = "Срочно",
   VRTypeNonUrgent = "В плановом порядке",
+}
+
+export enum ModelsVacancyPubStatus {
+  VacancyPubStatusNone = "Не размещена",
+  VacancyPubStatusModeration = "Публикуется",
+  VacancyPubStatusPublished = "Опубликована",
+  VacancyPubStatusRejected = "Отклонена",
+  VacancyPubStatusClosed = "Закрыта",
 }
 
 export enum ModelsVacancyStatus {
@@ -259,6 +309,24 @@ export interface VacancyapimodelsApprovalStages {
   approval_stages?: VacancyapimodelsApprovalStageData[];
 }
 
+export interface VacancyapimodelsExtVacancyInfo {
+  /** описание статуса/ошибки */
+  reason?: string;
+  /** статус публикации */
+  status?: ModelsVacancyPubStatus;
+  /** урл вакансии */
+  url?: string;
+}
+
+export interface VacancyapimodelsExternalData {
+  head_hunter?: VacancyapimodelsExternalLink;
+}
+
+export interface VacancyapimodelsExternalLink {
+  id?: string;
+  url?: string;
+}
+
 export interface VacancyapimodelsSalary {
   by_result?: number;
   from?: number;
@@ -277,6 +345,10 @@ export interface VacancyapimodelsVacancyData {
   company_struct_id?: string;
   /** ид подразделения */
   department_id?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   /** ид штатной должности */
   job_title_id?: string;
   /** кол-во открытых позиций */
@@ -289,6 +361,8 @@ export interface VacancyapimodelsVacancyData {
   requirements?: string;
   /** ожидания по зп */
   salary?: VacancyapimodelsSalary;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** срочность */
@@ -314,6 +388,10 @@ export interface VacancyapimodelsVacancyRequestData {
   department_id?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   /** внутреннее взаимодействие */
   in_interaction?: string;
   /** сотрудник проводящий интервью */
@@ -330,6 +408,8 @@ export interface VacancyapimodelsVacancyRequestData {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */
@@ -356,6 +436,10 @@ export interface VacancyapimodelsVacancyRequestEditData {
   department_id?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   /** внутреннее взаимодействие */
   in_interaction?: string;
   /** сотрудник проводящий интервью */
@@ -372,6 +456,8 @@ export interface VacancyapimodelsVacancyRequestEditData {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */
@@ -405,6 +491,10 @@ export interface VacancyapimodelsVacancyRequestView {
   department_name?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   id?: string;
   /** внутреннее взаимодействие */
   in_interaction?: string;
@@ -423,6 +513,8 @@ export interface VacancyapimodelsVacancyRequestView {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */
@@ -432,4 +524,55 @@ export interface VacancyapimodelsVacancyRequestView {
   urgency?: ModelsVRUrgency;
   /** название вакансии */
   vacancy_name?: string;
+}
+
+export interface VacancyapimodelsVacancyView {
+  /** фио непосредственного руководителя */
+  chief_fio?: string;
+  city?: string;
+  /** ид города */
+  city_id?: string;
+  /** ид компании */
+  company_id?: string;
+  company_name?: string;
+  /** ид структуры компании */
+  company_struct_id?: string;
+  company_struct_name?: string;
+  creation_date?: string;
+  /** ид подразделения */
+  department_id?: string;
+  department_name?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
+  external?: VacancyapimodelsExternalData;
+  favorite?: boolean;
+  hh?: VacancyapimodelsExternalLink;
+  id?: string;
+  /** ид штатной должности */
+  job_title_id?: string;
+  job_title_name?: string;
+  /** кол-во открытых позиций */
+  opened_positions?: number;
+  pinned?: boolean;
+  /** адрес места работы */
+  place_of_work?: string;
+  /** тип вакансии */
+  request_type?: ModelsVRType;
+  /** требования/обязанности/условия */
+  requirements?: string;
+  /** ожидания по зп */
+  salary?: VacancyapimodelsSalary;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
+  /** вид подбора */
+  selection_type?: ModelsVRSelectionType;
+  status?: ModelsVacancyStatus;
+  /** срочность */
+  urgency?: ModelsVRUrgency;
+  /** название вакансии */
+  vacancy_name?: string;
+  /** ид заявки на вакансию */
+  vacancy_request_id?: string;
 }

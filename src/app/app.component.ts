@@ -66,6 +66,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('hourglass', this.setPath(`${this.svgPath}/ic-hourglass.svg`))
       .addSvgIcon('block-circle', this.setPath(`${this.svgPath}/ic-block-circle.svg`))
       .addSvgIcon('check-circle', this.setPath(`${this.svgPath}/ic-check-circle.svg`))
+      .addSvgIcon('ql-stylus-note', this.setPath(`${this.svgPath}/ic-ql-stylus-note.svg`))
   }
 
   ngOnInit() {

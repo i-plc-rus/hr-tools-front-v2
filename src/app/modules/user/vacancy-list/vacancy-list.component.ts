@@ -3,8 +3,8 @@ import {ScreenWidthService} from '../../../services/screen-width.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
-  DbmodelsVacancyFilter,
-  DbmodelsVacancySort,
+  VacancyapimodelsVacancyFilter,
+  VacancyapimodelsVacancySort,
   DictapimodelsCityView,
   DictapimodelsDepartmentView,
   ModelsVacancyStatus,
@@ -38,7 +38,7 @@ export class VacancyListComponent implements OnInit {
     request_id: new FormControl(''),
     request_type: new FormControl<ModelsVRType | undefined>(undefined),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
-    sort: new FormControl<DbmodelsVacancySort>({created_at_desc: this.sortByDesc}),
+    sort: new FormControl<VacancyapimodelsVacancySort>({created_at_desc: this.sortByDesc}),
     statuses: new FormControl<ModelsVacancyStatus[]>([]),
     urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
   });
@@ -96,7 +96,7 @@ export class VacancyListComponent implements OnInit {
 
   getVacancyList() {
     this.isLoading = true;
-    const filter: DbmodelsVacancyFilter = this.filterForm.value as DbmodelsVacancyFilter;
+    const filter: VacancyapimodelsVacancyFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
     this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
@@ -141,6 +141,7 @@ export class VacancyListComponent implements OnInit {
       },
     })
   }
+
   setFormListeners() {
     this.category.valueChanges
       .subscribe((category) => {

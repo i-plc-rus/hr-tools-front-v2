@@ -1,0 +1,36 @@
+<quill-editor 
+  class="!block w-full"
+  [(ngModel)]="value"
+  [styles]="{height: height}"
+  [placeholder]="placeholder"
+  [readOnly]="!!disabled"
+  [modules]="modules"
+  (onBlur)="onTouched($event)"
+  (onContentChanged)="changeEditorValue($event)"
+  [sanitize]="true">
+  <div quill-editor-toolbar class="flex w-full justify-between">
+    <div>
+      <span class="ql-formats">
+        <button type="button" class="ql-header" value="2">
+          <mat-icon>title</mat-icon>
+        </button>
+      </span>
+      <span class="ql-formats">
+        <button type="button" class="ql-bold">
+          <mat-icon>format_bold</mat-icon>
+        </button>
+        <button type="button" class="ql-italic">
+          <mat-icon>format_italic</mat-icon>
+        </button>
+      </span>
+    </div>
+    @if (onActionBtnClick.observers.length > 0) {
+      <span>
+        <button type="button" class="flex items-center" (click)="actionBtnClicked()" [disabled]="actionBtnDisabled">
+          <mat-icon svgIcon="ql-stylus-note" />
+        </button>
+      </span>
+    }
+
+  </div>
+</quill-editor>

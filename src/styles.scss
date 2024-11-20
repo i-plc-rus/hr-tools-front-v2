@@ -7,8 +7,9 @@
 @import "assets/styles/normalize";
 // AG Data Grid CSS
 @import 'ag-grid-community/styles/ag-grid.css';
-@import "ag-grid-community/styles/ag-theme-material.css";
-
+@import 'ag-grid-community/styles/ag-theme-material.css';
+// Quill Editor
+@import 'quill/dist/quill.snow.css';
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
@@ -103,5 +104,20 @@ mat-chip-listbox {
 
   .mat-mdc-chip-selected .chip-number {
     @apply bg-white text-[var(--link-default)];
+  }
+}
+
+//quill-editor
+
+quill-editor {
+  .ql-toolbar.ql-snow {
+    @apply border-[var(--outline)] rounded-t;
+  }
+  .ql-container.ql-snow {
+    @apply border-[var(--outline)] rounded-b text-[16px] leading-6;
+  }
+
+  .ql-snow .ql-stroke {
+    @apply stroke-[var(--text-main)];
   }
 }

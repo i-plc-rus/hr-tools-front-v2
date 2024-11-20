@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ScreenWidthService} from '../../../services/screen-width.service';
 import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
-import {ModelsVRStatus, VacancyapimodelsVacancyRequestView} from '../../../api/data-contracts';
+import {ModelsVRSelectionType, ModelsVRStatus, VacancyapimodelsSearchPeriod, VacancyapimodelsVacancyRequestView, VacancyapimodelsVrFilter, VacancyapimodelsVrSort} from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {StatusTag} from '../../../models/StatusTag';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-request-list',
@@ -13,6 +14,19 @@ import {StatusTag} from '../../../models/StatusTag';
 })
 export class RequestListComponent implements OnInit {
   // фильтр
+  sortByDesc = true;
+  filterForm = new FormGroup({
+    search: new FormControl(''),
+    author_id: new FormControl(''),
+    city_id: new FormControl(''),
+    favorite: new FormControl(false),
+    search_from: new FormControl(''),
+    search_to: new FormControl(''),
+    search_period: new FormControl<VacancyapimodelsSearchPeriod | undefined>(undefined),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
+    sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}),
+    statuses: new FormControl<ModelsVRStatus[]>([]),
+  })
   searchValue: string = '';
 
   // справочники
@@ -24,6 +38,7 @@ export class RequestListComponent implements OnInit {
     {className: 'danger', value: ModelsVRStatus.VRStatusCanceled},
     {className: 'danger', value: ModelsVRStatus.VRStatusNotAccepted},
   ];
+  selectionTypes = Object.values(ModelsVRSelectionType);
 
   // вакансии
   isLoading = false;
@@ -41,7 +56,8 @@ export class RequestListComponent implements OnInit {
 
   getRequests() {
     this.isLoading = true;
-    this.api.v1SpaceVacancyRequestListCreate({observe: 'response'}).subscribe({
+    const filter: VacancyapimodelsVrFilter = this.filterForm.value as VacancyapimodelsVrFilter;
+    this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data)
           this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => new VacancyRequestView(request));

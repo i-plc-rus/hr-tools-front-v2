@@ -81,13 +81,6 @@ export class RequestCreationComponent implements OnInit {
 
   })
 
-  editorConfig = {
-    toolbar: [
-      ['bold', 'italic', 'underline'], 
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }] 
-    ]
-  };
-
   city: DictapimodelsCityView[] = []
   filteredCity$!: Observable<DictapimodelsCityView[]>; 
   companyStructureArray: DictapimodelsCompanyStructView[] = []

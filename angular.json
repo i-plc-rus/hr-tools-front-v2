@@ -33,8 +33,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/quill/dist/quill.snow.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },

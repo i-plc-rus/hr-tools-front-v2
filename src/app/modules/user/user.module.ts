@@ -19,12 +19,15 @@ import {LayoutComponent} from '../../components/layout/layout.component';
 import {SidebarComponent} from '../../components/sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
-import { QuillModule } from 'ngx-quill';
+import {QuillModule} from 'ngx-quill';
 import {StatusTagComponent} from '../../components/status-tag/status-tag.component';
 import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
-
+import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
+import {TextInputComponent} from "../../components/text-input/text-input.component";
+import {DropdownDirective} from "../../directives/dropdown.directive";
+import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -33,16 +36,9 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-
-import { TextInputComponent } from "../../components/text-input/text-input.component";
-import {DropdownDirective} from "../../directives/dropdown.directive";
-import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
 import {MatStepperModule} from '@angular/material/stepper';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
-
-
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
 
@@ -76,7 +72,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     FilterComponent,
     FilterToggleComponent,
     SearchInputComponent,
-
+    TextEditorComponent,
+    TextInputComponent,
+    DropdownDirective,
+    DropdownContentDirective,
 
     MatIcon,
     MatIconModule,
@@ -86,18 +85,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-
-    TextInputComponent,
-    DropdownDirective,
-    DropdownContentDirective,
     MatStepperModule,
     MatDialogModule,
     MatAutocompleteModule,
-]
-
     MatChipsModule,
     MatExpansionModule,
-  ]
+]
 
 })
 export class UserModule { }

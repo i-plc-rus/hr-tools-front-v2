@@ -84,3 +84,24 @@ button.btn-danger {
   --mat-menu-item-focus-state-layer-color: var(--background-main);
   --mat-menu-item-hover-state-layer-color: var(--background-main);
 }
+
+//material-chips
+
+mat-chip-listbox {
+  --mdc-chip-elevated-selected-container-color: var(--link-default);
+  --mdc-chip-selected-label-text-color: var(--background-alter);
+  --mdc-chip-label-text-color: var(--text-main);
+  --mdc-chip-outline-color: var(--link-disabled);
+
+  .mdc-evolution-chip__text-label {
+    @apply justify-center items-center;
+  }
+
+  .chip-number {
+    @apply inline-flex justify-center items-center w-5 h-5 rounded-full text-[11px] leading-4 bg-[var(--link-default)] text-white pt-0.5;
+  }
+
+  .mat-mdc-chip-selected .chip-number {
+    @apply bg-white text-[var(--link-default)];
+  }
+}

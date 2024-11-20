@@ -1,0 +1,19 @@
+:host {
+  @apply flex overflow-hidden;
+}
+
+@tailwind utilities;
+
+@layer utilities {
+  .description-dots {
+    span:not(:last-child):after {
+      @apply ml-2;
+      content: '•';
+    }
+  }
+}
+
+.request-menu-btn {
+  --mdc-icon-button-state-layer-size: 30px;
+  --mdc-icon-button-icon-size: 24px;
+}

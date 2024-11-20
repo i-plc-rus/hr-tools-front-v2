@@ -1,0 +1,16 @@
+.filter-button {
+  @apply p-2 w-14 h-14 flex justify-center items-center rounded-full duration-200;
+
+  &:has(input[type="checkbox"]:checked) {
+    @apply bg-[var(--link-default)];
+    --mat-icon-button-state-layer-color: var(--background-alter);
+  }
+
+  &:has(input[type="checkbox"]:not(:checked)) {
+    @apply bg-white;
+  }
+
+  button {
+    @apply p-2 w-12 h-12 flex justify-center items-center;
+  }
+}

@@ -6,28 +6,34 @@ import {AgGridAngular} from 'ag-grid-angular';
 import {UserComponent} from './user.component';
 import {UsersListComponent} from './users-list/users-list.component';
 import {TableButtonComponent} from './users-list/table-button/table-button.component';
-import {TableSpinnerComponent} from './users-list/table-spinner/table-spinner.component';
+import {LoaderComponent} from '../../components/loader/loader.component';
 import {AddUserModalComponent} from './users-list/add-user-modal/add-user-modal.component';
 import {DeleteUserModalComponent} from './users-list/delete-user-modal/delete-user-modal.component';
 import {VacancyListComponent} from './vacancy-list/vacancy-list.component';
 import {RequestListComponent} from './request-list/request-list.component';
+import {ViewCommentModalComponent} from './view-comment-modal/view-comment-modal.component';
 import {RequestCreationComponent} from './request-creation/request-creation.component';
 import {RequestApprovalComponent} from './request-approval/request-approval.component';
 import {RequestDetailComponent} from './request-detail/request-detail.component';
 import {LayoutComponent} from '../../components/layout/layout.component';
-import {SidebarComponent} from "../../components/sidebar/sidebar.component";
+import {SidebarComponent} from '../../components/sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationBubbleComponent} from '../../components/notification-bubble/notification-bubble.component';
 import { QuillModule } from 'ngx-quill';
+import {StatusTagComponent} from '../../components/status-tag/status-tag.component';
+import {FilterComponent} from '../../components/filter/filter.component';
+import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
+import {SearchInputComponent} from '../../components/search-input/search-input.component';
 
-import {MatIcon, MatIconModule} from "@angular/material/icon";
-import {MatTooltip} from "@angular/material/tooltip";
+
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+
 import { TextInputComponent } from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -37,16 +43,20 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
+import {MatChipsModule} from '@angular/material/chips';
+import {MatExpansionModule} from '@angular/material/expansion';
+
+
 @NgModule({
   declarations: [
     UserComponent,
     UsersListComponent,
     TableButtonComponent,
-    TableSpinnerComponent,
     AddUserModalComponent,
     DeleteUserModalComponent,
     VacancyListComponent,
     RequestListComponent,
+    ViewCommentModalComponent,
     RequestCreationComponent,
     RequestApprovalComponent,
     RequestDetailComponent,
@@ -61,15 +71,22 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     NotificationBubbleComponent,
     AgGridAngular,
     QuillModule.forRoot(),
+    StatusTagComponent,
+    LoaderComponent,
+    FilterComponent,
+    FilterToggleComponent,
+    SearchInputComponent,
+
+
     MatIcon,
     MatIconModule,
     MatButtonModule,
     MatTooltip,
     MatMenuModule,
-    MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+
     TextInputComponent,
     DropdownDirective,
     DropdownContentDirective,
@@ -77,5 +94,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDialogModule,
     MatAutocompleteModule,
 ]
+
+    MatChipsModule,
+    MatExpansionModule,
+  ]
+
 })
 export class UserModule { }

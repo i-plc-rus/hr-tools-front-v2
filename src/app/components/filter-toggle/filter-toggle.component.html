@@ -1,0 +1,11 @@
+<div class="filter-button">
+  <input type="checkbox" class="hidden" [(ngModel)]="checked" />
+
+  <button mat-icon-button (click)="checked = !checked">
+    @if (!checked) {
+      <mat-icon class="text-[var(--text-main)]">tune</mat-icon>
+    } @else {
+      <mat-icon class="text-white">close</mat-icon>
+    }
+  </button>
+</div>

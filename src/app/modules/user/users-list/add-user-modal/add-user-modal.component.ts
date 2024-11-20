@@ -1,8 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UsersModalService} from '../../../../services/users-modal.service';
-import {ModelsUserRole} from '../../../../api/data-contracts';
-import {User} from '../../../../models/User';
+import {SpaceapimodelsCreateUser, SpaceapimodelsUpdateUser} from '../../../../api/data-contracts';
+import {SpaceUser as User} from '../../../../models/SpaceUser';
+import {ApiService} from '../../../../api/Api';
+import {matchValidator} from '../../../../validators/match';
 
 @Component({
   selector: 'app-add-user-modal',
@@ -11,27 +13,31 @@ import {User} from '../../../../models/User';
 })
 export class AddUserModalComponent implements OnInit {
   @Input() user?: User;
-  @Output() onSubmit = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<boolean>();
 
-  roles: {name: string, value: ModelsUserRole}[] = [
-    {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
-    {name: 'Администратор', value: ModelsUserRole.UserRoleSuperAdmin},
-    {name: 'Менеджер', value: ModelsUserRole.UserRoleSuperAdmin},
-    {name: 'Пользователь', value: ModelsUserRole.UserRoleSuperAdmin},
+  roles: {name: string, value: boolean}[] = [
+    {name: 'Администратор', value: true},
+    {name: 'Пользователь', value: false},
   ];
   isEdit = false;
   isLoading = false;
 
   userForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirm_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), matchValidator('confirm_password', true)]),
+    confirm_password: new FormControl('', [Validators.required, Validators.minLength(8), matchValidator('password')]),
     first_name: new FormControl('', [Validators.required]),
     last_name: new FormControl('', [Validators.required]),
     phone_number: new FormControl('', [Validators.required]),
-    role: new FormControl<ModelsUserRole | null>(null, [Validators.required]),
+    is_admin: new FormControl<boolean>(false, [Validators.required]),
   });
-  constructor(private modalService: UsersModalService) {
+  spaceId: string;
+  constructor(
+    private modalService: UsersModalService,
+    private api: ApiService,
+  ) {
+
+    this.spaceId = localStorage.getItem('spaceId') || '';
   }
 
   ngOnInit(): void {
@@ -40,60 +46,72 @@ export class AddUserModalComponent implements OnInit {
       this.userForm.patchValue(this.user);
       if (this.user.password)
         this.userForm.get('confirm_password')?.setValue(this.user.password);
+      else {
+        this.userForm.get('password')?.setValue('')
+        this.userForm.get('password')?.removeValidators([Validators.required]);
+        this.userForm.get('confirm_password')?.removeValidators([Validators.required]);
+      }
     }
   }
 
-  isPasswordMatch() {
-    return this.userForm.get('password')?.value === this.userForm.get('confirm_password')?.value;
-  }
-
   submit() {
-    this.isEdit ?
+    if (this.isEdit)
       this.editUser()
-      :
+    else
       this.createUser();
   }
 
   createUser() {
-    if (!this.userForm.valid || !this.isPasswordMatch()) return;
+    if (!this.userForm.valid) return;
 
     this.isLoading = true;
-    const newUser = new User({
+    const newUser: SpaceapimodelsCreateUser = {
       email: this.userForm.controls.email.value || undefined,
       password: this.userForm.controls.password.value || undefined,
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
       phone_number: this.userForm.controls.phone_number.value || undefined,
-      role: this.userForm.controls.role.value || undefined
-    });
+      is_admin: this.userForm.controls.is_admin.value || undefined,
+      space_id: this.spaceId,
+    };
 
-    // this.apiService.addUser(newUser).subscribe(() => {
-    console.log(newUser);
-    this.onSubmit.emit(true);
-    this.isLoading = false;
-    this.modalService.closeModal();
-    // });
+    this.api.v1UsersCreate(newUser).subscribe({
+      next: () => {
+        this.onSubmit.emit(true);
+        this.isLoading = false;
+        this.modalService.closeModal();
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    });
   }
 
   editUser() {
-    if (!this.userForm.valid || !this.isPasswordMatch() || !this.user) return;
+    if (!this.userForm.valid || !this.user || !this.user.id) return;
 
     this.isLoading = true;
-    const updatedUser = new User({
+    const updatedUser: SpaceapimodelsUpdateUser = {
       email: this.userForm.controls.email.value || undefined,
       password: this.userForm.controls.password.value || undefined,
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
       phone_number: this.userForm.controls.phone_number.value || undefined,
-      role: this.userForm.controls.role.value || undefined
-    });
+      is_admin: this.userForm.controls.is_admin.value || undefined
+    };
 
-    // this.apiService.updateUser(this.user.id, updatedUser).subscribe(() => {
-    console.log(this.user.id, updatedUser);
-    this.onSubmit.emit(true);
-    this.isLoading = false;
-    this.modalService.closeModal();
-    // });
+    this.api.v1UsersUpdate(this.user.id, updatedUser).subscribe({
+      next: () => {
+        this.onSubmit.emit(true);
+        this.isLoading = false;
+        this.modalService.closeModal();
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    });
   }
 
   closeModal() {

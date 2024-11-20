@@ -1,0 +1,15 @@
+<div [class]="class">
+  <label class="search-rounded-input" [class.disabled]="!!disabled">
+    <input
+      [placeholder]="placeholder"
+      [disabled]="!!disabled"
+      [value]="value"
+      (keyup.enter)="onSearchBtnPress()"
+      (blur)="onTouched($event)"
+      (input)="changeInputValue($event)"
+      (change)="changeInputValue($event)" />
+    <button [disabled]="!!disabled" mat-icon-button (click)="onSearchBtnPress()">
+      <mat-icon svgIcon="search"></mat-icon>
+    </button>
+  </label>
+</div>

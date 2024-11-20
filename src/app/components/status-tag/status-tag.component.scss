@@ -1,0 +1,27 @@
+.status-tag {
+  @apply flex justify-center items-center text-[12px] leading-4 rounded-lg text-center px-2 py-1;
+
+  &:has(mat-icon) {
+  @apply p-1 pl-2 gap-1;
+  }
+
+  &.success {
+    @apply bg-[var(--status-color-success-bg)] text-[var(--status-color-success-text)];
+  }
+
+  &.danger {
+    @apply bg-[var(--status-color-danger-bg)] text-[var(--status-color-danger-text)];
+  }
+
+  &.warning {
+    @apply bg-[var(--status-color-warning-bg)] text-[var(--status-color-warning-text)];
+  }
+
+  &.info {
+    @apply bg-[var(--status-color-info-bg)] text-[var(--status-color-info-text)];
+  }
+
+  &.default {
+    @apply bg-[var(--status-color-default-bg)] text-[var(--status-color-default-text)];
+  }
+}

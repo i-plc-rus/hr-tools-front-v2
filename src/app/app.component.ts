@@ -58,6 +58,14 @@ export class AppComponent implements OnInit {
       .addSvgIcon('logout', this.setPath(`${this.svgPath}/ic-logout.svg`))
       .addSvgIcon('business-bag', this.setPath(`${this.svgPath}/ic-business-bag.svg`))
       .addSvgIcon('profile-in-circle', this.setPath(`${this.svgPath}/ic-profile-in-circle.svg`))
+      .addSvgIcon('group', this.setPath(`${this.svgPath}/ic-group.svg`))
+      .addSvgIcon('pin', this.setPath(`${this.svgPath}/ic-pin.svg`))
+      .addSvgIcon('pin-outline', this.setPath(`${this.svgPath}/ic-pin-outline.svg`))
+      .addSvgIcon('chat-outline', this.setPath(`${this.svgPath}/ic-chat-outline.svg`))
+      .addSvgIcon('avg-pace', this.setPath(`${this.svgPath}/ic-avg-pace.svg`))
+      .addSvgIcon('hourglass', this.setPath(`${this.svgPath}/ic-hourglass.svg`))
+      .addSvgIcon('block-circle', this.setPath(`${this.svgPath}/ic-block-circle.svg`))
+      .addSvgIcon('check-circle', this.setPath(`${this.svgPath}/ic-check-circle.svg`))
   }
 
   ngOnInit() {

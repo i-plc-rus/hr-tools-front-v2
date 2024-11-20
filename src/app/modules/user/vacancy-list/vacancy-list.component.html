@@ -1,1 +1,265 @@
-<p>vacancy-list works!</p>
+<app-filter [opened]="toggleFilter.checked">
+  <form [formGroup]="filterForm">
+    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
+      <h3 class="text-[22px] leading-7">Фильтр</h3>
+      <div class="flex gap-2">
+        <button mat-icon-button (click)="filterForm.reset()">
+          <mat-icon class="text-[var(--text-main)]">refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="flex items-center">
+          <mat-icon class="text-[var(--text-main)]">close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="w-full">
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
+          @for (status of statuses; track $index) {
+            <mat-chip-option [value]="status.value">{{ status.value }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Город</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Город</mat-label>
+          <input matInput [formControl]="searchCity" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (city of cities; track $index) {
+              <mat-chip-option [value]="city.id">{{ city.address }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Подразделение</mat-expansion-panel-header>
+        <div class="max-h-[200px] overflow-y-scroll overflow-x-hidden">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="department_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (department of departments; track $index) {
+              <mat-chip-option [value]="department.id">{{ department.name }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Создатель заявки</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Введите имя или фамилию</mat-label>
+          <input matInput [formControl]="searchRequestAuthor" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="request_author_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (requestAuthor of requestAuthors; track $index) {
+              <mat-chip-option [value]="requestAuthor.id">{{ requestAuthor.fullName }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Ответственный</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Введите имя или фамилию</mat-label>
+          <input matInput [formControl]="searchAuthor" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="author_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (author of authors; track $index) {
+              <mat-chip-option [value]="author.id">{{ author.fullName }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Тип вакансии</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator formControlName="request_type">
+          @for (requestType of requestTypes; track $index) {
+            <mat-chip-option [value]="requestType">{{ requestType }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Приоритет</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator formControlName="urgency">
+          @for (urgency of urgencies; track $index) {
+            <mat-chip-option [value]="urgency">{{ urgency }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Вид подбора</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator formControlName="selection_type">
+          @for (selectionType of selectionTypes; track $index) {
+            <mat-chip-option [value]="selectionType">{{ selectionType }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+    </div>
+  </form>
+</app-filter>
+
+<div class="py-8 px-4 w-full h-full">
+  <div class="w-full flex items-center gap-3">
+    <app-search-input class="w-[380px]" placeholder="Поиск вакансии" [(ngModel)]="searchValue" (onSearch)="search()">
+    </app-search-input>
+    <app-filter-toggle #toggleFilter />
+  </div>
+
+  <div class="w-full mt-4 bg-white rounded-3xl">
+    <div class="p-6 pb-4 flex gap-4 justify-between items-center">
+      <div class="flex gap-12 items-center">
+        <h1 class="text-[22px]">Вакансии</h1>
+        <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
+          <mat-chip-option value="all" [selectable]="category.value !== 'all'">Все</mat-chip-option>
+          <mat-chip-option value="my" [selectable]="category.value !== 'my'">Мои вакансии</mat-chip-option>
+          <mat-chip-option
+            value="favorites"
+            [selectable]="category.value !== 'favorites'"
+            [disabled]="favoritesCount === 0">
+            @if (favoritesCount > 0) {
+              <span class="chip-number">{{ favoritesCount }}</span>
+            }
+            Избранные
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div class="flex gap-4">
+        <button mat-icon-button (click)="sort()">
+          <mat-icon [style.transform]="sortByDesc ? '' : 'rotate(180deg)'" class="text-[var(--text-main)]">
+            filter_list
+          </mat-icon>
+        </button>
+        <button mat-flat-button class="btn-secondary">
+          <mat-icon>add</mat-icon>
+          <span>Создать вакансию</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 pt-4 flex flex-col gap-4 w-full">
+      @if (vacancyList.length && !isLoading) {
+        @for (vacancy of vacancyList; track $index) {
+          <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
+            <div class="lg:flex w-full gap-3 justify-between">
+              <div class="flex flex-col gap-4 w-full lg:w-auto">
+                <div class="flex gap-4">
+                  @if (vacancy.opened_positions > 1) {
+                    <div class="flex justify-center items-center p-1.5 gap-1 rounded-full bg-[var(--link-default)] h-6">
+                      <mat-icon svgIcon="group" class="!w-4"></mat-icon>
+                      <span class="text-white text-[14px] font-medium leading-5">{{ vacancy.opened_positions }}</span>
+                    </div>
+                  }
+                  <app-status-tag
+                    [matMenuTriggerFor]="statusContent"
+                    [status]="vacancy.statusClass"
+                    class="cursor-pointer">
+                    <span>{{ vacancy.status }}</span>
+                    <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+                  </app-status-tag>
+                  <mat-menu #statusContent="matMenu">
+                    @for (status of statuses; track $index) {
+                      @if (vacancy.status !== status.value) {
+                        <button mat-menu-item (click)="changeStatus(vacancy.id, status.value)">
+                          <app-status-tag [status]="status.className">{{ status.value }}</app-status-tag>
+                        </button>
+                      }
+                    }
+                  </mat-menu>
+                  @if (vacancy.urgency === 'Срочно') {
+                    <div class="h-6 text-[var(--error-alter)]">
+                      <mat-icon>alarm</mat-icon>
+                    </div>
+                  }
+                </div>
+                <h2 class="text-[32px] leading-10">{{ vacancy.vacancy_name }}</h2>
+              </div>
+              <div class="flex flex-col gap-2 mt-1 lg:text-right lg:min-w-[200px]">
+                <span class="text-[16px] leading-6 text-[var(--text-alter)]">{{ vacancy.department_name }}</span>
+                <span class="text-[22px] leading-7">{{ vacancy.city }}</span>
+              </div>
+            </div>
+
+            <div class="w-full flex flex-col gap-4">
+              <div
+                class="flex flex-col gap-2 lg:flex-row text-[16px] leading-6 text-[var(--text-alter)] lg:description-dots">
+                <span>{{ vacancy.company_name }}</span>
+                <span>{{ vacancy.company_struct_name }}</span>
+                <span>{{ vacancy.chief_fio }}</span>
+              </div>
+              <div class="flex gap-4 flex-grow flex-shrink flex-nowrap overflow-x-auto">
+                @for (stage of defaultVacancyCandidateStages; track $index) {
+                  <div
+                    class="flex flex-col gap-1 p-2 items-center rounded-lg bg-white h-[84px] grow-0 shrink-0 basis-[116px]">
+                    <div>
+                      <span class="text-[22px] leading-7 text-[var(--link-default)] text-center">
+                        {{ stage.value }}
+                      </span>
+                    </div>
+                    <span class="text-[12px] leading-4 text-[var(--text-alter)] text-center">
+                      {{ stage.label }}
+                    </span>
+                  </div>
+                }
+              </div>
+              <div class="flex justify-between items-center">
+                <div class="flex gap-4">
+                  <button mat-icon-button (click)="togglePin(vacancy.id, !vacancy.pinned)">
+                    @if (vacancy.pinned) {
+                      <mat-icon class="text-[var(--link-default)]" svgIcon="pin"></mat-icon>
+                    } @else {
+                      <mat-icon class="text-[var(--link-default)]" svgIcon="pin-outline"></mat-icon>
+                    }
+                  </button>
+                  <button mat-icon-button (click)="toggleFavorite(vacancy.id, !vacancy.favorite)">
+                    @if (vacancy.favorite) {
+                      <mat-icon class="text-[var(--link-default)]">bookmark</mat-icon>
+                    } @else {
+                      <mat-icon class="text-[var(--link-default)]">bookmark_outline</mat-icon>
+                    }
+                  </button>
+                  <div class="relative">
+                    <button mat-icon-button disabled #commentBtn (click)="openComment('')">
+                      <mat-icon
+                        class="{{ commentBtn.disabled ? '' : 'text-[var(--link-default)]' }}"
+                        svgIcon="chat-outline" />
+                      <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
+                    </button>
+                  </div>
+                </div>
+                <div class="text-[16px] leading-6 text-[var(--text-alter)] text-right">
+                  Дата создания: {{ vacancy.creation_date | date: 'dd.MM.yyyy' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="w-full h-full flex items-center justify-center">
+          @if (isLoading) {
+            <app-loader></app-loader>
+          } @else {
+            <div class="text-center py-3">
+              <h3 class="text-[22px] leading-7">Вакансии не найдены</h3>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -125,18 +125,18 @@ export interface DictapimodelsCompanyView {
 }
 
 export interface DictapimodelsDepartmentData {
-  company_id?: string;
+  company_struct_id?: string;
   name?: string;
   parent_id?: string;
 }
 
 export interface DictapimodelsDepartmentFind {
-  company_id?: string;
+  company_struct_id?: string;
   name?: string;
 }
 
 export interface DictapimodelsDepartmentView {
-  company_id?: string;
+  company_struct_id?: string;
   id?: string;
   name?: string;
   parent_id?: string;
@@ -388,6 +388,10 @@ export interface VacancyapimodelsVacancyRequestData {
   department_id?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   /** внутреннее взаимодействие */
   in_interaction?: string;
   /** сотрудник проводящий интервью */
@@ -404,6 +408,8 @@ export interface VacancyapimodelsVacancyRequestData {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */
@@ -430,6 +436,10 @@ export interface VacancyapimodelsVacancyRequestEditData {
   department_id?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   /** внутреннее взаимодействие */
   in_interaction?: string;
   /** сотрудник проводящий интервью */
@@ -446,6 +456,8 @@ export interface VacancyapimodelsVacancyRequestEditData {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */
@@ -479,6 +491,10 @@ export interface VacancyapimodelsVacancyRequestView {
   department_name?: string;
   /** Коментарий к заявке */
   description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
   id?: string;
   /** внутреннее взаимодействие */
   in_interaction?: string;
@@ -497,6 +513,8 @@ export interface VacancyapimodelsVacancyRequestView {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   /** краткая информация о комманде отдела */

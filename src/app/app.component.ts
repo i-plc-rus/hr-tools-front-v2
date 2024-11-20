@@ -56,6 +56,8 @@ export class AppComponent implements OnInit {
       .addSvgIcon('add-bag', this.setPath(`${this.svgPath}/ic-add-bag.svg`))
       .addSvgIcon('extension', this.setPath(`${this.svgPath}/ic-extension.svg`))
       .addSvgIcon('logout', this.setPath(`${this.svgPath}/ic-logout.svg`))
+      .addSvgIcon('business-bag', this.setPath(`${this.svgPath}/ic-business-bag.svg`))
+      .addSvgIcon('profile-in-circle', this.setPath(`${this.svgPath}/ic-profile-in-circle.svg`))
       .addSvgIcon('group', this.setPath(`${this.svgPath}/ic-group.svg`))
       .addSvgIcon('pin', this.setPath(`${this.svgPath}/ic-pin.svg`))
       .addSvgIcon('pin-outline', this.setPath(`${this.svgPath}/ic-pin-outline.svg`))

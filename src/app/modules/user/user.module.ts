@@ -24,7 +24,10 @@ import {StatusTagComponent} from '../../components/status-tag/status-tag.compone
 import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
+import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
+import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
+import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -56,6 +59,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
     RequestCreationComponent,
     RequestApprovalComponent,
     RequestDetailComponent,
+    VacancyNegotiationsComponent,
+    VacancyСandidatesComponent,
+    VacancyDetailComponent,
   ],
   imports: [
     CommonModule,

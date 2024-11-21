@@ -3,11 +3,11 @@
     <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
       <h3 class="text-[22px] leading-7">Фильтр</h3>
       <div class="flex gap-2">
-        <button mat-icon-button (click)="filterForm.reset()">
-          <mat-icon class="text-[var(--text-main)]">refresh</mat-icon>
+        <button mat-icon-button (click)="filterForm.reset()" class="btn-secondary">
+          <mat-icon>refresh</mat-icon>
         </button>
-        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="flex items-center">
-          <mat-icon class="text-[var(--text-main)]">close</mat-icon>
+        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+          <mat-icon>close</mat-icon>
         </button>
       </div>
     </div>
@@ -140,8 +140,8 @@
         </mat-chip-listbox>
       </div>
       <div class="flex gap-4">
-        <button mat-icon-button (click)="sort()">
-          <mat-icon [style.transform]="sortByDesc ? '' : 'rotate(180deg)'" class="text-[var(--text-main)]">
+        <button mat-icon-button (click)="sort()" class="btn-secondary">
+          <mat-icon [class.rotate-180]="!sortByDesc" class="transition-all">
             filter_list
           </mat-icon>
         </button>
@@ -187,7 +187,9 @@
                     </div>
                   }
                 </div>
-                <h2 class="text-[32px] leading-10">{{ vacancy.vacancy_name }}</h2>
+                <a class="hover:text-[var(--link-default)]" [routerLink]="['..', vacancy.id, 'candidates']">
+                  <h2 class="text-[32px] leading-10" >{{ vacancy.vacancy_name }}</h2>
+                </a>
               </div>
               <div class="flex flex-col gap-2 mt-1 lg:text-right lg:min-w-[200px]">
                 <span class="text-[16px] leading-6 text-[var(--text-alter)]">{{ vacancy.department_name }}</span>
@@ -204,8 +206,8 @@
               </div>
               <div class="flex gap-4 flex-grow flex-shrink flex-nowrap overflow-x-auto">
                 @for (stage of defaultVacancyCandidateStages; track $index) {
-                  <div
-                    class="flex flex-col gap-1 p-2 items-center rounded-lg bg-white h-[84px] grow-0 shrink-0 basis-[116px]">
+                  <div [routerLink]="['..',vacancy.id, stage.link]"
+                    class="flex flex-col gap-1 p-2 items-center rounded-lg bg-white h-[84px] grow-0 shrink-0 basis-[116px] cursor-pointer">
                     <div>
                       <span class="text-[22px] leading-7 text-[var(--link-default)] text-center">
                         {{ stage.value }}
@@ -219,25 +221,23 @@
               </div>
               <div class="flex justify-between items-center">
                 <div class="flex gap-4">
-                  <button mat-icon-button (click)="togglePin(vacancy.id, !vacancy.pinned)">
+                  <button mat-icon-button (click)="togglePin(vacancy.id, !vacancy.pinned)" class="btn-primary">
                     @if (vacancy.pinned) {
-                      <mat-icon class="text-[var(--link-default)]" svgIcon="pin"></mat-icon>
+                      <mat-icon svgIcon="pin"></mat-icon>
                     } @else {
-                      <mat-icon class="text-[var(--link-default)]" svgIcon="pin-outline"></mat-icon>
+                      <mat-icon svgIcon="pin-outline"></mat-icon>
                     }
                   </button>
-                  <button mat-icon-button (click)="toggleFavorite(vacancy.id, !vacancy.favorite)">
+                  <button mat-icon-button (click)="toggleFavorite(vacancy.id, !vacancy.favorite)" class="btn-primary">
                     @if (vacancy.favorite) {
-                      <mat-icon class="text-[var(--link-default)]">bookmark</mat-icon>
+                      <mat-icon>bookmark</mat-icon>
                     } @else {
-                      <mat-icon class="text-[var(--link-default)]">bookmark_outline</mat-icon>
+                      <mat-icon>bookmark_outline</mat-icon>
                     }
                   </button>
                   <div class="relative">
-                    <button mat-icon-button disabled #commentBtn (click)="openComment('')">
-                      <mat-icon
-                        class="{{ commentBtn.disabled ? '' : 'text-[var(--link-default)]' }}"
-                        svgIcon="chat-outline" />
+                    <button mat-icon-button disabled #commentBtn (click)="openComment('')" class="btn-primary">
+                      <mat-icon svgIcon="chat-outline" />
                       <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
                     </button>
                   </div>

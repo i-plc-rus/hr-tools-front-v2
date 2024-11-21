@@ -66,7 +66,18 @@ export class AppComponent implements OnInit {
       .addSvgIcon('hourglass', this.setPath(`${this.svgPath}/ic-hourglass.svg`))
       .addSvgIcon('block-circle', this.setPath(`${this.svgPath}/ic-block-circle.svg`))
       .addSvgIcon('check-circle', this.setPath(`${this.svgPath}/ic-check-circle.svg`))
+      .addSvgIcon('no-avatar', this.setPath(`${this.svgPath}/ic-no-avatar.svg`))
+      .addSvgIcon('assignment-ind', this.setPath(`${this.svgPath}/ic-assignment-ind.svg`))
+      .addSvgIcon('whatsapp', this.setPath(`${this.svgPath}/ic-whatsapp.svg`))
+      .addSvgIcon('telegram', this.setPath(`${this.svgPath}/ic-telegram.svg`))
+      .addSvgIcon('call', this.setPath(`${this.svgPath}/ic-call.svg`))
+      .addSvgIcon('mail', this.setPath(`${this.svgPath}/ic-mail.svg`))
+      .addSvgIcon('share', this.setPath(`${this.svgPath}/ic-share.svg`))
+      .addSvgIcon('print', this.setPath(`${this.svgPath}/ic-print.svg`))
+      .addSvgIcon('download', this.setPath(`${this.svgPath}/ic-download.svg`))
       .addSvgIcon('ql-stylus-note', this.setPath(`${this.svgPath}/ic-ql-stylus-note.svg`))
+      .addSvgIcon('cancel', this.setPath(`${this.svgPath}/ic-cancel.svg`))
+      .addSvgIcon('comment', this.setPath(`${this.svgPath}/ic-comment.svg`))
   }
 
   ngOnInit() {

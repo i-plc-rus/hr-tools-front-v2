@@ -1,1 +1,8 @@
+:host {
+  @apply flex;
+}
 
+.ag-theme-material {
+  --ag-border-radius: 24px;
+  --ag-row-height: 88px;
+}

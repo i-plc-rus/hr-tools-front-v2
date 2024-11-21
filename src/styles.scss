@@ -138,6 +138,46 @@ mat-chip-listbox {
   }
 }
 
+//material-input
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-focus-outline-color: var(--link-default);
+  --mdc-outlined-text-field-focus-label-text-color: var(--link-default);
+  --mdc-outlined-text-field-caret-color: var(--link-default);
+}
+
+//material-tabs
+
+.mat-mdc-tab {
+  --mat-tab-header-active-label-text-color: var(--link-default);
+  --mat-tab-header-active-focus-label-text-color: var(--text-main);
+  --mat-tab-header-active-hover-label-text-color: var(--text-main);
+
+  --mat-tab-header-inactive-label-text-color: var(--text-alter);
+  --mat-tab-header-inactive-focus-label-text-color: var(--text-main);
+  --mat-tab-header-inactive-hover-label-text-color: var(--text-main);
+
+  --mdc-tab-indicator-active-indicator-color: var(--link-default);
+  --mat-tab-header-active-focus-indicator-color: var(--link-default);
+  --mat-tab-header-active-hover-indicator-color: var(--link-default);
+
+  --mdc-tab-indicator-active-indicator-height: 3px;
+  --mdc-tab-indicator-active-indicator-shape: 5px 5px 0 0;
+}
+
+//ag-grid
+
+.ag-theme-material {
+  --ag-font-size: 14px;
+  --ag-header-height: 68px;
+  --ag-range-selection-border-color: transparent;
+  --ag-row-hover-color: var(--background-alter);
+  --ag-column-hover-color: var(--background-alter);
+  --ag-header-cell-hover-background-color: var(--background-alter);
+  --ag-header-foreground-color: var(--text-alter);
+  --ag-foreground-color: var(--text-main);
+}
+
 //quill-editor
 
 quill-editor {

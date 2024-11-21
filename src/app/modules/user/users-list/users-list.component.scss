@@ -7,14 +7,6 @@
 }
 
 .ag-theme-material {
-  --ag-font-size: 14px;
   --ag-row-height: 56px;
   --ag-row-border-color: transparent;
-  --ag-range-selection-border-color: transparent;
-  --ag-row-hover-color: var(--background-alter);
-  --ag-column-hover-color: var(--background-alter);
-
-  --ag-header-cell-hover-background-color: var(--background-alter);
-  --ag-header-foreground-color: var(--text-alter);
-  --ag-foreground-color: var(--text-main);
 }

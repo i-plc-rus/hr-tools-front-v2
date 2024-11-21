@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -11,6 +11,11 @@ import {TokenService} from './services/token.service';
 import {CookieService} from './services/cookie.service';
 import {authorizationInterceptor} from './interceptors/authorization.interceptor';
 import {provideEnvironmentNgxMask} from 'ngx-mask';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {registerLocaleData} from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import localeRuExtra from '@angular/common/locales/extra/ru';
+registerLocaleData(localeRu, 'ru-RU', localeRuExtra);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,11 +27,16 @@ export const appConfig: ApplicationConfig = {
       credentialsInterceptor
     ])),
     {
+      provide: LOCALE_ID,
+      useValue: 'ru-RU'
+    },
+    {
       provide: API_BASE_URL,
       useValue: 'https://a.hr-tools.pro'
     },
     TokenService,
     CookieService,
-    provideEnvironmentNgxMask()
+    provideEnvironmentNgxMask(),
+    provideNativeDateAdapter(),
   ]
 };

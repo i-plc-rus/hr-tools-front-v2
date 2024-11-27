@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../../api/Api';
@@ -19,7 +19,7 @@ import {MatButton} from '@angular/material/button';
     MatButton
   ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   form: FormGroup;
   loading: boolean = false;
@@ -35,6 +35,12 @@ export class LoginComponent {
     })
   }
 
+  ngOnInit(): void {
+    if (this.tokenService.refreshToken) {
+      this.router.navigate(['/user']);
+    }
+  }
+
   login() {
     this.loading = true;
     this.api.v1AuthLoginCreate(this.form.getRawValue())
@@ -42,7 +48,7 @@ export class LoginComponent {
         next: (response: any) => {
           console.log(response.body.data);
           this.loading = false;
-          this.tokenService.updateToken(response.body.data.token)
+          this.tokenService.updateToken(response.body.data.token, response.body.data.refresh_token);
           this.router.navigate(['/user']);
         },
         error: () => this.loading = false

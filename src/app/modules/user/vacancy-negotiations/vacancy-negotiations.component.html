@@ -49,7 +49,7 @@
       </mat-expansion-panel>
 
       <mat-expansion-panel class="mat-elevation-z">
-        <mat-expansion-panel-header>Водительсике права</mat-expansion-panel-header>
+        <mat-expansion-panel-header>Водительские права</mat-expansion-panel-header>
         <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="driver_licence">
           @for (driverLicense of driverLicenseTypes; track $index) {
             <mat-chip-option [value]="driverLicense">{{ driverLicense }}</mat-chip-option>

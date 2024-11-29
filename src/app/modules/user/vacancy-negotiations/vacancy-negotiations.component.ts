@@ -227,7 +227,7 @@ export class VacancyNegotiationsComponent {
     onCellClicked: this.openDetails.bind(this),
     columnDefs: this.colDefs,
     rowData: this.negotiationsList,
-    overlayNoRowsTemplate: 'Нет записей',
+    overlayNoRowsTemplate: '<span class="text-[32px] leading-10">Отклики отсутствуют</span>',
     loadingOverlayComponent: LoaderComponent,
     loading: true,
     suppressMovableColumns: true,

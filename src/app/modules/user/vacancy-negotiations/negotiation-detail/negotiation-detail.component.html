@@ -1,0 +1,149 @@
+@if (!isLoading) {
+  <div class="sticky top-0 flex w-full h-[69px] px-5 py-4 justify-between items-center bg-white z-10 border-b">
+    <div class="flex gap-1">
+      <button mat-icon-button (click)="closeDetail()" class="btn-secondary">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button class="btn-danger">
+        <mat-icon svgIcon="cancel" />
+        <span>Отменить</span>
+      </button>
+      <button mat-button class="btn-primary">
+        <mat-icon>arrow_forward</mat-icon>
+        <span class="text-[var(--text-main)]">Перевести</span>
+      </button>
+      <button mat-button class="btn-primary">
+        <mat-icon svgIcon="comment" />
+        <span class="text-[var(--text-main)]">Комментарий</span>
+      </button>
+      <button mat-button class="btn-primary">
+        <mat-icon svgIcon="mail" />
+        <span class="text-[var(--text-main)]">Написать</span>
+      </button>
+    </div>
+    <app-negotiation-status [negotiation]="negotiation" (onChange)="changeStatus($event)" />
+  </div>
+
+  <div class="flex flex-col w-full h-full px-6 py-4 gap-6">
+    <div class="flex w-full px-6 py-4 gap-3 bg-[var(--background-alter)] rounded-2xl">
+      <div class="flex w-[80px] h-[80px] bg-[var(--background-main)] rounded-full">
+        @if (negotiation?.photo_url) {
+          <img class="min-w-[80px] min-h-[80px] rounded-full" [src]="negotiation?.photo_url" alt="аватар" />
+        } @else {
+          <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
+        }
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <div class="flex w-full gap-4 items-center">
+          <app-status-tag status="warning"> Откликнулся </app-status-tag>
+          <span class="text-[11px] leading-4 font-medium text-[var(--text-alter)]">
+            Отклик с карьерного сайта {{ negotiation?.negotiation_date | date: 'dd.MM.yyyy' }}
+          </span>
+        </div>
+
+        <div class="flex flex-col w-full lg:flex-row">
+          <div class="flex flex-col grow gap-1">
+            <h4 class="text-[22px] leading-7">{{ negotiation?.fio }}</h4>
+            <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 lg:flex-row lg:description-dots">
+              <span>{{ negotiation?.age }} лет</span>
+              <span>{{ negotiation?.salary | currency: 'RUB' : 'руб.' : '1.0' }}</span>
+              <span>{{ negotiation?.resume_title }}</span>
+              <span>{{ negotiation?.address }}</span>
+            </div>
+            <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 lg:flex-row lg:description-dots">
+              <span>{{ negotiation?.phone }}</span>
+              <span>{{ negotiation?.email }}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col grow lg:justify-between lg:items-end">
+            <button mat-icon-button class="btn-primary">
+              <mat-icon svgIcon="assignment-ind" />
+            </button>
+            <div class="flex">
+              <button mat-icon-button class="btn-primary">
+                <mat-icon svgIcon="whatsapp" />
+              </button>
+              <button mat-icon-button class="btn-primary">
+                <mat-icon svgIcon="telegram" />
+              </button>
+              <button mat-icon-button class="btn-primary">
+                <mat-icon svgIcon="call" />
+              </button>
+              <button mat-icon-button class="btn-primary">
+                <mat-icon svgIcon="mail" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full">
+          @if (negotiation?.vacancy_author) {
+            <button mat-button class="btn-primary">{{ negotiation?.vacancy_author }}</button>
+          }
+          <div class="flex mt-2">
+            <button mat-button class="btn-primary">Название сопроводительного письма</button>
+            <button mat-icon-button class="btn-danger">
+              <mat-icon svgIcon="delete" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-8">
+      <div class="w-full">
+        <label class="text-[16px] leading-6 font-medium">Заметка о кандидате</label>
+        <app-text-editor class="w-full mt-2" [formControl]="comment"> </app-text-editor>
+        <button mat-flat-button class="btn-primary mt-4" (click)="saveComment()">Сохранить</button>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group fitInkBarToContent>
+    <mat-tab label="Резюме">
+      <div class="p-6">
+        <label class="text-[16px] leading-6 font-medium">Резюме</label>
+        <div class="w-full flex justify-between items-center mt-4">
+          <span class="text-[16px] leading-6 text-[var(--text-alter)]">Дата добавления резюме: 20.01.2024</span>
+          <div class="flex gap-3">
+            <button mat-icon-button class="btn-primary">
+              <mat-icon svgIcon="share" />
+            </button>
+            <button mat-icon-button class="btn-primary">
+              <mat-icon svgIcon="print" />
+            </button>
+            <button mat-icon-button class="btn-primary">
+              <mat-icon svgIcon="download" />
+            </button>
+            <button mat-icon-button class="btn-primary">
+              <mat-icon svgIcon="delete" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Действия">
+      <div class="p-6">
+        <mat-chip-listbox hideSingleSelectionIndicator>
+          <mat-chip-option selected>Все</mat-chip-option>
+          <mat-chip-option>Комментарии</mat-chip-option>
+        </mat-chip-listbox>
+        <div class="flex flex-col gap-4 mt-4">
+          <span class="text-[16px] leading-6 text-[var(--text-alter)]">Нет действий</span>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Документы">
+      <div class="p-6">
+        <button mat-flat-button class="btn-secondary">
+          <mat-icon>attach_file</mat-icon>
+          Прикрепить документ
+        </button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+} @else {
+  <div class="w-full h-full flex justify-center items-center">
+    <app-loader></app-loader>
+  </div>
+}

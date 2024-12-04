@@ -72,7 +72,7 @@ export class UsersListComponent implements OnInit {
     onGridReady: this.onGridReady.bind(this),
     columnDefs: this.colDefs,
     rowData: this.usersList,
-    overlayNoRowsTemplate: 'Нет записей',
+    overlayNoRowsTemplate: '<span class="text-[32px] leading-10">Пользователи отсутствуют</span>',
     loadingOverlayComponent: LoaderComponent,
     loading: true,
   }

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ScreenWidthService} from '../../../services/screen-width.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -70,16 +69,16 @@ export class VacancyListComponent implements OnInit {
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
   defaultVacancyCandidateStages = [
-    {label: 'Отклик', value: '-'},
-    {label: 'Добавлен', value: '-'},
-    {label: 'Написало письмо', value: '-'},
-    {label: 'Интервью с HR', value: '-'},
-    {label: 'Результативный звонок', value: '-'},
-    {label: 'Проверка СБ', value: '-'},
-    {label: 'Согласование оффера', value: '-'},
-    {label: 'Оффер', value: '-'},
-    {label: 'Письмо в кадры', value: '-'},
-    {label: 'Оформление документов', value: '-'},
+    {label: 'Отклик', value: '-', link: 'negotiations', params: ''},
+    {label: 'Добавлен', value: '-', link: '', params: ''},
+    {label: 'Написало письмо', value: '-', link: '', params: ''},
+    {label: 'Интервью с HR', value: '-', link: '', params: ''},
+    {label: 'Результативный звонок', value: '-', link: '', params: ''},
+    {label: 'Проверка СБ', value: '-', link: '', params: ''},
+    {label: 'Согласование оффера', value: '-', link: '', params: ''},
+    {label: 'Оффер', value: '-', link: '', params: ''},
+    {label: 'Письмо в кадры', value: '-', link: '', params: ''},
+    {label: 'Оформление документов', value: '-', link: '', params: ''},
   ];
 
   constructor(

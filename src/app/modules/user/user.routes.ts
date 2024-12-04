@@ -7,6 +7,9 @@ import {RequestCreationComponent} from './request-creation/request-creation.comp
 import {RequestApprovalComponent} from './request-approval/request-approval.component';
 import {RequestDetailComponent} from './request-detail/request-detail.component';
 import {DevelopmentComponent} from '../../components/development/development.component';
+import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
+import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
+import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
 
 export const routes: Routes = [
   {
@@ -19,7 +22,37 @@ export const routes: Routes = [
       },
       {
         path: 'vacancy',
-        component: VacancyListComponent,
+        children: [
+          {
+            path: 'list',
+            component: VacancyListComponent,
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: '',
+                component: VacancyDetailComponent,
+              },
+              {
+                path: 'negotiations',
+                component: VacancyNegotiationsComponent,
+              },
+              {
+                path: 'candidates',
+                component: VacancyСandidatesComponent,
+              },
+              {
+                path: '**',
+                redirectTo: ''
+              }
+            ],
+          },
+          {
+            path: '**',
+            redirectTo: 'list'
+          }
+        ],
       },
       {
         path: 'request',

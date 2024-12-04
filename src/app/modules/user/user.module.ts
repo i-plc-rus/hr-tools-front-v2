@@ -24,7 +24,13 @@ import {StatusTagComponent} from '../../components/status-tag/status-tag.compone
 import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
+import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
+import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
+import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
+import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
+import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
+import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -41,6 +47,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -56,6 +63,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
     RequestCreationComponent,
     RequestApprovalComponent,
     RequestDetailComponent,
+    VacancyNegotiationsComponent,
+    VacancyСandidatesComponent,
+    TableCandidateNameComponent,
+    NegotiationDetailComponent,
+    NegotiationStatusComponent,
+    VacancyDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -90,6 +103,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatAutocompleteModule,
     MatChipsModule,
     MatExpansionModule,
+    MatTabsModule,
 ]
 
 })

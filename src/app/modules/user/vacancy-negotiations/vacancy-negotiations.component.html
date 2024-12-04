@@ -1,0 +1,98 @@
+<app-filter [opened]="toggleFilter.checked">
+  <form [formGroup]="filterForm">
+    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
+      <h3 class="text-[22px] leading-7">Фильтр</h3>
+      <div class="flex gap-2">
+        <button mat-icon-button class="btn-secondary" (click)="filterForm.reset()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="w-full">
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Образование</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="education">
+          @for (education of educationTypes; track $index) {
+            <mat-chip-option [value]="education.value">{{ education.label }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Опыт</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="experience">
+          @for (experience of experienceTypes; track $index) {
+            <mat-chip-option [value]="experience.value">{{ experience.label }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Пол</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="gender">
+          @for (gender of genderTypes; track $index) {
+            <mat-chip-option [value]="gender.value">{{ gender.label }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Статус поиска работы</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="job_search_statuses">
+          @for (searchStatus of searchStatusTypes; track $index) {
+            <mat-chip-option [value]="searchStatus.value">{{ searchStatus.label }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Водительские права</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="driver_licence">
+          @for (driverLicense of driverLicenseTypes; track $index) {
+            <mat-chip-option [value]="driverLicense">{{ driverLicense }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+    </div>
+  </form>
+</app-filter>
+
+<div class="py-8 px-4 w-full h-full">
+  <div class="flex flex-col gap-4">
+    <div class="w-full flex gap-3 items-center">
+      <button mat-icon-button (click)="onBack()" class="btn-secondary">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="text-[32px] leading-10">{{ vacancyName }}</h1>
+    </div>
+    <div class="w-full flex items-center gap-3">
+      <app-search-input
+        class="w-[380px]"
+        placeholder="ФИО, почта и телефон"
+        [(ngModel)]="searchValue"
+        (onSearch)="onSearch()">
+      </app-search-input>
+      <app-filter-toggle #toggleFilter />
+    </div>
+  </div>
+
+  <div class="w-full mt-4 bg-white rounded-3xl">
+    @if (!detailsSelectedId) {
+      <div class="p-6 pb-4">
+        <h2 class="text-[22px]">Отклики</h2>
+      </div>
+    }
+
+    <div class="flex">
+      <ag-grid-angular
+        [gridOptions]="gridOptions"
+        class="ag-theme-material h-[800px] {{ detailsSelectedId ? 'w-1/4 max-w-[350px]' : 'w-full' }}" />
+      @if (detailsSelectedId) {
+        <app-negotiation-detail #negotiationDetail [negotiationId]="detailsSelectedId.negotiationId" (onClose)="closeDetails()"></app-negotiation-detail>
+      }
+    </div>
+  </div>
+</div>

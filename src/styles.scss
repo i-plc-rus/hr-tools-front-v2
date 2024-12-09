@@ -55,6 +55,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-right: none; 
 }
 
+@layer utilities {
+  .description-dots {
+    span:not(:last-child):after {
+      @apply ml-2;
+      content: '•';
+    }
+  }
+}
+
 //material flat-button styles
 
 button[mat-flat-button].btn-primary {

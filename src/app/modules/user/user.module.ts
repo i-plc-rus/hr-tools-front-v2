@@ -27,7 +27,9 @@ import {SearchInputComponent} from '../../components/search-input/search-input.c
 import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
+import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
+import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
@@ -76,7 +78,9 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     TableCandidateNameComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
+    СandidateListComponent,
     CandidateDetailComponent,
+    AddCandidateModalComponent,
     VacancyDetailComponent,
     VacancyDescriptionComponent,
     VacancyPublicationComponent,

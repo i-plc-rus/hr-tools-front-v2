@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
 import {ActivatedRoute} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
-// import {CandidateModalService} from '../../../services/candidate-modal.service';
+import {CandidateModalService} from '../../../services/candidate-modal.service';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -22,7 +22,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   });
 
   constructor(
-    // private modalService: CandidateModalService,
+    private modalService: CandidateModalService,
     private api: ApiService,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -60,9 +60,9 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   openEditModal() {
     if (!this.applicant) return;
     const id = this.applicant.id;
-    // this.modalService.editCandidateModal(this.applicant).subscribe(() =>
-    //   this.getApplicantById(id)
-    // );
+    this.modalService.editCandidateModal(this.applicant).subscribe(() =>
+      this.getApplicantById(id)
+    );
   }
 
   addTag(tag: string) {

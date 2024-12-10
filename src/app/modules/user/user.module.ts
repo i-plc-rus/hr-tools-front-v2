@@ -48,7 +48,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -104,6 +104,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatChipsModule,
     MatExpansionModule,
     MatTabsModule,
+    MatDatepickerModule,
 ]
 
 })

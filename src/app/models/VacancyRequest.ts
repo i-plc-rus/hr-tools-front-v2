@@ -1,4 +1,7 @@
 import {
+  ModelsEmployment,
+  ModelsExperience,
+  ModelsSchedule,
   ModelsVRSelectionType, 
   ModelsVRStatus, 
   ModelsVRType, 
@@ -29,6 +32,11 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   department_name: string = '';
   /** Коментарий к заявке */
   description: string = '';
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
+  favorite: boolean = false;
   /** внутреннее взаимодействие */
   in_interaction: string = '';
   /** сотрудник проводящий интервью */
@@ -40,10 +48,13 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   opened_positions: number = 1;
   /** внешнее взаимодействие */
   out_interaction: string = '';
+  pinned: boolean = false;
   /** адрес места работы */
   place_of_work: string = '';
   /** требования/обязанности/условия */
   requirements: string = '';
+  /** Режим работы */
+  schedule?: ModelsSchedule;
   /** краткая информация о комманде отдела */
   short_info: string = '';
   /** название вакансии */

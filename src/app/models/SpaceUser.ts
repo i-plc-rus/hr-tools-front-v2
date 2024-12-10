@@ -1,17 +1,17 @@
-import {SpaceapimodelsSpaceUser} from '../api/data-contracts';
+import {ModelsUserRole, SpaceapimodelsSpaceUser} from '../api/data-contracts';
 
 export class SpaceUser implements SpaceapimodelsSpaceUser {
-  id?: string;
-  space_id?: string;
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  phone_number?: string;
+  id: string = '';
+  space_id: string = '';
+  email: string = '';
+  first_name: string = '';
+  last_name: string = '';
+  phone_number: string = '';
   is_admin: boolean = false;
 
-  password?: string;
+  password: string = '';
   //is_active: boolean = true;  //todo работает или уволен
-  //role?: ModelsUserRole;  //todo когда добавят роли в бэк то надо будет дописать
+  role: string = '';
   get fullName(): string {
     return this.first_name + ' ' + this.last_name;
   }

@@ -2,10 +2,22 @@ import {Component, OnInit} from '@angular/core';
 import {ScreenWidthService} from '../../../services/screen-width.service';
 import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
-import {ModelsVRSelectionType, ModelsVRStatus, VacancyapimodelsSearchPeriod, VacancyapimodelsVacancyRequestView, VacancyapimodelsVrFilter, VacancyapimodelsVrSort} from '../../../api/data-contracts';
+import {
+  DictapimodelsCityView,
+  ModelsVRSelectionType,
+  ModelsVRStatus,
+  SpaceapimodelsSpaceUser,
+  VacancyapimodelsSearchPeriod,
+  VacancyapimodelsVacancyRequestView,
+  VacancyapimodelsVrFilter,
+  VacancyapimodelsVrSort
+} from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {StatusTag} from '../../../models/StatusTag';
 import {FormControl, FormGroup} from '@angular/forms';
+import {SpaceUser} from '../../../models/SpaceUser';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-request-list',
@@ -19,7 +31,7 @@ export class RequestListComponent implements OnInit {
     search: new FormControl(''),
     author_id: new FormControl(''),
     city_id: new FormControl(''),
-    favorite: new FormControl(false),
+    favorite: new FormControl<boolean | undefined>(undefined),
     search_from: new FormControl(''),
     search_to: new FormControl(''),
     search_period: new FormControl<VacancyapimodelsSearchPeriod | undefined>(undefined),
@@ -27,7 +39,10 @@ export class RequestListComponent implements OnInit {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
+  category = new FormControl<ModelsVRStatus | ''>('');
   searchValue: string = '';
+  searchCity = new FormControl('');
+  searchRequestAuthor = new FormControl('');
 
   // справочники
   statuses: {className: StatusTag; value: ModelsVRStatus}[] = [
@@ -39,6 +54,16 @@ export class RequestListComponent implements OnInit {
     {className: 'danger', value: ModelsVRStatus.VRStatusNotAccepted},
   ];
   selectionTypes = Object.values(ModelsVRSelectionType);
+  searchPeriodTypes: {label: string, value: VacancyapimodelsSearchPeriod}[] = [
+    {label: 'За сегодня', value: VacancyapimodelsSearchPeriod.SearchByToday},
+    {label: 'За 3 дня', value: VacancyapimodelsSearchPeriod.SearchBy3Days},
+    {label: 'За неделю', value: VacancyapimodelsSearchPeriod.SearchByWeek},
+    {label: 'За 30 дней', value: VacancyapimodelsSearchPeriod.SearchByMonth},
+    {label: 'За период', value: VacancyapimodelsSearchPeriod.SearchByPeriod},
+  ];
+  cities: DictapimodelsCityView[] = [];
+  users: SpaceUser[] = [];
+  requestAuthors: SpaceUser[] = [];
 
   // вакансии
   isLoading = false;
@@ -52,11 +77,17 @@ export class RequestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRequests();
+    this.getUsers();
+    this.setFormListeners();
   }
 
   getRequests() {
     this.isLoading = true;
     const filter: VacancyapimodelsVrFilter = this.filterForm.value as VacancyapimodelsVrFilter;
+    if (filter.search_from)
+      filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
+    if (filter.search_to)
+      filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
     this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data)
@@ -68,6 +99,46 @@ export class RequestListComponent implements OnInit {
         console.log(error);
       },
     })
+  }
+
+  setFormListeners() {
+    this.category.valueChanges
+      .subscribe((category) => {
+        this.sortByDesc = true;
+        this.filterForm.reset();
+        if (!category)
+          this.filterForm.controls.statuses.setValue([]);
+        else
+          this.filterForm.controls.statuses.setValue([category]);
+      });
+
+    this.searchCity.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((newValue) => {
+        if (this.filterForm.controls.city_id.value !== '')
+          this.filterForm.controls.city_id.setValue('');
+        if (newValue && newValue.length > 3)
+          this.getCities(newValue);
+        else
+          this.cities = [];
+      });
+
+    this.searchRequestAuthor.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((newValue) => {
+        if (this.filterForm.controls.author_id.value !== '')
+          this.filterForm.controls.author_id.setValue('');
+        if (newValue && newValue.length > 3)
+          this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+        else
+          this.requestAuthors = [];
+      });
+
+    this.filterForm.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe(() => {
+        this.getRequests();
+      });
   }
 
   openComment(comment: string) {
@@ -104,7 +175,61 @@ export class RequestListComponent implements OnInit {
         }
       })
   }
+  
+  toggleFavorite(id: string, set: boolean) {
+    this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getRequests();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    })
+  }
+
+  togglePin(id: string, set: boolean) {
+    this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getRequests();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    })
+  }
 
   search() {
+    this.filterForm.controls.search.setValue(this.searchValue);
+  }
+
+  sort() {
+    this.sortByDesc = !this.sortByDesc;
+    this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
+  }
+
+  getCities(address: string) {
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.cities = data.body.data;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  getUsers() {
+    this.api.v1UsersListCreate({}).subscribe({
+      next: (res: any) => {
+        if (res.body.data) {
+          this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }

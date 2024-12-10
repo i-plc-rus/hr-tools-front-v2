@@ -1,15 +1,100 @@
 <app-filter [opened]="toggleFilter.checked">
-  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
-    <h3 class="text-[22px] leading-7">Фильтр</h3>
-    <div class="flex gap-2">
-      <button mat-icon-button>
-        <mat-icon class="text-[var(--text-main)]">refresh</mat-icon>
-      </button>
-      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="flex items-center">
-        <mat-icon class="text-[var(--text-main)]">close</mat-icon>
-      </button>
+  <form [formGroup]="filterForm">
+    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
+      <h3 class="text-[22px] leading-7">Фильтр</h3>
+      <div class="flex gap-2">
+        <button mat-icon-button (click)="filterForm.reset()" class="btn-secondary">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
+    <div class="w-full">
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
+          @for (status of statuses; track $index) {
+            <mat-chip-option [value]="status.value">{{ status.value }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Город</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Город</mat-label>
+          <input matInput [formControl]="searchCity" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (city of cities; track $index) {
+              <mat-chip-option [value]="city.id">{{ city.address }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Создатель заявки</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Введите имя или фамилию</mat-label>
+          <input matInput [formControl]="searchRequestAuthor" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="author_id">
+            <mat-chip-option [value]="''">Все</mat-chip-option>
+            @for (requestAuthor of requestAuthors; track $index) {
+              <mat-chip-option [value]="requestAuthor.id">{{ requestAuthor.fullName }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Вид подбора</mat-expansion-panel-header>
+        <mat-chip-listbox hideSingleSelectionIndicator formControlName="selection_type">
+          @for (selectionType of selectionTypes; track $index) {
+            <mat-chip-option [value]="selectionType">{{ selectionType }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Дата создания</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="search_period">
+          @for (searchPeriodType of searchPeriodTypes; track $index) {
+            <mat-chip-option [value]="searchPeriodType.value">{{ searchPeriodType.label }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+        <mat-form-field class="w-full mt-2" appearance="outline" floatLabel="always">
+          <mat-label>Введите диапазон дат</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Начало" formControlName="search_from" />
+            <input matEndDate placeholder="Конец" formControlName="search_to" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker>
+            <mat-date-range-picker-actions>
+              <button mat-button matDateRangePickerCancel class="btn-primary">Сбросить</button>
+              <button mat-button matDateRangePickerApply class="btn-primary">Применить</button>
+            </mat-date-range-picker-actions>
+          </mat-date-range-picker>
+
+          @if (filterForm.controls.search_from.hasError('matStartDateInvalid')) {
+            <mat-error>Неверная дата начала</mat-error>
+          }
+          @if (filterForm.controls.search_to.hasError('matEndDateInvalid')) {
+            <mat-error>Неверная дата окончания</mat-error>
+          }
+        </mat-form-field>
+      </mat-expansion-panel>
+    </div>
+  </form>
 </app-filter>
 
 <div class="py-8 px-4 w-full h-full">
@@ -23,16 +108,22 @@
     <div class="p-6 pb-4 flex gap-4 justify-between items-center">
       <div class="flex gap-12 items-center">
         <h1 class="text-[22px]">Заявки</h1>
-        <mat-chip-listbox hideSingleSelectionIndicator [selectable]="false">
-          <mat-chip-option selected>Все</mat-chip-option>
-          <mat-chip-option>Согласовано</mat-chip-option>
-          <mat-chip-option>На согласовании</mat-chip-option>
-          <mat-chip-option>Не согласовано</mat-chip-option>
+        <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
+          <mat-chip-option [value]="''" [selectable]="category.value !== ''">Все</mat-chip-option>
+          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'"
+            >Согласовано</mat-chip-option
+          >
+          <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'"
+            >На согласовании</mat-chip-option
+          >
+          <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'"
+            >Не согласовано</mat-chip-option
+          >
         </mat-chip-listbox>
       </div>
       <div class="flex gap-4">
-        <button mat-icon-button>
-          <mat-icon class="text-[var(--text-main)]">filter_list</mat-icon>
+        <button mat-icon-button (click)="sort()" class="btn-secondary">
+          <mat-icon [class.rotate-180]="!sortByDesc" class="transition-all"> filter_list </mat-icon>
         </button>
         <button mat-flat-button class="btn-secondary" [routerLink]="['..', 'create']">
           <mat-icon>add</mat-icon>
@@ -72,8 +163,8 @@
                   </div>
                 }
               </div>
-              <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn">
-                <mat-icon class="text-[var(--link-default)]">more_horiz</mat-icon>
+              <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn btn-primary">
+                <mat-icon>more_horiz</mat-icon>
               </button>
               <mat-menu #optionsContent="matMenu">
                 <button mat-menu-item>Настройки</button>
@@ -130,21 +221,28 @@
 
             <div class="flex justify-between items-center">
               <div class="flex gap-4">
-                <!-- <button mat-icon-button>
-                <mat-icon class="text-[var(--link-default)]" svgIcon="pin-outline"></mat-icon>
-              </button> -->
-                <!-- <button mat-icon-button>
-                <mat-icon class="text-[var(--link-default)]">bookmark_outline</mat-icon>
-              </button> -->
+                <button mat-icon-button (click)="togglePin(request.id, !request.pinned)" class="btn-primary">
+                  @if (request.pinned) {
+                    <mat-icon svgIcon="pin"></mat-icon>
+                  } @else {
+                    <mat-icon svgIcon="pin-outline"></mat-icon>
+                  }
+                </button>
+                <button mat-icon-button (click)="toggleFavorite(request.id, !request.favorite)" class="btn-primary">
+                  @if (request.favorite) {
+                    <mat-icon>bookmark</mat-icon>
+                  } @else {
+                    <mat-icon>bookmark_outline</mat-icon>
+                  }
+                </button>
                 <div class="relative">
                   <button
                     mat-icon-button
                     [disabled]="request.description"
                     #commentBtn
-                    (click)="openComment(request.description)">
-                    <mat-icon
-                      class="{{ commentBtn.disabled ? '' : 'text-[var(--link-default)]' }}"
-                      svgIcon="chat-outline" />
+                    (click)="openComment(request.description)"
+                    class="btn-primary">
+                    <mat-icon svgIcon="chat-outline" />
                     <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
                   </button>
                 </div>

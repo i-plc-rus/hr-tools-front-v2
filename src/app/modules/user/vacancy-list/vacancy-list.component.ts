@@ -115,8 +115,15 @@ export class VacancyListComponent implements OnInit {
     });
   }
 
-  changeStatus(id: string, status: any) {
-    console.log(id, status);
+  changeStatus(id: string, status: ModelsVacancyStatus) {
+    this.api.v1SpaceVacancyChangeStatusUpdate(id, {status}, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getVacancyList();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    })
   }
 
   toggleFavorite(id: string, set: boolean) {

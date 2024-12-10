@@ -27,6 +27,7 @@ import {SearchInputComponent} from '../../components/search-input/search-input.c
 import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
+import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
@@ -68,6 +69,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     TableCandidateNameComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
+    CandidateDetailComponent,
     VacancyDetailComponent,
   ],
   imports: [

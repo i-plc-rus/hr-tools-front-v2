@@ -1,0 +1,11 @@
+:host {
+  @apply w-full;
+}
+
+.vacancy-candidate-detail {
+  @apply flex flex-col grow border-l border-[var(--link-disabled)] w-full h-[800px] overflow-y-auto;
+}
+
+.candidate-detail {
+  @apply py-4 px-6;
+}

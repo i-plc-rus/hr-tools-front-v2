@@ -1,1 +1,17 @@
+:host {
+  @apply flex;
+}
 
+.ag-theme-material {
+  --ag-border-radius: 24px;
+  --ag-row-height: 88px;
+}
+
+.filter-chip {
+  @apply flex justify-center items-center rounded-lg gap-2 px-2 py-1 border border-[var(--text-alter)] cursor-pointer;
+  @apply text-[14px] text-[var(--on-surface)] leading-5 text-center font-medium;
+}
+
+.filter-chip:hover, .filter-chip:focus {
+  @apply border-[var(--text-main)] text-[var(--text-main)];
+}

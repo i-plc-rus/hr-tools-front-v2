@@ -1,1 +1,144 @@
-vacancy-candidates works!
+<app-filter [opened]="toggleFilter.checked">
+  <form [formGroup]="filterForm">
+    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
+      <h3 class="text-[22px] leading-7">Фильтр</h3>
+      <div class="flex gap-2">
+        <button mat-icon-button class="btn-secondary">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="w-full">
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Образование</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="education">
+          @for (education of educationTypes; track $index) {
+            <mat-chip-option [value]="education">{{ education }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Навыки</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Поиск</mat-label>
+          <input matInput [formControl]="searchSkill" />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="skills">
+          <mat-chip-option [value]="''">Все</mat-chip-option>
+          @for (skill of skillsTypes; track $index) {
+            <mat-chip-option [value]="skill">{{ skill }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Опыт</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="experience">
+          <mat-chip-option [value]="''">Все</mat-chip-option>
+          @for (experience of experienceTypes; track $index) {
+            <mat-chip-option [value]="experience">{{ experience }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+    </div>
+  </form>
+</app-filter>
+
+<div class="py-8 px-4 w-full h-full">
+  <div class="flex flex-col gap-4">
+    <div class="w-full flex gap-3 items-center justify-between">
+      <div class="flex gap-3 items-center">
+        <button mat-icon-button (click)="onBack()" class="btn-secondary">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="text-[32px] leading-10 whitespace-normal">
+          {{ vacancy?.vacancy_name }}
+          <button mat-icon-button [routerLink]="['..']" class="btn-primary">
+            <mat-icon svgIcon="border-color" />
+          </button>
+        </h1>
+      </div>
+      @if (vacancy) {
+        <div class="flex flex-nowrap text-nowrap">
+          <app-status-tag [matMenuTriggerFor]="statusContent" [status]="vacancy.statusClass" class="cursor-pointer">
+            <span>{{ vacancy.status }}</span>
+            <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+          </app-status-tag>
+          <mat-menu #statusContent="matMenu">
+            @for (status of statuses; track $index) {
+              @if (vacancy.status !== status.value) {
+                <button mat-menu-item (click)="changeStatus(vacancy.id, status.value)">
+                  <app-status-tag [status]="status.className">{{ status.value }}</app-status-tag>
+                </button>
+              }
+            }
+          </mat-menu>
+        </div>
+      }
+    </div>
+    <div class="w-full flex items-center justify-between gap-3">
+      <div class="flex gap-3">
+        <app-search-input
+          class="w-[380px]"
+          placeholder="ФИО, почта и тег"
+          [(ngModel)]="searchValue"
+          (onSearch)="onSearch()">
+        </app-search-input>
+        <app-filter-toggle #toggleFilter />
+      </div>
+      <div class="flex gap-3">
+        <div class="filter-chip" [matMenuTriggerFor]="filterCandidateContent">
+          <app-notification-bubble [value]="1" />
+          <span>Все кандидаты</span>
+          <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+        </div>
+        <mat-menu #filterCandidateContent="matMenu">
+          <button mat-menu-item>Все кандидаты</button>
+          <button mat-menu-item>Откликнулся</button>
+          <button mat-menu-item>Добавлен в базу</button>
+          <button mat-menu-item>Телефонное интервью</button>
+          <button mat-menu-item>Отправка нанимающему менеджеру</button>
+          <button mat-menu-item>Решение руководителя</button>
+          <button mat-menu-item>Стажировка</button>
+          <button mat-menu-item>Оформление на работу</button>
+          <button mat-menu-item>Принят</button>
+        </mat-menu>
+        <div class="filter-chip" [matMenuTriggerFor]="filterStatusContent">
+          <app-notification-bubble [value]="1" />
+          <span>Все статусы</span>
+          <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+        </div>
+        <mat-menu #filterStatusContent="matMenu">
+          <button mat-menu-item>Все статусы</button>
+          <button mat-menu-item>В процессе</button>
+          <button mat-menu-item>Отклонены</button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full mt-4 bg-white rounded-3xl">
+    @if (!detailsSelectedId) {
+      <div class="p-6 pb-4">
+        <h2 class="text-[22px]">Кандидаты</h2>
+      </div>
+    }
+
+    <div class="flex">
+      <ag-grid-angular
+        [gridOptions]="gridOptions"
+        class="ag-theme-material h-[800px] {{ detailsSelectedId ? 'w-1/4 max-w-[350px]' : 'w-full' }}" />
+      @if (detailsSelectedId) {
+        <app-candidate-detail
+          #candidateDetail
+          [applicantId]="detailsSelectedId.applicantId"
+          (onClose)="closeDetails()"></app-candidate-detail>
+      }
+    </div>
+  </div>
+</div>

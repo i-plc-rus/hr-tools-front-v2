@@ -10,6 +10,7 @@ import {DevelopmentComponent} from '../../components/development/development.com
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
+import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
           {
             path: 'list',
             component: VacancyListComponent,
+          },
+          {
+            path: 'create',
+            component: VacancyDetailComponent,
           },
           {
             path: ':id',
@@ -90,7 +95,20 @@ export const routes: Routes = [
       },
       {
         path: 'candidates',
-        component: DevelopmentComponent,
+        children: [
+          {
+            path: 'list',
+            component: DevelopmentComponent,
+          },
+          {
+            path: ':id',
+            component: CandidateDetailComponent,
+          },
+          {
+            path: '**',
+            redirectTo: 'list'
+          }
+        ],
       },
       {
         path: 'offers',

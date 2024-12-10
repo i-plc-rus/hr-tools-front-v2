@@ -66,31 +66,43 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 //material flat-button styles
 
-button[mat-flat-button].btn-primary {
+button[mat-flat-button].btn-primary,
+a[mat-flat-button].btn-primary {
   --mdc-filled-button-label-text-color: var(--background-alter);
   --mdc-filled-button-container-color: var(--link-default);
 }
 
-button[mat-flat-button].btn-secondary {
+button[mat-flat-button].btn-secondary,
+a[mat-flat-button].btn-secondary {
   --mdc-filled-button-label-text-color: var(--link-default);
   --mdc-filled-button-container-color: var(--background-main);
   --mat-filled-button-state-layer-color: var(--link-hover);
 }
 
-button[mat-flat-button].btn-danger {
+button[mat-flat-button].btn-danger,
+a[mat-flat-button].btn-danger {
   --mdc-filled-button-label-text-color: var(--background-alter);
   --mdc-filled-button-container-color: var(--error-alter);
   --mat-filled-button-state-layer-color: var(--link-hover);
 }
 
+button[mat-flat-button].btn-secondary-red,
+a[mat-flat-button].btn-secondary-red {
+  --mdc-filled-button-label-text-color: var(--error-alter);
+  --mdc-filled-button-container-color: var(--status-color-danger-bg);
+  --mat-filled-button-state-layer-color: var(--error-alter);
+}
+
 //material button styles
 
-button[mat-button].btn-primary {
+button[mat-button].btn-primary,
+a[mat-button].btn-primary {
   --mdc-text-button-label-text-color: var(--link-default);
   --mdc-text-button-container-color: var(--background-alter);
 }
 
-button[mat-button].btn-danger {
+button[mat-button].btn-danger,
+a[mat-button].btn-danger {
   --mdc-text-button-label-text-color: var(--status-color-danger-text);
   --mat-text-button-ripple-color: var(--status-color-danger-bg);
   --mat-text-button-state-layer-color: var(--status-color-danger-text);
@@ -98,17 +110,20 @@ button[mat-button].btn-danger {
 
 //material icon-button styles
 
-button[mat-icon-button].btn-primary {
+button[mat-icon-button].btn-primary,
+a[mat-icon-button].btn-primary {
   --mdc-icon-button-icon-color: var(--link-default);
   --mat-icon-button-state-layer-color: var(--link-hover);
 }
 
-button[mat-icon-button].btn-secondary {
+button[mat-icon-button].btn-secondary,
+a[mat-icon-button].btn-secondary {
   --mdc-icon-button-icon-color: var(--text-main);
   --mat-icon-button-state-layer-color: var(--link-hover);
 }
 
-button[mat-icon-button].btn-danger {
+button[mat-icon-button].btn-danger,
+a[mat-icon-button].btn-danger {
   --mdc-icon-button-icon-color: var(--status-color-danger-text);
   --mat-icon-button-state-layer-color: var(--status-color-danger-text);
   --mat-icon-button-ripple-color: var(--status-color-danger-bg);
@@ -172,6 +187,74 @@ mat-chip-listbox {
 
   --mdc-tab-indicator-active-indicator-height: 3px;
   --mdc-tab-indicator-active-indicator-shape: 5px 5px 0 0;
+}
+
+//material-calendar
+
+.mat-datepicker-content {
+  --mat-datepicker-calendar-container-text-color: var(--text-main);
+  --mat-datepicker-calendar-date-text-color: var(--text-main);
+  --mat-datepicker-calendar-period-button-text-color: var(--text-main);
+  --mat-datepicker-calendar-period-button-icon-color: var(--text-main);
+  --mat-datepicker-calendar-navigation-button-icon-color: var(--text-main);
+  --mat-datepicker-calendar-header-text-color: var(--text-main);
+  --mat-datepicker-calendar-body-label-text-color: var(--text-main);
+  --mat-datepicker-calendar-container-background-color: var(--background-main);
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--link-default);
+  --mat-datepicker-calendar-date-today-outline-color: var(--link-default);
+  --mat-datepicker-calendar-date-preview-state-outline-color: var(--link-default);
+  --mat-datepicker-calendar-date-in-range-state-background-color: var(--status-color-info-bg);
+  --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--background-alter);
+
+  .mat-calendar-body-label {
+    @apply invisible;
+  }
+  .mat-calendar-body-label[colspan="7"] {
+    @apply hidden;
+  }
+}
+
+//material select, autocomplete, option
+
+.cdk-overlay-pane:has(.fit-content.mat-mdc-select-panel) {
+  @apply min-w-fit;
+}
+
+mat-select {
+  --mat-select-enabled-arrow-color: var(--text-main);
+  --mat-select-focused-arrow-color: var(--link-default);
+}
+
+.mat-mdc-select-panel {
+  --mat-select-panel-background-color: white;
+  --mat-select-container-shape: 16px;
+  --mat-select-container-elevation-shadow:
+  0px 1px 2px 0px rgba(0, 0, 0, 0.3), 
+  0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  border-radius: var(--mat-select-container-shape) !important;
+}
+
+.mat-mdc-autocomplete-panel {
+  --mat-autocomplete-background-color: white;
+  --mat-autocomplete-container-shape: 16px;
+  --mat-autocomplete-container-elevation-shadow:
+  0px 1px 2px 0px rgba(0, 0, 0, 0.3), 
+  0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  border-radius: var(--mat-autocomplete-container-shape) !important;
+}
+
+.cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) div.mat-mdc-autocomplete-panel,
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+  @apply mt-2;
+}
+.mat-mdc-autocomplete-panel-above div.mat-mdc-autocomplete-panel,
+.mat-mdc-select-panel-above div.mat-mdc-select-panel {
+  @apply mb-2;
+}
+
+mat-option {
+  --mat-option-focus-state-layer-color: var(--background-main);
+  --mat-option-hover-state-layer-color: var(--background-alter);
 }
 
 //ag-grid

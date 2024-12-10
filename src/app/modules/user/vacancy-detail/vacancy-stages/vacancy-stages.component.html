@@ -1,0 +1,136 @@
+<div class="absolute top-6 right-6">
+  <button mat-flat-button class="btn-secondary" (click)="openNewStageForm()">
+    <mat-icon>add</mat-icon>
+    Добавить этап
+  </button>
+</div>
+
+<ul cdkDropList [cdkDropListData]="stages" class="flex flex-col gap-2 mt-4" (cdkDropListDropped)="drop($event)">
+  @for (stage of stages; track $index) {
+    <li
+      cdkDrag
+      [cdkDragDisabled]="!stage.can_delete"
+      class="flex flex-col rounded-lg {{
+        stage.can_delete ? 'border-2 border-[var(--background-alter)] bg-white' : 'bg-[var(--background-alter)]'
+      }}">
+      <div class="flex px-5 py-2 gap-1 justify-between items-center">
+        <div class="flex w-full items-center">
+          <div class="flex gap-3 items-center w-1/2">
+            @if (stage.can_delete) {
+              <mat-icon
+                cdkDragHandle
+                class="text-[var(--text-alter)] text-[20px] !w-5 !h-5 cursor-move"
+                svgIcon="drag-indicator"></mat-icon>
+            } @else {
+              <mat-icon class="text-[var(--text-alter)] text-[20px] !w-5 !h-5">lock_outline</mat-icon>
+            }
+            <span class="text-[16px] leading-6 font-medium">{{ stage.name }}</span>
+          </div>
+          @if (stage.limit_value || stage.stage_type) {
+            @if (stage.limit_value) {
+              <span class="text-[var(--text-alter)] text-[14px] leading-5">
+                Лимит времени на на этапе: {{ stage.limit_value }} {{ stage.limit_type }}
+              </span>
+            } @else {
+              <span class="text-[var(--text-alter)] text-[14px] leading-5"> Тип этапа: {{ stage.stage_type }} </span>
+            }
+          }
+        </div>
+        <div class="flex gap-2">
+          <input type="checkbox" class="hidden" #limitEdit />
+          <input type="checkbox" class="hidden" #stageEdit />
+          <button
+            mat-icon-button
+            disabled
+            class="btn-primary"
+            (click)="stageEdit.checked = false; limitEdit.checked = !limitEdit.checked">
+            @if (limitEdit.checked) {
+              <mat-icon svgIcon="alarm-active"></mat-icon>
+            } @else {
+              <mat-icon>alarm</mat-icon>
+            }
+          </button>
+          <button
+            mat-icon-button
+            disabled
+            class="btn-primary"
+            (click)="limitEdit.checked = false; stageEdit.checked = !stageEdit.checked">
+            @if (stageEdit.checked) {
+              <mat-icon>edit</mat-icon>
+            } @else {
+              <mat-icon svgIcon="edit"></mat-icon>
+            }
+          </button>
+          @if (stage.can_delete) {
+            <button mat-icon-button class="btn-primary" (click)="deleteStage(stage.id || '')">
+              <mat-icon svgIcon="delete"></mat-icon>
+            </button>
+          }
+        </div>
+      </div>
+      @if (limitEdit.checked) {
+        <div class="flex flex-col px-5 py-4">
+          <div class="flex gap-4 w-full lg:w-1/2">
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Лимит времени на этапе</mat-label>
+              <input matInput type="number" [value]="stage.limit_value" />
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Единица времени</mat-label>
+              <mat-select [value]="stage.limit_type">
+                @for (limitType of limitTypes; track $index) {
+                  <mat-option [value]="limitType">{{ limitType }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="flex justify-between">
+            <button mat-flat-button class="btn-primary">Сохранить</button>
+            <div class="flex gap-4">
+              <button mat-flat-button class="btn-secondary">Отменить</button>
+              <button mat-flat-button class="btn-secondary-red">Удалить</button>
+            </div>
+          </div>
+        </div>
+      }
+      @if (stageEdit.checked) {
+        <div class="flex flex-col px-5 py-4">
+          <mat-form-field class="w-full lg:w-1/2" appearance="outline">
+            <mat-label>Название</mat-label>
+            <input matInput [value]="stage.name" />
+          </mat-form-field>
+          <div class="flex gap-4">
+            <button mat-flat-button class="btn-primary">Сохранить</button>
+            <button mat-flat-button class="btn-secondary">Отменить</button>
+          </div>
+        </div>
+      }
+    </li>
+  }
+  @if (newStageOpened) {
+    <form
+      class="rounded-lg border-2 border-[var(--background-alter)] px-5 py-4"
+      [formGroup]="newStageForm"
+      #newStageFormElement>
+      <div class="mb-6">
+        <span class="text-[16px] leading-6 font-medium mb-6">Добавить этап</span>
+      </div>
+      <div class="flex gap-6 mb-1">
+        <mat-form-field class="w-full lg:w-1/2" appearance="outline">
+          <mat-label>Название этапа</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="w-full lg:w-1/2" appearance="outline">
+          <mat-label>Тип</mat-label>
+          <input matInput formControlName="stage_type" />
+        </mat-form-field>
+      </div>
+      <div class="flex gap-4">
+        <button mat-flat-button class="btn-primary" (click)="addNewStage()">Добавить</button>
+        <button mat-flat-button class="btn-secondary" (click)="newStageOpened = false; newStageForm.reset()">
+          Отменить
+        </button>
+      </div>
+    </form>
+  }
+</ul>

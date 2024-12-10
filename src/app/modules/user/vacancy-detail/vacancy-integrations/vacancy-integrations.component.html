@@ -1,0 +1,98 @@
+<form class="flex flex-col">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:gap-6">
+    <div class="flex flex-col w-full lg:w-1/2">
+      <h2 class="text-[22px] leading-7 mb-4 mt-6">Общая информация</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Регион</mat-label>
+        <input matInput />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Тип занятости</mat-label>
+        <input matInput />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Вид занятости</mat-label>
+        <input matInput />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="flex flex-col gap-6">
+    <div class="relative">
+      <mat-expansion-panel class="mat-elevation-z" expanded hideToggle #hhExpansion>
+        <mat-expansion-panel-header>
+          <div class="flex w-full justify-between items-center">
+            <div class="flex gap-1">
+              <span>Настройка интеграции с Head Hunter</span>
+              <mat-icon class="transition-all" [class.rotate-180]="hhExpansion.expanded">
+                keyboard_arrow_down
+              </mat-icon>
+            </div>
+            <app-status-tag status="success" class="pr-14">Подключена</app-status-tag>
+          </div>
+        </mat-expansion-panel-header>
+
+        <div class="flex flex-col w-full lg:w-1/2">
+          <mat-form-field appearance="outline">
+            <mat-label>API-ключ</mat-label>
+            <input matInput />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Токен</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+        <div class="flex gap-4 justify-between">
+          <div class="flex gap-4">
+            <button mat-flat-button class="btn-secondary" (click)="checkHHConnection()">Проверить соединение</button>
+            <button mat-flat-button class="btn-primary">Сохранить</button>
+          </div>
+          <button mat-flat-button class="btn-secondary-red">Отключить</button>
+        </div>
+      </mat-expansion-panel>
+      <div class="absolute top-1 right-8 transition-all" [class.top-3]="hhExpansion.expanded">
+        <button mat-icon-button class="btn-primary" (click)="showHHLogs()">
+          <mat-icon svgIcon="import_contacts" />
+        </button>
+      </div>
+    </div>
+
+    <div class="relative">
+      <mat-expansion-panel class="mat-elevation-z" hideToggle #avitoExpansion>
+        <mat-expansion-panel-header>
+          <div class="flex w-full justify-between items-center">
+            <div class="flex gap-1">
+              <span>Avito</span>
+              <mat-icon class="transition-all" [class.rotate-180]="avitoExpansion.expanded">
+                keyboard_arrow_down
+              </mat-icon>
+            </div>
+            <app-status-tag status="success" class="pr-14">Подключена</app-status-tag>
+          </div>
+        </mat-expansion-panel-header>
+
+        <div class="flex flex-col w-full lg:w-1/2">
+          <mat-form-field appearance="outline">
+            <mat-label>API-ключ</mat-label>
+            <input matInput />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Токен</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+        <div class="flex gap-4 justify-between">
+          <div class="flex gap-4">
+            <button mat-flat-button class="btn-secondary" (click)="checkAvitoConnection()">Проверить соединение</button>
+            <button mat-flat-button class="btn-primary">Сохранить</button>
+          </div>
+          <button mat-flat-button class="btn-secondary-red">Отключить</button>
+        </div>
+      </mat-expansion-panel>
+      <div class="absolute top-1 right-8 transition-all" [class.top-3]="avitoExpansion.expanded">
+        <button mat-icon-button class="btn-primary" (click)="showAvitoLogs()">
+          <mat-icon svgIcon="import_contacts" />
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

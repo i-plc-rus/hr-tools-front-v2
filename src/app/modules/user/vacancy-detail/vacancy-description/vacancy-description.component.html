@@ -1,0 +1,203 @@
+<form class="flex flex-col" [formGroup]="vacancyForm">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:gap-6">
+    <div class="flex flex-col w-full lg:w-1/2">
+      <h2 class="text-[22px] leading-7 mb-4 mt-6">Общая информация</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Название компании</mat-label>
+        <input
+          matInput
+          (change)="autocompleteChange('company_id')"
+          (blur)="vacancyForm.controls['company_id'].markAsTouched()"
+          [matAutocomplete]="companyAutocomplete"
+          formControlName="company_name" />
+        <mat-autocomplete autoActiveFirstOption #companyAutocomplete="matAutocomplete">
+          @for (company of companies; track $index) {
+            <mat-option [value]="company.name" (onSelectionChange)="autocompleteChange('company_id', company.id)">
+              {{ company.name }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+        @let companyIdEmpty =
+          !vacancyForm.controls['company_name'].hasError('required') &&
+          !vacancyForm.controls['company_id'].value &&
+          !vacancyForm.controls['company_id'].untouched;
+        @if (companyIdEmpty) {
+          <mat-icon matSuffix matTooltip="Новая компания">add</mat-icon>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Название вакансии</mat-label>
+        <input matInput formControlName="vacancy_name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Подразделение</mat-label>
+        <input
+          matInput
+          (change)="autocompleteChange('department_id')"
+          (blur)="vacancyForm.controls['department_id'].markAsTouched()"
+          [matAutocomplete]="departmentAutocomplete"
+          formControlName="department_name" />
+        <mat-autocomplete autoActiveFirstOption #departmentAutocomplete="matAutocomplete">
+          @for (department of departments; track $index) {
+            <mat-option
+              [value]="department.name"
+              (onSelectionChange)="autocompleteChange('department_id', department.id)">
+              {{ department.name }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+        @let departmentIdErrorRequired =
+          vacancyForm.controls['department_id'].hasError('required') &&
+          !vacancyForm.controls['department_id'].untouched;
+        @if (departmentIdErrorRequired) {
+          <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error" />
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Штатная должность</mat-label>
+        <input
+          matInput
+          (change)="autocompleteChange('job_title_id')"
+          (blur)="vacancyForm.controls['job_title_id'].markAsTouched()"
+          [matAutocomplete]="jobTitleAutocomplete"
+          formControlName="job_title_name" />
+        <mat-autocomplete autoActiveFirstOption #jobTitleAutocomplete="matAutocomplete">
+          @for (jobTitle of jobTitles; track $index) {
+            <mat-option [value]="jobTitle.name" (onSelectionChange)="autocompleteChange('job_title_id', jobTitle.id)">
+              {{ jobTitle.name }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+        @let jobTitleIdErrorRequired =
+          vacancyForm.controls['job_title_id'].hasError('required') && !vacancyForm.controls['job_title_id'].untouched;
+        @if (jobTitleIdErrorRequired) {
+          <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error" />
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Структура</mat-label>
+        <input
+          matInput
+          (change)="autocompleteChange('company_struct_id')"
+          (blur)="vacancyForm.controls['company_struct_id'].markAsTouched()"
+          [matAutocomplete]="companyStructAutocomplete"
+          formControlName="company_struct_name" />
+        <mat-autocomplete autoActiveFirstOption #companyStructAutocomplete="matAutocomplete">
+          @for (companyStruct of companyStructures; track $index) {
+            <mat-option
+              [value]="companyStruct.name"
+              (onSelectionChange)="autocompleteChange('company_struct_id', companyStruct.id)">
+              {{ companyStruct.name }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+        @let companyStructIdErrorRequired =
+          vacancyForm.controls['company_struct_id'].hasError('required') &&
+          !vacancyForm.controls['company_struct_id'].untouched;
+        @if (companyStructIdErrorRequired) {
+          <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error" />
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col w-full lg:w-1/2" formGroupName="salary">
+      <label class="text-[16px] leading-6 font-medium mb-2">Ожидаемая ЗП</label>
+      <mat-form-field appearance="outline">
+        <mat-label>Сумма на руки</mat-label>
+        <input matInput type="number" formControlName="salary" formControlName="in_hand" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ЗП от</mat-label>
+        <input matInput type="number" formControlName="from" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ЗП до</mat-label>
+        <input matInput type="number" formControlName="to" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ЗП по результатам собеседования</mat-label>
+        <input matInput type="number" formControlName="by_result" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="flex flex-col lg:w-1/2">
+    <h2 class="text-[22px] leading-7 mb-4">Местоположение и контакты</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Город</mat-label>
+      <input
+        matInput
+        (change)="autocompleteChange('city_id')"
+        (blur)="vacancyForm.controls['city_id'].markAsTouched()"
+        [matAutocomplete]="cityAutocomplete"
+        formControlName="city" />
+      <mat-autocomplete autoActiveFirstOption #cityAutocomplete="matAutocomplete">
+        @for (city of cities; track $index) {
+          <mat-option [value]="city.address" (onSelectionChange)="autocompleteChange('city_id', city.id)">
+            {{ city.address }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+      @let cityIdErrorRequired =
+        vacancyForm.controls['city_id'].hasError('required') && !vacancyForm.controls['city_id'].untouched;
+      @if (cityIdErrorRequired) {
+        <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error" />
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Адрес офиса</mat-label>
+      <input matInput formControlName="place_of_work" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ФИО непосредственного руководителя</mat-label>
+      <input matInput formControlName="chief_fio" [matAutocomplete]="chiefAutocomplete" />
+      <mat-autocomplete autoActiveFirstOption #chiefAutocomplete="matAutocomplete">
+        @for (user of responsibleUsers; track $index) {
+          <mat-option [value]="user.fullName">
+            {{ user.fullName }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-col lg:flex-row lg:items-end lg:gap-6">
+    <div class="flex flex-col lg:w-1/2">
+      <h2 class="text-[22px] leading-7 mb-4">Детали вакансии</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Количество вакантных позиций</mat-label>
+        <input matInput type="number" formControlName="opened_positions" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Срочность</mat-label>
+        <mat-select formControlName="urgency">
+          @for (urgency of urgencies; track $index) {
+            <mat-option [value]="urgency">{{ urgency }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Тип заявки</mat-label>
+        <mat-select formControlName="request_type">
+          @for (requestType of requestTypes; track $index) {
+            <mat-option [value]="requestType">{{ requestType }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="flex flex-col w-full lg:w-1/2">
+      <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности, условия</label>
+      <app-text-editor
+        formControlName="requirements"
+        (onActionBtnClick)="openGenerateModal()"
+        class="w-full mb-5"
+        height="158px"></app-text-editor>
+    </div>
+  </div>
+
+  <div class="flex gap-4">
+    <button mat-flat-button [disabled]="isLoading" class="btn-primary" (click)="submitForm()">
+      {{ isNewVacancy ? 'Создать' : 'Сохранить' }}
+    </button>
+  </div>
+</form>

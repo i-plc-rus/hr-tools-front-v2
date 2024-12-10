@@ -15,6 +15,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {registerLocaleData} from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import localeRuExtra from '@angular/common/locales/extra/ru';
+import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
 registerLocaleData(localeRu, 'ru-RU', localeRuExtra);
 
 export const appConfig: ApplicationConfig = {
@@ -29,6 +30,13 @@ export const appConfig: ApplicationConfig = {
     {
       provide: LOCALE_ID,
       useValue: 'ru-RU'
+    },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS, 
+      useValue: {
+        hasBackdrop: true,
+        backdropClass: 'bg-[var(--overlay)]',
+      }
     },
     {
       provide: API_BASE_URL,

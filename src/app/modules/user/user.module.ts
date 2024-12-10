@@ -32,6 +32,7 @@ import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-det
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
 import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
+import {GenerateDescriptionModalComponent} from './generate-description-modal/generate-description-modal.component';
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -71,6 +72,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     NegotiationStatusComponent,
     CandidateDetailComponent,
     VacancyDetailComponent,
+    GenerateDescriptionModalComponent,
   ],
   imports: [
     CommonModule,

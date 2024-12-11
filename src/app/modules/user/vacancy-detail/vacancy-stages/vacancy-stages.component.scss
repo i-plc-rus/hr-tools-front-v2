@@ -1,0 +1,7 @@
+ul.cdk-drop-list-dragging li:not(.cdk-drag-placeholder) {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.cdk-drag-placeholder {
+  @apply opacity-0;
+}

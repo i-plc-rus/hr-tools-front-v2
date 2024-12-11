@@ -22,6 +22,15 @@ import {
   ApimodelsPagination,
   ApimodelsResponse,
   ApimodelsScrollerResponse,
+  ApplicantapimodelsApplicantData,
+  ApplicantapimodelsApplicantFilter,
+  ApplicantapimodelsApplicantHistoryFilter,
+  ApplicantapimodelsApplicantHistoryView,
+  ApplicantapimodelsApplicantNote,
+  ApplicantapimodelsApplicantView,
+  ApplicantapimodelsApplicantViewExt,
+  ApplicantapimodelsRejectReasons,
+  ApplicantapimodelsRejectRequest,
   AuthapimodelsJWTRefreshRequest,
   AuthapimodelsJWTResponse,
   AuthapimodelsLoginRequest,
@@ -38,6 +47,7 @@ import {
   DictapimodelsDepartmentFind,
   DictapimodelsDepartmentView,
   DictapimodelsJobTitleData,
+  FilesapimodelsFileView,
   GptmodelsGenVacancyDescRequest,
   GptmodelsGenVacancyDescResponse,
   HhapimodelsVacancyAttach,
@@ -54,8 +64,12 @@ import {
   SpaceapimodelsUpdateUser,
   VacancyapimodelsApprovalStages,
   VacancyapimodelsExtVacancyInfo,
+  VacancyapimodelsSelectionStageAdd,
+  VacancyapimodelsSelectionStageView,
+  VacancyapimodelsStatusChangeRequest,
   VacancyapimodelsVacancyData,
   VacancyapimodelsVacancyFilter,
+  VacancyapimodelsVacancyRequestCreateData,
   VacancyapimodelsVacancyRequestData,
   VacancyapimodelsVacancyRequestEditData,
   VacancyapimodelsVacancyRequestView,
@@ -1556,6 +1570,695 @@ export class ApiService {
     });
   }
   /**
+   * @description Создание
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantCreate
+   * @summary Создание
+   * @request POST:/api/v1/space/applicant
+   */
+  public v1SpaceApplicantCreate(
+    body: ApplicantapimodelsApplicantData,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: string;
+    }
+  >;
+  public v1SpaceApplicantCreate(
+    body: ApplicantapimodelsApplicantData,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: string;
+      }
+    >
+  >;
+  public v1SpaceApplicantCreate(
+    body: ApplicantapimodelsApplicantData,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: string;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: string;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: string;
+      }
+    >("POST", this.baseUrl + `/api/v1/space/applicant`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать документ кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantDocDetail
+   * @summary Скачать документ кандидата
+   * @request GET:/api/v1/space/applicant/doc/{id}
+   */
+  public v1SpaceApplicantDocDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceApplicantDocDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceApplicantDocDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/applicant/doc/${id}`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Список
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantListCreate
+   * @summary Список
+   * @request POST:/api/v1/space/applicant/list
+   */
+  public v1SpaceApplicantListCreate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsScrollerResponse & {
+      data?: ApplicantapimodelsApplicantView[];
+    }
+  >;
+  public v1SpaceApplicantListCreate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantView[];
+      }
+    >
+  >;
+  public v1SpaceApplicantListCreate(
+    body: ApplicantapimodelsApplicantFilter,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsScrollerResponse & {
+          data?: ApplicantapimodelsApplicantView[];
+        }
+      >
+    | (ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantView[];
+      }
+    >("POST", this.baseUrl + `/api/v1/space/applicant/list`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Список c причинами отказов
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantRejectListCreate
+   * @summary Список c причинами отказов
+   * @request POST:/api/v1/space/applicant/reject_list
+   */
+  public v1SpaceApplicantRejectListCreate(options?: RequestOptions): Observable<
+    ApimodelsResponse & {
+      data?: ApplicantapimodelsRejectReasons;
+    }
+  >;
+  public v1SpaceApplicantRejectListCreate(options?: RequestOptions & { observe: "response" }): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsRejectReasons;
+      }
+    >
+  >;
+  public v1SpaceApplicantRejectListCreate(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: ApplicantapimodelsRejectReasons;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: ApplicantapimodelsRejectReasons;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsRejectReasons;
+      }
+    >("POST", this.baseUrl + `/api/v1/space/applicant/reject_list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получение по ИД
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantDetail
+   * @summary Получение по ИД
+   * @request GET:/api/v1/space/applicant/{id}
+   */
+  public v1SpaceApplicantDetail(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: ApplicantapimodelsApplicantViewExt;
+    }
+  >;
+  public v1SpaceApplicantDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantViewExt;
+      }
+    >
+  >;
+  public v1SpaceApplicantDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: ApplicantapimodelsApplicantViewExt;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantViewExt;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantViewExt;
+      }
+    >("GET", this.baseUrl + `/api/v1/space/applicant/${id}`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Обновление
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantUpdate
+   * @summary Обновление
+   * @request PUT:/api/v1/space/applicant/{id}
+   */
+  public v1SpaceApplicantUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantData,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantData,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantData,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Перевести на другой этап подбора
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantChangeStageUpdate
+   * @summary Перевести на другой этап подбора
+   * @request PUT:/api/v1/space/applicant/{id}/change_stage
+   */
+  public v1SpaceApplicantChangeStageUpdate(
+    id: string,
+    query: {
+      /** Идентификатор этапа на который необходимо перевести кандидата */
+      stage_id: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantChangeStageUpdate(
+    id: string,
+    query: {
+      /** Идентификатор этапа на который необходимо перевести кандидата */
+      stage_id: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantChangeStageUpdate(
+    id: string,
+    query: {
+      /** Идентификатор этапа на который необходимо перевести кандидата */
+      stage_id: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/change_stage`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Лог действий
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantChangesUpdate
+   * @summary Лог действий
+   * @request PUT:/api/v1/space/applicant/{id}/changes
+   */
+  public v1SpaceApplicantChangesUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantHistoryFilter,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsScrollerResponse & {
+      data?: ApplicantapimodelsApplicantHistoryView[];
+    }
+  >;
+  public v1SpaceApplicantChangesUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantHistoryFilter,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      }
+    >
+  >;
+  public v1SpaceApplicantChangesUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantHistoryFilter,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsScrollerResponse & {
+          data?: ApplicantapimodelsApplicantHistoryView[];
+        }
+      >
+    | (ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      }
+    >("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/changes`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получить список документов кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantDocListDetail
+   * @summary Получить список документов кандидата
+   * @request GET:/api/v1/space/applicant/{id}/doc/list
+   */
+  public v1SpaceApplicantDocListDetail(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: FilesapimodelsFileView[];
+    }
+  >;
+  public v1SpaceApplicantDocListDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: FilesapimodelsFileView[];
+      }
+    >
+  >;
+  public v1SpaceApplicantDocListDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: FilesapimodelsFileView[];
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: FilesapimodelsFileView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: FilesapimodelsFileView[];
+      }
+    >("GET", this.baseUrl + `/api/v1/space/applicant/${id}/doc/list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description (Дубли) Пометить кандидатов как разных
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantIsolateUpdate
+   * @summary (Дубли) Пометить кандидатов как разных
+   * @request PUT:/api/v1/space/applicant/{id}/isolate
+   */
+  public v1SpaceApplicantIsolateUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
+      duplicate_id: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantIsolateUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
+      duplicate_id: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantIsolateUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
+      duplicate_id: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/isolate`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description (Дубли) Объединение кандидатов
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantJoinUpdate
+   * @summary (Дубли) Объединение кандидатов
+   * @request PUT:/api/v1/space/applicant/{id}/join
+   */
+  public v1SpaceApplicantJoinUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
+      duplicate_id: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantJoinUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
+      duplicate_id: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantJoinUpdate(
+    id: string,
+    query: {
+      /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
+      duplicate_id: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/join`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Добавить заметку о кандидате
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantNoteUpdate
+   * @summary Добавить заметку о кандидате
+   * @request PUT:/api/v1/space/applicant/{id}/note
+   */
+  public v1SpaceApplicantNoteUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantNote,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsScrollerResponse & {
+      data?: ApplicantapimodelsApplicantHistoryView[];
+    }
+  >;
+  public v1SpaceApplicantNoteUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantNote,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      }
+    >
+  >;
+  public v1SpaceApplicantNoteUpdate(
+    id: string,
+    body: ApplicantapimodelsApplicantNote,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsScrollerResponse & {
+          data?: ApplicantapimodelsApplicantHistoryView[];
+        }
+      >
+    | (ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsScrollerResponse & {
+        data?: ApplicantapimodelsApplicantHistoryView[];
+      }
+    >("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/note`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Отклонить кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantRejectUpdate
+   * @summary Отклонить кандидата
+   * @request PUT:/api/v1/space/applicant/{id}/reject
+   */
+  public v1SpaceApplicantRejectUpdate(
+    id: string,
+    body: ApplicantapimodelsRejectRequest,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantRejectUpdate(
+    id: string,
+    body: ApplicantapimodelsRejectRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantRejectUpdate(
+    id: string,
+    body: ApplicantapimodelsRejectRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/reject`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать резюме кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantResumeDetail
+   * @summary Скачать резюме кандидата
+   * @request GET:/api/v1/space/applicant/{id}/resume
+   */
+  public v1SpaceApplicantResumeDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceApplicantResumeDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceApplicantResumeDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/applicant/${id}/resume`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Добавить тэг
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantTagUpdate
+   * @summary Добавить тэг
+   * @request PUT:/api/v1/space/applicant/{id}/tag
+   */
+  public v1SpaceApplicantTagUpdate(
+    id: string,
+    query?: {
+      /** добавляемый Тег */
+      tag?: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantTagUpdate(
+    id: string,
+    query?: {
+      /** добавляемый Тег */
+      tag?: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantTagUpdate(
+    id: string,
+    query?: {
+      /** добавляемый Тег */
+      tag?: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/tag`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Удалить тэг
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantTagDelete
+   * @summary Удалить тэг
+   * @request DELETE:/api/v1/space/applicant/{id}/tag
+   */
+  public v1SpaceApplicantTagDelete(
+    id: string,
+    query?: {
+      /** удаляемый Тег */
+      tag?: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceApplicantTagDelete(
+    id: string,
+    query?: {
+      /** удаляемый Тег */
+      tag?: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceApplicantTagDelete(
+    id: string,
+    query?: {
+      /** удаляемый Тег */
+      tag?: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/applicant/${id}/tag`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить документ кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantUploadDocCreate
+   * @summary Загрузить документ кандидата
+   * @request POST:/api/v1/space/applicant/{id}/upload-doc
+   */
+  public v1SpaceApplicantUploadDocCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1SpaceApplicantUploadDocCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceApplicantUploadDocCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/applicant/${id}/upload-doc`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить резюме кандидата
+   *
+   * @tags Кандидат
+   * @name V1SpaceApplicantUploadResumeCreate
+   * @summary Загрузить резюме кандидата
+   * @request POST:/api/v1/space/applicant/{id}/upload-resume
+   */
+  public v1SpaceApplicantUploadResumeCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1SpaceApplicantUploadResumeCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceApplicantUploadResumeCreate(
+    id: string,
+    data: {
+      /** file to upload */
+      resume: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/applicant/${id}/upload-resume`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Проверка подключения к Avito
    *
    * @tags Интеграция Avito
@@ -2384,6 +3087,34 @@ export class ApiService {
     });
   }
   /**
+   * @description Изменение статуса вакансии
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyChangeStatusUpdate
+   * @summary Изменение статуса вакансии
+   * @request PUT:/api/v1/space/vacancy/{id}/change_status
+   */
+  public v1SpaceVacancyChangeStatusUpdate(
+    id: string,
+    body: VacancyapimodelsStatusChangeRequest,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyChangeStatusUpdate(
+    id: string,
+    body: VacancyapimodelsStatusChangeRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyChangeStatusUpdate(
+    id: string,
+    body: VacancyapimodelsStatusChangeRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/change_status`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description В избранное
    *
    * @tags Вакансия
@@ -2458,6 +3189,165 @@ export class ApiService {
     });
   }
   /**
+   * @description Добавить этап подбора
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyStageCreate
+   * @summary Добавить этап подбора
+   * @request POST:/api/v1/space/vacancy/{id}/stage
+   */
+  public v1SpaceVacancyStageCreate(
+    id: string,
+    body: VacancyapimodelsSelectionStageAdd,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyStageCreate(
+    id: string,
+    body: VacancyapimodelsSelectionStageAdd,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyStageCreate(
+    id: string,
+    body: VacancyapimodelsSelectionStageAdd,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/stage`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Удаление этап подбора
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyStageDelete
+   * @summary Удаление этап подбора
+   * @request DELETE:/api/v1/space/vacancy/{id}/stage
+   */
+  public v1SpaceVacancyStageDelete(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyStageDelete(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyStageDelete(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/vacancy/${id}/stage`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Изменение порядка этапов подбора
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyStageChangeOrderUpdate
+   * @summary Изменение порядка этапов подбора
+   * @request PUT:/api/v1/space/vacancy/{id}/stage/change_order
+   */
+  public v1SpaceVacancyStageChangeOrderUpdate(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+      /** новый порядковый номер */
+      stage_order?: number;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyStageChangeOrderUpdate(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+      /** новый порядковый номер */
+      stage_order?: number;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyStageChangeOrderUpdate(
+    id: string,
+    query?: {
+      /** идентификатор этапа */
+      stage_id?: string;
+      /** новый порядковый номер */
+      stage_order?: number;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+      "PUT",
+      this.baseUrl + `/api/v1/space/vacancy/${id}/stage/change_order`,
+      {
+        params: query,
+        ...(options as unknown as { observe: "response" }),
+      },
+    );
+  }
+  /**
+   * @description Список этапов подбора
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyStageListCreate
+   * @summary Список этапов подбора
+   * @request POST:/api/v1/space/vacancy/{id}/stage/list
+   */
+  public v1SpaceVacancyStageListCreate(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsScrollerResponse & {
+      data?: VacancyapimodelsSelectionStageView[];
+    }
+  >;
+  public v1SpaceVacancyStageListCreate(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsScrollerResponse & {
+        data?: VacancyapimodelsSelectionStageView[];
+      }
+    >
+  >;
+  public v1SpaceVacancyStageListCreate(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsScrollerResponse & {
+          data?: VacancyapimodelsSelectionStageView[];
+        }
+      >
+    | (ApimodelsScrollerResponse & {
+        data?: VacancyapimodelsSelectionStageView[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsScrollerResponse & {
+        data?: VacancyapimodelsSelectionStageView[];
+      }
+    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/stage/list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Создание
    *
    * @tags Заявка
@@ -2466,7 +3356,7 @@ export class ApiService {
    * @request POST:/api/v1/space/vacancy_request
    */
   public v1SpaceVacancyRequestCreate(
-    body: VacancyapimodelsVacancyRequestEditData,
+    body: VacancyapimodelsVacancyRequestCreateData,
     options?: RequestOptions,
   ): Observable<
     ApimodelsResponse & {
@@ -2474,7 +3364,7 @@ export class ApiService {
     }
   >;
   public v1SpaceVacancyRequestCreate(
-    body: VacancyapimodelsVacancyRequestEditData,
+    body: VacancyapimodelsVacancyRequestCreateData,
     options?: RequestOptions & { observe: "response" },
   ): Observable<
     HttpResponse<
@@ -2484,7 +3374,7 @@ export class ApiService {
     >
   >;
   public v1SpaceVacancyRequestCreate(
-    body: VacancyapimodelsVacancyRequestEditData,
+    body: VacancyapimodelsVacancyRequestCreateData,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<
     | HttpResponse<
@@ -2731,6 +3621,43 @@ export class ApiService {
     });
   }
   /**
+   * @description В избранное
+   *
+   * @tags Заявка
+   * @name V1SpaceVacancyRequestFavoriteUpdate
+   * @summary В избранное
+   * @request PUT:/api/v1/space/vacancy_request/{id}/favorite
+   */
+  public v1SpaceVacancyRequestFavoriteUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestFavoriteUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyRequestFavoriteUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/favorite`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Отправить на согласование
    *
    * @tags Заявка
@@ -2754,6 +3681,64 @@ export class ApiService {
         ...(options as unknown as { observe: "response" }),
       },
     );
+  }
+  /**
+   * @description Перевести шаблон на статус заявка создана
+   *
+   * @tags Заявка
+   * @name V1SpaceVacancyRequestOnCreateUpdate
+   * @summary Перевести шаблон на статус заявка создана
+   * @request PUT:/api/v1/space/vacancy_request/{id}/on_create
+   */
+  public v1SpaceVacancyRequestOnCreateUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestOnCreateUpdate(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyRequestOnCreateUpdate(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/on_create`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Закрепить
+   *
+   * @tags Заявка
+   * @name V1SpaceVacancyRequestPinUpdate
+   * @summary Закрепить
+   * @request PUT:/api/v1/space/vacancy_request/{id}/pin
+   */
+  public v1SpaceVacancyRequestPinUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestPinUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyRequestPinUpdate(
+    id: string,
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/pin`, {
+      params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
   }
   /**
    * @description Создать вакансию

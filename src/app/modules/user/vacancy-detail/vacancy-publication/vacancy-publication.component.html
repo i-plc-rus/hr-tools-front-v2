@@ -1,0 +1,39 @@
+<div class="mb-10">
+  <h2 class="text-[22px] leading-7 mb-1 mt-4">Job-сайты</h2>
+  <span class="text-[16px] leading-6 text-[var(--text-alter)] tracking-[0.5px]">
+    Опубликуйте вакансию на работных сайтах и получайте отклики кандидатов в систему
+  </span>
+</div>
+<div class="flex gap-10">
+  <div class="flex flex-col justify-end pb-6 rounded-2xl border-[2px] border-[var(--background-main)]">
+    <div class="flex justify-end">
+      <button mat-icon-button [matMenuTriggerFor]="attachContent" class="btn-primary">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+      <mat-menu #attachContent="matMenu">
+        <button mat-menu-item>
+          <mat-icon>attach_file</mat-icon>
+          <span>Привязать к существующей</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon svgIcon="forward" />
+          <span>Перейти к вакансии</span>
+        </button>
+      </mat-menu>
+    </div>
+    <div class="flex flex-col justify-center items-center px-12">
+      <mat-icon svgIcon="logo-hh" class="!w-14 !h-14 mb-2" />
+      <span class="text-[22px] leading-7 mb-4">Head Hunter</span>
+      <button mat-flat-button  class="btn-primary">Опубликовать</button>
+
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-end py-6 rounded-2xl border-[2px] border-[var(--background-main)]">
+    <div class="flex flex-col justify-center items-center px-12">
+      <mat-icon svgIcon="logo-avito" class="!w-14 !h-14 mb-2" />
+      <span class="text-[22px] leading-7 mb-4">Avito</span>
+      <button mat-flat-button class="btn-secondary">Подключить</button>
+    </div>
+  </div>
+</div>

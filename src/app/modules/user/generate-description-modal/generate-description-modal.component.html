@@ -1,0 +1,39 @@
+<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:w-[748px] lg:max-h-[748px]">
+  <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Настройки генерации</h2>
+    @if (!isGenerated && !isLoading) {
+      <span class="text-[16px] leading-6 mt-3 text-center"> Небольшое описание поможет написать нам качественный текст </span>
+    }
+    @if (isLoading) {
+      <span class="text-[16px] leading-6 mt-3 text-center"> Пару секунд и мы напишем за вас описание </span>
+
+    }
+
+    <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6">
+      <div class="w-full relative">
+        @if (isLoading) {
+          <app-loader class="absolute w-full h-full z-20"></app-loader>
+        }
+        <app-text-editor class="w-full" [class.opacity-20]="isLoading" [formControl]="textEditor"> </app-text-editor>
+      </div>
+
+      <div class="flex flex-col grow-0 shrink-0 gap-4 lg:gap-6">
+        <div
+          class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row lg:max-w-max">
+          <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отменить</button>
+          @if (isGenerated) {
+            <button mat-flat-button class="btn-primary" (click)="addToControl()">Добавить в описание</button>
+          } @else {
+            <button mat-flat-button class="btn-primary" (click)="generateDescription()" [disabled]="isLoading">Сгенерировать</button>
+          }
+        </div>
+        @if (isGenerated) {
+          <button mat-button class="btn-primary" (click)="reset()">
+            <mat-icon>refresh</mat-icon>
+            Сгенерировать еще
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

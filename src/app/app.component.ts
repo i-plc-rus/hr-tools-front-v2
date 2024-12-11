@@ -78,6 +78,15 @@ export class AppComponent implements OnInit {
       .addSvgIcon('ql-stylus-note', this.setPath(`${this.svgPath}/ic-ql-stylus-note.svg`))
       .addSvgIcon('cancel', this.setPath(`${this.svgPath}/ic-cancel.svg`))
       .addSvgIcon('comment', this.setPath(`${this.svgPath}/ic-comment.svg`))
+      .addSvgIcon('border-color', this.setPath(`${this.svgPath}/ic-border-color.svg`))
+      .addSvgIcon('logo-avito', this.setPath(`${this.svgPath}/ic-logo-avito.svg`))
+      .addSvgIcon('logo-hh', this.setPath(`${this.svgPath}/ic-logo-hh.svg`))
+      .addSvgIcon('forward', this.setPath(`${this.svgPath}/ic-forward.svg`))
+      .addSvgIcon('import_contacts', this.setPath(`${this.svgPath}/ic-import_contacts.svg`))
+      .addSvgIcon('alarm-active', this.setPath(`${this.svgPath}/ic-alarm-active.svg`))
+      .addSvgIcon('drag-indicator', this.setPath(`${this.svgPath}/ic-drag-indicator.svg`))
+      .addSvgIcon('article-shortcut', this.setPath(`${this.svgPath}/ic-article-shortcut.svg`))
+      .addSvgIcon('add-a-photo', this.setPath(`${this.svgPath}/ic-add-a-photo.svg`))
   }
 
   ngOnInit() {

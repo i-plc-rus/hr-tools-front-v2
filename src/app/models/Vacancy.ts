@@ -1,14 +1,15 @@
 import {
-  ModelsEmployment, 
-  ModelsExperience, 
-  ModelsSchedule, 
-  ModelsVacancyStatus, 
-  ModelsVRSelectionType, 
-  ModelsVRType, 
-  ModelsVRUrgency, 
-  VacancyapimodelsExternalData, 
-  VacancyapimodelsExternalLink, 
-  VacancyapimodelsSalary, 
+  ModelsEmployment,
+  ModelsExperience,
+  ModelsSchedule,
+  ModelsVacancyStatus,
+  ModelsVRSelectionType,
+  ModelsVRType,
+  ModelsVRUrgency,
+  VacancyapimodelsExternalData,
+  VacancyapimodelsExternalLink,
+  VacancyapimodelsSalary,
+  VacancyapimodelsSelectionStageView,
   VacancyapimodelsVacancyView
 } from '../api/data-contracts';
 import {StatusTag} from './StatusTag';
@@ -57,6 +58,8 @@ export class VacancyView implements VacancyapimodelsVacancyView {
   salary?: VacancyapimodelsSalary;
   /** Режим работы */
   schedule?: ModelsSchedule;
+  /** этапы подбора */
+  selection_stages?: VacancyapimodelsSelectionStageView[];
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   status?: ModelsVacancyStatus;

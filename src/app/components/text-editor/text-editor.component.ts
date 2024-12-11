@@ -24,7 +24,7 @@ import Quill from 'quill';
 })
 export class TextEditorComponent implements ControlValueAccessor, OnInit {
   @Input() value: string = '';
-  @Input() height: string = '200px';
+  @Input() height: string = '160px';
   @Input() placeholder: string = '';
   @Input() disabled: boolean = false;
   @Input() actionBtnDisabled: boolean = false;

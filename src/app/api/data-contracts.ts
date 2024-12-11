@@ -66,6 +66,283 @@ export interface ApimodelsScrollerResponse {
   status?: string;
 }
 
+export interface ApplicantapimodelsApplicantData {
+  /** Адрес */
+  address?: string;
+  /** Дата рождения ДД.ММ.ГГГГ */
+  birth_date?: string;
+  /** Гражданство */
+  citizenship?: string;
+  /** Коментарий */
+  comment?: string;
+  /** Емайл */
+  email?: string;
+  /** Имя */
+  first_name?: string;
+  /** Пол кандидата */
+  gender?: ModelsGenderType;
+  /** Фамилия */
+  last_name?: string;
+  /** Отчество */
+  middle_name?: string;
+  /** Доподнительные параметры */
+  params?: DbmodelsApplicantParams;
+  /** Телефон */
+  phone?: string;
+  /** Готовность к переезду */
+  relocation?: ModelsRelocationType;
+  /** Желаемая ЗП */
+  salary?: number;
+  /** Источник кандидата */
+  source?: ModelsApplicantSource;
+  /** Опыт работ в месяцах */
+  total_experience?: number;
+  /** Идентификатор вакансии */
+  vacancy_id?: string;
+}
+
+export interface ApplicantapimodelsApplicantDuplicate {
+  /** Идентификатор кандидата */
+  duplicate_id?: string;
+  /** Тип дубля (По автору резюме/По контактным данным) */
+  duplicate_type?: ModelsDuplicateType;
+  /** Найден */
+  found?: boolean;
+}
+
+export interface ApplicantapimodelsApplicantFilter {
+  /** Дата добавления кандидата ДД.ММ.ГГГГ */
+  added_day?: string;
+  /** Период добавления кандидата */
+  added_period?: ModelsApAddedPeriodType;
+  /** Тип добавления */
+  added_type?: ModelsAddedType;
+  /** Возраст "от" */
+  age_from?: number;
+  /** Возраст "до" */
+  age_to?: number;
+  /** Город проживания */
+  city?: string;
+  /** Пол кандидата */
+  gender?: ModelsGenderType;
+  /** Знание языков */
+  language?: string;
+  /** Записей на странице */
+  limit?: number;
+  /** Страница (1,2,3..) */
+  page?: number;
+  /** Готовность к переезду */
+  relocation?: ModelsRelocationType;
+  /** График работы */
+  schedule?: ModelsSchedule;
+  /** Поиск по ФИО/телефон/емайл/тег */
+  search?: string;
+  sort?: ApplicantapimodelsApplicantSort;
+  /** Источник */
+  source?: ModelsApplicantSource;
+  /** Этап */
+  stage_name?: string;
+  /** Статус кандидата */
+  status?: ModelsApplicantStatus;
+  /** Тэг */
+  tag?: string;
+  /** Опыт работ в месяцах "от" */
+  total_experience_from?: number;
+  /** Опыт работ в месяцах "до" */
+  total_experience_to?: number;
+  /** Идентификатор вакансии */
+  vacancy_id?: string;
+  /** Название вакансии */
+  vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsApplicantHistoryFilter {
+  /** Только комментарии */
+  comments_only?: boolean;
+  /** Записей на странице */
+  limit?: number;
+  /** Страница (1,2,3..) */
+  page?: number;
+}
+
+export interface ApplicantapimodelsApplicantHistoryView {
+  /** Тип действия */
+  action_type?: DbmodelsActionType;
+  /** Изменения */
+  changes?: DbmodelsApplicantChanges;
+  /** Идентификатор сотрудника */
+  user_id?: string;
+  /** Имя сотрудника */
+  user_name?: string;
+  /** Идентификатор вакансии */
+  vacancy_id?: string;
+  /** Название вакансии */
+  vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsApplicantNote {
+  /** Приватный */
+  is_private?: boolean;
+  /** Комментарий */
+  note?: string;
+}
+
+export interface ApplicantapimodelsApplicantSort {
+  /** Дата добавления, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  accept_date_desc?: boolean;
+  /** ФИО, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  fio_desc?: boolean;
+  /** ЗП, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  salary_desc?: boolean;
+}
+
+export interface ApplicantapimodelsApplicantView {
+  /** Дата добавления */
+  accept_date?: string;
+  /** Адрес */
+  address?: string;
+  /** возраст */
+  age?: number;
+  /** Дата рождения ДД.ММ.ГГГГ */
+  birth_date?: string;
+  /** Гражданство */
+  citizenship?: string;
+  /** Коментарий */
+  comment?: string;
+  /** Емайл */
+  email?: string;
+  /** ФИО кандидата */
+  fio?: string;
+  /** Имя */
+  first_name?: string;
+  /** Пол кандидата */
+  gender?: ModelsGenderType;
+  /** Идентификатор кандидата */
+  id?: string;
+  /** Фамилия */
+  last_name?: string;
+  /** Отчество */
+  middle_name?: string;
+  /** Дата отклика во внешней системе ДД.ММ.ГГГГ */
+  negotiation_date?: string;
+  /** Идентификатор отклика во внешней системе */
+  negotiation_id?: string;
+  /** Доподнительные параметры */
+  params?: DbmodelsApplicantParams;
+  /** Телефон */
+  phone?: string;
+  /** Готовность к переезду */
+  relocation?: ModelsRelocationType;
+  /** Идентификатор резюме во внешней системе */
+  resume_id?: string;
+  /** Заголовок резюме */
+  resume_title?: string;
+  /** Желаемая ЗП */
+  salary?: number;
+  /** Идентификатор этапа подбора кандидата */
+  selection_stage_id?: string;
+  /** Название этапа */
+  selection_stage_name?: string;
+  /** Источник кандидата */
+  source?: ModelsApplicantSource;
+  /** Время на этапе */
+  stage_time?: string;
+  /** Дата выхода */
+  start_date?: string;
+  /** Статус кандидата */
+  status?: ModelsApplicantStatus;
+  /** Опыт работ в месяцах */
+  total_experience?: number;
+  /** Идентификатор вакансии */
+  vacancy_id?: string;
+  /** Название вакансии */
+  vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsApplicantViewExt {
+  /** Дата добавления */
+  accept_date?: string;
+  /** Адрес */
+  address?: string;
+  /** возраст */
+  age?: number;
+  /** Дата рождения ДД.ММ.ГГГГ */
+  birth_date?: string;
+  /** Гражданство */
+  citizenship?: string;
+  /** Коментарий */
+  comment?: string;
+  /** Идентификатор кандидатов дубликатов */
+  duplicates?: string[];
+  /** Емайл */
+  email?: string;
+  /** ФИО кандидата */
+  fio?: string;
+  /** Имя */
+  first_name?: string;
+  /** Пол кандидата */
+  gender?: ModelsGenderType;
+  /** Идентификатор кандидата */
+  id?: string;
+  /** Фамилия */
+  last_name?: string;
+  /** Отчество */
+  middle_name?: string;
+  /** Дата отклика во внешней системе ДД.ММ.ГГГГ */
+  negotiation_date?: string;
+  /** Идентификатор отклика во внешней системе */
+  negotiation_id?: string;
+  /** Доподнительные параметры */
+  params?: DbmodelsApplicantParams;
+  /** Телефон */
+  phone?: string;
+  /** Возможный дубликат */
+  potential_duplicate?: ApplicantapimodelsApplicantDuplicate;
+  /** Готовность к переезду */
+  relocation?: ModelsRelocationType;
+  /** Идентификатор резюме во внешней системе */
+  resume_id?: string;
+  /** Заголовок резюме */
+  resume_title?: string;
+  /** Желаемая ЗП */
+  salary?: number;
+  /** Идентификатор этапа подбора кандидата */
+  selection_stage_id?: string;
+  /** Название этапа */
+  selection_stage_name?: string;
+  /** Источник кандидата */
+  source?: ModelsApplicantSource;
+  /** Время на этапе */
+  stage_time?: string;
+  /** Дата выхода */
+  start_date?: string;
+  /** Статус кандидата */
+  status?: ModelsApplicantStatus;
+  tags?: string[];
+  /** Опыт работ в месяцах */
+  total_experience?: number;
+  /** Идентификатор вакансии */
+  vacancy_id?: string;
+  /** Название вакансии */
+  vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsRejectReasons {
+  /** Отказы кандидата */
+  applicant_reasons?: string[];
+  /** Отказы руководителя */
+  head_reasons?: string[];
+  /** Отказы рекрутера */
+  hr_reasons?: string[];
+}
+
+export interface ApplicantapimodelsRejectRequest {
+  /** Инициатор отказа */
+  initiator?: ModelsRejectInitiator;
+  /** Причина отказа */
+  reason?: string;
+}
+
 export interface AuthapimodelsJWTRefreshRequest {
   refresh_token?: string;
 }
@@ -88,6 +365,33 @@ export interface AuthapimodelsSendEmail {
 export interface AvitoapimodelsVacancyAttach {
   /** идентификатор вакансии в виде: 3364561973 */
   id?: number;
+}
+
+export enum DbmodelsActionType {
+  HistoryTypeComment = "comment",
+  HistoryTypeAdded = "added",
+  HistoryTypeUpdate = "update",
+  HistoryTypeNegotiation = "negotiation",
+  HistoryTypeStageChange = "stage_change",
+  HistoryTypeDuplicate = "duplicate",
+  HistoryTypeArchive = "archive",
+  HistoryTypeReject = "reject",
+}
+
+export interface DbmodelsApplicantChange {
+  /** Измененное поле */
+  field?: string;
+  /** Новое значение */
+  new_value?: any;
+  /** Старое значение */
+  old_value?: any;
+}
+
+export interface DbmodelsApplicantChanges {
+  /** Список изменений */
+  data?: DbmodelsApplicantChange[];
+  /** Комментрий */
+  description?: string;
 }
 
 export interface DbmodelsApplicantParams {
@@ -209,6 +513,13 @@ export interface DictapimodelsJobTitleData {
   name?: string;
 }
 
+export interface FilesapimodelsFileView {
+  applicant_id?: string;
+  id?: string;
+  name?: string;
+  space_id?: string;
+}
+
 export interface GptmodelsGenVacancyDescRequest {
   /** Текст, на основе которого необходимо сгенерировать описание */
   text?: string;
@@ -224,10 +535,30 @@ export interface HhapimodelsVacancyAttach {
   url?: string;
 }
 
+export enum ModelsAddedType {
+  AddedTypeAdded = "Добавлен",
+  AddedTypeNegotiation = "Откликнулся",
+}
+
+export enum ModelsApAddedPeriodType {
+  ApAddedPeriodTypeTDay = "За сегодня",
+  ApAddedPeriodTypeYDay = "За вчера",
+  ApAddedPeriodType7Days = "За последние 7 дней",
+  ApAddedPeriodTypeMonth = "За последний месяц",
+  ApAddedPeriodTypeYear = "За последний год",
+}
+
 export enum ModelsApplicantSource {
   ApplicantSourceManual = "Ручной ввод",
   ApplicantSourceAvito = "Avito",
   ApplicantSourceHh = "HeadHunter",
+}
+
+export enum ModelsApplicantStatus {
+  ApplicantStatusInProcess = "В процессе",
+  ApplicantStatusRejected = "Отклонен",
+  ApplicantStatusNegotiation = "Отклик",
+  ApplicantStatusArchive = "Архивный",
 }
 
 export enum ModelsApprovalStatus {
@@ -247,6 +578,11 @@ export enum ModelsDriverLicenseType {
   DriverLicenseDE = "DE",
   DriverLicenseTM = "TM",
   DriverLicenseTB = "TB",
+}
+
+export enum ModelsDuplicateType {
+  DuplicateTypeByAuthor = "ByAuthor",
+  DuplicateTypeByContacts = "ByContacts",
 }
 
 export enum ModelsEducationType {
@@ -299,10 +635,23 @@ export enum ModelsLanguageLevelType {
   LanguageLevelL1 = "l1",
 }
 
+export enum ModelsLimitType {
+  LimitTypeMin = "Минут",
+  LimitTypeHour = "Часов",
+  LimitTypDay = "Дней",
+  LimitTypeWeek = "Недель",
+}
+
 export enum ModelsNegotiationStatus {
   NegotiationStatusWait = "Рассмотреть позже",
   NegotiationStatusRejected = "Отклонен",
   NegotiationStatusAccepted = "Подходит",
+}
+
+export enum ModelsRejectInitiator {
+  HrReject = "Рекрутер",
+  HeadReject = "Руководитель",
+  ApplicantReject = "Кандидат",
 }
 
 export enum ModelsRelocationType {
@@ -348,6 +697,8 @@ export enum ModelsTripReadinessType {
 }
 
 export enum ModelsUserRole {
+  SpaceAdminRole = "SPACE_ADMIN_ROLE",
+  SpaceUserRole = "SPACE_USER_ROLE",
   UserRoleSuperAdmin = "SUPER_ADMIN",
 }
 
@@ -363,6 +714,7 @@ export enum ModelsVRStatus {
   VRStatusAccepted = "Согласована",
   VRStatusUnderRevision = "На доработке",
   VRStatusUnderAccepted = "На согласовании",
+  VRStatusTemplate = "Шаблон",
 }
 
 export enum ModelsVRType {
@@ -466,6 +818,7 @@ export interface SpaceapimodelsCreateUser {
   last_name?: string;
   password?: string;
   phone_number?: string;
+  role?: string;
   space_id?: string;
 }
 
@@ -489,6 +842,7 @@ export interface SpaceapimodelsSpaceUser {
   is_admin?: boolean;
   last_name?: string;
   phone_number?: string;
+  role?: string;
   space_id?: string;
 }
 
@@ -504,6 +858,7 @@ export interface SpaceapimodelsUpdateUser {
   last_name?: string;
   password?: string;
   phone_number?: string;
+  role?: string;
   space_id?: string;
 }
 
@@ -557,6 +912,41 @@ export enum VacancyapimodelsSearchPeriod {
   SearchByPeriod = 5,
 }
 
+export interface VacancyapimodelsSelectionStageAdd {
+  /** Лимит времени на этапе - единицы измерения */
+  limit_type?: ModelsLimitType;
+  /** Лимит времени на этапе */
+  limit_value?: number;
+  /** Название этапа */
+  name?: string;
+  /** Тип этапа */
+  stage_type?: string;
+}
+
+export interface VacancyapimodelsSelectionStageView {
+  /** Возможность удаления этапа */
+  can_delete?: boolean;
+  /** Идентификатор этапа подбора кандидата */
+  id?: string;
+  /** Лимит времени на этапе - единицы измерения */
+  limit_type?: ModelsLimitType;
+  /** Лимит времени на этапе */
+  limit_value?: number;
+  /** Название этапа */
+  name?: string;
+  /** Порядковый номер этапа */
+  stage_order?: number;
+  /** Тип этапа */
+  stage_type?: string;
+  /** Количество активных кандидатов */
+  total?: number;
+}
+
+export interface VacancyapimodelsStatusChangeRequest {
+  /** новый статус вакансии */
+  status?: ModelsVacancyStatus;
+}
+
 export interface VacancyapimodelsVacancyData {
   /** фио непосредственного руководителя */
   chief_fio?: string;
@@ -597,22 +987,86 @@ export interface VacancyapimodelsVacancyData {
 }
 
 export interface VacancyapimodelsVacancyFilter {
+  /** Фильтр по автору вакансии */
   author_id?: string;
+  /** Фильтр по идентификатору города */
   city_id?: string;
+  /** Фильтр по идентификатору подразделения */
   department_id?: string;
+  /** Отображать избранные */
   favorite?: boolean;
   /** Записей на странице */
   limit?: number;
   /** Страница (1,2,3..) */
   page?: number;
+  /** Фильтр по автору запроса на вкансию */
   request_author_id?: string;
+  /** Идентификатор запроса на вакансию */
   request_id?: string;
+  /** Фильтр по тип вакансии */
   request_type?: ModelsVRType;
+  /** Поиск */
   search?: string;
+  /** Фильтр по виду подбора */
   selection_type?: ModelsVRSelectionType;
+  /** Сортировка */
   sort?: VacancyapimodelsVacancySort;
+  /** Фильтр по статусам */
   statuses?: ModelsVacancyStatus[];
+  /** Фильтр по вкладке: 0 - Все, 1 - Мои, 2 - Другие, 3 - Архив */
+  tab?: VacancyapimodelsVacancyTab;
+  /** Фильтр по срочности */
   urgency?: ModelsVRUrgency;
+}
+
+export interface VacancyapimodelsVacancyRequestCreateData {
+  approval_stages?: VacancyapimodelsApprovalStageData[];
+  /** сохранить как шаблон */
+  as_template?: boolean;
+  /** фио непосредственного руководителя */
+  chief_fio?: string;
+  /** ид города */
+  city_id?: string;
+  /** ид компании */
+  company_id?: string;
+  /** ид структуры компании */
+  company_struct_id?: string;
+  /** конфиденциальная вакансия */
+  confidential?: boolean;
+  /** ид подразделения */
+  department_id?: string;
+  /** Коментарий к заявке */
+  description?: string;
+  /** Занятость */
+  employment?: ModelsEmployment;
+  /** Опыт работы */
+  experience?: ModelsExperience;
+  /** внутреннее взаимодействие */
+  in_interaction?: string;
+  /** сотрудник проводящий интервью */
+  interviewer?: string;
+  /** ид штатной должности */
+  job_title_id?: string;
+  /** кол-во открытых позиций */
+  opened_positions?: number;
+  /** внешнее взаимодействие */
+  out_interaction?: string;
+  /** адрес места работы */
+  place_of_work?: string;
+  /** тип вакансии */
+  request_type?: ModelsVRType;
+  /** требования/обязанности/условия */
+  requirements?: string;
+  /** Режим работы */
+  schedule?: ModelsSchedule;
+  /** вид подбора */
+  selection_type?: ModelsVRSelectionType;
+  /** краткая информация о комманде отдела */
+  short_info?: string;
+  /** срочность */
+  urgency?: ModelsVRUrgency;
+  /** название вакансии */
+  vacancy_name?: string;
 }
 
 export interface VacancyapimodelsVacancyRequestData {
@@ -737,6 +1191,7 @@ export interface VacancyapimodelsVacancyRequestView {
   employment?: ModelsEmployment;
   /** Опыт работы */
   experience?: ModelsExperience;
+  favorite?: boolean;
   id?: string;
   /** внутреннее взаимодействие */
   in_interaction?: string;
@@ -749,6 +1204,7 @@ export interface VacancyapimodelsVacancyRequestView {
   opened_positions?: number;
   /** внешнее взаимодействие */
   out_interaction?: string;
+  pinned?: boolean;
   /** адрес места работы */
   place_of_work?: string;
   /** тип вакансии */
@@ -771,6 +1227,13 @@ export interface VacancyapimodelsVacancyRequestView {
 export interface VacancyapimodelsVacancySort {
   /** порядок сортировки false = ASC/ true = DESC */
   created_at_desc?: boolean;
+}
+
+export enum VacancyapimodelsVacancyTab {
+  VacancyTabAll = 0,
+  VacancyTabMy = 1,
+  VacancyTabOther = 2,
+  VacancyTabArch = 3,
 }
 
 export interface VacancyapimodelsVacancyView {
@@ -813,6 +1276,8 @@ export interface VacancyapimodelsVacancyView {
   salary?: VacancyapimodelsSalary;
   /** Режим работы */
   schedule?: ModelsSchedule;
+  /** этапы подбора */
+  selection_stages?: VacancyapimodelsSelectionStageView[];
   /** вид подбора */
   selection_type?: ModelsVRSelectionType;
   status?: ModelsVacancyStatus;

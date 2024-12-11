@@ -27,10 +27,19 @@ import {SearchInputComponent} from '../../components/search-input/search-input.c
 import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
+import {СandidateListComponent} from './candidate-list/candidate-list.component';
+import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
+import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
 import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
+import {VacancyDescriptionComponent} from './vacancy-detail/vacancy-description/vacancy-description.component';
+import {VacancyTeamComponent} from './vacancy-detail/vacancy-team/vacancy-team.component';
+import {VacancyPublicationComponent} from './vacancy-detail/vacancy-publication/vacancy-publication.component';
+import {VacancyStagesComponent} from './vacancy-detail/vacancy-stages/vacancy-stages.component';
+import {VacancyIntegrationsComponent} from './vacancy-detail/vacancy-integrations/vacancy-integrations.component';
+import {GenerateDescriptionModalComponent} from './generate-description-modal/generate-description-modal.component';
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -48,7 +57,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -68,7 +78,16 @@ import {MatTabsModule} from '@angular/material/tabs';
     TableCandidateNameComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
+    СandidateListComponent,
+    CandidateDetailComponent,
+    AddCandidateModalComponent,
     VacancyDetailComponent,
+    VacancyDescriptionComponent,
+    VacancyPublicationComponent,
+    VacancyStagesComponent,
+    VacancyIntegrationsComponent,
+    VacancyTeamComponent,
+    GenerateDescriptionModalComponent,
   ],
   imports: [
     CommonModule,
@@ -104,6 +123,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatChipsModule,
     MatExpansionModule,
     MatTabsModule,
+    MatDatepickerModule,
+    DragDropModule,
 ]
 
 })

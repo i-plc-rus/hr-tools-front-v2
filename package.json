@@ -23,6 +23,7 @@
     "@angular/router": "^18.2.0",
     "@archeion/swagger-angular-api": "^1.0.0-alpha.0",
     "ag-grid-angular": "^32.3.0",
+    "dayjs": "^1.11.13",
     "lodash.debounce": "^4.0.8",
     "ngx-device-detector": "^8.0.0",
     "ngx-mask": "^18.0.0",

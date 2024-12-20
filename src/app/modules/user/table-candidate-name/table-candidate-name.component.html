@@ -1,9 +1,10 @@
-<div class="flex w-10 h-10 rounded-full bg-[var(--background-main)]">
-  @if (params.data?.photo_url) {
-    <img class="min-w-10 h-10 rounded-full" src="{{ params.data?.photo_url }}" alt="аватар" />
-  } @else {
-    <mat-icon svgIcon="no-avatar" class="!w-10 !h-10 rounded-full">
-    </mat-icon>
-  }
+<div [class]="params ? 'inline-flex w-full h-full' : 'flex'" class="gap-3 items-center leading-5">
+  <div class="flex w-10 h-10 rounded-full bg-[var(--background-main)]">
+    @if (photo_url) {
+      <img class="min-w-10 h-10 rounded-full" src="{{ photo_url }}" alt="аватар" />
+    } @else {
+      <mat-icon svgIcon="no-avatar" class="!w-10 !h-10 rounded-full"> </mat-icon>
+    }
+  </div>
+  <span class="text-[16px] leading-6 whitespace-normal">{{ fio }}</span>
 </div>
-<span class="text-[16px] leading-6 whitespace-normal">{{ params.data?.fio }}</span>

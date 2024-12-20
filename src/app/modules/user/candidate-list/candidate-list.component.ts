@@ -166,7 +166,7 @@ export class СandidateListComponent {
     private modalService: CandidateModalService,
     private api: ApiService,
     private router: Router,
-  ) {}
+  ) { }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -262,9 +262,9 @@ export class СandidateListComponent {
   openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {
     if (!Array.isArray(applicants))
       applicants = [applicants];
-    // this.modalService.rejectCandidateModal(applicants).subscribe(() =>
-    //   this.getApplicants()
-    // );
+    this.modalService.rejectCandidateModal(applicants).subscribe(() =>
+      this.getApplicants()
+    );
   }
 
   openChangeStageModal(applicants: ApplicantView[]) {

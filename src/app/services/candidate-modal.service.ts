@@ -2,6 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {AddCandidateModalComponent} from '../modules/user/candidate-list/add-candidate-modal/add-candidate-modal.component';
+import {RejectCandidateModalComponent} from '../modules/user/candidate-list/reject-candidate-modal/reject-candidate-modal.component';
 import {ApplicantView, ApplicantViewExt} from '../models/Applicant';
 
 @Injectable({
@@ -9,7 +10,7 @@ import {ApplicantView, ApplicantViewExt} from '../models/Applicant';
 })
 export class CandidateModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal<AddCandidateModalComponent>;
+  portal?: ComponentPortal<AddCandidateModalComponent | RejectCandidateModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -40,7 +41,20 @@ export class CandidateModalService {
     this.portal = new ComponentPortal(AddCandidateModalComponent);
     this.overlayRef = this.createOverlay(this.overlay);
     const componentRef = this.overlayRef.attach(this.portal);
-    componentRef.instance.applicant = applicant;
+    if (componentRef.instance instanceof AddCandidateModalComponent)
+      componentRef.instance.applicant = applicant;
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    })
+    return componentRef.instance.onSubmit;
+  }
+
+  rejectCandidateModal(applicants: ApplicantView[] | ApplicantViewExt[]): EventEmitter<boolean> {
+    this.portal = new ComponentPortal(RejectCandidateModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(this.portal);
+    if (componentRef.instance instanceof RejectCandidateModalComponent)
+      componentRef.instance.applicants = applicants;
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();
     })

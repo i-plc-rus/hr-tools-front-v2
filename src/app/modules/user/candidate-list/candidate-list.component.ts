@@ -268,9 +268,9 @@ export class СandidateListComponent {
   }
 
   openChangeStageModal(applicants: ApplicantView[]) {
-    // this.modalService.changeStageModal(applicants).subscribe(() =>
-    //   this.getApplicants()
-    // );
+    this.modalService.changeStageModal(applicants).subscribe(() =>
+      this.getApplicants()
+    );
   }
 
   openAddApplicantModal() {

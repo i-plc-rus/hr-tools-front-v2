@@ -22,6 +22,7 @@ import {
 import {VacancyView} from '../../../../models/Vacancy';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import {educationTypes, employmentTypes, genderTypes, languageLevelTypes, relocationTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../../user-consts';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -71,61 +72,14 @@ export class AddCandidateModalComponent implements OnInit {
     vacancy_id: new FormControl('', Validators.required),
   });
   driverLicenseTypes = Object.values(ModelsDriverLicenseType);
-  genderTypes: {label: string, value: ModelsGenderType}[] = [
-    {label: 'Мужской', value: ModelsGenderType.GenderTypeM},
-    {label: 'Женский', value: ModelsGenderType.GenderTypeF},
-  ];
-  educationTypes: {label: string, value: ModelsEducationType}[] = [
-    {label: 'Среднее', value: ModelsEducationType.EducationTypeSecondary},
-    {label: 'Среднее профессиональное', value: ModelsEducationType.EducationTypeSpecialSecondary},
-    {label: 'Незаконченное высшее', value: ModelsEducationType.EducationTypeUnfinishedHigher},
-    {label: 'Высшее', value: ModelsEducationType.EducationTypeHigher},
-    {label: 'Бакалавр', value: ModelsEducationType.EducationTypeBachelor},
-    {label: 'Магистр', value: ModelsEducationType.EducationTypeMaster},
-    {label: 'Кандидат наук', value: ModelsEducationType.EducationTypeCandidate},
-    {label: 'Доктор наук', value: ModelsEducationType.EducationTypeDoctor},
-  ];
-  employmentTypes: {label: string, value: ModelsEmployment}[] = [
-    {label: 'Полная занятость', value: ModelsEmployment.EmploymentFull},
-    {label: 'Частичная занятость', value: ModelsEmployment.EmploymentPartial},
-    {label: 'Временная занятость', value: ModelsEmployment.EmploymentTemporary},
-    {label: 'Интернатура', value: ModelsEmployment.EmploymentInternship},
-    {label: 'Стажировка', value: ModelsEmployment.EmploymentProbation},
-    {label: 'Волонтерство', value: ModelsEmployment.EmploymentVolunteer},
-  ];
-  scheduleTypes: {label: string, value: ModelsSchedule}[] = [
-    {label: 'Полный день', value: ModelsSchedule.ScheduleFullDay},
-    {label: 'Неполная занятость', value: ModelsSchedule.SchedulePartTime},
-    {label: 'Гибкий график', value: ModelsSchedule.ScheduleFlexible},
-    {label: 'Сменный график', value: ModelsSchedule.ScheduleShift},
-    {label: 'Вахтовый метод', value: ModelsSchedule.ScheduleFlyInFlyOut},
-  ];
-  searchStatusTypes: {label: string, value: ModelsSearchStatusType}[] = [
-    {label: 'Активно ищет работу', value: ModelsSearchStatusType.SearchStatusActive},
-    {label: 'Рассматривает предложения', value: ModelsSearchStatusType.SearchStatusLookingForOffers},
-    {label: 'Не ищет работу', value: ModelsSearchStatusType.SearchStatusNotLookingForJob},
-    {label: 'Предложили работу, решает', value: ModelsSearchStatusType.SearchStatusHasJobOffer},
-    {label: 'Вышел на новое место', value: ModelsSearchStatusType.SearchStatusAcceptedJobOffer},
-  ];
-  tripReadinessTypes: {label: string, value: ModelsTripReadinessType}[] = [
-    {label: 'Готов к командировкам', value: ModelsTripReadinessType.TripReadinessReady},
-    {label: 'Иногда готов к командировкам', value: ModelsTripReadinessType.TripReadinessSometimes},
-    {label: 'Не готов к командировкам', value: ModelsTripReadinessType.TripReadinessNever},
-  ];
-  languageLevelTypes: {label: string, value: ModelsLanguageLevelType}[] = [
-    {label: 'A1 - Начальный', value: ModelsLanguageLevelType.LanguageLevelA1},
-    {label: 'A2 - Элементарный', value: ModelsLanguageLevelType.LanguageLevelA2},
-    {label: 'B1 - Средний', value: ModelsLanguageLevelType.LanguageLevelB1},
-    {label: 'B2 - Средне-продвинуый', value: ModelsLanguageLevelType.LanguageLevelB2},
-    {label: 'C1 - Продвинутый', value: ModelsLanguageLevelType.LanguageLevelC1},
-    {label: 'C2 - В совершенстве', value: ModelsLanguageLevelType.LanguageLevelC2},
-    {label: 'Родной язык', value: ModelsLanguageLevelType.LanguageLevelL1},
-  ];
-  relocationTypes: {label: string, value: ModelsRelocationType}[] = [
-    {label: 'Не готов к переезду', value: ModelsRelocationType.RelocationTypeNo},
-    {label: 'Могу переехать', value: ModelsRelocationType.RelocationTypeYes},
-    {label: 'Хочу переехать', value: ModelsRelocationType.RelocationTypeWant},
-  ];
+  genderTypes = genderTypes;
+  educationTypes = educationTypes;
+  employmentTypes = employmentTypes;
+  scheduleTypes = scheduleTypes;
+  searchStatusTypes = searchStatusTypes;
+  tripReadinessTypes = tripReadinessTypes;
+  languageLevelTypes = languageLevelTypes;
+  relocationTypes = relocationTypes;
 
   vacancyList: VacancyView[] = [];
   docList: FilesapimodelsFileView[] = [];

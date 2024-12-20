@@ -205,16 +205,16 @@
                 <span>{{ vacancy.chief_fio }}</span>
               </div>
               <div class="flex gap-4 flex-grow flex-shrink flex-nowrap overflow-x-auto">
-                @for (stage of defaultVacancyCandidateStages; track $index) {
-                  <div [routerLink]="['..',vacancy.id, stage.link]"
+                @for (stage of vacancy.selection_stages; track $index) {
+                  <div [routerLink]="['..',vacancy.id, stage.name === 'Откликнулся' ? 'negotiations' : 'candidates']" [queryParams]="stage.name === 'Откликнулся' ? {} : { stage: stage.name }"
                     class="flex flex-col gap-1 p-2 items-center rounded-lg bg-white h-[84px] grow-0 shrink-0 basis-[116px] cursor-pointer">
                     <div>
                       <span class="text-[22px] leading-7 text-[var(--link-default)] text-center">
-                        {{ stage.value }}
+                        {{ stage.total }}
                       </span>
                     </div>
                     <span class="text-[12px] leading-4 text-[var(--text-alter)] text-center">
-                      {{ stage.label }}
+                      {{ stage.name }}
                     </span>
                   </div>
                 }

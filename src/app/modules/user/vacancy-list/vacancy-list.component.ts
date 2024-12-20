@@ -13,11 +13,11 @@ import {
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyView
 } from '../../../api/data-contracts';
-import {StatusTag} from '../../../models/StatusTag';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
+import {vacancyStatuses} from '../user-consts';
 
 @Component({
   selector: 'app-vacancy-list',
@@ -51,12 +51,7 @@ export class VacancyListComponent implements OnInit {
   requestTypes = Object.values(ModelsVRType);
   selectionTypes = Object.values(ModelsVRSelectionType);
   urgencies = Object.values(ModelsVRUrgency);
-  statuses: {className: StatusTag; value: ModelsVacancyStatus}[] = [
-    {className: 'success', value: ModelsVacancyStatus.VacancyStatusOpened},
-    {className: 'warning', value: ModelsVacancyStatus.VacancyStatusSuspended},
-    {className: 'danger', value: ModelsVacancyStatus.VacancyStatusCanceled},
-    {className: 'default', value: ModelsVacancyStatus.VacancyStatusClosed},
-  ];
+  statuses = vacancyStatuses;
   cities: DictapimodelsCityView[] = [];
   departments: DictapimodelsDepartmentView[] = [];
   users: SpaceUser[] = [];
@@ -68,18 +63,6 @@ export class VacancyListComponent implements OnInit {
   isLoading: boolean = false;
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
-  defaultVacancyCandidateStages = [
-    {label: 'Отклик', value: '-', link: 'negotiations', params: ''},
-    {label: 'Добавлен', value: '-', link: '', params: ''},
-    {label: 'Написало письмо', value: '-', link: '', params: ''},
-    {label: 'Интервью с HR', value: '-', link: '', params: ''},
-    {label: 'Результативный звонок', value: '-', link: '', params: ''},
-    {label: 'Проверка СБ', value: '-', link: '', params: ''},
-    {label: 'Согласование оффера', value: '-', link: '', params: ''},
-    {label: 'Оффер', value: '-', link: '', params: ''},
-    {label: 'Письмо в кадры', value: '-', link: '', params: ''},
-    {label: 'Оформление документов', value: '-', link: '', params: ''},
-  ];
 
   constructor(
     private modalService: VacancyModalService,
@@ -101,6 +84,8 @@ export class VacancyListComponent implements OnInit {
         if (data.body?.data) {
           this.favoritesCount = 0;
           this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
+            if (vacancy.selection_stages)
+              vacancy.selection_stages = vacancy.selection_stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
             if (vacancy.favorite)
               this.favoritesCount++;
             return new VacancyView(vacancy);

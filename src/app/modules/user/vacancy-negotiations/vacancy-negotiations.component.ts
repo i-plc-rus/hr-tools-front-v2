@@ -24,6 +24,7 @@ import {MockDataService} from '../../../services/mock-data.service';
 import {TableCandidateNameComponent} from '../table-candidate-name/table-candidate-name.component';
 import {ActivatedRoute} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
+import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
 
 
 @Component({
@@ -74,68 +75,20 @@ export class VacancyNegotiationsComponent {
   driverLicenseTypes = Object.values(ModelsDriverLicenseType);
   applicantSources = Object.values(ModelsApplicantSource);
   responsePeriodTypes = Object.values(ModelsResponsePeriodType);
-  educationTypes: {label: string, value: ModelsEducationType}[] = [
-    {label: 'Среднее', value: ModelsEducationType.EducationTypeSecondary},
-    {label: 'Среднее профессиональное', value: ModelsEducationType.EducationTypeSpecialSecondary},
-    {label: 'Незаконченное высшее', value: ModelsEducationType.EducationTypeUnfinishedHigher},
-    {label: 'Высшее', value: ModelsEducationType.EducationTypeHigher},
-    {label: 'Бакалавр', value: ModelsEducationType.EducationTypeBachelor},
-    {label: 'Магистр', value: ModelsEducationType.EducationTypeMaster},
-    {label: 'Кандидат наук', value: ModelsEducationType.EducationTypeCandidate},
-    {label: 'Доктор наук', value: ModelsEducationType.EducationTypeDoctor},
-  ];
-  experienceTypes: {label: string, value: ModelsExperienceType}[] = [
-    {label: 'Нет опыта', value: ModelsExperienceType.ExperienceTypeNo},
-    {label: 'От 1 до 3 лет', value: ModelsExperienceType.ExperienceTypeBetween1And3},
-    {label: 'От 3 до 6 лет', value: ModelsExperienceType.ExperienceTypeBetween3And6},
-    {label: 'Более 6 лет', value: ModelsExperienceType.ExperienceTypeMoreThan6},
-  ];
-  scheduleTypes: {label: string, value: ModelsSchedule}[] = [
-    {label: 'Полный день', value: ModelsSchedule.ScheduleFullDay},
-    {label: 'Неполная занятость', value: ModelsSchedule.SchedulePartTime},
-    {label: 'Гибкий график', value: ModelsSchedule.ScheduleFlexible},
-    {label: 'Сменный график', value: ModelsSchedule.ScheduleShift},
-    {label: 'Вахтовый метод', value: ModelsSchedule.ScheduleFlyInFlyOut},
-  ];
+  educationTypes = educationTypes;
+  experienceTypes = experienceBetweenTypes;
+  scheduleTypes = scheduleTypes;
   searchLabelTypes: {label: string, value: ModelsSearchLabelType}[] = [
     {label: 'С фотографией', value: ModelsSearchLabelType.SearchLabelPhoto},
     {label: 'Указана зарплатой', value: ModelsSearchLabelType.SearchLabelSalary},
     {label: 'Указан возраст', value: ModelsSearchLabelType.SearchLabelAge},
     {label: 'Указан пол', value: ModelsSearchLabelType.SearchLabelGender},
   ];
-  searchStatusTypes: {label: string, value: ModelsSearchStatusType}[] = [
-    {label: 'Активно ищет работу', value: ModelsSearchStatusType.SearchStatusActive},
-    {label: 'Рассматривает предложения', value: ModelsSearchStatusType.SearchStatusLookingForOffers},
-    {label: 'Не ищет работу', value: ModelsSearchStatusType.SearchStatusNotLookingForJob},
-    {label: 'Предложили работу, решает', value: ModelsSearchStatusType.SearchStatusHasJobOffer},
-    {label: 'Вышел на новое место', value: ModelsSearchStatusType.SearchStatusAcceptedJobOffer},
-  ];
-  genderTypes: {label: string, value: ModelsGenderType}[] = [
-    {label: 'Мужской', value: ModelsGenderType.GenderTypeM},
-    {label: 'Женский', value: ModelsGenderType.GenderTypeF},
-  ];
-  employmentTypes: {label: string, value: ModelsEmployment}[] = [
-    {label: 'Полная занятость', value: ModelsEmployment.EmploymentFull},
-    {label: 'Частичная занятость', value: ModelsEmployment.EmploymentPartial},
-    {label: 'Временная занятость', value: ModelsEmployment.EmploymentTemporary},
-    {label: 'Интернатура', value: ModelsEmployment.EmploymentInternship},
-    {label: 'Стажировка', value: ModelsEmployment.EmploymentProbation},
-    {label: 'Волонтерство', value: ModelsEmployment.EmploymentVolunteer},
-  ];
-  tripReadinessTypes: {label: string, value: ModelsTripReadinessType}[] = [
-    {label: 'Готов к командировкам', value: ModelsTripReadinessType.TripReadinessReady},
-    {label: 'Иногда готов к командировкам', value: ModelsTripReadinessType.TripReadinessSometimes},
-    {label: 'Не готов к командировкам', value: ModelsTripReadinessType.TripReadinessNever},
-  ];
-  languageLevelTypes: {label: string, value: ModelsLanguageLevelType}[] = [
-    {label: 'A1 - Начальный', value: ModelsLanguageLevelType.LanguageLevelA1},
-    {label: 'A2 - Элементарный', value: ModelsLanguageLevelType.LanguageLevelA2},
-    {label: 'B1 - Средний', value: ModelsLanguageLevelType.LanguageLevelB1},
-    {label: 'B2 - Средне-продвинуый', value: ModelsLanguageLevelType.LanguageLevelB2},
-    {label: 'C1 - Продвинутый', value: ModelsLanguageLevelType.LanguageLevelC1},
-    {label: 'C2 - В совершенстве', value: ModelsLanguageLevelType.LanguageLevelC2},
-    {label: 'Родной язык', value: ModelsLanguageLevelType.LanguageLevelL1},
-  ];
+  searchStatusTypes = searchStatusTypes;
+  genderTypes = genderTypes;
+  employmentTypes = employmentTypes;
+  tripReadinessTypes = tripReadinessTypes;
+  languageLevelTypes = languageLevelTypes;
   searchValue: string = '';
   vacancyName: string = '';
 

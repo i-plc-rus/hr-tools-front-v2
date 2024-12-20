@@ -8,7 +8,7 @@ import {LoaderComponent} from '../../../components/loader/loader.component';
 import {TableCandidateNameComponent} from '../table-candidate-name/table-candidate-name.component';
 import {ActivatedRoute} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
-import {StatusTag} from '../../../models/StatusTag';
+import {vacancyStatuses} from '../user-consts';
 
 @Component({
   selector: 'app-vacancy-candidates',
@@ -26,12 +26,7 @@ export class VacancyСandidatesComponent implements OnInit {
   educationTypes = Object.values(ModelsVRType);
   skillsTypes = Object.values(ModelsVRSelectionType);
   experienceTypes = Object.values(ModelsVRUrgency);
-  statuses: {className: StatusTag; value: ModelsVacancyStatus}[] = [
-    {className: 'success', value: ModelsVacancyStatus.VacancyStatusOpened},
-    {className: 'warning', value: ModelsVacancyStatus.VacancyStatusSuspended},
-    {className: 'danger', value: ModelsVacancyStatus.VacancyStatusCanceled},
-    {className: 'default', value: ModelsVacancyStatus.VacancyStatusClosed},
-  ];
+  statuses = vacancyStatuses;
   searchSkill = new FormControl('');
   searchValue: string = '';
   vacancy?: VacancyView;

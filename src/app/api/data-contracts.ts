@@ -327,6 +327,24 @@ export interface ApplicantapimodelsApplicantViewExt {
   vacancy_name?: string;
 }
 
+export interface ApplicantapimodelsMultiChangeStageRequest {
+  /** идентификаторы кандидатов */
+  ids?: string[];
+  /** идентификаторы этапа */
+  stage_id?: string;
+}
+
+export interface ApplicantapimodelsMultiEmailResponse {
+  /** список ФИО кандидатов которым не удалось отправить письма */
+  fail_mails?: string[];
+}
+
+export interface ApplicantapimodelsMultiRejectRequest {
+  /** идентификаторы кандидатов */
+  ids?: string[];
+  reject?: ApplicantapimodelsRejectRequest;
+}
+
 export interface ApplicantapimodelsRejectReasons {
   /** Отказы кандидата */
   applicant_reasons?: string[];
@@ -343,6 +361,13 @@ export interface ApplicantapimodelsRejectRequest {
   reason?: string;
 }
 
+export interface ApplicantapimodelsXlsExportRequest {
+  /** Фильтр скроллера, в случае если не указан список идентификатов */
+  filter?: ApplicantapimodelsApplicantFilter;
+  /** список идентификатов кандидатов */
+  ids?: string[];
+}
+
 export interface AuthapimodelsJWTRefreshRequest {
   refresh_token?: string;
 }
@@ -355,6 +380,16 @@ export interface AuthapimodelsJWTResponse {
 export interface AuthapimodelsLoginRequest {
   email?: string;
   password?: string;
+}
+
+export interface AuthapimodelsPasswordRecovery {
+  /** емайл для отправки письма с иснтвукцией, он же логин */
+  email?: string;
+}
+
+export interface AuthapimodelsPasswordResetRequest {
+  new_password?: string;
+  reset_code?: string;
 }
 
 export interface AuthapimodelsSendEmail {
@@ -812,6 +847,7 @@ export interface SpaceapimodelsCreateOrganization {
 }
 
 export interface SpaceapimodelsCreateUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   is_admin?: boolean;
@@ -820,6 +856,8 @@ export interface SpaceapimodelsCreateUser {
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
 }
 
 export interface SpaceapimodelsSpaceSettingView {
@@ -836,14 +874,21 @@ export interface SpaceapimodelsSpaceSettingView {
 }
 
 export interface SpaceapimodelsSpaceUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   id?: string;
   is_admin?: boolean;
+  /** Email подтвержден */
+  is_email_verified?: boolean;
   last_name?: string;
+  /** Новый email, который станет основным после подтверждения */
+  new_email?: string;
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
 }
 
 export interface SpaceapimodelsUpdateSpaceSettingValue {
@@ -852,6 +897,7 @@ export interface SpaceapimodelsUpdateSpaceSettingValue {
 }
 
 export interface SpaceapimodelsUpdateUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   is_admin?: boolean;
@@ -860,6 +906,8 @@ export interface SpaceapimodelsUpdateUser {
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
 }
 
 export interface VacancyapimodelsApprovalStageData {

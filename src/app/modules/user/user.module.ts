@@ -28,6 +28,7 @@ import {TableCandidateNameComponent} from './table-candidate-name/table-candidat
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
+import {CandidateStatusComponent} from './candidate-list/candidate-status/candidate-status.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
@@ -79,6 +80,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     NegotiationDetailComponent,
     NegotiationStatusComponent,
     СandidateListComponent,
+    CandidateStatusComponent,
     CandidateDetailComponent,
     AddCandidateModalComponent,
     VacancyDetailComponent,

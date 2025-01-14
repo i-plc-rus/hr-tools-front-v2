@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
   ApplicantapimodelsApplicantView,
+  ApplicantapimodelsXlsExportRequest,
   DictapimodelsCityView,
   ModelsAddedType,
   ModelsApAddedPeriodType,
@@ -273,6 +274,28 @@ export class СandidateListComponent {
     this.modalService.addCandidateModal().subscribe(() =>
       this.getApplicants()
     );
+  }
+
+  exportXls() {
+    const request: ApplicantapimodelsXlsExportRequest = {
+      filter: this.filterForm.value as ApplicantapimodelsApplicantFilter,
+      ids: this.selectedApplicants.map((applicant: ApplicantView) => applicant.id)
+    };
+    this.api.v1SpaceApplicantMultiActionsExportXlsUpdate(request, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data) => {
+        if (data.body) {
+          const blob = new Blob([data.body], {type: 'application/octet-stream'});
+
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'Кандидаты.xlsx';
+          link.click();
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   onSearch() {

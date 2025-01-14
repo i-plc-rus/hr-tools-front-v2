@@ -245,10 +245,13 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Комментарий</mat-label>
-          <textarea matInput formControlName="comment"></textarea>
-        </mat-form-field>
+        @if (!isEdit) {
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Заметка о кандидате</mat-label>
+            <textarea matInput formControlName="comment"></textarea>
+          </mat-form-field>
+        }
+
       </form>
 
       <div

@@ -19,15 +19,22 @@
               <mat-icon>arrow_back</mat-icon>
             </button>
           }
-          <button mat-button class="btn-danger">
+          <button mat-button class="btn-danger" (click)="openRejectModal()">
             <mat-icon svgIcon="cancel" />
             <span>Отменить</span>
           </button>
-          <button mat-button class="btn-primary">
+          <button mat-button class="btn-primary" [matMenuTriggerFor]="changeStageContent">
             <mat-icon>arrow_forward</mat-icon>
             <span class="text-[var(--text-main)]">Перевести</span>
           </button>
-          <button mat-button class="btn-primary">
+          <mat-menu #changeStageContent="matMenu">
+            @for (stage of stages; track $index) {
+              <button mat-menu-item (click)="changeStage(stage.id)">
+                {{ stage.name }}
+              </button>
+            }
+          </mat-menu>
+          <button mat-button class="btn-primary" (click)="openCommentModal()">
             <mat-icon svgIcon="comment" />
             <span class="text-[var(--text-main)]">Комментарий</span>
           </button>
@@ -41,8 +48,8 @@
             <mat-icon>more_horiz</mat-icon>
           </button>
           <mat-menu #optionsContent="matMenu">
-            <button mat-menu-item>Не ответил на звонок</button>
-            <button mat-menu-item>Добавить в черный список</button>
+            <button [disabled]="true" mat-menu-item>Не ответил на звонок</button>
+            <button [disabled]="true" mat-menu-item>Добавить в черный список</button>
           </mat-menu>
         </div>
       </div>
@@ -89,8 +96,12 @@
                   }
                 </div>
                 <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 lg:flex-row lg:description-dots">
-                  <span>{{ applicant?.phone }}</span>
-                  <span>{{ applicant?.email }}</span>
+                  @if (applicant && applicant.phone) {
+                    <span>{{ applicant.phone | mask: '+0 (000) 000-00-00' }}</span>
+                  }
+                  @if (applicant && applicant.email) {
+                    <span>{{ applicant.email }}</span>
+                  }
                 </div>
               </div>
 
@@ -151,10 +162,10 @@
           </div>
         </div>
 
-        <form [formGroup]="form" class="flex flex-col gap-8">
+        <form class="flex flex-col gap-8">
           <div class="w-full">
             <label class="text-[16px] leading-6 font-medium">Заметка о кандидате</label>
-            <app-text-editor class="w-full mt-2" formControlName="comment"></app-text-editor>
+            <app-text-editor class="w-full mt-2" [formControl]="comment"></app-text-editor>
             <button mat-flat-button class="btn-primary mt-4" (click)="saveComment()">Сохранить</button>
           </div>
         </form>

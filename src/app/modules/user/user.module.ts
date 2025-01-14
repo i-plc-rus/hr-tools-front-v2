@@ -34,6 +34,7 @@ import {CandidateDetailComponent} from './candidate-detail/candidate-detail.comp
 import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
 import {RejectCandidateModalComponent} from './candidate-list/reject-candidate-modal/reject-candidate-modal.component';
 import {ChangeStageModalComponent} from './candidate-list/change-stage-modal/change-stage-modal.component';
+import {AddCommentModalComponent} from './candidate-detail/add-comment-modal/add-comment-modal.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
@@ -63,6 +64,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
@@ -90,6 +92,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     AddCandidateModalComponent,
     RejectCandidateModalComponent,
     ChangeStageModalComponent,
+    AddCommentModalComponent,
     VacancyDetailComponent,
     VacancyDescriptionComponent,
     VacancyPublicationComponent,
@@ -135,6 +138,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatExpansionModule,
     MatTabsModule,
     MatDatepickerModule,
+    MatCheckboxModule,
     DragDropModule,
 ]
 

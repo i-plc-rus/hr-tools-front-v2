@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
 import {ActivatedRoute} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
+import {
+  VacancyapimodelsSelectionStageView
+} from '../../../api/data-contracts';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -16,10 +19,8 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   isLoading = false;
   isVacancyCard = false;
   applicant?: ApplicantViewExt;
-
-  form: FormGroup = new FormGroup({
-    comment: new FormControl(''),
-  });
+  stages?: VacancyapimodelsSelectionStageView[];
+  comment = new FormControl('');
 
   constructor(
     private modalService: CandidateModalService,
@@ -46,8 +47,12 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     this.isLoading = true;
     this.api.v1SpaceApplicantDetail(id, {observe: 'response'}).subscribe({
       next: (data) => {
-        if (data.body?.data)
+        if (data.body?.data) {
           this.applicant = new ApplicantViewExt(data.body.data);
+          this.comment.setValue(this.applicant.comment);
+          if (this.applicant.vacancy_id)
+            this.getStages(this.applicant.vacancy_id);
+        }
         this.isLoading = false;
       },
       error: (error) => {
@@ -57,11 +62,53 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     });
   }
 
+  getStages(vacancyId: string) {
+    this.api.v1SpaceVacancyStageListCreate(vacancyId, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          const dataStages = data.body.data as VacancyapimodelsSelectionStageView[];
+          this.stages = dataStages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  changeStage(stage_id?: string) {
+    if (!this.applicant || !stage_id) return;
+    const id = this.applicant.id;
+    this.api.v1SpaceApplicantChangeStageUpdate(id, {stage_id}).subscribe({
+      next: () => {
+        this.getApplicantById(id);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
   openEditModal() {
     if (!this.applicant) return;
     const id = this.applicant.id;
     this.modalService.editCandidateModal(this.applicant).subscribe(() =>
       this.getApplicantById(id)
+    );
+  }
+
+  openRejectModal() {
+    if (!this.applicant) return;
+    const id = this.applicant.id;
+    this.modalService.rejectCandidateModal([this.applicant]).subscribe(() =>
+      this.getApplicantById(id)
+    );
+  }
+
+  openCommentModal() {
+    if (!this.applicant) return;
+    this.modalService.openCommentModal(this.applicant.id).subscribe(//() =>
+      //this.getChangesLog(!!this.changesCommentsOnly.value)
     );
   }
 
@@ -94,15 +141,19 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   saveComment() {
     if (!this.applicant) return;
     const id = this.applicant.id;
-    const comment = this.form.value.comment;
-    // this.api.v1SpaceApplicantUpdate(id, {comment}).subscribe({
-    //   next: () => {
-    //     this.getApplicantById(id);
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // })
+    const comment = this.comment.value || '';
+    const applicant = {...this.applicant, comment};
+    this.isLoading = true;
+    this.api.v1SpaceApplicantUpdate(id, applicant).subscribe({
+      next: () => {
+        this.getApplicantById(id);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    })
   }
 
   closeDetail() {

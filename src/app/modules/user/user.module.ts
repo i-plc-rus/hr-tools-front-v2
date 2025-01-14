@@ -24,7 +24,7 @@ import {StatusTagComponent} from '../../components/status-tag/status-tag.compone
 import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
-import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
+import {CellCandidateNameComponent} from '../../components/cell-candidate-name/cell-candidate-name.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
@@ -78,7 +78,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     RequestDetailComponent,
     VacancyNegotiationsComponent,
     VacancyСandidatesComponent,
-    TableCandidateNameComponent,
+    CellCandidateNameComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
     СandidateListComponent,

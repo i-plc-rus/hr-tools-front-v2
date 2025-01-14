@@ -5,7 +5,7 @@ import {ApiService} from '../../../api/Api';
 import {ApplicantView} from '../../../models/Applicant';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
-import {TableCandidateNameComponent} from '../table-candidate-name/table-candidate-name.component';
+import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {ActivatedRoute} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {vacancyStatuses} from '../user-consts';
@@ -43,7 +43,7 @@ export class VacancyСandidatesComponent implements OnInit {
       minWidth: 200,
       maxWidth: 350,
       resizable: false,
-      cellRenderer: TableCandidateNameComponent,
+      cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.fio,
     }
   ];
@@ -53,7 +53,7 @@ export class VacancyСandidatesComponent implements OnInit {
       headerClass: 'font-medium',
       width: 320,
       minWidth: 200,
-      cellRenderer: TableCandidateNameComponent,
+      cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.fio,
       pinned: 'left',
     },

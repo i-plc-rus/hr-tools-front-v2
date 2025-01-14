@@ -5,7 +5,7 @@
         <h1 class="text-[32px] text-center leading-[40px] m-0 p-0">Перевод кандидатов на другой этап</h1>
         <div class="flex flex-wrap gap-4">
           @for (applicant of applicants; track $index) {
-            <app-table-candidate-name [fio]="applicant.fio" [photo_url]="''"></app-table-candidate-name>
+            <app-cell-candidate-name [fio]="applicant.fio" [photo_url]="''" [applicantId]="applicant.id"></app-cell-candidate-name>
           }
         </div>
       </div>

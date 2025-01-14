@@ -21,7 +21,7 @@ import {NegotiationView} from '../../../models/Negotiation';
 import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {MockDataService} from '../../../services/mock-data.service';
-import {TableCandidateNameComponent} from '../table-candidate-name/table-candidate-name.component';
+import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {ActivatedRoute} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
 import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
@@ -104,7 +104,7 @@ export class VacancyNegotiationsComponent {
       minWidth: 200,
       maxWidth: 350,
       resizable: false,
-      cellRenderer: TableCandidateNameComponent,
+      cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<NegotiationView>) => params.data?.fio,
     }
   ];
@@ -114,7 +114,7 @@ export class VacancyNegotiationsComponent {
       headerClass: 'font-medium',
       width: 320,
       minWidth: 200,
-      cellRenderer: TableCandidateNameComponent,
+      cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<NegotiationView>) => params.data?.fio,
       pinned: 'left',
     },

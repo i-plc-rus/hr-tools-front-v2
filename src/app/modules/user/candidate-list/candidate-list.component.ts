@@ -15,9 +15,10 @@ import {
   VacancyapimodelsVacancyView
 } from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
-import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, SelectionChangedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, SelectionChangedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ApplicantView} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {Router} from '@angular/router';
@@ -84,12 +85,7 @@ export class СandidateListComponent {
       headerName: 'Контакты',
       headerClass: 'font-medium',
       sortable: false,
-      cellRenderer: (params: ICellRendererParams<ApplicantView>) => {
-        return `<div class="flex h-full flex-col justify-center gap-1 leading-4">
-          <span>${params.data?.phone}</span>
-          <span>${params.data?.email}</span>
-          </div>`;
-      },
+      cellRenderer: CellCandidateContactsComponent,
     },
     {
       field: 'vacancy_name',

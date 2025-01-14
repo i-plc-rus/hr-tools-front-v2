@@ -18,10 +18,11 @@ import {
 } from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {NegotiationView} from '../../../models/Negotiation';
-import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {MockDataService} from '../../../services/mock-data.service';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ActivatedRoute} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
 import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
@@ -122,12 +123,7 @@ export class VacancyNegotiationsComponent {
       headerName: 'Контакты',
       headerClass: 'font-medium',
       sortable: false,
-      cellRenderer: (params: ICellRendererParams<NegotiationView>) => {
-        return `<div class="flex h-full flex-col justify-center gap-1 leading-4">
-          <span>${params.data?.phone}</span>
-          <span>${params.data?.email}</span>
-          </div>`;
-      },
+      cellRenderer: CellCandidateContactsComponent,
     },
     {
       field: 'comment',

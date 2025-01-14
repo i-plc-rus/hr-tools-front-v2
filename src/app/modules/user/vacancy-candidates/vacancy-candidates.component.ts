@@ -3,9 +3,10 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {ApplicantView} from '../../../models/Applicant';
-import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {ColDef, GridApi, GridOptions, GridReadyEvent, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ActivatedRoute} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {vacancyStatuses} from '../user-consts';
@@ -61,12 +62,7 @@ export class VacancyСandidatesComponent implements OnInit {
       headerName: 'Контакты',
       headerClass: 'font-medium',
       sortable: false,
-      cellRenderer: (params: ICellRendererParams<ApplicantView>) => {
-        return `<div class="flex h-full flex-col justify-center gap-1 leading-4">
-          <span>${params.data?.phone}</span>
-          <span>${params.data?.email}</span>
-          </div>`;
-      },
+      cellRenderer: CellCandidateContactsComponent,
     },
     {
       field: 'comment',

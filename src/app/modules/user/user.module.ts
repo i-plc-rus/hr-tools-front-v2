@@ -25,6 +25,7 @@ import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
 import {CellCandidateNameComponent} from '../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
@@ -46,6 +47,7 @@ import {GenerateDescriptionModalComponent} from './generate-description-modal/ge
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
+import {NgxMaskDirective, NgxMaskPipe} from 'ngx-mask';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -79,6 +81,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     VacancyNegotiationsComponent,
     VacancyСandidatesComponent,
     CellCandidateNameComponent,
+    CellCandidateContactsComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
     СandidateListComponent,
@@ -114,6 +117,8 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     TextInputComponent,
     DropdownDirective,
     DropdownContentDirective,
+    NgxMaskDirective,
+    NgxMaskPipe,
 
     MatIcon,
     MatIconModule,

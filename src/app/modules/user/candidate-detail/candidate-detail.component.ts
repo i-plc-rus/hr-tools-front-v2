@@ -24,6 +24,9 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   isVacancyCard = false;
   applicant?: ApplicantViewExt;
   stages?: VacancyapimodelsSelectionStageView[];
+  docList?: FilesapimodelsFileView[];
+  photo?: string;
+  resume?: File;
   changesLog?: ApplicantHistoryView[];
   changesCommentsOnly = new FormControl<boolean>(false);
   comment = new FormControl('');
@@ -62,6 +65,9 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
           if (this.applicant.vacancy_id)
             this.getStages(this.applicant.vacancy_id);
           this.getChangesLog(!!this.changesCommentsOnly.value);
+          this.getDocList();
+          this.getResume();
+          this.getPhoto();
         }
         this.isLoading = false;
       },
@@ -70,6 +76,63 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
         this.isLoading = false;
       },
     });
+  }
+
+  getResume() {
+    if (!this.applicant) return;
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data: any) => {
+        if (data.body && data.body.size > 0) {
+          this.resume = data.body;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getDocList() {
+    if (!this.applicant) return;
+    this.isLoading = true;
+    this.api.v1SpaceApplicantDocListDetail(this.applicant.id, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.docList = data.body.data;
+        }
+        else
+          this.docList = [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getPhoto() {
+    if (!this.applicant) return;
+    this.api.v1SpaceApplicantPhotoDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data: any) => {
+        if (data.body && data.body.size > 0) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target && e.target.result)
+              this.photo = e.target?.result as string;
+          }
+          reader.readAsDataURL(new Blob([data.body]));
+        }
+        else
+          this.photo = '';
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
   getChangesLog(comments_only: boolean = false) {
@@ -119,7 +182,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   openEditModal() {
     if (!this.applicant) return;
     const id = this.applicant.id;
-    this.modalService.editCandidateModal(this.applicant).subscribe(() =>
+    this.modalService.editCandidateModal(this.applicant, this.photo, this.resume ? 'Файл резюме' : undefined).subscribe(() =>
       this.getApplicantById(id)
     );
   }
@@ -158,6 +221,103 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     this.api.v1SpaceApplicantTagDelete(id, {tag}).subscribe({
       next: () => {
         this.getApplicantById(id);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  uploadResume(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length || !this.applicant) return;
+
+    this.isLoading = true;
+    const formData = new FormData();
+    formData.append("resume", target.files[0], target.files[0].name);
+    this.api.v1SpaceApplicantUploadResumeCreate(this.applicant.id, formData as any, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getResume();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  downloadResume() {
+    if (!this.applicant || !this.resume) return;
+
+    const blob = new Blob([this.resume], {type: 'application/octet-stream'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Резюме.pdf';
+    link.click();
+  }
+
+  deleteResume() {
+    if (!this.applicant) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.resume = undefined;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  uploadDocument(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length || !this.applicant) return;
+
+    this.isLoading = true;
+    const formData = new FormData();
+    formData.append("document", target.files[0], target.files[0].name);
+    this.api.v1SpaceApplicantUploadDocCreate(this.applicant.id, formData as any, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getDocList();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  downloadDocument(id?: string, name?: string) {
+    if (!this.applicant || !id || !name) return;
+
+    this.api.v1SpaceApplicantDocDetail(id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data) => {
+        if (data.body) {
+          const blob = new Blob([data.body], {type: 'application/octet-stream'});
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = name;
+          link.click();
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  deleteDocument(id?: string) {
+    if (!this.applicant || !id) return;
+
+    this.api.v1SpaceApplicantDocDelete(id, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getDocList();
       },
       error: (error) => {
         console.log(error);

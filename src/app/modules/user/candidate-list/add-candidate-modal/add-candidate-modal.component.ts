@@ -5,7 +5,6 @@ import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
 import {
   ApplicantapimodelsApplicantData,
-  FilesapimodelsFileView,
   ModelsApplicantSource,
   ModelsDriverLicenseType,
   ModelsEducationType,
@@ -22,7 +21,17 @@ import {
 import {VacancyView} from '../../../../models/Vacancy';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import {educationTypes, employmentTypes, genderTypes, languageLevelTypes, relocationTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../../user-consts';
+import {
+  educationTypes,
+  employmentTypes,
+  genderTypes,
+  languageLevelTypes,
+  relocationTypes,
+  scheduleTypes,
+  searchStatusTypes,
+  tripReadinessTypes
+} from '../../user-consts';
+import {forkJoin, of, switchMap} from 'rxjs';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -40,6 +49,8 @@ class LanguageFormControls extends FormGroup {
 })
 export class AddCandidateModalComponent implements OnInit {
   @Input() applicant?: ApplicantView | ApplicantViewExt;
+  @Input() photo?: string;
+  @Input() resumeName?: string;
   onSubmit = new EventEmitter<boolean>();
   isEdit = false;
   isLoading = false;
@@ -82,9 +93,8 @@ export class AddCandidateModalComponent implements OnInit {
   relocationTypes = relocationTypes;
 
   vacancyList: VacancyView[] = [];
-  docList: FilesapimodelsFileView[] = [];
-  newResumeFile?: File;
-  currentResumeFile?: FilesapimodelsFileView;
+  newCandidateResume?: File;
+  newCandidatePhoto?: File;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -103,8 +113,6 @@ export class AddCandidateModalComponent implements OnInit {
           language_level: new FormControl<ModelsLanguageLevelType | ''>(language.language_level || '', Validators.required),
         }))
       });
-
-      this.getDocList(this.applicant.id);
     }
     this.getVacancyList();
   }
@@ -131,7 +139,7 @@ export class AddCandidateModalComponent implements OnInit {
         search_status: this.params.controls['search_status'].value || undefined,
         trip_readiness: this.params.controls['trip_readiness'].value || undefined,
       },
-      phone: this.applicantForm.controls.phone.value || undefined,
+      phone: this.applicantForm.controls.phone.value?.replace(/[^0-9]/g, '') || undefined,
       relocation: this.applicantForm.controls.relocation.value || undefined,
       salary: this.applicantForm.controls.salary.value || undefined,
       source: this.applicantForm.controls.source.value || undefined,
@@ -162,11 +170,23 @@ export class AddCandidateModalComponent implements OnInit {
     this.isLoading = true;
     const newApplicant = this.mapFormToApplicant();
 
-    this.api.v1SpaceApplicantCreate(newApplicant, {observe: 'response'}).subscribe({
-      next: (data) => {
-        if (data.body?.data && this.newResumeFile) {
-          this.uploadResume(data.body.data);
+    this.api.v1SpaceApplicantCreate(newApplicant, {observe: 'response'}).pipe(
+      switchMap((response) => {
+        const observables = [];
+        if (response.body?.data) {
+          const applicantId = response.body.data;
+          if (this.newCandidateResume)
+            observables.push(this.uploadResume(applicantId, this.newCandidateResume));
+          if (this.newCandidatePhoto)
+            observables.push(this.uploadPhoto(applicantId, this.newCandidatePhoto));
         }
+        if (observables.length === 0) {
+          return of(null);
+        }
+        return forkJoin(observables);
+      })
+    ).subscribe({
+      next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.modalService.closeModal();
@@ -187,9 +207,6 @@ export class AddCandidateModalComponent implements OnInit {
 
     this.api.v1SpaceApplicantUpdate(applicantId, updatedApplicant, {observe: 'response'}).subscribe({
       next: () => {
-        if (this.newResumeFile) {
-          this.uploadResume(applicantId);
-        }
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.modalService.closeModal();
@@ -223,42 +240,107 @@ export class AddCandidateModalComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: Event) {
+  onResumeSelected(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.newResumeFile = target.files?.[0];
-    console.log(this.newResumeFile);
-  }
-
-  getDocList(id: string) {
-    this.isLoading = true;
-    this.api.v1SpaceApplicantDocListDetail(id, {observe: 'response'}).subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          this.docList = data.body.data;
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.log(error);
-      },
-    })
-  }
-
-  uploadResume(applicantId: string) {
-    if (!this.newResumeFile) return;
-    this.isLoading = true;
-    this.api.v1SpaceApplicantUploadResumeCreate(applicantId, {resume: this.newResumeFile}, {observe: 'response', headers: {'Content-Type': 'multipart/form-data'}})
-      .subscribe({
+    if (!target.files?.length) return;
+    if (this.isEdit && this.applicant && this.applicant.id) {
+      this.isLoading = true;
+      this.uploadResume(this.applicant.id, target.files[0]).subscribe({
         next: () => {
           this.isLoading = false;
-          this.getDocList(applicantId);
+          this.resumeName = target.files?.[0]?.name;
+          this.onSubmit.emit(true);
         },
         error: (error) => {
           console.log(error);
           this.isLoading = false;
         },
-      })
+      });
+    }
+    else
+      if (!this.isEdit)
+        this.newCandidateResume = target.files[0];
+  }
+
+  onPhotoSelected(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length) return;
+    if (this.isEdit && this.applicant && this.applicant.id) {
+      this.isLoading = true;
+      this.uploadPhoto(this.applicant.id, target.files[0]).subscribe({
+        next: () => {
+          this.isLoading = false;
+          if (target.files?.[0])
+            this.photo = URL.createObjectURL(target.files[0]);
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+    }
+    else
+      if (!this.isEdit) {
+        this.newCandidatePhoto = target.files[0];
+        this.photo = URL.createObjectURL(target.files[0]);
+      }
+  }
+
+  uploadPhoto(id: string, photo: File) {
+    const formData = new FormData();
+    formData.append("photo", photo, photo.name);
+    return this.api.v1SpaceApplicantUploadPhotoCreate(id, formData as any, {observe: 'response'});
+  }
+
+  uploadResume(applicantId: string, resume: File) {
+    const formData = new FormData();
+    formData.append("resume", resume, resume.name);
+    return this.api.v1SpaceApplicantUploadResumeCreate(applicantId, formData as any, {observe: 'response'});
+  }
+
+  deletePhoto() {
+    if (!this.isEdit) {
+      this.newCandidatePhoto = undefined;
+      return;
+    }
+    if (!this.applicant || !this.applicant.id) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantPhotoDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.photo = undefined;
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  deleteResume() {
+    if (!this.isEdit) {
+      this.newCandidateResume = undefined;
+      return;
+    }
+    if (!this.applicant || !this.applicant.id) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.resumeName = undefined;
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
   }
 
   get params() {

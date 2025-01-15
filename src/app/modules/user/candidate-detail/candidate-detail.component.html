@@ -63,8 +63,11 @@
         </div> -->
         <div class="flex w-full px-6 py-4 gap-3 bg-[var(--background-alter)] rounded-2xl">
           <div class="flex w-[80px] h-[80px] bg-[var(--background-main)] rounded-full">
-            <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
-            <!-- <img class="min-w-[80px] min-h-[80px] rounded-full" src="" /> -->
+            @if (!photo) {
+              <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
+            } @else {
+              <img class="min-w-[80px] min-h-[80px] rounded-full" [src]="photo" />
+            }
           </div>
           <div class="flex flex-col gap-2 w-full">
             <div class="flex w-full gap-4 items-center">
@@ -173,26 +176,42 @@
       <mat-tab-group fitInkBarToContent>
         <mat-tab label="Резюме">
           <div class="p-6">
-            <button mat-flat-button class="btn-secondary">
-              <mat-icon>add</mat-icon>
-              Добавить резюме
-            </button>
             <div class="w-full flex justify-between items-center mt-4">
-              <span class="text-[16px] leading-6 text-[var(--text-alter)]">Дата добавления резюме: 20.01.2024</span>
-              <div class="flex gap-3">
-                <button mat-icon-button class="btn-primary">
-                  <mat-icon svgIcon="share" />
+              @if (!resume) {
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  class="hidden"
+                  (change)="uploadResume($event)"
+                  #resumeInput />
+                <button mat-flat-button class="btn-secondary" (click)="resumeInput.click()">
+                  <mat-icon>add</mat-icon>
+                  Добавить резюме
                 </button>
-                <button mat-icon-button class="btn-primary">
-                  <mat-icon svgIcon="print" />
-                </button>
-                <button mat-icon-button class="btn-primary">
-                  <mat-icon svgIcon="download" />
-                </button>
-                <button mat-icon-button class="btn-primary">
-                  <mat-icon svgIcon="delete" />
-                </button>
-              </div>
+              } @else {
+                <div class="flex gap-1 flex-wrap">
+                  <button mat-button class="btn-secondary">
+                    <mat-icon>attach_file</mat-icon>
+                    {{ applicant?.resume_title || 'Резюме' }}
+                  </button>
+                </div>
+
+                <!-- <span class="text-[16px] leading-6 text-[var(--text-alter)]">Дата добавления резюме: 20.01.2024</span> -->
+                <div class="flex gap-3">
+                  <button mat-icon-button class="btn-primary" disabled>
+                    <mat-icon svgIcon="share" />
+                  </button>
+                  <button mat-icon-button class="btn-primary" disabled>
+                    <mat-icon svgIcon="print" />
+                  </button>
+                  <button mat-icon-button class="btn-primary" (click)="downloadResume()">
+                    <mat-icon svgIcon="download" />
+                  </button>
+                  <button mat-icon-button class="btn-primary" (click)="deleteResume()">
+                    <mat-icon svgIcon="delete" />
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </mat-tab>
@@ -276,10 +295,33 @@
         </mat-tab>
         <mat-tab label="Документы">
           <div class="p-6">
-            <button mat-flat-button class="btn-secondary">
+            <input
+              type="file"
+              accept="application/pdf"
+              class="hidden"
+              (change)="uploadDocument($event)"
+              #documentInput />
+            <button mat-flat-button class="btn-secondary" (click)="documentInput.click()">
               <mat-icon>attach_file</mat-icon>
               Прикрепить документ
             </button>
+            @for (doc of docList; track $index) {
+              <hr class="w-full h-[1px] bg-[var(--background-alter)] my-2" />
+              <div class="w-full flex justify-between">
+                <button mat-button class="btn-secondary">
+                  <mat-icon>attach_file</mat-icon>
+                  {{ doc.name }}
+                </button>
+                <div class="flex gap-3">
+                  <button mat-icon-button class="btn-primary" (click)="downloadDocument(doc.id, doc.name)">
+                    <mat-icon svgIcon="download" />
+                  </button>
+                  <button mat-icon-button class="btn-primary" (click)="deleteDocument(doc.id)">
+                    <mat-icon svgIcon="delete" />
+                  </button>
+                </div>
+              </div>
+            }
           </div>
         </mat-tab>
       </mat-tab-group>

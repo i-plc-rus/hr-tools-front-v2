@@ -39,12 +39,15 @@ export class CandidateModalService {
     return componentRef.instance.onSubmit;
   }
 
-  editCandidateModal(applicant: ApplicantView | ApplicantViewExt): EventEmitter<boolean> {
+  editCandidateModal(applicant: ApplicantView | ApplicantViewExt, photo?: string, resumeName?: string): EventEmitter<boolean>  {
     this.portal = new ComponentPortal(AddCandidateModalComponent);
     this.overlayRef = this.createOverlay(this.overlay);
     const componentRef = this.overlayRef.attach(this.portal);
-    if (componentRef.instance instanceof AddCandidateModalComponent)
+    if (componentRef.instance instanceof AddCandidateModalComponent) {
       componentRef.instance.applicant = applicant;
+      componentRef.instance.photo = photo;
+      componentRef.instance.resumeName = resumeName;
+    }
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();
     })

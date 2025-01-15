@@ -5,8 +5,12 @@ import {ActivatedRoute} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {
+  ApplicantapimodelsApplicantHistoryFilter,
+  ApplicantapimodelsApplicantHistoryView,
+  FilesapimodelsFileView,
   VacancyapimodelsSelectionStageView
 } from '../../../api/data-contracts';
+import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -20,6 +24,8 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   isVacancyCard = false;
   applicant?: ApplicantViewExt;
   stages?: VacancyapimodelsSelectionStageView[];
+  changesLog?: ApplicantHistoryView[];
+  changesCommentsOnly = new FormControl<boolean>(false);
   comment = new FormControl('');
 
   constructor(
@@ -41,6 +47,9 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
         this.getApplicantById(params['id']);
       })
     }
+    this.changesCommentsOnly.valueChanges.subscribe((value) =>
+      this.getChangesLog(!!value)
+    );
   }
 
   getApplicantById(id: string) {
@@ -52,6 +61,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
           this.comment.setValue(this.applicant.comment);
           if (this.applicant.vacancy_id)
             this.getStages(this.applicant.vacancy_id);
+          this.getChangesLog(!!this.changesCommentsOnly.value);
         }
         this.isLoading = false;
       },
@@ -60,6 +70,23 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
         this.isLoading = false;
       },
     });
+  }
+
+  getChangesLog(comments_only: boolean = false) {
+    if (!this.applicant) return;
+    const filter = {comments_only} as ApplicantapimodelsApplicantHistoryFilter;
+    this.api.v1SpaceApplicantChangesUpdate(this.applicant.id, filter, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          let dataChanges = data.body.data as ApplicantapimodelsApplicantHistoryView[];
+          dataChanges = dataChanges.reverse();
+          this.changesLog = dataChanges.map((change) => new ApplicantHistoryView(change));
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
   getStages(vacancyId: string) {
@@ -107,8 +134,8 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
 
   openCommentModal() {
     if (!this.applicant) return;
-    this.modalService.openCommentModal(this.applicant.id).subscribe(//() =>
-      //this.getChangesLog(!!this.changesCommentsOnly.value)
+    this.modalService.openCommentModal(this.applicant.id).subscribe(() =>
+      this.getChangesLog(!!this.changesCommentsOnly.value)
     );
   }
 

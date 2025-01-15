@@ -87,6 +87,10 @@ export class AppComponent implements OnInit {
       .addSvgIcon('drag-indicator', this.setPath(`${this.svgPath}/ic-drag-indicator.svg`))
       .addSvgIcon('article-shortcut', this.setPath(`${this.svgPath}/ic-article-shortcut.svg`))
       .addSvgIcon('add-a-photo', this.setPath(`${this.svgPath}/ic-add-a-photo.svg`))
+      .addSvgIcon('arrow-forward', this.setPath(`${this.svgPath}/ic-arrow-forward.svg`))
+      .addSvgIcon('forum', this.setPath(`${this.svgPath}/ic-forum.svg`))
+      .addSvgIcon('person', this.setPath(`${this.svgPath}/ic-person.svg`))
+      .addSvgIcon('smart-toy', this.setPath(`${this.svgPath}/ic-smart-toy.svg`))
   }
 
   ngOnInit() {

@@ -198,14 +198,80 @@
         </mat-tab>
         <mat-tab label="Действия">
           <div class="p-6">
-            <mat-chip-listbox hideSingleSelectionIndicator>
-              <mat-chip-option selected>Все</mat-chip-option>
-              <mat-chip-option>Комментарии</mat-chip-option>
+            <mat-chip-listbox hideSingleSelectionIndicator [formControl]="changesCommentsOnly">
+              <mat-chip-option [value]="false" [selectable]="changesCommentsOnly.value === true"> Все </mat-chip-option>
+              <mat-chip-option [value]="true" [selectable]="changesCommentsOnly.value === false">
+                Комментарии
+              </mat-chip-option>
             </mat-chip-listbox>
 
-            <div class="flex flex-col gap-4 mt-4">
-              <span class="text-[16px] leading-6 text-[var(--text-alter)]">Нет действий</span>
-            </div>
+            <ul class="flex flex-col gap-4 mt-4">
+              @if (!changesLog || changesLog.length === 0) {
+                <li class="text-[16px] leading-6 text-[var(--text-alter)]">Нет действий</li>
+              } @else {
+                @for (logItem of changesLog; track $index) {
+                  <li class="flex gap-4" [class]="logItem.action_type === 'comment' ? 'items-start' : 'items-center'">
+                    <div class="flex">
+                      <div
+                        class="flex items-center justify-center rounded-full bg-[var(--background-main)] w-14 h-14 z-0">
+                        <mat-icon [class]="logItem.actionIcon.className" [svgIcon]="logItem.actionIcon.name"></mat-icon>
+                      </div>
+                      <div
+                        class="flex items-center justify-center rounded-full bg-[var(--background-alter)] w-14 h-14 ml-[-12px]">
+                        <mat-icon
+                          class="text-[var(--link-default)]"
+                          [svgIcon]="logItem.user_id ? 'person' : 'smart-toy'"></mat-icon>
+                      </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      <span class="text-[var(--text-alter)] text-[12px] leading-4 font-medium">
+                        {{ logItem.user_name || 'Система' }}
+                      </span>
+                      @if (logItem.action_type === 'comment') {
+                        <span class="text-[14px] leading-5">
+                          Оставлен комментарий по вакансии
+                          <span class="text-[14px] leading-5 text-[var(--link-default)]">
+                            {{ logItem.vacancy_name }}
+                          </span>
+                        </span>
+                        <span
+                          class="text-[14px] leading-5 bg-[var(--background-alter)] p-3 rounded-2xl whitespace-pre-line">
+                          {{ logItem.changes?.description }}
+                        </span>
+                      } @else {
+                        <span class="text-[14px] leading-5">
+                          {{ logItem.changes?.description }}
+                          <span class="text-[14px] leading-5 text-[var(--link-default)]">
+                            {{ logItem.vacancy_name }}
+                          </span>
+                        </span>
+                      }
+                      <input type="checkbox" class="hidden" #viewChanges />
+                      @if (logItem.changes?.data) {
+                        <span
+                          class="text-[14px] leading-5 text-[var(--text-alter)] cursor-pointer"
+                          (click)="viewChanges.checked = !viewChanges.checked">
+                          {{ logItem.changes?.data?.length }} изменений
+                        </span>
+                      }
+                    </div>
+                  </li>
+                  @if (logItem.changes?.data && viewChanges.checked) {
+                    <div class="flex gap-4">
+                      <div class="w-[120px]"></div>
+                      <div class="flex flex-col gap-2">
+                        @for (data of logItem.changes?.data; track $index) {
+                          <span class="text-[14px] leading-5 text-[var(--text-alter)]">
+                            {{ data.field }}
+                          </span>
+                          <span class="text-[14px] leading-5"> {{ data.old_value }} -> {{ data.new_value }} </span>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              }
+            </ul>
           </div>
         </mat-tab>
         <mat-tab label="Документы">

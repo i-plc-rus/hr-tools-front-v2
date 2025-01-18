@@ -31,6 +31,8 @@ import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidat
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateStatusComponent} from './candidate-list/candidate-status/candidate-status.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
+import {CandidateDetailInfoComponent} from './candidate-detail/candidate-detail-info/candidate-detail-info.component';
+import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
 import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
 import {RejectCandidateModalComponent} from './candidate-list/reject-candidate-modal/reject-candidate-modal.component';
 import {ChangeStageModalComponent} from './candidate-list/change-stage-modal/change-stage-modal.component';
@@ -89,6 +91,8 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     СandidateListComponent,
     CandidateStatusComponent,
     CandidateDetailComponent,
+    CandidateDetailInfoComponent,
+    CandidateDuplicateComponent,
     AddCandidateModalComponent,
     RejectCandidateModalComponent,
     ChangeStageModalComponent,

@@ -91,6 +91,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('forum', this.setPath(`${this.svgPath}/ic-forum.svg`))
       .addSvgIcon('person', this.setPath(`${this.svgPath}/ic-person.svg`))
       .addSvgIcon('smart-toy', this.setPath(`${this.svgPath}/ic-smart-toy.svg`))
+      .addSvgIcon('merge', this.setPath(`${this.svgPath}/ic-merge.svg`))
   }
 
   ngOnInit() {

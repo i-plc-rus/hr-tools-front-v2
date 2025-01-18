@@ -179,14 +179,6 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     })
   }
 
-  openEditModal() {
-    if (!this.applicant) return;
-    const id = this.applicant.id;
-    this.modalService.editCandidateModal(this.applicant, this.photo, this.resume ? 'Файл резюме' : undefined).subscribe(() =>
-      this.getApplicantById(id)
-    );
-  }
-
   openRejectModal() {
     if (!this.applicant) return;
     const id = this.applicant.id;
@@ -200,32 +192,6 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     this.modalService.openCommentModal(this.applicant.id).subscribe(() =>
       this.getChangesLog(!!this.changesCommentsOnly.value)
     );
-  }
-
-  addTag(tag: string) {
-    if (!this.applicant || tag === '') return;
-    const id = this.applicant.id;
-    this.api.v1SpaceApplicantTagUpdate(id, {tag}).subscribe({
-      next: () => {
-        this.getApplicantById(id);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
-  }
-
-  removeTag(tag: string) {
-    if (!this.applicant) return;
-    const id = this.applicant.id;
-    this.api.v1SpaceApplicantTagDelete(id, {tag}).subscribe({
-      next: () => {
-        this.getApplicantById(id);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
   }
 
   uploadResume(event: Event) {

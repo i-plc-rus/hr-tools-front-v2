@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
+import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsVacancyStatus} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {ApplicantView} from '../../../models/Applicant';
-import {ColDef, GridApi, GridOptions, GridReadyEvent, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ActivatedRoute} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
-import {vacancyStatuses} from '../user-consts';
+import {relocationTypes, vacancyStatuses} from '../user-consts';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'app-vacancy-candidates',
@@ -17,21 +18,39 @@ import {vacancyStatuses} from '../user-consts';
   styleUrl: './vacancy-candidates.component.scss',
 })
 export class VacancyСandidatesComponent implements OnInit {
+  vacancy?: VacancyView;
   // фильтр
   filterForm = new FormGroup({
-    education: new FormControl(''),
-    skills: new FormControl(''),
-    experience: new FormControl(''),
+    added_day: new FormControl(''),
+    added_period: new FormControl<ModelsApAddedPeriodType | undefined>(undefined),
+    added_type: new FormControl<ModelsAddedType | undefined>(undefined),
+    age_from: new FormControl(0, {nonNullable: true}),
+    age_to: new FormControl(0, {nonNullable: true}),
+    city: new FormControl('', {nonNullable: true}),
+    gender: new FormControl<ModelsGenderType | undefined>(undefined),
+    language: new FormControl(''),
+    relocation: new FormControl<ModelsRelocationType | undefined>(undefined),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined),
+    search: new FormControl(''),
+    source: new FormControl<ModelsApplicantSource | undefined>(undefined),
+    stage_name: new FormControl(''),
+    status: new FormControl<ModelsApplicantStatus | undefined>(undefined),
+    tag: new FormControl(''),
+    total_experience_from: new FormControl(0, {nonNullable: true}),
+    total_experience_to: new FormControl(0, {nonNullable: true}),
+    vacancy_id: new FormControl(''),
     vacancy_name: new FormControl(''),
   });
-  educationTypes = Object.values(ModelsVRType);
-  skillsTypes = Object.values(ModelsVRSelectionType);
-  experienceTypes = Object.values(ModelsVRUrgency);
-  statuses = vacancyStatuses;
-  searchSkill = new FormControl('');
-  searchValue: string = '';
-  vacancy?: VacancyView;
-
+  statusTypes = Object.values(ModelsApplicantStatus);
+  sourceTypes = Object.values(ModelsApplicantSource);
+  addedPeriodTypes = Object.values(ModelsApAddedPeriodType);
+  addedTypes = Object.values(ModelsAddedType);
+  relocationTypes = relocationTypes;
+  vacancyStatuses = vacancyStatuses;
+  vacancyList: VacancyView[] = [];
+  cities: DictapimodelsCityView[] = [];
+  searchCity = new FormControl('');
+  searchValue = new FormControl('');
   //кандидаты
   private gridApi!: GridApi<ApplicantView>;
   detailsSelectedId?: {applicantId: string, nodeId?: string};
@@ -68,6 +87,9 @@ export class VacancyСandidatesComponent implements OnInit {
       field: 'comment',
       headerName: 'Последний комментарий',
       headerClass: 'font-medium',
+      cellRenderer: (params: ICellRendererParams<ApplicantView>) => {
+        return params.data?.comment
+      },
     },
     {
       field: 'negotiation_date',
@@ -122,6 +144,10 @@ export class VacancyСandidatesComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['stage'])
+        this.filterForm.controls.stage_name.setValue(params['stage']);
+    })
     this.activatedRoute.params.subscribe(params => {
       this.getVacancyById(params['id']);
     })
@@ -141,7 +167,35 @@ export class VacancyСandidatesComponent implements OnInit {
   }
 
   setFilterFormListeners() {
-    this.filterForm.valueChanges.subscribe(() => this.getApplicants());
+    this.searchCity.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((newValue) => {
+        if (this.filterForm.controls.city.value !== '')
+          this.filterForm.controls.city.setValue('');
+        if (newValue && newValue.length > 3)
+          this.getCities(newValue);
+        else
+          this.cities = [];
+      });
+
+    this.filterForm.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.getApplicants()
+      });
+  }
+
+  getCities(address: string) {
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.cities = data.body.data;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   changeStatus(id: string, status: ModelsVacancyStatus) {
@@ -180,7 +234,9 @@ export class VacancyСandidatesComponent implements OnInit {
       next: (data) => {
         if (data.body?.data) {
           this.vacancy = new VacancyView(data.body.data);
-          this.filterForm.controls['vacancy_name'].patchValue(this.vacancy.vacancy_name);
+          const stages = this.vacancy.selection_stages || [];
+          this.vacancy.selection_stages = stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
+          this.filterForm.controls.vacancy_id.setValue(this.vacancy.id);
         }
       },
       error: (error) => {
@@ -190,7 +246,23 @@ export class VacancyСandidatesComponent implements OnInit {
   }
 
   onSearch() {
-    console.log(this.filterForm.value);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
+  }
+
+  onReset() {
+    if (!this.vacancy) return;
+    this.filterForm.reset();
+    this.filterForm.controls.vacancy_id.setValue(this.vacancy.id);
+    this.searchValue.reset();
+    this.searchCity.reset();
+  }
+
+  onSelectStage(name: string) {
+    this.filterForm.controls.stage_name.setValue(name);
+  }
+
+  onSelectStatus(status?: ModelsApplicantStatus) {
+    this.filterForm.controls.status.setValue(status);
   }
 
   onBack() {

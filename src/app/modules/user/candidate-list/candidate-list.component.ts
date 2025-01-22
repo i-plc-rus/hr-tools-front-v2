@@ -39,9 +39,9 @@ export class СandidateListComponent {
     added_day: new FormControl(''),
     added_period: new FormControl<ModelsApAddedPeriodType | undefined>(undefined),
     added_type: new FormControl<ModelsAddedType | undefined>(undefined),
-    age_from: new FormControl(0),
-    age_to: new FormControl(0),
-    city: new FormControl(''),
+    age_from: new FormControl(0, {nonNullable: true}),
+    age_to: new FormControl(0, {nonNullable: true}),
+    city: new FormControl('', {nonNullable: true}),
     gender: new FormControl<ModelsGenderType | undefined>(undefined),
     language: new FormControl(''),
     relocation: new FormControl<ModelsRelocationType | undefined>(undefined),
@@ -51,9 +51,9 @@ export class СandidateListComponent {
     stage_name: new FormControl(''),
     status: new FormControl<ModelsApplicantStatus | undefined>(undefined),
     tag: new FormControl(''),
-    total_experience_from: new FormControl(0),
-    total_experience_to: new FormControl(0),
-    vacancy_id: new FormControl(''),
+    total_experience_from: new FormControl(0, {nonNullable: true}),
+    total_experience_to: new FormControl(0, {nonNullable: true}),
+    vacancy_id: new FormControl('', {nonNullable: true}),
     vacancy_name: new FormControl(''),
   });
   statusTypes = Object.values(ModelsApplicantStatus);
@@ -65,7 +65,7 @@ export class СandidateListComponent {
   cities: DictapimodelsCityView[] = [];
   searchVacancy = new FormControl('');
   searchCity = new FormControl('');
-  searchValue: string = '';
+  searchValue = new FormControl('');
 
   //кандидаты
   private gridApi!: GridApi<ApplicantView>;
@@ -299,8 +299,14 @@ export class СandidateListComponent {
   }
 
   onSearch() {
-    console.log(this.filterForm.value);
-    this.filterForm.controls.search.setValue(this.searchValue);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
+  }
+
+  onReset() {
+    this.filterForm.reset();
+    this.searchCity.reset();
+    this.searchVacancy.reset();
+    this.searchValue.reset();
   }
 
   onBack() {

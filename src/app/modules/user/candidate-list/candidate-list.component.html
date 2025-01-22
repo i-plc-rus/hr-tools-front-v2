@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
       <h3 class="text-[22px] leading-7">Фильтр</h3>
       <div class="flex gap-2">
-        <button mat-icon-button class="btn-secondary">
+        <button mat-icon-button class="btn-secondary" (click)="onReset()">
           <mat-icon>refresh</mat-icon>
         </button>
         <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
@@ -129,7 +129,7 @@
     <app-search-input
       class="w-[380px]"
       placeholder="ФИО, почта и тег"
-      [(ngModel)]="searchValue"
+      [formControl]="searchValue"
       (onSearch)="onSearch()">
     </app-search-input>
     <app-filter-toggle #toggleFilter />

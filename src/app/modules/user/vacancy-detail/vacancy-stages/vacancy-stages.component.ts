@@ -23,11 +23,11 @@ export class VacancyStagesComponent implements OnChanges {
   stages: VacancyapimodelsSelectionStageView[] = [];
   newStageOpened = false;
   newStageForm: FormGroup = new FormGroup({
-    can_delete: new FormControl<boolean>(true),
+    can_delete: new FormControl<boolean>(true, {nonNullable: true}),
     name: new FormControl<string>(''),
     limit_type: new FormControl<ModelsLimitType | undefined>(undefined),
     limit_value: new FormControl<number | undefined>(undefined),
-    stage_order: new FormControl<number>(1),
+    stage_order: new FormControl<number>(1, {nonNullable: true}),
     stage_type: new FormControl<string>('')
   });
   limitTypes = Object.values(ModelsLimitType);

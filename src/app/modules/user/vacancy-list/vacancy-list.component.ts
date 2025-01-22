@@ -29,15 +29,15 @@ export class VacancyListComponent implements OnInit {
   sortByDesc = true;
   filterForm = new FormGroup({
     search: new FormControl(''),
-    author_id: new FormControl(''),
-    city_id: new FormControl(''),
+    author_id: new FormControl('', {nonNullable: true}),
+    city_id: new FormControl('', {nonNullable: true}),
     department_id: new FormControl(''),
     favorite: new FormControl(false),
-    request_author_id: new FormControl(''),
+    request_author_id: new FormControl('', {nonNullable: true}),
     request_id: new FormControl(''),
     request_type: new FormControl<ModelsVRType | undefined>(undefined),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
-    sort: new FormControl<VacancyapimodelsVacancySort>({created_at_desc: this.sortByDesc}),
+    sort: new FormControl<VacancyapimodelsVacancySort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVacancyStatus[]>([]),
     urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
   });
@@ -45,7 +45,7 @@ export class VacancyListComponent implements OnInit {
   searchCity = new FormControl('');
   searchAuthor = new FormControl('');
   searchRequestAuthor = new FormControl('');
-  searchValue: string = '';
+  searchValue = new FormControl('');
 
   // справочники
   requestTypes = Object.values(ModelsVRType);
@@ -185,7 +185,15 @@ export class VacancyListComponent implements OnInit {
   }
 
   search() {
-    this.filterForm.controls.search.setValue(this.searchValue);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
+  }
+
+  reset() {
+    this.searchValue.reset();
+    this.category.setValue('all');
+    this.searchCity.reset();
+    this.searchAuthor.reset();
+    this.searchRequestAuthor.reset();
   }
 
   sort() {

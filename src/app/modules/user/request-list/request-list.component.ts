@@ -29,18 +29,18 @@ export class RequestListComponent implements OnInit {
   sortByDesc = true;
   filterForm = new FormGroup({
     search: new FormControl(''),
-    author_id: new FormControl(''),
-    city_id: new FormControl(''),
+    author_id: new FormControl('', {nonNullable: true}),
+    city_id: new FormControl('', {nonNullable: true}),
     favorite: new FormControl<boolean | undefined>(undefined),
     search_from: new FormControl(''),
     search_to: new FormControl(''),
     search_period: new FormControl<VacancyapimodelsSearchPeriod | undefined>(undefined),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
-    sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}),
+    sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
   category = new FormControl<ModelsVRStatus | 'favorites' | ''>('');
-  searchValue: string = '';
+  searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
 
@@ -208,7 +208,14 @@ export class RequestListComponent implements OnInit {
   }
 
   search() {
-    this.filterForm.controls.search.setValue(this.searchValue);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
+  }
+
+  reset() {
+    this.searchValue.reset();
+    this.category.setValue('');
+    this.searchCity.reset();
+    this.searchRequestAuthor.reset();
   }
 
   sort() {

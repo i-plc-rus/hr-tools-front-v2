@@ -193,10 +193,6 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
     this.vacancyModal.openGenerateModal(this.vacancyForm.controls['requirements'] as FormControl);
   }
 
-  cancelVacancy() {
-
-  }
-
   submitForm() {
     if (!this.isNewVacancy && !this.vacancyForm.value.id) {
       console.log('Отсутствует ID вакансии');

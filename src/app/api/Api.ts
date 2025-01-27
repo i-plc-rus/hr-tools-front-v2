@@ -27,6 +27,7 @@ import {
   ApplicantapimodelsApplicantHistoryFilter,
   ApplicantapimodelsApplicantHistoryView,
   ApplicantapimodelsApplicantNote,
+  ApplicantapimodelsApplicantSourceData,
   ApplicantapimodelsApplicantView,
   ApplicantapimodelsApplicantViewExt,
   ApplicantapimodelsMultiChangeStageRequest,
@@ -64,15 +65,21 @@ import {
   NegotiationapimodelsStatusData,
   SpaceapimodelsCreateOrganization,
   SpaceapimodelsCreateUser,
+  SpaceapimodelsPasswordChange,
+  SpaceapimodelsProfileData,
   SpaceapimodelsSpaceSettingView,
   SpaceapimodelsSpaceUser,
+  SpaceapimodelsSpaceUserProfileData,
+  SpaceapimodelsSpaceUserProfileView,
   SpaceapimodelsUpdateSpaceSettingValue,
   SpaceapimodelsUpdateUser,
   VacancyapimodelsApprovalStages,
   VacancyapimodelsExtVacancyInfo,
+  VacancyapimodelsPersonFilter,
   VacancyapimodelsSelectionStageAdd,
   VacancyapimodelsSelectionStageView,
   VacancyapimodelsStatusChangeRequest,
+  VacancyapimodelsTeamPerson,
   VacancyapimodelsVacancyData,
   VacancyapimodelsVacancyFilter,
   VacancyapimodelsVacancyRequestCreateData,
@@ -1646,6 +1653,79 @@ export class ApiService {
     });
   }
   /**
+   * @description Источники кандидатов
+   *
+   * @tags Аналитика
+   * @name V1SpaceAnalyticsSourceUpdate
+   * @summary Источники кандидатов
+   * @request PUT:/api/v1/space/analytics/source
+   */
+  public v1SpaceAnalyticsSourceUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: ApplicantapimodelsApplicantSourceData;
+    }
+  >;
+  public v1SpaceAnalyticsSourceUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantSourceData;
+      }
+    >
+  >;
+  public v1SpaceAnalyticsSourceUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: ApplicantapimodelsApplicantSourceData;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantSourceData;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: ApplicantapimodelsApplicantSourceData;
+      }
+    >("PUT", this.baseUrl + `/api/v1/space/analytics/source`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Источники кандидатов. Выгрузить в Excel
+   *
+   * @tags Аналитика
+   * @name V1SpaceAnalyticsSourceExportUpdate
+   * @summary Источники кандидатов. Выгрузить в Excel
+   * @request PUT:/api/v1/space/analytics/source_export
+   */
+  public v1SpaceAnalyticsSourceExportUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1SpaceAnalyticsSourceExportUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceAnalyticsSourceExportUpdate(
+    body: ApplicantapimodelsApplicantFilter,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/space/analytics/source_export`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Создание
    *
    * @tags Кандидат
@@ -3151,6 +3231,114 @@ export class ApiService {
     });
   }
   /**
+   * @description Получение профиля
+   *
+   * @tags Профиль организации
+   * @name V1SpaceProfileList
+   * @summary Получение профиля
+   * @request GET:/api/v1/space/profile
+   */
+  public v1SpaceProfileList(options?: RequestOptions): Observable<
+    ApimodelsResponse & {
+      data?: SpaceapimodelsProfileData;
+    }
+  >;
+  public v1SpaceProfileList(options?: RequestOptions & { observe: "response" }): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsProfileData;
+      }
+    >
+  >;
+  public v1SpaceProfileList(options: RequestOptions & { observe: "response" } = { observe: "response" }): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SpaceapimodelsProfileData;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SpaceapimodelsProfileData;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsProfileData;
+      }
+    >("GET", this.baseUrl + `/api/v1/space/profile`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Обновление профиля
+   *
+   * @tags Профиль организации
+   * @name V1SpaceProfileUpdate
+   * @summary Обновление профиля
+   * @request PUT:/api/v1/space/profile
+   */
+  public v1SpaceProfileUpdate(options?: RequestOptions): Observable<ApimodelsResponse>;
+  public v1SpaceProfileUpdate(
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceProfileUpdate(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/profile`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать фото
+   *
+   * @tags Профиль организации
+   * @name V1SpaceProfilePhotoList
+   * @summary Скачать фото
+   * @request GET:/api/v1/space/profile/photo
+   */
+  public v1SpaceProfilePhotoList(options?: RequestOptions): Observable<void>;
+  public v1SpaceProfilePhotoList(options?: RequestOptions & { observe: "response" }): Observable<HttpResponse<void>>;
+  public v1SpaceProfilePhotoList(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/profile/photo`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить фото
+   *
+   * @tags Профиль организации
+   * @name V1SpaceProfilePhotoCreate
+   * @summary Загрузить фото
+   * @request POST:/api/v1/space/profile/photo
+   */
+  public v1SpaceProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1SpaceProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/profile/photo`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Список настроек
    *
    * @tags Настройки space
@@ -3672,6 +3860,216 @@ export class ApiService {
     });
   }
   /**
+   * @description Команда
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyTeamListCreate
+   * @summary Команда
+   * @request POST:/api/v1/space/vacancy/{id}/team/list
+   */
+  public v1SpaceVacancyTeamListCreate(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: VacancyapimodelsTeamPerson[];
+    }
+  >;
+  public v1SpaceVacancyTeamListCreate(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >
+  >;
+  public v1SpaceVacancyTeamListCreate(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: VacancyapimodelsTeamPerson[];
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/team/list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Команда. Список пользователей в системе
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyTeamUsersListCreate
+   * @summary Команда. Список пользователей в системе
+   * @request POST:/api/v1/space/vacancy/{id}/team/users_list
+   */
+  public v1SpaceVacancyTeamUsersListCreate(
+    id: string,
+    body: VacancyapimodelsPersonFilter,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: VacancyapimodelsTeamPerson[];
+    }
+  >;
+  public v1SpaceVacancyTeamUsersListCreate(
+    id: string,
+    body: VacancyapimodelsPersonFilter,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >
+  >;
+  public v1SpaceVacancyTeamUsersListCreate(
+    id: string,
+    body: VacancyapimodelsPersonFilter,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: VacancyapimodelsTeamPerson[];
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/team/users_list`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Команда. Исключить участника
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyTeamExcludeUpdate
+   * @summary Команда. Исключить участника
+   * @request PUT:/api/v1/space/vacancy/{id}/team/{user_id}/exclude
+   */
+  public v1SpaceVacancyTeamExcludeUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyTeamExcludeUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyTeamExcludeUpdate(
+    id: string,
+    userId: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+      "PUT",
+      this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/exclude`,
+      {
+        ...(options as unknown as { observe: "response" }),
+      },
+    );
+  }
+  /**
+   * @description Команда. Пригласить участника
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyTeamInviteUpdate
+   * @summary Команда. Пригласить участника
+   * @request PUT:/api/v1/space/vacancy/{id}/team/{user_id}/invite
+   */
+  public v1SpaceVacancyTeamInviteUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: VacancyapimodelsTeamPerson[];
+    }
+  >;
+  public v1SpaceVacancyTeamInviteUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >
+  >;
+  public v1SpaceVacancyTeamInviteUpdate(
+    id: string,
+    userId: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: VacancyapimodelsTeamPerson[];
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: VacancyapimodelsTeamPerson[];
+      }
+    >("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/invite`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Команда. Сделать ответственным
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyTeamSetAsResponsibleUpdate
+   * @summary Команда. Сделать ответственным
+   * @request PUT:/api/v1/space/vacancy/{id}/team/{user_id}/set_as_responsible
+   */
+  public v1SpaceVacancyTeamSetAsResponsibleUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyTeamSetAsResponsibleUpdate(
+    id: string,
+    userId: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyTeamSetAsResponsibleUpdate(
+    id: string,
+    userId: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+      "PUT",
+      this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/set_as_responsible`,
+      {
+        ...(options as unknown as { observe: "response" }),
+      },
+    );
+  }
+  /**
    * @description Создание
    *
    * @tags Заявка
@@ -4137,6 +4535,148 @@ export class ApiService {
         ...(options as unknown as { observe: "response" }),
       },
     );
+  }
+  /**
+   * @description Получить профиль пользователя
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfileList
+   * @summary Получить профиль пользователя
+   * @request GET:/api/v1/user_profile
+   */
+  public v1UserProfileList(options?: RequestOptions): Observable<
+    ApimodelsResponse & {
+      data?: SpaceapimodelsSpaceUserProfileView;
+    }
+  >;
+  public v1UserProfileList(options?: RequestOptions & { observe: "response" }): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceUserProfileView;
+      }
+    >
+  >;
+  public v1UserProfileList(options: RequestOptions & { observe: "response" } = { observe: "response" }): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SpaceapimodelsSpaceUserProfileView;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceUserProfileView;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsSpaceUserProfileView;
+      }
+    >("GET", this.baseUrl + `/api/v1/user_profile`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Обновить профиль пользователя
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfileUpdate
+   * @summary Обновить профиль пользователя
+   * @request PUT:/api/v1/user_profile
+   */
+  public v1UserProfileUpdate(
+    id: string,
+    body: SpaceapimodelsSpaceUserProfileData,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1UserProfileUpdate(
+    id: string,
+    body: SpaceapimodelsSpaceUserProfileData,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1UserProfileUpdate(
+    id: string,
+    body: SpaceapimodelsSpaceUserProfileData,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Изменить пароль
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfileChangePasswordUpdate
+   * @summary Изменить пароль
+   * @request PUT:/api/v1/user_profile/change_password
+   */
+  public v1UserProfileChangePasswordUpdate(
+    body: SpaceapimodelsPasswordChange,
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1UserProfileChangePasswordUpdate(
+    body: SpaceapimodelsPasswordChange,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1UserProfileChangePasswordUpdate(
+    body: SpaceapimodelsPasswordChange,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/user_profile/change_password`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать фото
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfilePhotoList
+   * @summary Скачать фото
+   * @request GET:/api/v1/user_profile/photo
+   */
+  public v1UserProfilePhotoList(options?: RequestOptions): Observable<void>;
+  public v1UserProfilePhotoList(options?: RequestOptions & { observe: "response" }): Observable<HttpResponse<void>>;
+  public v1UserProfilePhotoList(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/user_profile/photo`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить фото
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfilePhotoCreate
+   * @summary Загрузить фото
+   * @request POST:/api/v1/user_profile/photo
+   */
+  public v1UserProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions,
+  ): Observable<void>;
+  public v1UserProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1UserProfilePhotoCreate(
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("POST", this.baseUrl + `/api/v1/user_profile/photo`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
   }
   /**
    * @description Создать нового пользователя

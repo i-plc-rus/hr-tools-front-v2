@@ -32,18 +32,18 @@
       <mat-chip-option value="description" [selectable]="category.value !== 'description'">
         Описание вакансии
       </mat-chip-option>
-      <mat-chip-option value="publication" [selectable]="category.value !== 'publication'" [disabled]="isNewVacancy">
+      <!-- <mat-chip-option value="publication" [selectable]="category.value !== 'publication'" [disabled]="isNewVacancy">
         Публикация
-      </mat-chip-option>
+      </mat-chip-option> -->
       <mat-chip-option value="stages" [selectable]="category.value !== 'stages'" [disabled]="isNewVacancy">
         Этапы подбора
       </mat-chip-option>
-      <mat-chip-option value="integrations" [selectable]="category.value !== 'integrations'" [disabled]="isNewVacancy">
+      <!-- <mat-chip-option value="integrations" [selectable]="category.value !== 'integrations'" [disabled]="isNewVacancy">
         Интеграции
-      </mat-chip-option>
-      <!-- <mat-chip-option value="team" [selectable]="category.value !== 'team'" [disabled]="isNewVacancy">
-        Команда
       </mat-chip-option> -->
+      <mat-chip-option value="team" [selectable]="category.value !== 'team'" [disabled]="isNewVacancy">
+        Команда
+      </mat-chip-option>
     </mat-chip-listbox>
 
     <app-vacancy-description
@@ -56,7 +56,7 @@
       [vacancy]="vacancy"></app-vacancy-publication>
     <app-vacancy-stages [class.hidden]="category.value !== 'stages'" [vacancy]="vacancy"></app-vacancy-stages>
     <app-vacancy-integrations [class.hidden]="category.value !== 'integrations'"></app-vacancy-integrations>
-    <app-vacancy-team [class.hidden]="category.value !== 'team'"></app-vacancy-team>
+    <app-vacancy-team [class.hidden]="category.value !== 'team'" [vacancyId]="vacancy?.id || ''"></app-vacancy-team>
   </div>
 } @else {
   <div class="w-full h-full flex items-center justify-center">

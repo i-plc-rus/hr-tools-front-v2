@@ -6,6 +6,7 @@ import { Observable, forkJoin, map, startWith, switchMap } from 'rxjs';
 import { DictapimodelsCityView } from '../../../api/data-contracts';
 import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
+import {employmentTypes, experienceTypes, scheduleTypes} from '../user-consts';
 
 @Component({
   selector: 'app-request-creation',
@@ -21,39 +22,20 @@ export class RequestCreationComponent implements OnInit {
   users: any = []
   ModelsVRSelectionType = ModelsVRSelectionType
 
-  expiriences: {name: string; value: ModelsExperience}[] =[
-    {name: 'Не имеет значения', value: ModelsExperience.ExperienceNoMatter},
-    {name: 'Более года', value: ModelsExperience.ExperienceMoreThan1},
-    {name: 'Более 3 лет', value: ModelsExperience.ExperienceMoreThan3},
-    {name: 'Болеее 5 лет', value: ModelsExperience.ExperienceMoreThan5},
-    {name: 'Болеее 10 лет', value: ModelsExperience.ExperienceMoreThan10},
-  ]
+  expiriences = experienceTypes;
 
   urgencys: {name: string; value: ModelsVRUrgency}[] = [
     {name: 'Срочно', value: ModelsVRUrgency.VRTypeUrgent},
     {name: 'В плановом порядке', value: ModelsVRUrgency.VRTypeNonUrgent}
   ]
 
-
   request_types: {name: string; value: ModelsVRType}[] = [
     {name: 'Новая позиция', value: ModelsVRType.VRTypeNew},
     {name: 'Замена', value: ModelsVRType.VRTypeReplace}
   ]
 
-  employments: {name: string; value: ModelsEmployment}[] = [
-    {name: 'Временная', value: ModelsEmployment.EmploymentTemporary},
-    {name: 'Постоянная', value: ModelsEmployment.EmploymentFull},
-    {name: 'Стажировка', value: ModelsEmployment.EmploymentInternship},
-    {name: 'Частичная', value: ModelsEmployment.EmploymentPartial}
-  ]
-
-  schedules: {name: string; value: ModelsSchedule}[] = [
-    {name: 'Гибкий', value: ModelsSchedule.ScheduleFlexible},
-    {name: 'Сменный', value: ModelsSchedule.ScheduleFlyInFlyOut},
-    {name: 'Неполный день', value: ModelsSchedule.SchedulePartTime},
-    {name: 'Полный день', value: ModelsSchedule.ScheduleFullDay},
-    {name: 'Вахта', value: ModelsSchedule.ScheduleShift}
-  ]
+  employments = employmentTypes;
+  schedules = scheduleTypes;
   
   form = new FormGroup({
     company_name: new FormControl('', [Validators.required]),

@@ -1,9 +1,16 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
+import {
+  ApplicantapimodelsApplicantHistoryFilter,
+  ApplicantapimodelsApplicantHistoryView,
+  FilesapimodelsFileView,
+  VacancyapimodelsSelectionStageView
+} from '../../../api/data-contracts';
+import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -16,15 +23,19 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   isLoading = false;
   isVacancyCard = false;
   applicant?: ApplicantViewExt;
-
-  form: FormGroup = new FormGroup({
-    comment: new FormControl(''),
-  });
+  stages?: VacancyapimodelsSelectionStageView[];
+  docList?: FilesapimodelsFileView[];
+  photo?: string;
+  resume?: File;
+  changesLog?: ApplicantHistoryView[];
+  changesCommentsOnly = new FormControl<boolean>(false);
+  comment = new FormControl('');
 
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -40,14 +51,25 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
         this.getApplicantById(params['id']);
       })
     }
+    this.changesCommentsOnly.valueChanges.subscribe((value) =>
+      this.getChangesLog(!!value)
+    );
   }
 
   getApplicantById(id: string) {
     this.isLoading = true;
     this.api.v1SpaceApplicantDetail(id, {observe: 'response'}).subscribe({
       next: (data) => {
-        if (data.body?.data)
+        if (data.body?.data) {
           this.applicant = new ApplicantViewExt(data.body.data);
+          this.comment.setValue(this.applicant.comment);
+          if (this.applicant.vacancy_id)
+            this.getStages(this.applicant.vacancy_id);
+          this.getChangesLog(!!this.changesCommentsOnly.value);
+          this.getDocList();
+          this.getResume();
+          this.getPhoto();
+        }
         this.isLoading = false;
       },
       error: (error) => {
@@ -57,18 +79,98 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  openEditModal() {
+  getResume() {
     if (!this.applicant) return;
-    const id = this.applicant.id;
-    this.modalService.editCandidateModal(this.applicant).subscribe(() =>
-      this.getApplicantById(id)
-    );
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data: any) => {
+        if (data.body && data.body.size > 0) {
+          this.resume = data.body;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
   }
 
-  addTag(tag: string) {
-    if (!this.applicant || tag === '') return;
+  getDocList() {
+    if (!this.applicant) return;
+    this.isLoading = true;
+    this.api.v1SpaceApplicantDocListDetail(this.applicant.id, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.docList = data.body.data;
+        }
+        else
+          this.docList = [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getPhoto() {
+    if (!this.applicant) return;
+    this.api.v1SpaceApplicantPhotoDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data: any) => {
+        if (data.body && data.body.size > 0) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target && e.target.result)
+              this.photo = e.target?.result as string;
+          }
+          reader.readAsDataURL(new Blob([data.body]));
+        }
+        else
+          this.photo = '';
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  getChangesLog(comments_only: boolean = false) {
+    if (!this.applicant) return;
+    const filter = {comments_only} as ApplicantapimodelsApplicantHistoryFilter;
+    this.api.v1SpaceApplicantChangesUpdate(this.applicant.id, filter, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          let dataChanges = data.body.data as ApplicantapimodelsApplicantHistoryView[];
+          dataChanges = dataChanges.reverse();
+          this.changesLog = dataChanges.map((change) => new ApplicantHistoryView(change));
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  getStages(vacancyId: string) {
+    this.api.v1SpaceVacancyStageListCreate(vacancyId, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          const dataStages = data.body.data as VacancyapimodelsSelectionStageView[];
+          this.stages = dataStages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  changeStage(stage_id?: string) {
+    if (!this.applicant || !stage_id) return;
     const id = this.applicant.id;
-    this.api.v1SpaceApplicantTagUpdate(id, {tag}).subscribe({
+    this.api.v1SpaceApplicantChangeStageUpdate(id, {stage_id}).subscribe({
       next: () => {
         this.getApplicantById(id);
       },
@@ -78,12 +180,111 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     })
   }
 
-  removeTag(tag: string) {
+  openRejectModal() {
     if (!this.applicant) return;
     const id = this.applicant.id;
-    this.api.v1SpaceApplicantTagDelete(id, {tag}).subscribe({
+    this.modalService.rejectCandidateModal([this.applicant]).subscribe(() =>
+      this.getApplicantById(id)
+    );
+  }
+
+  openCommentModal() {
+    if (!this.applicant) return;
+    this.modalService.openCommentModal(this.applicant.id).subscribe(() =>
+      this.getChangesLog(!!this.changesCommentsOnly.value)
+    );
+  }
+
+  uploadResume(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length || !this.applicant) return;
+
+    this.isLoading = true;
+    const formData = new FormData();
+    formData.append("resume", target.files[0], target.files[0].name);
+    this.api.v1SpaceApplicantUploadResumeCreate(this.applicant.id, formData as any, {observe: 'response'}).subscribe({
       next: () => {
-        this.getApplicantById(id);
+        this.getResume();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  downloadResume() {
+    if (!this.applicant || !this.resume) return;
+
+    const blob = new Blob([this.resume], {type: 'application/octet-stream'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Резюме.pdf';
+    link.click();
+  }
+
+  deleteResume() {
+    if (!this.applicant) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.resume = undefined;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  uploadDocument(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length || !this.applicant) return;
+
+    this.isLoading = true;
+    const formData = new FormData();
+    formData.append("document", target.files[0], target.files[0].name);
+    this.api.v1SpaceApplicantUploadDocCreate(this.applicant.id, formData as any, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getDocList();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  downloadDocument(id?: string, name?: string) {
+    if (!this.applicant || !id || !name) return;
+
+    this.api.v1SpaceApplicantDocDetail(id, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data) => {
+        if (data.body) {
+          const blob = new Blob([data.body], {type: 'application/octet-stream'});
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = name;
+          link.click();
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  deleteDocument(id?: string) {
+    if (!this.applicant || !id) return;
+
+    this.api.v1SpaceApplicantDocDelete(id, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getDocList();
       },
       error: (error) => {
         console.log(error);
@@ -94,15 +295,19 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   saveComment() {
     if (!this.applicant) return;
     const id = this.applicant.id;
-    const comment = this.form.value.comment;
-    // this.api.v1SpaceApplicantUpdate(id, {comment}).subscribe({
-    //   next: () => {
-    //     this.getApplicantById(id);
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // })
+    const comment = this.comment.value || '';
+    const applicant = {...this.applicant, comment};
+    this.isLoading = true;
+    this.api.v1SpaceApplicantUpdate(id, applicant).subscribe({
+      next: () => {
+        this.getApplicantById(id);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    })
   }
 
   closeDetail() {
@@ -110,6 +315,6 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   }
 
   onBack() {
-    window.history.back();
+    this.router.navigate(['user', 'candidates', 'list']);
   }
 }

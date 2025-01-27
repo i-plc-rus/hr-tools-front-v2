@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
-import {StatusTag} from '../../../models/StatusTag';
 import {ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
+import {vacancyStatuses} from '../user-consts';
 
 type VacancyDetailCategory = 'description' | 'publication' | 'stages' | 'integrations' | 'team';
 
@@ -47,16 +47,12 @@ export class VacancyDetailComponent implements OnInit {
     schedule: new FormControl<ModelsSchedule | undefined>(undefined),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
   });
-  statuses: {className: StatusTag; value: ModelsVacancyStatus}[] = [
-    {className: 'success', value: ModelsVacancyStatus.VacancyStatusOpened},
-    {className: 'warning', value: ModelsVacancyStatus.VacancyStatusSuspended},
-    {className: 'danger', value: ModelsVacancyStatus.VacancyStatusCanceled},
-    {className: 'default', value: ModelsVacancyStatus.VacancyStatusClosed},
-  ];
+  statuses = vacancyStatuses;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -97,7 +93,10 @@ export class VacancyDetailComponent implements OnInit {
   }
 
   onBack() {
-    window.history.back();
+    if (!this.vacancy || this.isNewVacancy)
+      this.router.navigate(['user', 'vacancy', 'list']);
+    else
+      this.router.navigate(['user', 'vacancy', this.vacancy.id, 'candidates']);
   }
 
 }

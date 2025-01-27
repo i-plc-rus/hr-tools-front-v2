@@ -1,0 +1,113 @@
+<div class="flex w-[80px] h-[80px] bg-[var(--background-main)] rounded-full">
+  @if (!photo) {
+    <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
+  } @else {
+    <img class="min-w-[80px] min-h-[80px] rounded-full" [src]="photo" />
+  }
+</div>
+<div class="flex flex-col gap-2 w-full">
+  <div class="flex w-full gap-4 items-center">
+    @if (applicant && applicant.status) {
+      <app-status-tag [status]="applicant.statusClass"> {{ applicant.status }} </app-status-tag>
+    }
+    @if (applicant && applicant.accept_date) {
+      <span class="text-[11px] leading-4 font-medium text-[var(--text-alter)]">
+        {{ applicant.selection_stage_name }} {{ applicant.source }} {{ applicant.accept_date }}
+      </span>
+    }
+  </div>
+
+  <div class="flex flex-col w-full lg:flex-row">
+    <div class="flex flex-col grow gap-1">
+      <h4 class="text-[22px] leading-7">{{ applicant?.fio }}</h4>
+      <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 lg:flex-row lg:description-dots">
+        @if (applicant?.age) {
+          <span>{{ applicant?.age }} лет</span>
+        }
+        @if (applicant?.salary) {
+          <span>{{ applicant?.salary | currency: 'RUB' : 'руб.' : '1.0' }}</span>
+        }
+        @if (applicant?.resume_title) {
+          <span>{{ applicant?.resume_title }}</span>
+        }
+        @if (applicant?.address) {
+          <span>{{ applicant?.address }}</span>
+        }
+      </div>
+      <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 lg:flex-row lg:description-dots">
+        @if (applicant && applicant.phone) {
+          <span>{{ applicant.phone | mask: '+0 (000) 000-00-00' }}</span>
+        }
+        @if (applicant && applicant.email) {
+          <span>{{ applicant.email }}</span>
+        }
+      </div>
+    </div>
+
+    @if (!isComparisonPage) {
+      <div class="flex flex-col grow lg:justify-between lg:items-end">
+        @if (isVacancyCard) {
+          <button mat-icon-button class="btn-primary" [routerLink]="['/user/candidates/', applicant?.id]">
+            <mat-icon svgIcon="assignment-ind" />
+          </button>
+        } @else {
+          <button mat-icon-button class="btn-primary" (click)="openEditModal()">
+            <mat-icon svgIcon="edit" />
+          </button>
+        }
+
+        <div class="flex">
+          <a mat-icon-button class="btn-primary" href="https://wa.me/{{ applicant?.phone }}">
+            <mat-icon svgIcon="whatsapp" />
+          </a>
+          <!-- <a mat-icon-button class="btn-primary">
+                    <mat-icon svgIcon="telegram" />
+                  </a> -->
+          <a mat-icon-button class="btn-primary" href="tel:{{ applicant?.phone }}">
+            <mat-icon svgIcon="call" />
+          </a>
+          <a mat-icon-button class="btn-primary" href="mailto:{{ applicant?.email }}">
+            <mat-icon svgIcon="mail" />
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (!isComparisonPage) {
+    <div class="w-full">
+      @for (tag of applicant?.tags; track $index) {
+        <button mat-button class="btn-primary" (click)="removeTag(tag)">
+          <mat-icon svgIcon="delete" />
+          {{ tag }}
+        </button>
+      }
+      <input type="checkbox" class="hidden" #tagAddVisible />
+      @if (tagAddVisible.checked) {
+        <mat-form-field appearance="outline">
+          <mat-label>Добавить тег</mat-label>
+          <input matInput type="text" #tagInput />
+          <button matSuffix mat-icon-button (click)="addTag(tagInput.value)">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button matSuffix mat-icon-button (click)="tagAddVisible.checked = false; tagInput.value = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      } @else {
+        <button mat-button class="btn-primary" (click)="tagAddVisible.checked = true">
+          <mat-icon>add</mat-icon>
+          Добавить тег
+        </button>
+      }
+    </div>
+    @if (!isVacancyCard && applicant?.potential_duplicate?.found) {
+      <div class="flex gap-2">
+        <app-status-tag status="danger" class="mt-2">Найден возможный дубликат</app-status-tag>
+        <button mat-button class="btn-primary" [routerLink]="[applicant?.potential_duplicate?.duplicate_id]">
+          Перейти к сравнению
+        </button>
+      </div>
+    }
+  }
+</div>

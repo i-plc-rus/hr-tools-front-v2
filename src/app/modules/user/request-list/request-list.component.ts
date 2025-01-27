@@ -29,18 +29,18 @@ export class RequestListComponent implements OnInit {
   sortByDesc = true;
   filterForm = new FormGroup({
     search: new FormControl(''),
-    author_id: new FormControl(''),
-    city_id: new FormControl(''),
+    author_id: new FormControl('', {nonNullable: true}),
+    city_id: new FormControl('', {nonNullable: true}),
     favorite: new FormControl<boolean | undefined>(undefined),
     search_from: new FormControl(''),
     search_to: new FormControl(''),
     search_period: new FormControl<VacancyapimodelsSearchPeriod | undefined>(undefined),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
-    sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}),
+    sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | ''>('');
-  searchValue: string = '';
+  category = new FormControl<ModelsVRStatus | 'favorites' | ''>('');
+  searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
 
@@ -68,6 +68,7 @@ export class RequestListComponent implements OnInit {
   // вакансии
   isLoading = false;
   requestList: VacancyRequestView[] = [];
+  favoritesCount: number = 0;
 
   constructor(
     public screen: ScreenWidthService,
@@ -90,8 +91,14 @@ export class RequestListComponent implements OnInit {
       filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
     this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).subscribe({
       next: (data) => {
-        if (data.body?.data)
-          this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => new VacancyRequestView(request));
+        if (data.body?.data) {
+          this.favoritesCount = 0;
+          this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
+            if (request.favorite)
+              this.favoritesCount++;
+            return new VacancyRequestView(request)
+          });
+        }
         this.isLoading = false;
       },
       error: (error) => {
@@ -108,6 +115,8 @@ export class RequestListComponent implements OnInit {
         this.filterForm.reset();
         if (!category)
           this.filterForm.controls.statuses.setValue([]);
+        else if (category === 'favorites')
+          this.filterForm.controls.favorite.setValue(true);
         else
           this.filterForm.controls.statuses.setValue([category]);
       });
@@ -175,7 +184,7 @@ export class RequestListComponent implements OnInit {
         }
       })
   }
-  
+
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).subscribe({
       next: () => {
@@ -199,7 +208,14 @@ export class RequestListComponent implements OnInit {
   }
 
   search() {
-    this.filterForm.controls.search.setValue(this.searchValue);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
+  }
+
+  reset() {
+    this.searchValue.reset();
+    this.category.setValue('');
+    this.searchCity.reset();
+    this.searchRequestAuthor.reset();
   }
 
   sort() {

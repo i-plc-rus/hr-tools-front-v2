@@ -1,0 +1,72 @@
+<div class="py-4 px-6">
+  <div class="flex gap-2 items-center py-6">
+    <button mat-icon-button (click)="onBack()" class="btn-secondary">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="text-[16px] leading-6 font-medium">Вернуться назад</span>
+  </div>
+  @if (!isLoading && applicant && duplicateApplicant) {
+    <h1 class="text-[22px] leading-7 m-0 p-0">Сравнение дубликатов</h1>
+    <div class="bg-white rounded-2xl my-4 p-4">
+      <span class="text-[16px] leading-6 font-medium">Совпадение по контактным данным</span>
+      <div class="flex justify-between items-center gap-2 mt-2">
+        <span class="text-[16px] leading-6">
+          У данных кандидатов одинаковые ФИО, номер телефона или электронная почта. Объединение дубликатов отменить
+          нельзя. Внимательно сверьте оба профиля.
+        </span>
+        <div class="min-w-52">
+          <button mat-flat-button class="btn-secondary" (click)="isolateProfiles()">Это разные кандидаты</button>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl my-4">
+      <div class="flex flex-wrap">
+        <div class="flex w-full py-3 px-6 gap-5">
+          <div class="w-1/2">
+            <button mat-button class="w-full btn-primary" (click)="mergeProfiles(applicant.id, duplicateApplicant.id)">
+              <mat-icon svgIcon="merge" />
+              Перевести все данные в этот профиль
+            </button>
+          </div>
+          <div class="w-1/2">
+            <button mat-button class="w-full btn-primary" (click)="mergeProfiles(duplicateApplicant.id, applicant.id)">
+              <mat-icon svgIcon="merge" />
+              Перевести все данные в этот профиль
+            </button>
+          </div>
+        </div>
+        <hr class="w-full h-[1px] bg-[var(--background-alter)]" />
+        <div class="flex w-full py-3 px-6 gap-5">
+          <div class="w-1/2">
+            <app-candidate-detail-info [isComparisonPage]="true" [applicant]="applicant" [photo]="applicantFiles.photo">
+            </app-candidate-detail-info>
+          </div>
+          <div class="w-1/2">
+            <app-candidate-detail-info
+              [isComparisonPage]="true"
+              [applicant]="duplicateApplicant"
+              [photo]="duplicateApplicantFiles.photo">
+            </app-candidate-detail-info>
+          </div>
+        </div>
+
+        <div class="flex w-full py-3 px-6 gap-5">
+          <div class="w-1/2">
+            <form class="flex flex-col w-full">
+              <label class="text-[16px] leading-6 font-medium">Заметка о кандидате</label>
+              <app-text-editor class="w-full mt-2" [formControl]="comment"></app-text-editor>
+            </form>
+          </div>
+          <div class="w-1/2">
+            <form class="flex flex-col w-full">
+              <label class="text-[16px] leading-6 font-medium">Заметка о кандидате</label>
+              <app-text-editor class="w-full mt-2" [formControl]="duplicateComment"></app-text-editor>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <app-loader></app-loader>
+  }
+</div>

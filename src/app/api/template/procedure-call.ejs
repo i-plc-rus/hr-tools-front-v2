@@ -1,0 +1,98 @@
+<%
+const { utils, route, config } = it;
+const { requestBodyInfo, responseBodyInfo, specificArgNameResolver } = route;
+const { _, getInlineParseContent, getParseContent, parseSchema, getComponentByRef, require } = utils;
+const { parameters, path, method, payload, query, formData, security, requestParams } = route.request;
+const { type, errorType, contentTypes } = route.response;
+const { HTTP_CLIENT, RESERVED_REQ_PARAMS_ARG_NAMES } = config.constants;
+const routeDocs = includeFile("@base/route-docs", { config, route, utils });
+const queryName = (query && query.name) || "query";
+const pathParams = _.values(parameters);
+const pathParamsNames = _.map(pathParams, "name");
+
+const isFetchTemplate = config.httpClientType === HTTP_CLIENT.FETCH;
+
+const basicOptionsField = {
+    name: "options",
+    optional: true,
+    type: "RequestOptions",
+}
+const optionsFieldWithResponse = {
+    name: "options",
+    optional: true,
+    type: "RequestOptions & { observe: 'response' }",
+}
+const realOptionsField = {
+    name: "options",
+    optional: true,
+    type: "RequestOptions & { observe: 'response' }",
+    defaultValue: "{observe: 'response'}",
+}
+
+const argToTmpl = ({ name, optional, type, defaultValue }) => `${name}${!defaultValue && optional ? '?' : ''}: ${type}${defaultValue ? ` = ${defaultValue}` : ''}`;
+
+function createArgs(optionsField){
+    const rawWrapperArgs = config.extractRequestParams ?
+        _.compact([
+            requestParams && {
+            name: pathParams.length ? `{ ${_.join(pathParamsNames, ", ")}, ...${queryName} }` : queryName,
+            optional: false,
+            type: getInlineParseContent(requestParams),
+        },
+        ...(!requestParams ? pathParams : []),
+            payload,
+            optionsField,
+        ]) :
+        _.compact([
+            ...pathParams,
+            query,
+            payload,
+            optionsField,
+        ])
+    
+    const wrapperArgs = _
+        // Sort by optionality
+        .sortBy(rawWrapperArgs, [o => o.optional])
+        .map(argToTmpl)
+        .join(', ')
+    
+    return wrapperArgs
+}
+
+// RequestParams["format"]
+const responseContentKind = {
+    "JSON": '"json"',
+    "IMAGE": '"blob"',
+    "FORM_DATA": isFetchTemplate ? '"formData"' : '"document"'
+}
+
+const bodyTmpl = _.get(payload, "name") || null;
+const queryTmpl = (query != null && queryName) || null;
+const responseFormatTmpl = responseContentKind[responseBodyInfo.success && responseBodyInfo.success.schema && responseBodyInfo.success.schema.contentKind] || null;
+
+const describeReturnType = () => {
+    return `:Observable<${type}>`
+}
+
+%>
+/**
+<%~ routeDocs.description %>
+
+ *<% /* Here you can add some other JSDoc tags */ %>
+
+<%~ routeDocs.lines %>
+
+ */
+public <%~ route.routeName.usage %> (<%~ createArgs(basicOptionsField) %>): <%~ `Observable<${type}>` %>;
+public <%~ route.routeName.usage %> (<%~ createArgs(optionsFieldWithResponse) %>): <%~ `Observable<HttpResponse<${type}>>` %>;
+public <%~ route.routeName.usage %> (<%~ createArgs(realOptionsField) %>): <%~ `Observable<HttpResponse<${type}> | ${type}>` %> {
+    return this.http.request<<%~ type %>>(
+        '<%~ _.upperCase(method) %>',
+        this.baseUrl + `<%~ path %>`,
+        {
+        <%~ queryTmpl ? `params: ${queryTmpl},` : '' %>
+        <%~ bodyTmpl ? `body: ${bodyTmpl},` : '' %>
+        <%~ responseFormatTmpl ? `responseType: ${responseFormatTmpl},` : '' %>
+        ...options as unknown as {observe: "response"},
+    })
+}

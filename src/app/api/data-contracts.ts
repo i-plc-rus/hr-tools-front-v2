@@ -196,6 +196,15 @@ export interface ApplicantapimodelsApplicantSort {
   salary_desc?: boolean;
 }
 
+export interface ApplicantapimodelsApplicantSourceData {
+  /** Откликнулись */
+  adding_source?: ApplicantapimodelsSourceData;
+  /** Добавлены */
+  negotiation_source?: ApplicantapimodelsSourceData;
+  /** Общая статистика */
+  total_source?: ApplicantapimodelsSourceData;
+}
+
 export interface ApplicantapimodelsApplicantView {
   /** Дата добавления */
   accept_date?: string;
@@ -327,6 +336,24 @@ export interface ApplicantapimodelsApplicantViewExt {
   vacancy_name?: string;
 }
 
+export interface ApplicantapimodelsMultiChangeStageRequest {
+  /** идентификаторы кандидатов */
+  ids?: string[];
+  /** идентификаторы этапа */
+  stage_id?: string;
+}
+
+export interface ApplicantapimodelsMultiEmailResponse {
+  /** список ФИО кандидатов которым не удалось отправить письма */
+  fail_mails?: string[];
+}
+
+export interface ApplicantapimodelsMultiRejectRequest {
+  /** идентификаторы кандидатов */
+  ids?: string[];
+  reject?: ApplicantapimodelsRejectRequest;
+}
+
 export interface ApplicantapimodelsRejectReasons {
   /** Отказы кандидата */
   applicant_reasons?: string[];
@@ -343,6 +370,24 @@ export interface ApplicantapimodelsRejectRequest {
   reason?: string;
 }
 
+export interface ApplicantapimodelsSourceData {
+  data?: ApplicantapimodelsSourceItem[];
+  total?: number;
+}
+
+export interface ApplicantapimodelsSourceItem {
+  count?: number;
+  name?: string;
+  percent?: number;
+}
+
+export interface ApplicantapimodelsXlsExportRequest {
+  /** Фильтр скроллера, в случае если не указан список идентификатов */
+  filter?: ApplicantapimodelsApplicantFilter;
+  /** список идентификатов кандидатов */
+  ids?: string[];
+}
+
 export interface AuthapimodelsJWTRefreshRequest {
   refresh_token?: string;
 }
@@ -355,6 +400,16 @@ export interface AuthapimodelsJWTResponse {
 export interface AuthapimodelsLoginRequest {
   email?: string;
   password?: string;
+}
+
+export interface AuthapimodelsPasswordRecovery {
+  /** емайл для отправки письма с иснтвукцией, он же логин */
+  email?: string;
+}
+
+export interface AuthapimodelsPasswordResetRequest {
+  new_password?: string;
+  reset_code?: string;
 }
 
 export interface AuthapimodelsSendEmail {
@@ -552,6 +607,9 @@ export enum ModelsApplicantSource {
   ApplicantSourceManual = "Ручной ввод",
   ApplicantSourceAvito = "Avito",
   ApplicantSourceHh = "HeadHunter",
+  ApplicantSourceEmail = "Электронная почта",
+  ApplicantSourceSoc = "Социальные сети",
+  ApplicantSite = "Карьерный сайт",
 }
 
 export enum ModelsApplicantStatus {
@@ -812,14 +870,39 @@ export interface SpaceapimodelsCreateOrganization {
 }
 
 export interface SpaceapimodelsCreateUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   is_admin?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
   last_name?: string;
   password?: string;
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
+}
+
+export interface SpaceapimodelsPasswordChange {
+  /** Текущий пароль */
+  current_password?: string;
+  /** Новый пароль */
+  new_password?: string;
+}
+
+export interface SpaceapimodelsProfileData {
+  /** Описание компании */
+  description?: string;
+  /** ФИО руководителя */
+  director_name?: string;
+  /** Название компании */
+  organization_name?: string;
+  /** Часовой пояс */
+  time_zone?: string;
+  /** Адрес сайта */
+  web?: string;
 }
 
 export interface SpaceapimodelsSpaceSettingView {
@@ -836,14 +919,69 @@ export interface SpaceapimodelsSpaceSettingView {
 }
 
 export interface SpaceapimodelsSpaceUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   id?: string;
   is_admin?: boolean;
+  /** Email подтвержден */
+  is_email_verified?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
+  /** Навание должности */
+  job_title_name?: string;
   last_name?: string;
+  /** Новый email, который станет основным после подтверждения */
+  new_email?: string;
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
+}
+
+export interface SpaceapimodelsSpaceUserProfileData {
+  /** Email пользователя */
+  email?: string;
+  /** Имя */
+  first_name?: string;
+  /** Внутренний номер */
+  internal_phone_number?: string;
+  /** Фамилия */
+  last_name?: string;
+  /** Телефон */
+  phone_number?: string;
+  /** Текст подписи */
+  text_sign?: string;
+  /** Персональная подпись */
+  use_personal_sign?: boolean;
+}
+
+export interface SpaceapimodelsSpaceUserProfileView {
+  /** Email пользователя */
+  email?: string;
+  /** Имя */
+  first_name?: string;
+  /** Идентфикатор пользователя */
+  id?: string;
+  /** Внутренний номер */
+  internal_phone_number?: string;
+  /** Email подтвержден */
+  is_email_verified?: boolean;
+  /** Должность */
+  job_title_name?: string;
+  /** Фамилия */
+  last_name?: string;
+  /** Новый email, который станет основным после подтверждения */
+  new_email?: string;
+  /** Телефон */
+  phone_number?: string;
+  /** Роль */
+  role?: string;
+  /** Текст подписи */
+  text_sign?: string;
+  /** Персональная подпись */
+  use_personal_sign?: boolean;
 }
 
 export interface SpaceapimodelsUpdateSpaceSettingValue {
@@ -852,14 +990,19 @@ export interface SpaceapimodelsUpdateSpaceSettingValue {
 }
 
 export interface SpaceapimodelsUpdateUser {
+  /** Email пользователя */
   email?: string;
   first_name?: string;
   is_admin?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
   last_name?: string;
   password?: string;
   phone_number?: string;
   role?: string;
   space_id?: string;
+  /** Текст подписи */
+  text_sign?: string;
 }
 
 export interface VacancyapimodelsApprovalStageData {
@@ -895,6 +1038,11 @@ export interface VacancyapimodelsExternalData {
 export interface VacancyapimodelsExternalLink {
   id?: string;
   url?: string;
+}
+
+export interface VacancyapimodelsPersonFilter {
+  /** Поиск по ФИО */
+  search?: string;
 }
 
 export interface VacancyapimodelsSalary {
@@ -947,6 +1095,15 @@ export interface VacancyapimodelsStatusChangeRequest {
   status?: ModelsVacancyStatus;
 }
 
+export interface VacancyapimodelsTeamPerson {
+  /** Email пользователя */
+  email?: string;
+  full_name?: string;
+  id?: string;
+  responsible?: boolean;
+  role?: ModelsUserRole;
+}
+
 export interface VacancyapimodelsVacancyData {
   /** фио непосредственного руководителя */
   chief_fio?: string;
@@ -954,6 +1111,8 @@ export interface VacancyapimodelsVacancyData {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
+  company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
   /** ид подразделения */
@@ -989,6 +1148,8 @@ export interface VacancyapimodelsVacancyData {
 export interface VacancyapimodelsVacancyFilter {
   /** Фильтр по автору вакансии */
   author_id?: string;
+  /** Поиск по ФИО автора */
+  author_search?: string;
   /** Фильтр по идентификатору города */
   city_id?: string;
   /** Фильтр по идентификатору подразделения */
@@ -1005,6 +1166,8 @@ export interface VacancyapimodelsVacancyFilter {
   request_id?: string;
   /** Фильтр по тип вакансии */
   request_type?: ModelsVRType;
+  /** Поиск по ФИО ответственного */
+  responsible_search?: string;
   /** Поиск */
   search?: string;
   /** Фильтр по виду подбора */
@@ -1029,6 +1192,8 @@ export interface VacancyapimodelsVacancyRequestCreateData {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
+  company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
   /** конфиденциальная вакансия */
@@ -1076,6 +1241,8 @@ export interface VacancyapimodelsVacancyRequestData {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
+  company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
   /** конфиденциальная вакансия */
@@ -1124,6 +1291,8 @@ export interface VacancyapimodelsVacancyRequestEditData {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
+  company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
   /** конфиденциальная вакансия */
@@ -1175,6 +1344,7 @@ export interface VacancyapimodelsVacancyRequestView {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
   company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
@@ -1237,6 +1407,10 @@ export enum VacancyapimodelsVacancyTab {
 }
 
 export interface VacancyapimodelsVacancyView {
+  /** ФИО автора вакансии */
+  author_full_name?: string;
+  /** Идентификатор автора вакансии */
+  author_id?: string;
   /** фио непосредственного руководителя */
   chief_fio?: string;
   city?: string;
@@ -1244,6 +1418,7 @@ export interface VacancyapimodelsVacancyView {
   city_id?: string;
   /** ид компании */
   company_id?: string;
+  /** название компании */
   company_name?: string;
   /** ид структуры компании */
   company_struct_id?: string;
@@ -1272,6 +1447,10 @@ export interface VacancyapimodelsVacancyView {
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */
   requirements?: string;
+  /** ФИО ответственного */
+  responsible_full_name?: string;
+  /** Идентификатор ответственного */
+  responsible_id?: string;
   /** ожидания по зп */
   salary?: VacancyapimodelsSalary;
   /** Режим работы */

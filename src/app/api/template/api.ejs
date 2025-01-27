@@ -1,0 +1,27 @@
+<% const { utils, route, config, modelTypes }=it; const { _, pascalCase, require }=utils; const
+   
+   apiClassName=pascalCase(route.moduleName); const routes=route.routes; const dataContracts=_.map(modelTypes, "name"
+    
+    );
+    
+    %>
+
+import { Inject, Injectable } from "@angular/core";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+import { RequestOptions } from "./<%~ config.fileNames.httpClient %>";
+
+<% if (dataContracts.length) { %>
+    import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
+        <% } %>
+
+import {API_BASE_URL} from "../tokens/api.token";
+
+@Injectable(<%~ config.angular?.providedIn ? `{providedIn: '${config.angular.providedIn}'}` : '' %>)
+export class <%= apiClassName %>Service {
+constructor(private readonly http: HttpClient, @Inject(API_BASE_URL) private readonly baseUrl: string = ''){}
+    <% for (const route of routes) { %>
+        <%~ includeFile('./procedure-call.ejs', { ...it, route }) %>
+    <% } %>
+}

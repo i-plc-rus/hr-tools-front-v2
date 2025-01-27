@@ -1,13 +1,32 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
+import {
+  ApplicantapimodelsApplicantFilter,
+  ApplicantapimodelsApplicantView,
+  ApplicantapimodelsXlsExportRequest,
+  DictapimodelsCityView,
+  ModelsAddedType,
+  ModelsApAddedPeriodType,
+  ModelsApplicantSource,
+  ModelsApplicantStatus,
+  ModelsGenderType,
+  ModelsRelocationType,
+  ModelsSchedule,
+  VacancyapimodelsVacancyFilter,
+  VacancyapimodelsVacancyView
+} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
-import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, SelectionChangedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
-import {TableCandidateNameComponent} from '../table-candidate-name/table-candidate-name.component';
+import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ApplicantView} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {Router} from '@angular/router';
+import {VacancyView} from '../../../models/Vacancy';
+import {relocationTypes} from '../user-consts';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
 
 @Component({
   selector: 'app-candidate-list',
@@ -17,26 +36,49 @@ import {Router} from '@angular/router';
 export class СandidateListComponent {
   // фильтр
   filterForm = new FormGroup({
-    education: new FormControl(''),
-    skills: new FormControl(''),
-    experience: new FormControl('')
+    added_day: new FormControl(''),
+    added_period: new FormControl<ModelsApAddedPeriodType | undefined>(undefined),
+    added_type: new FormControl<ModelsAddedType | undefined>(undefined),
+    age_from: new FormControl(0, {nonNullable: true}),
+    age_to: new FormControl(0, {nonNullable: true}),
+    city: new FormControl('', {nonNullable: true}),
+    gender: new FormControl<ModelsGenderType | undefined>(undefined),
+    language: new FormControl(''),
+    relocation: new FormControl<ModelsRelocationType | undefined>(undefined),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined),
+    search: new FormControl(''),
+    source: new FormControl<ModelsApplicantSource | undefined>(undefined),
+    stage_name: new FormControl(''),
+    status: new FormControl<ModelsApplicantStatus | undefined>(undefined),
+    tag: new FormControl(''),
+    total_experience_from: new FormControl(0, {nonNullable: true}),
+    total_experience_to: new FormControl(0, {nonNullable: true}),
+    vacancy_id: new FormControl('', {nonNullable: true}),
+    vacancy_name: new FormControl(''),
   });
-  educationTypes = Object.values(ModelsVRType);
-  skillsTypes = Object.values(ModelsVRSelectionType);
-  experienceTypes = Object.values(ModelsVRUrgency);
-  searchSkill = new FormControl('');
-  searchValue: string = '';
+  statusTypes = Object.values(ModelsApplicantStatus);
+  sourceTypes = Object.values(ModelsApplicantSource);
+  addedPeriodTypes = Object.values(ModelsApAddedPeriodType);
+  addedTypes = Object.values(ModelsAddedType);
+  relocationTypes = relocationTypes;
+  vacancyList: VacancyView[] = [];
+  cities: DictapimodelsCityView[] = [];
+  searchVacancy = new FormControl('');
+  searchCity = new FormControl('');
+  searchValue = new FormControl('');
 
   //кандидаты
   private gridApi!: GridApi<ApplicantView>;
   applicantsList: ApplicantView[] = [];
+  selectedApplicants: ApplicantView[] = [];
+  selectedSameVacancy: boolean = false;
   colDefs: ColDef<ApplicantView>[] = [
     {
-      headerName: 'Кандидаты',
+      headerName: 'ФИО',
       headerClass: 'font-medium',
       width: 320,
       minWidth: 200,
-      cellRenderer: TableCandidateNameComponent,
+      cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.fio,
       pinned: 'left',
     },
@@ -44,16 +86,21 @@ export class СandidateListComponent {
       headerName: 'Контакты',
       headerClass: 'font-medium',
       sortable: false,
-      cellRenderer: (params: ICellRendererParams<ApplicantView>) => {
-        return `<div class="flex h-full flex-col justify-center gap-1 leading-4">
-          <span>${params.data?.phone}</span>
-          <span>${params.data?.email}</span>
-          </div>`;
-      },
+      cellRenderer: CellCandidateContactsComponent,
     },
     {
-      field: 'comment',
-      headerName: 'Последний комментарий',
+      field: 'vacancy_name',
+      headerName: 'Вакансия',
+      headerClass: 'font-medium',
+    },
+    {
+      field: 'resume_title',
+      headerName: 'Должность',
+      headerClass: 'font-medium',
+    },
+    {
+      field: 'source',
+      headerName: 'Источник кандидата',
       headerClass: 'font-medium',
     },
     {
@@ -68,49 +115,70 @@ export class СandidateListComponent {
       }
     },
     {
-      headerName: 'Оценка',
-      headerClass: 'font-medium'
-    },
-    {
       field: 'salary',
       headerName: 'Ожидаемая ЗП',
       headerClass: 'font-medium'
     },
     {
-      field: 'selection_stage_name',
-      headerName: 'Этап',
-      headerClass: 'font-medium'
+      field: 'start_date',
+      headerName: 'Дата выхода',
+      headerClass: 'font-medium',
+      valueFormatter: function (params: ValueFormatterParams) {
+        if (params.data?.start_date) {
+          return new Date(params.data?.start_date).toLocaleDateString('ru-RU');
+        } else
+          return '';
+      }
     },
     {
-      field: 'stage_time',
-      headerName: 'Время на этапе',
-      headerClass: 'font-medium'
+      field: 'status',
+      headerName: 'Статус',
+      headerClass: 'font-medium',
+      cellRenderer: CandidateStatusComponent,
+      cellRendererParams: {
+        onChange: this.openRejectCandidateModal.bind(this),
+      },
+      valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.status,
     },
   ];
   gridOptions: GridOptions = {
     onGridReady: this.onGridReady.bind(this),
-    onRowClicked: this.onRowClicked.bind(this),
+    onCellClicked: this.onCellClicked.bind(this),
+    onSelectionChanged: this.onSelectionChanged.bind(this),
     columnDefs: this.colDefs,
     rowData: this.applicantsList,
     overlayNoRowsTemplate: '<span class="text-[32px] leading-10">Кандидаты отсутствуют</span>',
     loadingOverlayComponent: LoaderComponent,
     loading: true,
     suppressMovableColumns: true,
+    rowSelection: {
+      mode: 'multiRow'
+    },
+    selectionColumnDef: {
+      pinned: 'left',
+    },
   }
 
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
     private router: Router,
-  ) {}
+  ) { }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.getApplicants();
+    this.setFormListeners();
   }
 
-  onRowClicked(params: RowClickedEvent) {
-    this.router.navigate([`user/candidates/${params.data?.id}`]);
+  onCellClicked(event: CellClickedEvent) {
+    if (event.colDef.field !== 'status' && event.colDef.colId !== 'ag-Grid-ControlsColumn')
+      this.router.navigate([`user/candidates/${event.data?.id}`]);
+  }
+
+  onSelectionChanged(event: SelectionChangedEvent) {
+    this.selectedApplicants = event.api.getSelectedNodes().map(node => node.data);
+    this.selectedSameVacancy = this.selectedApplicants.every(applicant => applicant.vacancy_id === this.selectedApplicants[0].vacancy_id);
   }
 
   getApplicants() {
@@ -132,19 +200,113 @@ export class СandidateListComponent {
     })
   }
 
+  getVacancyList(search: string) {
+    const filter = {search} as VacancyapimodelsVacancyFilter;
+    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy));
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  getCities(address: string) {
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.cities = data.body.data;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  setFormListeners() {
+    this.searchVacancy.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((newValue) => {
+        if (this.filterForm.controls.vacancy_id.value !== '')
+          this.filterForm.controls.vacancy_id.setValue('');
+        if (newValue && newValue.length > 3)
+          this.getVacancyList(newValue);
+        else
+          this.vacancyList = [];
+      });
+    this.searchCity.valueChanges
+      .pipe(debounceTime(700), distinctUntilChanged())
+      .subscribe((newValue) => {
+        if (this.filterForm.controls.city.value !== '')
+          this.filterForm.controls.city.setValue('');
+        if (newValue && newValue.length > 3)
+          this.getCities(newValue);
+        else
+          this.cities = [];
+      });
+
+    this.filterForm.valueChanges
+      .pipe(debounceTime(200), distinctUntilChanged())
+      .subscribe(() => {
+        this.getApplicants()
+      });
+  }
+
+  openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {
+    if (!Array.isArray(applicants))
+      applicants = [applicants];
+    this.modalService.rejectCandidateModal(applicants).subscribe(() =>
+      this.getApplicants()
+    );
+  }
+
+  openChangeStageModal(applicants: ApplicantView[]) {
+    this.modalService.changeStageModal(applicants).subscribe(() =>
+      this.getApplicants()
+    );
+  }
+
   openAddApplicantModal() {
     this.modalService.addCandidateModal().subscribe(() =>
       this.getApplicants()
     );
   }
 
+  exportXls() {
+    const request: ApplicantapimodelsXlsExportRequest = {
+      filter: this.filterForm.value as ApplicantapimodelsApplicantFilter,
+      ids: this.selectedApplicants.map((applicant: ApplicantView) => applicant.id)
+    };
+    this.api.v1SpaceApplicantMultiActionsExportXlsUpdate(request, {observe: 'response', responseType: 'blob'}).subscribe({
+      next: (data) => {
+        if (data.body) {
+          const blob = new Blob([data.body], {type: 'application/octet-stream'});
+
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'Кандидаты.xlsx';
+          link.click();
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
   onSearch() {
-    console.log(this.filterForm.value);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
   }
 
-  onBack() {
-    window.history.back();
+  onReset() {
+    this.filterForm.reset();
+    this.searchCity.reset();
+    this.searchVacancy.reset();
+    this.searchValue.reset();
   }
-
 
 }

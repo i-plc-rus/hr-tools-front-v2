@@ -5,7 +5,6 @@ import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
 import {
   ApplicantapimodelsApplicantData,
-  FilesapimodelsFileView,
   ModelsApplicantSource,
   ModelsDriverLicenseType,
   ModelsEducationType,
@@ -22,6 +21,17 @@ import {
 import {VacancyView} from '../../../../models/Vacancy';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import {
+  educationTypes,
+  employmentTypes,
+  genderTypes,
+  languageLevelTypes,
+  relocationTypes,
+  scheduleTypes,
+  searchStatusTypes,
+  tripReadinessTypes
+} from '../../user-consts';
+import {forkJoin, of, switchMap} from 'rxjs';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -39,6 +49,8 @@ class LanguageFormControls extends FormGroup {
 })
 export class AddCandidateModalComponent implements OnInit {
   @Input() applicant?: ApplicantView | ApplicantViewExt;
+  @Input() photo?: string;
+  @Input() resumeName?: string;
   onSubmit = new EventEmitter<boolean>();
   isEdit = false;
   isLoading = false;
@@ -71,66 +83,18 @@ export class AddCandidateModalComponent implements OnInit {
     vacancy_id: new FormControl('', Validators.required),
   });
   driverLicenseTypes = Object.values(ModelsDriverLicenseType);
-  genderTypes: {label: string, value: ModelsGenderType}[] = [
-    {label: 'Мужской', value: ModelsGenderType.GenderTypeM},
-    {label: 'Женский', value: ModelsGenderType.GenderTypeF},
-  ];
-  educationTypes: {label: string, value: ModelsEducationType}[] = [
-    {label: 'Среднее', value: ModelsEducationType.EducationTypeSecondary},
-    {label: 'Среднее профессиональное', value: ModelsEducationType.EducationTypeSpecialSecondary},
-    {label: 'Незаконченное высшее', value: ModelsEducationType.EducationTypeUnfinishedHigher},
-    {label: 'Высшее', value: ModelsEducationType.EducationTypeHigher},
-    {label: 'Бакалавр', value: ModelsEducationType.EducationTypeBachelor},
-    {label: 'Магистр', value: ModelsEducationType.EducationTypeMaster},
-    {label: 'Кандидат наук', value: ModelsEducationType.EducationTypeCandidate},
-    {label: 'Доктор наук', value: ModelsEducationType.EducationTypeDoctor},
-  ];
-  employmentTypes: {label: string, value: ModelsEmployment}[] = [
-    {label: 'Полная занятость', value: ModelsEmployment.EmploymentFull},
-    {label: 'Частичная занятость', value: ModelsEmployment.EmploymentPartial},
-    {label: 'Временная занятость', value: ModelsEmployment.EmploymentTemporary},
-    {label: 'Интернатура', value: ModelsEmployment.EmploymentInternship},
-    {label: 'Стажировка', value: ModelsEmployment.EmploymentProbation},
-    {label: 'Волонтерство', value: ModelsEmployment.EmploymentVolunteer},
-  ];
-  scheduleTypes: {label: string, value: ModelsSchedule}[] = [
-    {label: 'Полный день', value: ModelsSchedule.ScheduleFullDay},
-    {label: 'Неполная занятость', value: ModelsSchedule.SchedulePartTime},
-    {label: 'Гибкий график', value: ModelsSchedule.ScheduleFlexible},
-    {label: 'Сменный график', value: ModelsSchedule.ScheduleShift},
-    {label: 'Вахтовый метод', value: ModelsSchedule.ScheduleFlyInFlyOut},
-  ];
-  searchStatusTypes: {label: string, value: ModelsSearchStatusType}[] = [
-    {label: 'Активно ищет работу', value: ModelsSearchStatusType.SearchStatusActive},
-    {label: 'Рассматривает предложения', value: ModelsSearchStatusType.SearchStatusLookingForOffers},
-    {label: 'Не ищет работу', value: ModelsSearchStatusType.SearchStatusNotLookingForJob},
-    {label: 'Предложили работу, решает', value: ModelsSearchStatusType.SearchStatusHasJobOffer},
-    {label: 'Вышел на новое место', value: ModelsSearchStatusType.SearchStatusAcceptedJobOffer},
-  ];
-  tripReadinessTypes: {label: string, value: ModelsTripReadinessType}[] = [
-    {label: 'Готов к командировкам', value: ModelsTripReadinessType.TripReadinessReady},
-    {label: 'Иногда готов к командировкам', value: ModelsTripReadinessType.TripReadinessSometimes},
-    {label: 'Не готов к командировкам', value: ModelsTripReadinessType.TripReadinessNever},
-  ];
-  languageLevelTypes: {label: string, value: ModelsLanguageLevelType}[] = [
-    {label: 'A1 - Начальный', value: ModelsLanguageLevelType.LanguageLevelA1},
-    {label: 'A2 - Элементарный', value: ModelsLanguageLevelType.LanguageLevelA2},
-    {label: 'B1 - Средний', value: ModelsLanguageLevelType.LanguageLevelB1},
-    {label: 'B2 - Средне-продвинуый', value: ModelsLanguageLevelType.LanguageLevelB2},
-    {label: 'C1 - Продвинутый', value: ModelsLanguageLevelType.LanguageLevelC1},
-    {label: 'C2 - В совершенстве', value: ModelsLanguageLevelType.LanguageLevelC2},
-    {label: 'Родной язык', value: ModelsLanguageLevelType.LanguageLevelL1},
-  ];
-  relocationTypes: {label: string, value: ModelsRelocationType}[] = [
-    {label: 'Не готов к переезду', value: ModelsRelocationType.RelocationTypeNo},
-    {label: 'Могу переехать', value: ModelsRelocationType.RelocationTypeYes},
-    {label: 'Хочу переехать', value: ModelsRelocationType.RelocationTypeWant},
-  ];
+  genderTypes = genderTypes;
+  educationTypes = educationTypes;
+  employmentTypes = employmentTypes;
+  scheduleTypes = scheduleTypes;
+  searchStatusTypes = searchStatusTypes;
+  tripReadinessTypes = tripReadinessTypes;
+  languageLevelTypes = languageLevelTypes;
+  relocationTypes = relocationTypes;
 
   vacancyList: VacancyView[] = [];
-  docList: FilesapimodelsFileView[] = [];
-  newResumeFile?: File;
-  currentResumeFile?: FilesapimodelsFileView;
+  newCandidateResume?: File;
+  newCandidatePhoto?: File;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -149,8 +113,6 @@ export class AddCandidateModalComponent implements OnInit {
           language_level: new FormControl<ModelsLanguageLevelType | ''>(language.language_level || '', Validators.required),
         }))
       });
-
-      this.getDocList(this.applicant.id);
     }
     this.getVacancyList();
   }
@@ -177,7 +139,7 @@ export class AddCandidateModalComponent implements OnInit {
         search_status: this.params.controls['search_status'].value || undefined,
         trip_readiness: this.params.controls['trip_readiness'].value || undefined,
       },
-      phone: this.applicantForm.controls.phone.value || undefined,
+      phone: this.applicantForm.controls.phone.value?.replace(/[^0-9]/g, '') || undefined,
       relocation: this.applicantForm.controls.relocation.value || undefined,
       salary: this.applicantForm.controls.salary.value || undefined,
       source: this.applicantForm.controls.source.value || undefined,
@@ -208,11 +170,23 @@ export class AddCandidateModalComponent implements OnInit {
     this.isLoading = true;
     const newApplicant = this.mapFormToApplicant();
 
-    this.api.v1SpaceApplicantCreate(newApplicant, {observe: 'response'}).subscribe({
-      next: (data) => {
-        if (data.body?.data && this.newResumeFile) {
-          this.uploadResume(data.body.data);
+    this.api.v1SpaceApplicantCreate(newApplicant, {observe: 'response'}).pipe(
+      switchMap((response) => {
+        const observables = [];
+        if (response.body?.data) {
+          const applicantId = response.body.data;
+          if (this.newCandidateResume)
+            observables.push(this.uploadResume(applicantId, this.newCandidateResume));
+          if (this.newCandidatePhoto)
+            observables.push(this.uploadPhoto(applicantId, this.newCandidatePhoto));
         }
+        if (observables.length === 0) {
+          return of(null);
+        }
+        return forkJoin(observables);
+      })
+    ).subscribe({
+      next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.modalService.closeModal();
@@ -233,9 +207,6 @@ export class AddCandidateModalComponent implements OnInit {
 
     this.api.v1SpaceApplicantUpdate(applicantId, updatedApplicant, {observe: 'response'}).subscribe({
       next: () => {
-        if (this.newResumeFile) {
-          this.uploadResume(applicantId);
-        }
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.modalService.closeModal();
@@ -269,42 +240,107 @@ export class AddCandidateModalComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: Event) {
+  onResumeSelected(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.newResumeFile = target.files?.[0];
-    console.log(this.newResumeFile);
-  }
-
-  getDocList(id: string) {
-    this.isLoading = true;
-    this.api.v1SpaceApplicantDocListDetail(id, {observe: 'response'}).subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          this.docList = data.body.data;
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.log(error);
-      },
-    })
-  }
-
-  uploadResume(applicantId: string) {
-    if (!this.newResumeFile) return;
-    this.isLoading = true;
-    this.api.v1SpaceApplicantUploadResumeCreate(applicantId, {resume: this.newResumeFile}, {observe: 'response', headers: {'Content-Type': 'multipart/form-data'}})
-      .subscribe({
+    if (!target.files?.length) return;
+    if (this.isEdit && this.applicant && this.applicant.id) {
+      this.isLoading = true;
+      this.uploadResume(this.applicant.id, target.files[0]).subscribe({
         next: () => {
           this.isLoading = false;
-          this.getDocList(applicantId);
+          this.resumeName = target.files?.[0]?.name;
+          this.onSubmit.emit(true);
         },
         error: (error) => {
           console.log(error);
           this.isLoading = false;
         },
-      })
+      });
+    }
+    else
+      if (!this.isEdit)
+        this.newCandidateResume = target.files[0];
+  }
+
+  onPhotoSelected(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files?.length) return;
+    if (this.isEdit && this.applicant && this.applicant.id) {
+      this.isLoading = true;
+      this.uploadPhoto(this.applicant.id, target.files[0]).subscribe({
+        next: () => {
+          this.isLoading = false;
+          if (target.files?.[0])
+            this.photo = URL.createObjectURL(target.files[0]);
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+    }
+    else
+      if (!this.isEdit) {
+        this.newCandidatePhoto = target.files[0];
+        this.photo = URL.createObjectURL(target.files[0]);
+      }
+  }
+
+  uploadPhoto(id: string, photo: File) {
+    const formData = new FormData();
+    formData.append("photo", photo, photo.name);
+    return this.api.v1SpaceApplicantUploadPhotoCreate(id, formData as any, {observe: 'response'});
+  }
+
+  uploadResume(applicantId: string, resume: File) {
+    const formData = new FormData();
+    formData.append("resume", resume, resume.name);
+    return this.api.v1SpaceApplicantUploadResumeCreate(applicantId, formData as any, {observe: 'response'});
+  }
+
+  deletePhoto() {
+    if (!this.isEdit) {
+      this.newCandidatePhoto = undefined;
+      return;
+    }
+    if (!this.applicant || !this.applicant.id) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantPhotoDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.photo = undefined;
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  deleteResume() {
+    if (!this.isEdit) {
+      this.newCandidateResume = undefined;
+      return;
+    }
+    if (!this.applicant || !this.applicant.id) return;
+
+    this.isLoading = true;
+    this.api.v1SpaceApplicantResumeDelete(this.applicant.id, {observe: 'response'})
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.resumeName = undefined;
+          this.onSubmit.emit(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoading = false;
+        },
+      });
   }
 
   get params() {

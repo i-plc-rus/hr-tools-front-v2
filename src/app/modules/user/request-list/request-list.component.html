@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
       <h3 class="text-[22px] leading-7">Фильтр</h3>
       <div class="flex gap-2">
-        <button mat-icon-button (click)="filterForm.reset()" class="btn-secondary">
+        <button mat-icon-button (click)="reset()" class="btn-secondary">
           <mat-icon>refresh</mat-icon>
         </button>
         <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
@@ -99,7 +99,7 @@
 
 <div class="py-8 px-4 w-full h-full">
   <div class="w-full flex items-center gap-3">
-    <app-search-input class="w-[380px]" placeholder="Поиск заявки" [(ngModel)]="searchValue" (onSearch)="search()">
+    <app-search-input class="w-[380px]" placeholder="Поиск заявки" [formControl]="searchValue" (onSearch)="search()">
     </app-search-input>
     <app-filter-toggle #toggleFilter />
   </div>
@@ -110,15 +110,24 @@
         <h1 class="text-[22px]">Заявки</h1>
         <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
           <mat-chip-option [value]="''" [selectable]="category.value !== ''">Все</mat-chip-option>
-          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'"
-            >Согласовано</mat-chip-option
-          >
-          <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'"
-            >На согласовании</mat-chip-option
-          >
-          <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'"
-            >Не согласовано</mat-chip-option
-          >
+          <mat-chip-option
+            value="favorites"
+            [selectable]="category.value !== 'favorites'"
+            [disabled]="favoritesCount === 0">
+            @if (favoritesCount > 0) {
+              <span class="chip-number">{{ favoritesCount }}</span>
+            }
+            Избранные
+          </mat-chip-option>
+          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
+            Согласовано
+          </mat-chip-option>
+          <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'">
+            На согласовании
+          </mat-chip-option>
+          <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
+            Не согласовано
+          </mat-chip-option>
         </mat-chip-listbox>
       </div>
       <div class="flex gap-4">

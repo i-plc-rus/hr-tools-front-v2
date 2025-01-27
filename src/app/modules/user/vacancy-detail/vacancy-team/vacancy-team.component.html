@@ -1,77 +1,67 @@
-<div class="flex flex-col w-full justify-between my-6 px-6 py-4 gap-2 bg-[var(--background-alter)] rounded-2xl lg:flex-row">
-  <div class="flex items-center gap-2">
-    <div class="flex w-[80px] h-[80px] bg-[var(--background-main)] rounded-full">
-      <!-- <img class="min-w-[80px] min-h-[80px] rounded-full" [src]="negotiation?.photo_url" alt="аватар" /> -->
-      <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
-    </div>
-    <div class="flex flex-col grow gap-1">
-      <h4 class="text-[22px] leading-7">Руденко Михаил</h4>
-      <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 text-[var(--text-alter)] lg:flex-row lg:description-dots">
-        <span>Суперадмин</span>
-        <span>miketech&#64;yandex.ru</span>
+<div class="flex flex-col w-full gap-3 mt-6" [class.mb-6]="teamPersonList.length">
+  @for (teamPerson of teamPersonList; track $index) {
+    <div class="flex flex-col justify-between px-6 py-4 gap-2 bg-[var(--background-alter)] rounded-2xl lg:flex-row">
+      <div class="flex items-center gap-2">
+        <div class="flex w-[80px] h-[80px] bg-[var(--background-main)] rounded-full">
+          <mat-icon svgIcon="no-avatar" class="!w-[80px] !h-[80px] rounded-full" />
+        </div>
+        <div class="flex flex-col grow gap-1">
+          <h4 class="text-[22px] leading-7">{{ teamPerson.full_name }}</h4>
+          <div class="flex flex-col flex-wrap gap-y-1 gap-x-2 text-[var(--text-alter)] lg:flex-row lg:description-dots">
+            <span>{{ teamPerson.roleName }}</span>
+            <span>{{ teamPerson.email }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex">
+        @if (teamPerson.responsible) {
+          <button mat-button class="btn-primary" disabled>
+            <mat-icon class="text-[var(--text-alter)]">stars</mat-icon>
+            <span class="text-[var(--text-alter)]">Ответственный</span>
+          </button>
+        } @else {
+          <button mat-button class="btn-primary" (click)="setAsResponsible(teamPerson.id)">
+            Сделать ответственным
+          </button>
+          <button mat-icon-button class="btn-danger" (click)="excludeUser(teamPerson.id)">
+            <mat-icon svgIcon="delete" />
+          </button>
+        }
       </div>
     </div>
-  </div>
-  <div class="flex">
-    <button mat-button class="btn-primary">Сделать ответственным</button>
-    <!-- <button mat-button class="btn-primary">
-      <mat-icon class="text-[var(--text-alter)]">stars</mat-icon>
-      <span class="text-[var(--text-alter)]">Ответственный</span>
-    </button> -->
-    <button mat-icon-button class="btn-danger">
-      <mat-icon svgIcon="delete" />
-    </button>
-  </div>
+  }
 </div>
 
-<mat-expansion-panel class="mat-elevation-z" expanded hideToggle #hhExpansion>
-  <mat-expansion-panel-header>
-    <div class="flex gap-1">
-      <span>Пригласить участников</span>
-      <mat-icon class="transition-all" [class.rotate-180]="hhExpansion.expanded">keyboard_arrow_down</mat-icon>
-    </div>
-  </mat-expansion-panel-header>
+<h2 class="text-[22px] leading-7 mb-2">Пригласить участников</h2>
 
-  <div class="flex flex-col w-full lg:w-1/2 mb-8">
-    <span class="text-[14px] leading-5 text-[var(--text-alter)] tracking-[0.25px] mb-6">
-      Вы можете пригласить как пользователя, уже зарегистрированного в системе, так и нового пользователя (по e-mail)
-    </span>
-    <mat-form-field class="mb-1" appearance="outline">
-      <mat-label>Пользователь в системе</mat-label>
-      <input matInput />
-    </mat-form-field>
-    <div>
-      <button mat-flat-button class="btn-primary w-auto">Пригласить</button>
-    </div>
-  </div>
+<form class="flex flex-col w-full lg:w-1/2 mb-8">
+  <span class="text-[14px] leading-5 text-[var(--text-alter)] tracking-[0.25px] mb-6">
+    Вы можете пригласить зарегистрированного в системе пользователя
+  </span>
+  <mat-form-field class="mb-1" appearance="outline">
+    <mat-label>Пользователь в системе</mat-label>
+    <input
+      matInput
+      (change)="selectedUserId.reset()"
+      (blur)="selectedUserId.markAsTouched()"
+      [matAutocomplete]="inviteUserAutocomplete"
+      [formControl]="searchUser" />
+    <mat-autocomplete #inviteUserAutocomplete="matAutocomplete">
+      @for (user of usersList; track $index) {
+        <mat-option [value]="user.full_name" (onSelectionChange)="selectedUserId.setValue(user.id)">
+          {{ user.full_name }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+    @let inviteErrorRequired = selectedUserId.hasError('required') && !selectedUserId.untouched;
+    @if (inviteErrorRequired) {
+      <mat-icon matSuffix matTooltip="Выберите пользователя из списка" svgIcon="error" />
+    }
+  </mat-form-field>
 
-  <div class="w-full mb-4">
-    <span class="text-[16px] leading-6 font-medium"> Пригласить нового по e-mail </span>
-  </div>
-
-  <div class="flex flex-col lg:flex-row lg:gap-6">
-    <div class="flex flex-col w-full lg:w-1/2">
-      <mat-form-field appearance="outline">
-        <mat-label>Почта</mat-label>
-        <input matInput />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Роль</mat-label>
-        <input matInput />
-      </mat-form-field>
-    </div>
-    <div class="flex flex-col w-full lg:w-1/2">
-      <mat-form-field appearance="outline">
-        <mat-label>Телефон</mat-label>
-        <input matInput />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Фамилия и имя</mat-label>
-        <input matInput />
-      </mat-form-field>
-    </div>
-  </div>
   <div>
-    <button mat-flat-button class="btn-primary w-auto">Пригласить</button>
+    <button mat-flat-button class="btn-primary" [disabled]="selectedUserId.invalid" (click)="inviteUser()">
+      Пригласить
+    </button>
   </div>
-</mat-expansion-panel>
+</form>

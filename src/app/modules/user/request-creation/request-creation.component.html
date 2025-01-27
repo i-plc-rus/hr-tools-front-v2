@@ -170,7 +170,7 @@
                             <mat-label>Занятость</mat-label>
                             <mat-select [formControl]="form.controls['employment']">
                               @for (employment of employments; track $index) {
-                              <mat-option value="{{ employment.value }}">{{ employment.name }}</mat-option>
+                              <mat-option value="{{ employment.value }}">{{ employment.label }}</mat-option>
                               }
                             </mat-select>
                             @if (form.get('employment')?.invalid && !form.get('employment')?.untouched) {
@@ -184,7 +184,7 @@
                             <mat-label>Опыт работы</mat-label>
                             <mat-select [formControl]="form.controls['expirience']">
                               @for (expirience of expiriences; track $index) {
-                              <mat-option value="{{ expirience.value }}">{{ expirience.name }}</mat-option>
+                              <mat-option value="{{ expirience.value }}">{{ expirience.label }}</mat-option>
                               }
                             </mat-select>
                             @if (form.get('expirience')?.invalid && !form.get('expirience')?.untouched) {
@@ -198,7 +198,7 @@
                             <mat-label>Режим работы</mat-label>
                             <mat-select [formControl]="form.controls['schedule']">
                               @for (schedule of schedules; track $index) {
-                              <mat-option value="{{ schedule.value }}">{{ schedule.name }}</mat-option>
+                              <mat-option value="{{ schedule.value }}">{{ schedule.label }}</mat-option>
                               }
                             </mat-select>
                             @if (form.get('schedule')?.invalid && !form.get('schedule')?.untouched) {

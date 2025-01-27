@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4">
       <h3 class="text-[22px] leading-7">Фильтр</h3>
       <div class="flex gap-2">
-        <button mat-icon-button class="btn-secondary">
+        <button mat-icon-button class="btn-secondary" (click)="onReset()">
           <mat-icon>refresh</mat-icon>
         </button>
         <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
@@ -13,35 +13,79 @@
     </div>
     <div class="w-full">
       <mat-expansion-panel class="mat-elevation-z" expanded>
-        <mat-expansion-panel-header>Образование</mat-expansion-panel-header>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="education">
-          @for (education of educationTypes; track $index) {
-            <mat-chip-option [value]="education">{{ education }}</mat-chip-option>
+        <mat-expansion-panel-header>Готовность к переезду</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="relocation">
+          @for (relocation of relocationTypes; track $index) {
+            <mat-chip-option [value]="relocation.value">{{ relocation.label }}</mat-chip-option>
           }
         </mat-chip-listbox>
       </mat-expansion-panel>
 
       <mat-expansion-panel class="mat-elevation-z" expanded>
-        <mat-expansion-panel-header>Навыки</mat-expansion-panel-header>
+        <mat-expansion-panel-header>Возраст</mat-expansion-panel-header>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="age_from" />
+          </mat-form-field>
+          <div class="mb-5">-</div>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="age_to" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Опыт работы</mat-expansion-panel-header>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="total_experience_from" />
+          </mat-form-field>
+          <div class="mb-5">-</div>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="total_experience_to" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Город</mat-expansion-panel-header>
         <mat-form-field class="w-full" appearance="outline" floatLabel="always">
-          <mat-label>Поиск</mat-label>
-          <input matInput [formControl]="searchSkill" />
+          <mat-label>Город</mat-label>
+          <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="skills">
-          <mat-chip-option [value]="''">Все</mat-chip-option>
-          @for (skill of skillsTypes; track $index) {
-            <mat-chip-option [value]="skill">{{ skill }}</mat-chip-option>
+        <div class="max-h-[200px] overflow-y-scroll">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city">
+            @for (city of cities; track $index) {
+              <mat-chip-option [value]="city.address">{{ city.address }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Источник</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="source">
+          @for (source of sourceTypes; track $index) {
+            <mat-chip-option [value]="source">{{ source }}</mat-chip-option>
           }
         </mat-chip-listbox>
       </mat-expansion-panel>
 
-      <mat-expansion-panel class="mat-elevation-z" expanded>
-        <mat-expansion-panel-header>Опыт</mat-expansion-panel-header>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="experience">
-          <mat-chip-option [value]="''">Все</mat-chip-option>
-          @for (experience of experienceTypes; track $index) {
-            <mat-chip-option [value]="experience">{{ experience }}</mat-chip-option>
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>По дате добавления</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="added_period">
+          @for (addedPeriod of addedPeriodTypes; track $index) {
+            <mat-chip-option [value]="addedPeriod">{{ addedPeriod }}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Тип добавления</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="added_type">
+          @for (addedType of addedTypes; track $index) {
+            <mat-chip-option [value]="addedType">{{ addedType }}</mat-chip-option>
           }
         </mat-chip-listbox>
       </mat-expansion-panel>
@@ -70,7 +114,7 @@
             <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
           </app-status-tag>
           <mat-menu #statusContent="matMenu">
-            @for (status of statuses; track $index) {
+            @for (status of vacancyStatuses; track $index) {
               @if (vacancy.status !== status.value) {
                 <button mat-menu-item (click)="changeStatus(vacancy.id, status.value)">
                   <app-status-tag [status]="status.className">{{ status.value }}</app-status-tag>
@@ -86,37 +130,31 @@
         <app-search-input
           class="w-[380px]"
           placeholder="ФИО, почта и тег"
-          [(ngModel)]="searchValue"
+          [formControl]="searchValue"
           (onSearch)="onSearch()">
         </app-search-input>
         <app-filter-toggle #toggleFilter />
       </div>
       <div class="flex gap-3">
         <div class="filter-chip" [matMenuTriggerFor]="filterCandidateContent">
-          <app-notification-bubble [value]="1" />
-          <span>Все кандидаты</span>
+          <span>{{ filterForm.get('stage_name')?.value || 'Все кандидаты' }}</span>
           <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
         </div>
         <mat-menu #filterCandidateContent="matMenu">
-          <button mat-menu-item>Все кандидаты</button>
-          <button mat-menu-item>Откликнулся</button>
-          <button mat-menu-item>Добавлен в базу</button>
-          <button mat-menu-item>Телефонное интервью</button>
-          <button mat-menu-item>Отправка нанимающему менеджеру</button>
-          <button mat-menu-item>Решение руководителя</button>
-          <button mat-menu-item>Стажировка</button>
-          <button mat-menu-item>Оформление на работу</button>
-          <button mat-menu-item>Принят</button>
+          <button mat-menu-item (click)="onSelectStage('')">Все кандидаты</button>
+          @for (stage of vacancy?.selection_stages; track $index) {
+            <button mat-menu-item (click)="onSelectStage(stage.name || '')">{{ stage.name }}</button>
+          }
         </mat-menu>
         <div class="filter-chip" [matMenuTriggerFor]="filterStatusContent">
-          <app-notification-bubble [value]="1" />
-          <span>Все статусы</span>
+          <span>{{ filterForm.get('status')?.value || 'Все статусы' }}</span>
           <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
         </div>
         <mat-menu #filterStatusContent="matMenu">
-          <button mat-menu-item>Все статусы</button>
-          <button mat-menu-item>В процессе</button>
-          <button mat-menu-item>Отклонены</button>
+          <button mat-menu-item (click)="onSelectStatus()">Все статусы</button>
+          @for (status of statusTypes; track $index) {
+            <button mat-menu-item (click)="onSelectStatus(status)">{{ status }}</button>
+          }
         </mat-menu>
       </div>
     </div>

@@ -24,12 +24,19 @@ import {StatusTagComponent} from '../../components/status-tag/status-tag.compone
 import {FilterComponent} from '../../components/filter/filter.component';
 import {FilterToggleComponent} from '../../components/filter-toggle/filter-toggle.component';
 import {SearchInputComponent} from '../../components/search-input/search-input.component';
-import {TableCandidateNameComponent} from './table-candidate-name/table-candidate-name.component';
+import {CellCandidateNameComponent} from '../../components/cell-candidate-name/cell-candidate-name.component';
+import {CellCandidateContactsComponent} from '../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {VacancyNegotiationsComponent} from './vacancy-negotiations/vacancy-negotiations.component';
 import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidates.component';
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
+import {CandidateStatusComponent} from './candidate-list/candidate-status/candidate-status.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
+import {CandidateDetailInfoComponent} from './candidate-detail/candidate-detail-info/candidate-detail-info.component';
+import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
 import {AddCandidateModalComponent} from './candidate-list/add-candidate-modal/add-candidate-modal.component';
+import {RejectCandidateModalComponent} from './candidate-list/reject-candidate-modal/reject-candidate-modal.component';
+import {ChangeStageModalComponent} from './candidate-list/change-stage-modal/change-stage-modal.component';
+import {AddCommentModalComponent} from './candidate-detail/add-comment-modal/add-comment-modal.component';
 import {NegotiationDetailComponent} from './vacancy-negotiations/negotiation-detail/negotiation-detail.component';
 import {NegotiationStatusComponent} from './vacancy-negotiations/negotiation-status/negotiation-status.component';
 import {TextEditorComponent} from '../../components/text-editor/text-editor.component';
@@ -43,6 +50,7 @@ import {GenerateDescriptionModalComponent} from './generate-description-modal/ge
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
+import {NgxMaskDirective, NgxMaskPipe} from 'ngx-mask';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -58,6 +66,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
@@ -75,12 +84,19 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     RequestDetailComponent,
     VacancyNegotiationsComponent,
     VacancyСandidatesComponent,
-    TableCandidateNameComponent,
+    CellCandidateNameComponent,
+    CellCandidateContactsComponent,
     NegotiationDetailComponent,
     NegotiationStatusComponent,
     СandidateListComponent,
+    CandidateStatusComponent,
     CandidateDetailComponent,
+    CandidateDetailInfoComponent,
+    CandidateDuplicateComponent,
     AddCandidateModalComponent,
+    RejectCandidateModalComponent,
+    ChangeStageModalComponent,
+    AddCommentModalComponent,
     VacancyDetailComponent,
     VacancyDescriptionComponent,
     VacancyPublicationComponent,
@@ -108,6 +124,8 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     TextInputComponent,
     DropdownDirective,
     DropdownContentDirective,
+    NgxMaskDirective,
+    NgxMaskPipe,
 
     MatIcon,
     MatIconModule,
@@ -124,6 +142,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatExpansionModule,
     MatTabsModule,
     MatDatepickerModule,
+    MatCheckboxModule,
     DragDropModule,
 ]
 

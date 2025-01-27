@@ -1,32 +1,37 @@
 <div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:w-[950px] lg:max-h-[1200px]">
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     <div class="flex justify-between items-center">
-      <div class="flex w-14 h-14 items-center justify-center bg-[var(--background-main)] rounded-full cursor-pointer">
-        <mat-icon class="text-[var(--link-default)]" svgIcon="add-a-photo" />
-      </div>
-      <input type="file" (change)="onFileSelected($event)" class="hidden" #fileUpload />
-      @if (!currentResumeFile) {
-        @if (newResumeFile) {
-          <div class="flex gap-1 flex-wrap">
-            <button mat-button class="btn-secondary" (click)="fileUpload.click()">
-              {{ newResumeFile.name }}
-            </button>
-            <button mat-button class="btn-danger" (click)="newResumeFile = undefined">Отмена</button>
-          </div>
-        } @else {
-          <button mat-flat-button class="btn-secondary" (click)="fileUpload.click()">
-            <mat-icon svgIcon="article-shortcut" />
-            Загрузить резюме
+      <input type="file" accept="image/png, image/jpeg" (change)="onPhotoSelected($event)" class="hidden" #photoUpload />
+      <div class="flex gap-2 items-center">
+        <div class="flex w-14 h-14 items-center justify-center bg-[var(--background-main)] rounded-full"
+          (click)="!photo ? photoUpload.click() : null" [class.cursor-pointer]="!photo">
+          @if (!photo) {
+            <mat-icon class="text-[var(--link-default)]" svgIcon="add-a-photo" />
+          } @else {
+            <img class="min-w-14 min-h-14 rounded-full" [src]="photo" />
+          }
+        </div>
+        @if (photo) {
+          <button mat-icon-button class="btn-danger" (click)="deletePhoto()">
+            <mat-icon svgIcon="delete" />
           </button>
         }
+      </div>
+
+      <input type="file" accept="application/pdf" (change)="onResumeSelected($event)" class="hidden" #resumeUpload />
+      @if (!newCandidateResume && !resumeName) {
+        <button mat-flat-button class="btn-secondary" (click)="resumeUpload.click()">
+          <mat-icon svgIcon="article-shortcut" />
+          Загрузить резюме
+        </button>
       }
-      @if (currentResumeFile) {
+      @if (newCandidateResume || resumeName) {
         <div class="flex gap-1 flex-wrap">
           <button mat-button class="btn-secondary">
             <mat-icon>attach_file</mat-icon>
-            {{ currentResumeFile.name }}
+            {{ resumeName || newCandidateResume?.name }}
           </button>
-          <button mat-icon-button class="btn-danger">
+          <button mat-icon-button class="btn-danger" (click)="deleteResume()">
             <mat-icon svgIcon="delete" />
           </button>
         </div>
@@ -100,7 +105,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Телефон</mat-label>
-            <input matInput [formControl]="applicantForm.controls['phone']" />
+            <input matInput [formControl]="applicantForm.controls['phone']" placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00" />
 
             @let isPhoneErrorRequired =
               applicantForm.controls['phone'].hasError('required') && !applicantForm.controls['phone'].untouched;
@@ -245,10 +250,13 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Комментарий</mat-label>
-          <textarea matInput formControlName="comment"></textarea>
-        </mat-form-field>
+        @if (!isEdit) {
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Заметка о кандидате</mat-label>
+            <textarea matInput formControlName="comment"></textarea>
+          </mat-form-field>
+        }
+
       </form>
 
       <div

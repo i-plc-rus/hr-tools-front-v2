@@ -5,9 +5,6 @@ import {
   DictapimodelsCompanyStructView,
   DictapimodelsCompanyView,
   DictapimodelsDepartmentView,
-  ModelsEmployment,
-  ModelsExperience,
-  ModelsSchedule,
   ModelsVRSelectionType,
   ModelsVRType,
   ModelsVRUrgency,
@@ -19,6 +16,7 @@ import {ApiService} from '../../../../api/Api';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {SpaceUser} from '../../../../models/SpaceUser';
 import {Router} from '@angular/router';
+import {employmentTypes, experienceTypes, scheduleTypes} from '../../user-consts';
 
 @Component({
   selector: 'app-vacancy-description',
@@ -33,28 +31,9 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
 
   requestTypes = Object.values(ModelsVRType);
   urgencies = Object.values(ModelsVRUrgency);
-  employmentTypes: {label: string, value: ModelsEmployment}[] = [
-    {label: 'Полная занятость', value: ModelsEmployment.EmploymentFull},
-    {label: 'Частичная занятость', value: ModelsEmployment.EmploymentPartial},
-    {label: 'Временная занятость', value: ModelsEmployment.EmploymentTemporary},
-    {label: 'Интернатура', value: ModelsEmployment.EmploymentInternship},
-    {label: 'Стажировка', value: ModelsEmployment.EmploymentProbation},
-    {label: 'Волонтерство', value: ModelsEmployment.EmploymentVolunteer},
-  ];
-  experienceTypes: {label: string, value: ModelsExperience}[] = [
-    {label: 'Без опыта', value: ModelsExperience.ExperienceNoMatter},
-    {label: 'От 1 года', value: ModelsExperience.ExperienceMoreThan1},
-    {label: 'От 3 лет', value: ModelsExperience.ExperienceMoreThan3},
-    {label: 'От 5 лет', value: ModelsExperience.ExperienceMoreThan5},
-    {label: 'От 10 лет', value: ModelsExperience.ExperienceMoreThan10},
-  ];
-  scheduleTypes: {label: string, value: ModelsSchedule}[] = [
-    {label: 'Полный день', value: ModelsSchedule.ScheduleFullDay},
-    {label: 'Неполная занятость', value: ModelsSchedule.SchedulePartTime},
-    {label: 'Гибкий график', value: ModelsSchedule.ScheduleFlexible},
-    {label: 'Сменный график', value: ModelsSchedule.ScheduleShift},
-    {label: 'Вахтовый метод', value: ModelsSchedule.ScheduleFlyInFlyOut},
-  ];
+  employmentTypes = employmentTypes;
+  experienceTypes = experienceTypes;
+  scheduleTypes = scheduleTypes;
   cities: DictapimodelsCityView[] = [];
   companies: DictapimodelsCompanyView[] = [];
   companyStructures: DictapimodelsCompanyStructView[] = [];
@@ -212,10 +191,6 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
 
   openGenerateModal() {
     this.vacancyModal.openGenerateModal(this.vacancyForm.controls['requirements'] as FormControl);
-  }
-
-  cancelVacancy() {
-
   }
 
   submitForm() {

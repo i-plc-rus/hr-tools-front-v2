@@ -5,12 +5,13 @@ generateApi({
   name: 'MyAPI',
   output: path.resolve(__dirname, './src/app/api'),
   url: 'https://a.hr-tools.pro/docs/swagger.json',
-  templates: path.resolve(__dirname, './node_modules/@archeion/swagger-angular-api/templates/angular'),
+  templates: path.resolve(__dirname, './src/app/api/template'),
   // Currently only modular mode is supported.
   modular: true,
   // Optionally you can add options to personalize angular generation
   angular: {
     generateIndex: true,
+    providedIn: 'root'
   },
   hooks: {
     // Don't forget to add onInit hook

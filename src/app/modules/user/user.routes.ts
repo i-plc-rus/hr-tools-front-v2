@@ -12,6 +12,7 @@ import {VacancyСandidatesComponent} from './vacancy-candidates/vacancy-candidat
 import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component';
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
+import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
 
 export const routes: Routes = [
   {
@@ -103,7 +104,20 @@ export const routes: Routes = [
           },
           {
             path: ':id',
-            component: CandidateDetailComponent,
+            children: [
+              {
+                path: '',
+                component: CandidateDetailComponent,
+              },
+              {
+                path: ':duplicateId',
+                component: CandidateDuplicateComponent,
+              },
+              {
+                path: '**',
+                redirectTo: ''
+              }
+            ]
           },
           {
             path: '**',

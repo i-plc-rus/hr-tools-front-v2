@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
@@ -51,7 +51,8 @@ export class VacancyDetailComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -92,7 +93,10 @@ export class VacancyDetailComponent implements OnInit {
   }
 
   onBack() {
-    window.history.back();
+    if (!this.vacancy || this.isNewVacancy)
+      this.router.navigate(['user', 'vacancy', 'list']);
+    else
+      this.router.navigate(['user', 'vacancy', this.vacancy.id, 'candidates']);
   }
 
 }

@@ -309,8 +309,4 @@ export class СandidateListComponent {
     this.searchValue.reset();
   }
 
-  onBack() {
-    window.history.back();
-  }
-
 }

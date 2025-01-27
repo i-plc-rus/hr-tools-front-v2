@@ -23,7 +23,7 @@ import {LoaderComponent} from '../../../components/loader/loader.component';
 import {MockDataService} from '../../../services/mock-data.service';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
 import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
 
@@ -185,7 +185,8 @@ export class VacancyNegotiationsComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     private mockApi: MockDataService,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   onGridReady(params: GridReadyEvent) {
@@ -257,6 +258,6 @@ export class VacancyNegotiationsComponent {
   }
 
   onBack() {
-    window.history.back();
+    this.router.navigate(['user', 'vacancy', 'list']);
   }
 }

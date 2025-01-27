@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {
@@ -34,7 +34,8 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -314,6 +315,6 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   }
 
   onBack() {
-    window.history.back();
+    this.router.navigate(['user', 'candidates', 'list']);
   }
 }

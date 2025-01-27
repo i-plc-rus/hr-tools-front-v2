@@ -7,7 +7,7 @@ import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowCl
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes, vacancyStatuses} from '../user-consts';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
@@ -135,7 +135,8 @@ export class VacancyСandidatesComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -266,8 +267,7 @@ export class VacancyСandidatesComponent implements OnInit {
   }
 
   onBack() {
-    window.history.back();
+    this.router.navigate(['user', 'vacancy', 'list']);
   }
-
 
 }

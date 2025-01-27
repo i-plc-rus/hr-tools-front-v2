@@ -38,10 +38,10 @@
             <mat-icon svgIcon="comment" />
             <span class="text-[var(--text-main)]">Комментарий</span>
           </button>
-          <a mat-button class="btn-primary" href="mailto:{{ applicant?.email }}">
+          <button mat-button class="btn-primary" disabled>
             <mat-icon svgIcon="mail" />
             <span class="text-[var(--text-main)]">Написать</span>
-          </a>
+          </button>
         </div>
         <div>
           <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="btn-primary">

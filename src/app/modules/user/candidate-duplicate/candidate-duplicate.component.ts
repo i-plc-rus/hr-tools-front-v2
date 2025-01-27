@@ -130,6 +130,9 @@ export class CandidateDuplicateComponent implements OnInit {
   }
 
   onBack() {
-    window.history.back();
+    if (!this.applicant)
+      window.history.back();
+    else
+      this.router.navigate(['user', 'candidates', this.applicant.id]);
   }
 }

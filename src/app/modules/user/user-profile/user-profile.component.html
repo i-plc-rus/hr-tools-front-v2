@@ -1,0 +1,92 @@
+<div class="py-8 px-4 w-full min-h-screen pb-6">
+  <div class="w-full mt-4 bg-white rounded-3xl p-5 shadow-md">
+
+    <!-- Кнопки "Личный профиль" и "Настройки компании" -->
+    <div class="flex gap-3">
+      <button mat-flat-button color="primary" class="btn-primary">Личный профиль</button>
+      <button mat-stroked-button color="primary" class="btn-secondary">Настройки компании</button>
+    </div>
+
+    <!-- Табы -->
+    <mat-tab-group class="mt-4" mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="Мой аккаунт"></mat-tab>
+      <mat-tab label="Аккаунты на других сайтах"></mat-tab>
+      <mat-tab label="Настройка уведомлений"></mat-tab>
+      <mat-tab label="Мои шаблоны"></mat-tab>
+      <mat-tab label="Настройка интерфейса"></mat-tab>
+    </mat-tab-group>
+
+    <!-- Контейнер с фото и кнопкой -->
+    <div class="flex justify-between items-center mt-6">
+      <div class="flex items-center gap-4">
+        <div class="photo-upload">
+          <img src="assets/icons/ic-add-a-photo.svg" class="photo-icon" alt="Добавить фото">
+        </div>
+
+      </div>
+      <button mat-flat-button class="btn-secondary" (click)="openChangePasswordModal()"> <span>Изменить пароль</span></button>
+    </div>
+
+    <!-- Форма -->
+    <form [formGroup]="profileForm" >
+      <div class="mt-6 grid grid-cols-3 gap-x-4 gap-y-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Фамилия</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Имя</mat-label>
+        <input matInput formControlName="firstName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Должность</mat-label>
+        <input matInput formControlName="position">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Телефон</mat-label>
+        <input matInput formControlName="phone">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Внутренний номер</mat-label>
+        <mat-select formControlName="internalNumber">
+          <mat-option *ngFor="let number of internalNumbers" [value]="number">{{ number }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+      <!-- Переключатель "Персональная подпись" -->
+      <div class="flex items-center mt-2">
+        <mat-slide-toggle formControlName="personalSignature" class="mr-2 mat-mdc-slide-toggle"></mat-slide-toggle>
+        <span class="text-gray-500 text-sm">Персональная подпись</span>
+      </div>
+
+      <!-- Текстовое поле с редактором -->
+      <div class="mt-4 w-full">
+        <mat-label>Текст подписи</mat-label>
+        <quill-editor formControlName="signatureText" [modules]="quillConfig" placeholder="" class="w-full h-40"></quill-editor>
+      </div>
+
+      <!-- Кнопка "Сохранить" -->
+      <div class="mt-4">
+        <button
+          mat-flat-button
+          class="btn-primary"
+          (click)="saveProfile()"
+          [disabled]="profileForm.pristine || profileForm.invalid">
+          Сохранить
+        </button>
+      </div>
+    </form>
+
+
+
+  </div>
+</div>

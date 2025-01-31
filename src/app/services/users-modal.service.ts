@@ -4,13 +4,16 @@ import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {AddUserModalComponent} from '../modules/user/users-list/add-user-modal/add-user-modal.component';
 import {DeleteUserModalComponent} from '../modules/user/users-list/delete-user-modal/delete-user-modal.component';
 import {SpaceUser as User} from '../models/SpaceUser';
+import {
+  ChangePasswordModalComponent
+} from '../modules/user/user-profile/change-password-modal/change-password-modal.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent>;
+  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -58,6 +61,19 @@ export class UsersModalService {
     })
     return componentRef.instance.onSubmit;
   }
+
+  changePasswordModal(): EventEmitter<boolean> {
+    this.portal = new ComponentPortal(ChangePasswordModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(this.portal);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
 
   closeModal() {
     this.overlayRef?.dispose();

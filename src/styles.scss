@@ -52,7 +52,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 //fix: Material input floating label outline bug
 //more info: https://github.com/angular/components/issues/26102
 .mdc-notched-outline__notch {
-  border-right: none; 
+  border-right: none;
 }
 
 @layer utilities {
@@ -229,7 +229,7 @@ mat-select {
   --mat-select-panel-background-color: white;
   --mat-select-container-shape: 16px;
   --mat-select-container-elevation-shadow:
-  0px 1px 2px 0px rgba(0, 0, 0, 0.3), 
+  0px 1px 2px 0px rgba(0, 0, 0, 0.3),
   0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: var(--mat-select-container-shape) !important;
 }
@@ -238,7 +238,7 @@ mat-select {
   --mat-autocomplete-background-color: white;
   --mat-autocomplete-container-shape: 16px;
   --mat-autocomplete-container-elevation-shadow:
-  0px 1px 2px 0px rgba(0, 0, 0, 0.3), 
+  0px 1px 2px 0px rgba(0, 0, 0, 0.3),
   0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: var(--mat-autocomplete-container-shape) !important;
 }
@@ -286,3 +286,5 @@ quill-editor {
     @apply stroke-[var(--text-main)];
   }
 }
+
+

@@ -84,14 +84,15 @@
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
         <mat-icon svgIcon="settings"></mat-icon>
       </span>
-      <span (click)="profileMenuTrigger.openMenu()"
+      <span
+        (click)="profileMenuTrigger.openMenu()"
         matTooltip="Профиль"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer sidebtn-with-menu">
         <mat-icon svgIcon="profile"></mat-icon>
       <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
       </span>
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item [routerLink]="['/user', 'profile']">
           <mat-icon svgIcon="account-box"></mat-icon>
           Личный кабинет
         </button>

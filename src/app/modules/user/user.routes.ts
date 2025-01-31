@@ -13,6 +13,7 @@ import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component'
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
+import {UserProfileComponent} from './user-profile/user-profile.component';
 
 export const routes: Routes = [
   {
@@ -137,6 +138,20 @@ export const routes: Routes = [
         path: 'analytics',
         component: DevelopmentComponent,
       },
+      {
+        path: 'profile',
+        children: [
+          {
+            path: 'list',
+            component: UserProfileComponent,
+          },
+          {
+            path: '**',
+            redirectTo: 'list'
+          }
+        ],
+      },
+
       {
         path: '**',
         redirectTo: 'vacancy'

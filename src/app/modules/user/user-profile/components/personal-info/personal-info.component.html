@@ -19,17 +19,26 @@
     <!-- Контейнер с фото и кнопкой -->
     <div class="flex justify-between items-center mt-6">
       <div class="flex items-center gap-4">
-        <div class="photo-upload">
-          <mat-icon
-            svgIcon="add-a-photo"
-            class="text-[var(--link-default)] text-[20px] !w-5 !h-5"
-            aria-label="Добавить фото">
-          </mat-icon>
+        <!-- Контейнер для фото -->
+        <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden" (click)="fileInput.click()">
+          @if (userPhotoPreview) {
+            <img [src]="userPhotoPreview" alt="Фото профиля" class="w-full h-full object-cover">
+          } @else if (userPhoto) {
+            <img [src]="userPhoto" alt="Фото профиля" class="w-full h-full object-cover">
+          } @else {
+            <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
+              <mat-icon svgIcon="add-a-photo" class="text-gray-500 text-2xl"></mat-icon>
+            </div>
+          }
 
+          <!-- Скрытый input для загрузки фото -->
+          <input #fileInput type="file" (change)="uploadPhoto($event)" hidden accept="image/*">
         </div>
+
       </div>
       <button mat-flat-button class="btn-secondary" (click)="openChangePasswordModal()">Изменить пароль</button>
     </div>
+
 
     <!-- Форма -->
     <form [formGroup]="profileForm">
@@ -46,7 +55,11 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Должность</mat-label>
-          <input matInput formControlName="position">
+          <mat-select formControlName="job_title_id">
+            @for (job of jobTitles; track job.id) {
+              <mat-option [value]="job.id">{{ job.name }}</mat-option>
+            }
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -61,12 +74,9 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Внутренний номер</mat-label>
-          <mat-select formControlName="internalNumber">
-            @for (number of internalNumbers; track number) {
-              <mat-option [value]="number">{{ number }}</mat-option>
-            }
-          </mat-select>
+          <input matInput formControlName="internalNumber" type="number" />
         </mat-form-field>
+
       </div>
 
       <!-- Переключатель "Персональная подпись" -->

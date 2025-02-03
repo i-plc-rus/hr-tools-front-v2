@@ -39,13 +39,6 @@ export interface AdminpanelapimodelsUserView {
   role?: ModelsUserRole;
 }
 
-export interface ApimodelsPagination {
-  /** Записей на странице */
-  limit?: number;
-  /** Страница (1,2,3..) */
-  page?: number;
-}
-
 export interface ApimodelsResponse {
   /** данные ответа */
   data?: any;
@@ -170,6 +163,10 @@ export interface ApplicantapimodelsApplicantHistoryView {
   action_type?: DbmodelsActionType;
   /** Изменения */
   changes?: DbmodelsApplicantChanges;
+  /** дата записи dd.mm.yyyy */
+  date?: string;
+  /** время записи HH:mm */
+  time?: string;
   /** Идентификатор сотрудника */
   user_id?: string;
   /** Имя сотрудника */
@@ -352,15 +349,6 @@ export interface ApplicantapimodelsMultiRejectRequest {
   /** идентификаторы кандидатов */
   ids?: string[];
   reject?: ApplicantapimodelsRejectRequest;
-}
-
-export interface ApplicantapimodelsRejectReasons {
-  /** Отказы кандидата */
-  applicant_reasons?: string[];
-  /** Отказы руководителя */
-  head_reasons?: string[];
-  /** Отказы рекрутера */
-  hr_reasons?: string[];
 }
 
 export interface ApplicantapimodelsRejectRequest {
@@ -568,6 +556,31 @@ export interface DictapimodelsJobTitleData {
   name?: string;
 }
 
+export interface DictapimodelsRejectReasonData {
+  /** Инициатор отказа */
+  initiator?: ModelsRejectInitiator;
+  /** Причина отказа */
+  name?: string;
+}
+
+export interface DictapimodelsRejectReasonFind {
+  /** Фильтр по инициатору отказа */
+  initiator?: ModelsRejectInitiator;
+  /** Поиск по содержимому причины */
+  search?: string;
+}
+
+export interface DictapimodelsRejectReasonView {
+  /** Можно изменять */
+  can_change?: boolean;
+  /** Идентификатор записи */
+  id?: string;
+  /** Инициатор отказа */
+  initiator?: ModelsRejectInitiator;
+  /** Причина отказа */
+  name?: string;
+}
+
 export interface FilesapimodelsFileView {
   applicant_id?: string;
   id?: string;
@@ -748,6 +761,25 @@ export enum ModelsSearchStatusType {
   SearchStatusAcceptedJobOffer = "accepted_job_offer",
 }
 
+export enum ModelsSpaceSettingCode {
+  YandexGPTPromtSetting = "ya_gpt_promt",
+  HhClientIDSetting = "HHClientID",
+  HhClientSecretSetting = "HHClientSecret",
+  AvitoClientIDSetting = "AvitoClientID",
+  AvitoClientSecretSetting = "AvitoClientSecret",
+  SpaceSenderEmail = "SpaceSenderEmail",
+}
+
+export enum ModelsTemplateType {
+  TplMail = "Письмо",
+  TplApplicantNote = "Комментарий к кандидату",
+  TplRejectNote = "Комментарий к отказу",
+  TplReminder = "Напоминание",
+  TplRatingNote = "Комментарий к оценке",
+  TplSms = "SMS",
+  TplOffer = "Оффер",
+}
+
 export enum ModelsTripReadinessType {
   TripReadinessReady = "ready",
   TripReadinessSometimes = "sometimes",
@@ -800,10 +832,27 @@ export enum ModelsVacancyStatus {
   VacancyStatusClosed = "Закрыта",
 }
 
-export interface MsgtemplateapimodelsMsgTemplateView {
-  id?: string;
+export interface MsgtemplateapimodelsMsgTemplateData {
+  /** Текст шаблона с переменными шаблона (Пример шаблона: "Вакансия {{.VacancyName}} более не актуальна, приходи еще, {{.SelfName}}") */
   message?: string;
+  /** Название шаблона */
   name?: string;
+  /** Тип шаблона */
+  template_type?: ModelsTemplateType;
+  /** Тема/заголовок письма с переменными шаблона (Пример шаблона: "Информация от {{.CompanyName}}") */
+  title?: string;
+}
+
+export interface MsgtemplateapimodelsMsgTemplateView {
+  /** Идентификатор шаблона */
+  id?: string;
+  /** Текст шаблона с переменными шаблона (Пример шаблона: "Вакансия {{.VacancyName}} более не актуальна, приходи еще, {{.SelfName}}") */
+  message?: string;
+  /** Название шаблона */
+  name?: string;
+  /** Тип шаблона */
+  template_type?: ModelsTemplateType;
+  /** Тема/заголовок письма с переменными шаблона (Пример шаблона: "Информация от {{.CompanyName}}") */
   title?: string;
 }
 
@@ -812,6 +861,13 @@ export interface MsgtemplateapimodelsSendMessage {
   applicant_id?: string;
   /** ID шаблона сообщения, которое нужно отправить */
   msg_template_id?: string;
+}
+
+export interface MsgtemplateapimodelsTemplateItem {
+  /** Значение для отображения пользователю */
+  name?: string;
+  /** Переменная шаблона */
+  value?: string;
 }
 
 export interface NegotiationapimodelsCommentData {
@@ -907,7 +963,7 @@ export interface SpaceapimodelsProfileData {
 
 export interface SpaceapimodelsSpaceSettingView {
   /** Код настройки */
-  code?: string;
+  code?: ModelsSpaceSettingCode;
   /** идентификтор Настройки */
   id?: string;
   /** Название настройки */
@@ -938,6 +994,17 @@ export interface SpaceapimodelsSpaceUser {
   space_id?: string;
   /** Текст подписи */
   text_sign?: string;
+}
+
+export interface SpaceapimodelsSpaceUserFilter {
+  /** Записей на странице */
+  limit?: number;
+  /** Страница (1,2,3..) */
+  page?: number;
+  /** Поиск */
+  search?: string;
+  /** Сортировка */
+  sort?: SpaceapimodelsSpaceUserSort;
 }
 
 export interface SpaceapimodelsSpaceUserProfileData {
@@ -982,6 +1049,15 @@ export interface SpaceapimodelsSpaceUserProfileView {
   text_sign?: string;
   /** Персональная подпись */
   use_personal_sign?: boolean;
+}
+
+export interface SpaceapimodelsSpaceUserSort {
+  /** Email, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  email_desc?: boolean;
+  /** Имя, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  fio_desc?: boolean;
+  /** Роль добавления, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  role_desc?: boolean;
 }
 
 export interface SpaceapimodelsUpdateSpaceSettingValue {

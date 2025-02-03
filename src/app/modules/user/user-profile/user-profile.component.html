@@ -20,48 +20,55 @@
     <div class="flex justify-between items-center mt-6">
       <div class="flex items-center gap-4">
         <div class="photo-upload">
-          <img src="assets/icons/ic-add-a-photo.svg" class="photo-icon" alt="Добавить фото">
-        </div>
+          <mat-icon
+            svgIcon="add-a-photo"
+            class="text-[var(--link-default)] text-[20px] !w-5 !h-5"
+            aria-label="Добавить фото">
+          </mat-icon>
 
+        </div>
       </div>
-      <button mat-flat-button class="btn-secondary" (click)="openChangePasswordModal()"> <span>Изменить пароль</span></button>
+      <button mat-flat-button class="btn-secondary" (click)="openChangePasswordModal()">Изменить пароль</button>
     </div>
 
     <!-- Форма -->
-    <form [formGroup]="profileForm" >
+    <form [formGroup]="profileForm">
       <div class="mt-6 grid grid-cols-3 gap-x-4 gap-y-2">
-      <mat-form-field appearance="outline">
-        <mat-label>Фамилия</mat-label>
-        <input matInput formControlName="lastName">
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Фамилия</mat-label>
+          <input matInput formControlName="lastName">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Имя</mat-label>
-        <input matInput formControlName="firstName">
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Имя</mat-label>
+          <input matInput formControlName="firstName">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Должность</mat-label>
-        <input matInput formControlName="position">
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Должность</mat-label>
+          <input matInput formControlName="position">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Телефон</mat-label>
-        <input matInput formControlName="phone">
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Телефон</mat-label>
+          <input matInput formControlName="phone">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Внутренний номер</mat-label>
-        <mat-select formControlName="internalNumber">
-          <mat-option *ngFor="let number of internalNumbers" [value]="number">{{ number }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Внутренний номер</mat-label>
+          <mat-select formControlName="internalNumber">
+            @for (number of internalNumbers; track number) {
+              <mat-option [value]="number">{{ number }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
       </div>
+
       <!-- Переключатель "Персональная подпись" -->
       <div class="flex items-center mt-2">
         <mat-slide-toggle formControlName="personalSignature" class="mr-2 mat-mdc-slide-toggle"></mat-slide-toggle>
@@ -85,8 +92,5 @@
         </button>
       </div>
     </form>
-
-
-
   </div>
 </div>

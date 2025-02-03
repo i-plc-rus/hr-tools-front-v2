@@ -33,22 +33,11 @@ import {CommonModule} from '@angular/common';
   templateUrl: './change-password-modal.component.html',
   styleUrl: './change-password-modal.component.scss'
 })
-export class ChangePasswordModalComponent implements OnInit{
+export class ChangePasswordModalComponent implements OnInit {
   @Input() user?: User;
   onSubmit = new EventEmitter<boolean>();
   isLoading = false;
-
-  constructor(
-    private modalService: UsersModalService,
-    private api: ApiService,
-    private cdRef: ChangeDetectorRef
-
-  ) {}
-
-  ngOnInit() {
-    console.log('Форма создана:', this.user);
-  }
-
+  currentPasswordError: string | null = null;
 
   changePasswordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
@@ -64,8 +53,15 @@ export class ChangePasswordModalComponent implements OnInit{
     ]),
   });
 
+  constructor(
+    private modalService: UsersModalService,
+    private api: ApiService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-  currentPasswordError: string | null = null;
+  ngOnInit() {
+    console.log('Форма создана:', this.user);
+  }
 
   savePassword() {
     if (this.changePasswordForm.valid) {
@@ -74,7 +70,7 @@ export class ChangePasswordModalComponent implements OnInit{
 
       const requestBody: SpaceapimodelsPasswordChange = {
         current_password: this.changePasswordForm.value.currentPassword!,
-        new_password: this.changePasswordForm.value.newPassword!
+        new_password: this.changePasswordForm.value.newPassword!,
       };
 
       this.api.v1UserProfileChangePasswordUpdate(requestBody).subscribe({
@@ -86,14 +82,13 @@ export class ChangePasswordModalComponent implements OnInit{
         error: (error) => {
           console.error('Ошибка изменения пароля:', error);
           this.isLoading = false;
-
           //ToDo: проверка на код ошибки
-            this.currentPasswordError = "Текущий пароль указан неверно. Попробуйте снова.";
-          }
+          this.currentPasswordError =
+            'Текущий пароль указан неверно. Попробуйте снова.';
+        },
       });
     }
   }
-
 
   closeModal() {
     this.modalService.closeModal();

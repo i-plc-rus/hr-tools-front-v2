@@ -38,13 +38,12 @@ import {UsersModalService} from '../../../services/users-modal.service';
     MatFormFieldModule,
     MatInputModule,
     QuillEditorComponent,
-    MatMenuItem,
+    MatMenuItem
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })
-export class UserProfileComponent implements OnInit{
-
+export class UserProfileComponent implements OnInit {
   internalNumbers: number[] = [1001, 1002, 1003, 1004];
 
   profileForm = new FormGroup({
@@ -61,45 +60,33 @@ export class UserProfileComponent implements OnInit{
   userId: string | null = null;
 
   quillConfig = {
-    toolbar: [
-      ['bold', 'italic', 'underline'] // Жирный, курсив, подчёркнутый
-    ]
+    toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
   };
 
-
-  constructor(private api: ApiService, private modalService: UsersModalService,
-  ) {}
+  constructor(private api: ApiService, private modalService: UsersModalService) {}
 
   ngOnInit(): void {
     this.api.v1AuthMeList().subscribe({
       next: (response) => {
         const httpResponse = response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>;
-
         if (httpResponse.body && httpResponse.body.data) {
           const user = httpResponse.body.data;
-
           this.userId = user.id || null;
-
           this.profileForm.patchValue({
             email: user.email || '',
             firstName: user.first_name || '',
             lastName: user.last_name || '',
             phone: user.phone_number || '',
             position: user.job_title_id || '',
-            internalNumber: user.text_sign || '',
+            internalNumber: user.text_sign || ''
           });
         } else {
           console.warn('Данные отсутствуют в ответе.');
         }
       },
-      error: (err) => {
-        console.error('Ошибка получения данных пользователя:', err);
-      }
+      error: (err) => console.error('Ошибка получения данных пользователя:', err)
     });
   }
-
-
-
 
   saveProfile(): void {
     if (this.profileForm.valid && this.userId) {
@@ -109,7 +96,7 @@ export class UserProfileComponent implements OnInit{
         last_name: this.profileForm.value.lastName!,
         phone_number: this.profileForm.value.phone!,
         job_title_id: this.profileForm.value.position!,
-        text_sign: this.profileForm.value.internalNumber!,
+        text_sign: this.profileForm.value.internalNumber!
       };
 
       this.api.v1UsersUpdate(this.userId, updateData).subscribe({
@@ -117,9 +104,7 @@ export class UserProfileComponent implements OnInit{
           console.log('Данные пользователя успешно сохранены.');
           this.profileForm.markAsPristine();
         },
-        error: (err) => {
-          console.error('Ошибка сохранения данных пользователя:', err);
-        }
+        error: (err) => console.error('Ошибка сохранения данных пользователя:', err)
       });
     } else {
       console.warn('Форма невалидна или отсутствует ID пользователя.');
@@ -127,9 +112,7 @@ export class UserProfileComponent implements OnInit{
   }
 
   openChangePasswordModal(): void {
-    this.modalService.changePasswordModal().subscribe(() => {
-      console.log('Пароль успешно изменен');
-    });
+    this.modalService.changePasswordModal().subscribe(() => console.log('Пароль успешно изменен'));
   }
-
 }
+

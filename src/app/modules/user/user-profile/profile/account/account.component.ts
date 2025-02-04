@@ -1,25 +1,38 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
-import { MatInputModule, MatInput } from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
-import { MatSelect, MatOption } from '@angular/material/select';
-import { ApiService } from '../../../../../api/Api';
-import { UsersModalService } from '../../../../../services/users-modal.service';
-import { HttpResponse } from '@angular/common/http';
-import { DictapimodelsCompanyView, DictapimodelsJobTitleData, SpaceapimodelsSpaceUser } from '../../../../../api/data-contracts';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ApiService} from '../../../../../api/Api';
+import {UsersModalService} from '../../../../../services/users-modal.service';
+import {HttpResponse} from '@angular/common/http';
+import {DictapimodelsCompanyView, SpaceapimodelsSpaceUser} from '../../../../../api/data-contracts';
+import {MatButton} from '@angular/material/button';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatOption} from '@angular/material/core';
+import {MatSelect} from '@angular/material/select';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {QuillEditorComponent} from 'ngx-quill';
 
 @Component({
-  selector: 'app-personal-info',
+  selector: 'app-account',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButton, MatSelect, MatOption
+    FormsModule,
+    MatButton,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatSlideToggle,
+    QuillEditorComponent,
+    ReactiveFormsModule
   ],
-  templateUrl: './personal-info.component.html',
-  styleUrls: ['./personal-info.component.scss']
+  templateUrl: './account.component.html',
+  styleUrl: './account.component.scss'
 })
-export class UserProfileComponent implements OnInit {
+export class AccountComponent implements OnInit{
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
   profileForm = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
@@ -35,6 +48,9 @@ export class UserProfileComponent implements OnInit {
   userPhoto: string | null = null;
   userPhotoPreview: string | null = null;
   jobTitles: { id: string; name: string }[] = [];
+  quillConfig = {
+    toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
+  };
 
   constructor(private api: ApiService, private modalService: UsersModalService) {}
 

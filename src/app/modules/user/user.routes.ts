@@ -13,7 +13,12 @@ import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component'
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
-import {UserProfileComponent} from './user-profile/components/personal-info/personal-info.component';
+import {UserProfileComponent} from './user-profile/user-profile';
+import {AccountComponent} from './user-profile/profile/account/account.component';
+import {ExternalAccountsComponent} from './user-profile/profile/external-accounts/external-accounts.component';
+import {NotificationsComponent} from './user-profile/profile/notifications/notifications.component';
+import {TemplatesComponent} from './user-profile/profile/templates/templates.component';
+import {InterfaceSettingsComponent} from './user-profile/profile/interface-settings/interface-settings.component';
 
 export const routes: Routes = [
   {
@@ -140,18 +145,16 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
+        component: UserProfileComponent,
         children: [
-          {
-            path: 'list',
-            component: UserProfileComponent,
-          },
-          {
-            path: '**',
-            redirectTo: 'list'
-          }
-        ],
+          { path: 'account', component: AccountComponent },
+          { path: 'external-accounts', component: ExternalAccountsComponent },
+          { path: 'notifications', component: NotificationsComponent },
+          { path: 'templates', component: TemplatesComponent },
+          { path: 'interface-settings', component: InterfaceSettingsComponent },
+          { path: '**', redirectTo: 'account' }
+        ]
       },
-
       {
         path: '**',
         redirectTo: 'vacancy'

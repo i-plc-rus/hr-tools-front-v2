@@ -583,6 +583,7 @@ export interface DictapimodelsRejectReasonView {
 
 export interface FilesapimodelsFileView {
   applicant_id?: string;
+  content_type?: string;
   id?: string;
   name?: string;
   space_id?: string;

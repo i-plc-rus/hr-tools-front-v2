@@ -4,11 +4,13 @@ import {ApiService} from '../../../../api/Api';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
 import {
   ApplicantapimodelsMultiRejectRequest,
-  ApplicantapimodelsRejectReasons,
   ApplicantapimodelsRejectRequest,
   ModelsRejectInitiator,
+  DictapimodelsRejectReasonFind,
+  DictapimodelsRejectReasonView
 } from '../../../../api/data-contracts';
 import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'app-reject-candidate-modal',
@@ -21,12 +23,11 @@ export class RejectCandidateModalComponent implements OnInit {
   isLoading = false;
 
   rejectForm = new FormGroup({
-    initiator: new FormControl<ModelsRejectInitiator | undefined>(undefined, [Validators.required]),
+    initiator: new FormControl<ModelsRejectInitiator>(ModelsRejectInitiator.ApplicantReject, [Validators.required]),
     reason: new FormControl('', [Validators.required]),
   });
   rejectInitiatorTypes = Object.values(ModelsRejectInitiator);
-  rejectReasonList?: ApplicantapimodelsRejectReasons;
-  currentReasonList: string[] = [];
+  rejectReasonList?: DictapimodelsRejectReasonView[];
 
   constructor(
     private modalService: CandidateModalService,
@@ -34,23 +35,12 @@ export class RejectCandidateModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getRejectList();
-    this.rejectForm.controls.initiator.valueChanges.subscribe((value) => {
-      switch (value) {
-        case ModelsRejectInitiator.HrReject:
-          this.currentReasonList = this.rejectReasonList?.hr_reasons ?? [];
-          break;
-        case ModelsRejectInitiator.HeadReject:
-          this.currentReasonList = this.rejectReasonList?.head_reasons ?? [];
-          break;
-        case ModelsRejectInitiator.ApplicantReject:
-          this.currentReasonList = this.rejectReasonList?.applicant_reasons ?? [];
-          break;
-        default:
-          this.currentReasonList = [];
-          break;
-      }
-    });
+    this.getRejectList(this.rejectListBody);
+    this.rejectForm.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.getRejectList(this.rejectListBody);
+      });
   }
 
   submit() {
@@ -81,24 +71,28 @@ export class RejectCandidateModalComponent implements OnInit {
     })
   }
 
-
   closeModal() {
     this.modalService.closeModal();
   }
 
-  getRejectList() {
-    this.isLoading = true;
-    this.api.v1SpaceApplicantRejectListCreate({observe: 'response'}).subscribe({
+  getRejectList(body: DictapimodelsRejectReasonFind) {
+    this.api.v1DictRejectReasonFindCreate(body, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.rejectReasonList = data.body.data;
         }
-        this.isLoading = false;
       },
       error: (error) => {
-        this.isLoading = false;
         console.log(error);
       },
     })
   }
+
+  get rejectListBody(): DictapimodelsRejectReasonFind {
+    return {
+      initiator: this.rejectForm.controls.initiator.value || undefined,
+      search: this.rejectForm.controls.reason.value || '',
+    }
+  }
+
 }

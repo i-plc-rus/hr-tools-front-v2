@@ -1,10 +1,51 @@
-<mat-card class="notifications-container">
-  <div class="push-settings">
+<div class="notifications-container">
+  <!-- Плашка Push-уведомлений -->
+  <mat-card class="push-settings mt-4">
     <h3>Push-уведомления</h3>
     <p>Подключите push-уведомления, чтобы быть в курсе событий, даже когда вкладка HR-tools закрыта</p>
     <mat-radio-group>
       <mat-radio-button value="on">Вкл.</mat-radio-button>
       <mat-radio-button value="off">Выкл.</mat-radio-button>
     </mat-radio-group>
+  </mat-card>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="notifications" class="mat-elevation-z1 full-width">
+
+      <!-- Событие -->
+      <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef class="text-left"> Событие </th>
+        <td mat-cell *matCellDef="let element" class="text-left"> {{ element.event }} </td>
+      </ng-container>
+
+      <!-- Системные -->
+      <ng-container matColumnDef="system">
+        <th mat-header-cell *matHeaderCellDef> Системные </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.system" disabled></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.email" disabled></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Telegram -->
+      <ng-container matColumnDef="telegram">
+        <th mat-header-cell *matHeaderCellDef> Telegram </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.telegram" disabled></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Заголовок таблицы -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Ряд данных -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </div>
-</mat-card>
+</div>

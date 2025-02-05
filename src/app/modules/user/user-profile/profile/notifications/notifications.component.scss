@@ -1,0 +1,71 @@
+.notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.push-settings {
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--background-main);
+  box-shadow: var(--mat-elevation-2);
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+p {
+  font-size: 14px;
+  color: var(--text-alter);
+}
+
+mat-radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+.table-container {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--background-alter);
+  padding: 16px;
+  text-align: left;
+  color: var(--text-main);
+}
+
+td {
+  font-size: 14px;
+  padding: 16px;
+  border-bottom: 1px solid var(--outline);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mat-checkbox {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-checkbox-disabled .mat-checkbox-frame {
+  border-color: var(--outline) !important;
+}

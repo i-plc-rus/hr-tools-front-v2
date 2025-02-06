@@ -762,6 +762,20 @@ export enum ModelsSearchStatusType {
   SearchStatusAcceptedJobOffer = "accepted_job_offer",
 }
 
+export enum ModelsSpacePushSettingCode {
+  PushLicenseExpire = "PushLicenseExpire",
+  PushVRClosed = "PushVRClosed",
+  PushVRApproved = "PushVRApproved",
+  PushVRRejected = "PushVRRejected",
+  PushVacancyResponsible = "PushVacancyResponsible",
+  PushVacancyNewStatus = "PushVacancyNewStatus",
+  PushVacancyPublished = "PushVacancyPublished",
+  PushApplicantNegotiation = "PushApplicantNegotiation",
+  PushApplicantNote = "PushApplicantNote",
+  PushApplicantMsg = "PushApplicantMsg",
+  PushApplicantNewStage = "PushApplicantNewStage",
+}
+
 export enum ModelsSpaceSettingCode {
   YandexGPTPromtSetting = "ya_gpt_promt",
   HhClientIDSetting = "HHClientID",
@@ -960,6 +974,38 @@ export interface SpaceapimodelsProfileData {
   time_zone?: string;
   /** Адрес сайта */
   web?: string;
+}
+
+export interface SpaceapimodelsPushSettingData {
+  /** Код события */
+  code?: ModelsSpacePushSettingCode;
+  /** Значение настроек пуша */
+  value?: SpaceapimodelsPushSettingValue;
+}
+
+export interface SpaceapimodelsPushSettingValue {
+  /** email уведомления о событии (вкл/выкл) */
+  email?: boolean;
+  /** Системные уведомления о событии (вкл/выкл) */
+  system?: boolean;
+  /** telegram уведомления о событии (вкл/выкл) */
+  tg?: boolean;
+}
+
+export interface SpaceapimodelsPushSettingView {
+  /** Код события */
+  code?: ModelsSpacePushSettingCode;
+  /** Название события */
+  name?: string;
+  /** Значение настроек пуша */
+  value?: SpaceapimodelsPushSettingValue;
+}
+
+export interface SpaceapimodelsPushSettings {
+  /** Push-уведомления включены */
+  is_active?: boolean;
+  /** Список событий */
+  settings?: SpaceapimodelsPushSettingView[];
 }
 
 export interface SpaceapimodelsSpaceSettingView {
@@ -1575,4 +1621,15 @@ export interface VacancyapimodelsVrFilter {
 export interface VacancyapimodelsVrSort {
   /** порядок сортировки false = ASC/ true = DESC */
   created_at_desc?: boolean;
+}
+
+export interface WsmodelsServerMessage {
+  /** код события */
+  code?: string;
+  /** текст события */
+  msg?: string;
+  /** время события */
+  time?: string;
+  /** заголовок события */
+  title?: string;
 }

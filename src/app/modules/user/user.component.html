@@ -6,25 +6,17 @@
       <div #addMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="addMenu"></div>
     </div>
     <mat-menu #addMenu="matMenu" xPosition="after">
-      <button mat-menu-item [matMenuTriggerFor]="createRequestMenu">
+      <button mat-menu-item [routerLink]="['/user', 'request', 'create']">
         <mat-icon svgIcon="request"></mat-icon>
         Создать заявку
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item [routerLink]="['/user', 'vacancy', 'create']">
         <mat-icon svgIcon="add-bag"></mat-icon>
         Создать вакансию
       </button>
-      <button mat-menu-item [routerLink]="['/user', 'add-candidate']">
+      <button mat-menu-item [routerLink]="['/user', 'candidates', 'list']" [queryParams]="{ type: 'create' }">
         <mat-icon svgIcon="add-person"></mat-icon>
         Создать кандидата
-      </button>
-    </mat-menu>
-    <mat-menu #createRequestMenu="matMenu">
-      <button mat-menu-item>
-        Массовая
-      </button>
-      <button mat-menu-item>
-        Профессиональная
       </button>
     </mat-menu>
     <div class="pt-6 flex flex-col items-center gap-y-4">

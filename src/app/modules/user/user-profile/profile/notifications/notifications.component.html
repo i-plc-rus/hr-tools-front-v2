@@ -3,14 +3,15 @@
   <mat-card class="push-settings mt-4">
     <h3>Push-уведомления</h3>
     <p>Подключите push-уведомления, чтобы быть в курсе событий, даже когда вкладка HR-tools закрыта</p>
-    <mat-radio-group>
-      <mat-radio-button value="on">Вкл.</mat-radio-button>
-      <mat-radio-button value="off">Выкл.</mat-radio-button>
+    <mat-radio-group [value]="pushEnabled()" (change)="togglePushNotifications($event.value)">
+      <mat-radio-button [value]="true">Вкл.</mat-radio-button>
+      <mat-radio-button [value]="false">Выкл.</mat-radio-button>
     </mat-radio-group>
   </mat-card>
 
-  <div class="table-container">
-    <table mat-table [dataSource]="notifications" class="mat-elevation-z1 full-width">
+  <!-- Таблица уведомлений -->
+  <div class="table-container mt-4">
+    <table mat-table [dataSource]="notifications()" class="mat-elevation-z1 full-width" [trackBy]="trackByCode">
 
       <!-- Событие -->
       <ng-container matColumnDef="event">
@@ -18,27 +19,30 @@
         <td mat-cell *matCellDef="let element" class="text-left"> {{ element.event }} </td>
       </ng-container>
 
-      <!-- Системные -->
+      <!-- Системные уведомления -->
       <ng-container matColumnDef="system">
         <th mat-header-cell *matHeaderCellDef> Системные </th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.system" disabled></mat-checkbox>
+          <mat-checkbox [checked]="element.system" (change)="updateNotification(element.code, 'system', $event)">
+          </mat-checkbox>
         </td>
       </ng-container>
 
-      <!-- Email -->
+      <!-- Email уведомления -->
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef> Email </th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.email" disabled></mat-checkbox>
+          <mat-checkbox [checked]="element.email" (change)="updateNotification(element.code, 'email', $event)">
+          </mat-checkbox>
         </td>
       </ng-container>
 
-      <!-- Telegram -->
+      <!-- Telegram уведомления -->
       <ng-container matColumnDef="telegram">
         <th mat-header-cell *matHeaderCellDef> Telegram </th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.telegram" disabled></mat-checkbox>
+          <mat-checkbox [checked]="element.telegram" (change)="updateNotification(element.code, 'telegram', $event)">
+          </mat-checkbox>
         </td>
       </ng-container>
 
@@ -46,6 +50,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <!-- Ряд данных -->
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
     </table>
   </div>
 </div>

@@ -1,0 +1,11 @@
+.modal-overlay {
+  @apply flex flex-col justify-center items-stretch py-16 px-2 lg:p-16;
+}
+
+.modal-content {
+  @apply flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6;
+}
+  
+.modal-actions {
+  @apply flex flex-col items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row lg:max-w-max; 
+}

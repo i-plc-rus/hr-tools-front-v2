@@ -22,6 +22,7 @@ export class VacancyTeamComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (!this.vacancyId) return;
     this.getTeamList();
     this.getUsersList();
     this.searchUser.valueChanges

@@ -184,6 +184,30 @@
           }
         </mat-select>
       </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Тип занятости</mat-label>
+        <mat-select formControlName="employment">
+          @for (employmentType of employmentTypes; track $index) {
+            <mat-option [value]="employmentType.value">{{ employmentType.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Формат работы</mat-label>
+        <mat-select formControlName="schedule">
+          @for (scheduleType of scheduleTypes; track $index) {
+            <mat-option [value]="scheduleType.value">{{ scheduleType.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Опыт работы</mat-label>
+        <mat-select formControlName="experience">
+          @for (experienceType of experienceTypes; track $index) {
+            <mat-option [value]="experienceType.value">{{ experienceType.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="flex flex-col w-full lg:w-1/2">
       <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности, условия</label>
@@ -191,7 +215,7 @@
         formControlName="requirements"
         (onActionBtnClick)="openGenerateModal()"
         class="w-full mb-5"
-        height="158px"></app-text-editor>
+        height="386px"></app-text-editor>
     </div>
   </div>
 

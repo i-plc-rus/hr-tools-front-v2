@@ -22,7 +22,7 @@ import {CellCandidateNameComponent} from '../../../components/cell-candidate-nam
 import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ApplicantView} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes} from '../user-consts';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
@@ -163,9 +163,16 @@ export class СandidateListComponent {
     private modalService: CandidateModalService,
     private api: ApiService,
     private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   onGridReady(params: GridReadyEvent) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['type'] === 'create') {
+        this.openAddApplicantModal();
+        this.router.navigate([], { queryParams: {}, replaceUrl: true, relativeTo: this.activatedRoute });
+      }
+    });
     this.gridApi = params.api;
     this.getApplicants();
     this.setFormListeners();

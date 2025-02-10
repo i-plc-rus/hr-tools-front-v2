@@ -70,6 +70,8 @@ import {
   SpaceapimodelsCreateUser,
   SpaceapimodelsPasswordChange,
   SpaceapimodelsProfileData,
+  SpaceapimodelsPushSettingData,
+  SpaceapimodelsPushSettings,
   SpaceapimodelsSpaceSettingView,
   SpaceapimodelsSpaceUser,
   SpaceapimodelsSpaceUserFilter,
@@ -2968,7 +2970,7 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsExtVacancyInfo;
       }
-    >("PUT", this.baseUrl + `/api/v1/space/ext/avito/${id}/status`, {
+    >("GET", this.baseUrl + `/api/v1/space/ext/avito/${id}/status`, {
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -3144,7 +3146,7 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsExtVacancyInfo;
       }
-    >("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/status`, {
+    >("GET", this.baseUrl + `/api/v1/space/ext/hh/${id}/status`, {
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -5014,6 +5016,105 @@ export class ApiService {
   ): Observable<HttpResponse<void> | void> {
     return this.http.request<void>("POST", this.baseUrl + `/api/v1/user_profile/photo`, {
       body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Push уведомления - список событий
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfilePushSettingsList
+   * @summary Push уведомления - список событий
+   * @request GET:/api/v1/user_profile/push_settings
+   */
+  public v1UserProfilePushSettingsList(options?: RequestOptions): Observable<
+    ApimodelsResponse & {
+      data?: SpaceapimodelsPushSettings;
+    }
+  >;
+  public v1UserProfilePushSettingsList(options?: RequestOptions & { observe: "response" }): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsPushSettings;
+      }
+    >
+  >;
+  public v1UserProfilePushSettingsList(
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SpaceapimodelsPushSettings;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SpaceapimodelsPushSettings;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SpaceapimodelsPushSettings;
+      }
+    >("GET", this.baseUrl + `/api/v1/user_profile/push_settings`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Push уведомления - настройка уведомлений по событию
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfilePushSettingsUpdate
+   * @summary Push уведомления - настройка уведомлений по событию
+   * @request PUT:/api/v1/user_profile/push_settings
+   */
+  public v1UserProfilePushSettingsUpdate(
+    body: SpaceapimodelsPushSettingData,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1UserProfilePushSettingsUpdate(
+    body: SpaceapimodelsPushSettingData,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1UserProfilePushSettingsUpdate(
+    body: SpaceapimodelsPushSettingData,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile/push_settings`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Push уведомления - настройка отправки
+   *
+   * @tags Профиль пользователя space
+   * @name V1UserProfilePushSettingsEnableUpdate
+   * @summary Push уведомления - настройка отправки
+   * @request PUT:/api/v1/user_profile/push_settings/enable
+   */
+  public v1UserProfilePushSettingsEnableUpdate(
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1UserProfilePushSettingsEnableUpdate(
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1UserProfilePushSettingsEnableUpdate(
+    query?: {
+      /** выбрано/не выбрано */
+      set?: boolean;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile/push_settings/enable`, {
+      params: query,
       ...(options as unknown as { observe: "response" }),
     });
   }

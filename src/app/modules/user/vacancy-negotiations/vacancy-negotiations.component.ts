@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {
   ModelsApplicantSource,
@@ -15,17 +15,18 @@ import {
   ModelsTripReadinessType,
   DbmodelsNegotiationFilter,
   ModelsNegotiationStatus,
+  NegotiationapimodelsNegotiationView,
 } from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {NegotiationView} from '../../../models/Negotiation';
 import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
-import {MockDataService} from '../../../services/mock-data.service';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
 import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
 import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 
 @Component({
@@ -33,11 +34,11 @@ import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, la
   templateUrl: './vacancy-negotiations.component.html',
   styleUrl: './vacancy-negotiations.component.scss',
 })
-export class VacancyNegotiationsComponent {
+export class VacancyNegotiationsComponent implements OnInit {
   // фильтр
   filterForm = new FormGroup({
     /** Водительсике права */
-    driver_licence: new FormControl<ModelsDriverLicenseType[] | undefined>(undefined),
+    driver_licence: new FormControl<ModelsDriverLicenseType[]>([]),
     /** Образование */
     education: new FormControl<ModelsEducationType | undefined>(undefined),
     /** Опыт */
@@ -67,8 +68,8 @@ export class VacancyNegotiationsComponent {
     /** Повышение квалификации, курсы */
     advanced_training: new FormControl<boolean | undefined>(undefined),
     language: new FormControl<string>(''),
-    city: new FormControl(''),
-    citizenship: new FormControl(''),
+    city: new FormControl('', {nonNullable: true}),
+    citizenship: new FormControl('', {nonNullable: true}),
     /** поиск по ФИО/телефон/емайл */
     search: new FormControl(''),
     vacancy_id: new FormControl(''),
@@ -90,8 +91,9 @@ export class VacancyNegotiationsComponent {
   employmentTypes = employmentTypes;
   tripReadinessTypes = tripReadinessTypes;
   languageLevelTypes = languageLevelTypes;
-  searchValue: string = '';
+  searchValue = new FormControl('');
   vacancyName: string = '';
+  vacancyId: string = '';
 
   //отклики
   private gridApi!: GridApi<NegotiationView>;
@@ -184,14 +186,16 @@ export class VacancyNegotiationsComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private mockApi: MockDataService,
     private api: ApiService,
     private router: Router
   ) { }
 
+  ngOnInit(): void {
+    this.setFilterFormListeners();
+  }
+
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    this.getNegotiations();
     this.activatedRoute.params.subscribe(params => {
       this.getVacancyById(params['id']);
     })
@@ -212,12 +216,21 @@ export class VacancyNegotiationsComponent {
     this.gridApi.setGridOption('columnDefs', this.colDefs);
   }
 
+  setFilterFormListeners() {
+    this.filterForm.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.getNegotiations();
+      });
+  }
+
   getNegotiations() {
     const filter = this.filterForm.value as DbmodelsNegotiationFilter;
     this.gridApi.setGridOption('loading', true);
-    this.mockApi.getNegotiations().subscribe({
+    this.api.v1SpaceNegotiationListCreate(filter, {observe: 'response'}).subscribe({
       next: (res) => {
-        this.negotiationsList = res;
+        if (res.body?.data)
+          this.negotiationsList = res.body?.data.map((negotiation: NegotiationapimodelsNegotiationView) => new NegotiationView(negotiation));
         this.gridApi.setGridOption('rowData', this.negotiationsList);
         this.gridApi.setGridOption('loading', false);
 
@@ -232,8 +245,12 @@ export class VacancyNegotiationsComponent {
   getVacancyById(id: string) {
     this.api.v1SpaceVacancyDetail(id, {observe: 'response'}).subscribe({
       next: (data) => {
-        if (data.body?.data)
+        if (data.body?.data) {
           this.vacancyName = data.body.data.vacancy_name;
+          this.vacancyId = data.body.data.id;
+          this.filterForm.controls.vacancy_id.setValue(this.vacancyId);
+          this.getNegotiations();
+        }
       },
       error: (error) => {
         console.log(error);
@@ -242,22 +259,28 @@ export class VacancyNegotiationsComponent {
   }
 
   changeStatus(id: string, status: ModelsNegotiationStatus) {
-    console.log('Смена статуса', id, status);
-    // this.api.v1SpaceNegotiationStatusChangeUpdate(id, {status}).subscribe({
-    //   next: (data) => {
-    //     this.getNegotiations();
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // });
+    this.api.v1SpaceNegotiationStatusChangeUpdate(id, {status}).subscribe({
+      next: () => {
+        this.getNegotiations();
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   onSearch() {
-    console.log(this.filterForm.value);
+    this.filterForm.controls.search.setValue(this.searchValue.value);
   }
 
   onBack() {
     this.router.navigate(['user', 'vacancy', 'list']);
+  }
+
+  onReset() {
+    if (!this.vacancyId) return;
+    this.filterForm.reset();
+    this.filterForm.controls.vacancy_id.setValue(this.vacancyId);
+    this.searchValue.reset();
   }
 }

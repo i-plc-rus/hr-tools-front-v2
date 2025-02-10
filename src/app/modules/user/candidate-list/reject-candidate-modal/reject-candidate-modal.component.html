@@ -2,16 +2,21 @@
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     @if (!isLoading) {
       <div class="flex flex-col gap-5">
-        <h1 class="text-[32px] text-center leading-[40px] m-0 p-0">{{applicants && applicants.length > 1 ? 'Отклонить кандидатов' : 'Причина отклонения'}}</h1>
+        <h1 class="text-[32px] text-center leading-[40px] m-0 p-0">
+          {{ applicants && applicants.length > 1 ? 'Отклонить кандидатов' : 'Причина отклонения' }}
+        </h1>
         @if (applicants && applicants.length > 1) {
           <div class="flex flex-wrap gap-4">
             @for (applicant of applicants; track $index) {
-              <app-cell-candidate-name [fio]="applicant.fio" [photo_url]="''" [applicantId]="applicant.id"></app-cell-candidate-name>
+              <app-cell-candidate-name
+                [fio]="applicant.fio"
+                [photo_url]="''"
+                [applicantId]="applicant.id"></app-cell-candidate-name>
             }
           </div>
         }
       </div>
-      
+
       <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-8">
         <form
           [formGroup]="rejectForm"
@@ -27,11 +32,19 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Причина</mat-label>
-            <mat-select formControlName="reason">
-              @for (reason of currentReasonList; track $index) {
-                <mat-option [value]="reason">{{ reason }}</mat-option>
+            <input matInput [matAutocomplete]="reasonAutocomplete" formControlName="reason" />
+            <mat-autocomplete autoActiveFirstOption #reasonAutocomplete="matAutocomplete">
+              @for (reason of rejectReasonList; track $index) {
+                <mat-option [value]="reason.name">
+                  {{ reason.name }}
+                </mat-option>
               }
-            </mat-select>
+            </mat-autocomplete>
+            @let reasonIdErrorRequired =
+              rejectForm.controls['reason'].hasError('required') && !rejectForm.controls['reason'].untouched;
+            @if (reasonIdErrorRequired) {
+              <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error" />
+            }
           </mat-form-field>
         </form>
 

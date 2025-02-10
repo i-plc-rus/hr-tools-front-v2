@@ -4,36 +4,143 @@
     Опубликуйте вакансию на работных сайтах и получайте отклики кандидатов в систему
   </span>
 </div>
-<div class="flex gap-10">
-  <div class="flex flex-col justify-end pb-6 rounded-2xl border-[2px] border-[var(--background-main)]">
-    <div class="flex justify-end">
-      <button mat-icon-button [matMenuTriggerFor]="attachContent" class="btn-primary">
-        <mat-icon>more_horiz</mat-icon>
-      </button>
-      <mat-menu #attachContent="matMenu">
-        <button mat-menu-item>
-          <mat-icon>attach_file</mat-icon>
-          <span>Привязать к существующей</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon svgIcon="forward" />
-          <span>Перейти к вакансии</span>
-        </button>
-      </mat-menu>
+@if (!isLoading) {
+  <div class="flex gap-10">
+    <div class="flex flex-col gap-4 w-72 justify-between">
+      <div
+        class="flex flex-col grow justify-start pb-6 pt-10 rounded-2xl border-[2px] relative"
+        [class]="errorMessageHH ? 'border-[var(--status-color-danger-bg)]' : 'border-[var(--background-main)]'">
+        @if (currentHHStatus === 'Опубликована' || currentHHStatus === 'Не размещена') {
+          <div class="absolute top-0 right-0">
+            <button mat-icon-button [matMenuTriggerFor]="attachHHContent" class="btn-primary">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #attachHHContent="matMenu">
+              @if (currentHHStatus === 'Не размещена') {
+                <button mat-menu-item (click)="openAttachDialog('hh')">
+                  <mat-icon>attach_file</mat-icon>
+                  <span>Привязать к существующей</span>
+                </button>
+              } @else {
+                <button mat-menu-item (click)="goToHHVacancy()">
+                  <mat-icon svgIcon="forward" />
+                  <span>Перейти к вакансии</span>
+                </button>
+              }
+            </mat-menu>
+          </div>
+        }
+        <div class="flex flex-col justify-center items-center px-12">
+          <mat-icon svgIcon="logo-hh" class="!w-14 !h-14 mb-2" />
+          <span class="text-[22px] leading-7 mb-4">Head Hunter</span>
+          @switch (currentHHStatus) {
+            @case ('Не подключена') {
+              <button mat-flat-button class="btn-secondary" (click)="connectHH()">Подключить</button>
+            }
+            @case ('Не размещена') {
+              <button mat-flat-button class="btn-primary" (click)="publishHHVacancy()">Опубликовать</button>
+            }
+            @case ('Опубликована') {
+              <div class="flex flex-col gap-4">
+                <button mat-flat-button class="btn-secondary-red" (click)="closeHHVacancy()">Снять с публикации</button>
+                <button mat-flat-button class="btn-secondary" (click)="updateHHVacancy()">Обновить вакансию</button>
+              </div>
+            }
+            @default {
+              <button mat-flat-button class="btn-secondary" disabled>
+                {{ currentHHStatus }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+      @if (errorMessageHH) {
+        <span class="text-[12px] leading-4 text-[var(--error-alter)] text-center">
+          {{ errorMessageHH }}
+        </span>
+      }
     </div>
-    <div class="flex flex-col justify-center items-center px-12">
-      <mat-icon svgIcon="logo-hh" class="!w-14 !h-14 mb-2" />
-      <span class="text-[22px] leading-7 mb-4">Head Hunter</span>
-      <button mat-flat-button  class="btn-primary">Опубликовать</button>
 
+    <div class="flex flex-col gap-4 w-72 justify-between">
+      <div
+        class="flex flex-col grow justify-start pb-6 pt-10 rounded-2xl border-[2px] relative"
+        [class]="errorMessageAvito ? 'border-[var(--status-color-danger-bg)]' : 'border-[var(--background-main)]'">
+        @if (currentAvitoStatus === 'Опубликована' || currentAvitoStatus === 'Не размещена') {
+          <div class="absolute top-0 right-0">
+            <button mat-icon-button [matMenuTriggerFor]="attachAvitoContent" class="btn-primary">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #attachAvitoContent="matMenu">
+              @if (currentAvitoStatus === 'Не размещена') {
+                <button mat-menu-item (click)="openAttachDialog('avito')">
+                  <mat-icon>attach_file</mat-icon>
+                  <span>Привязать к существующей</span>
+                </button>
+              } @else {
+                <button mat-menu-item (click)="goToAvitoVacancy()">
+                  <mat-icon svgIcon="forward" />
+                  <span>Перейти к вакансии</span>
+                </button>
+              }
+            </mat-menu>
+          </div>
+        }
+        <div class="flex flex-col justify-center items-center px-12">
+          <mat-icon svgIcon="logo-avito" class="!w-14 !h-14 mb-2" />
+          <span class="text-[22px] leading-7 mb-4">Avito</span>
+          @switch (currentAvitoStatus) {
+            @case ('Не подключена') {
+              <button mat-flat-button class="btn-secondary" (click)="connectAvito()">Подключить</button>
+            }
+            @case ('Не размещена') {
+              <button mat-flat-button class="btn-primary" (click)="publishAvitoVacancy()">Опубликовать</button>
+            }
+            @case ('Опубликована') {
+              <div class="flex flex-col gap-4">
+                <button mat-flat-button class="btn-secondary-red" (click)="closeAvitoVacancy()">
+                  Снять с публикации
+                </button>
+                <button mat-flat-button class="btn-secondary" (click)="updateAvitoVacancy()">Обновить вакансию</button>
+              </div>
+            }
+            @default {
+              <button mat-flat-button class="btn-secondary" disabled>
+                {{ currentAvitoStatus }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+      @if (errorMessageAvito) {
+        <span class="text-[12px] leading-4 text-[var(--error-alter)] text-center">
+          {{ errorMessageAvito }}
+        </span>
+      }
     </div>
   </div>
+}
+@else {
+  <app-loader />
+}
 
-  <div class="flex flex-col justify-end py-6 rounded-2xl border-[2px] border-[var(--background-main)]">
-    <div class="flex flex-col justify-center items-center px-12">
-      <mat-icon svgIcon="logo-avito" class="!w-14 !h-14 mb-2" />
-      <span class="text-[22px] leading-7 mb-4">Avito</span>
-      <button mat-flat-button class="btn-secondary">Подключить</button>
+<ng-template #attachDialog>
+  <div class="modal-overlay">
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Привязка к вакансии</h2>
+    <div class="modal-content">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>{{ attachDialogType === 'hh' ? 'Ссылка на вакансию' : 'Идентификатор вакансии' }}</mat-label>
+        <input matInput #attachInput />
+      </mat-form-field>
+      <div class="modal-actions">
+        <button mat-flat-button class="btn-secondary" (click)="closeDialog()">Отменить</button>
+        <button
+          mat-flat-button
+          class="btn-primary"
+          [disabled]="!attachInput.value"
+          (click)="attachVacancy(attachInput.value)">
+          Привязать
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>

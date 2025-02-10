@@ -1,0 +1,56 @@
+<div class="notifications-container">
+  <!-- Плашка Push-уведомлений -->
+  <mat-card class="push-settings mt-4">
+    <h3>Push-уведомления</h3>
+    <p>Подключите push-уведомления, чтобы быть в курсе событий, даже когда вкладка HR-tools закрыта</p>
+    <mat-radio-group [value]="pushEnabled()" (change)="togglePushNotifications($event.value)">
+      <mat-radio-button [value]="true">Вкл.</mat-radio-button>
+      <mat-radio-button [value]="false">Выкл.</mat-radio-button>
+    </mat-radio-group>
+  </mat-card>
+
+  <!-- Таблица уведомлений -->
+  <div class="table-container mt-4">
+    <table mat-table [dataSource]="notifications()" class="mat-elevation-z1 full-width" [trackBy]="trackByCode">
+
+      <!-- Событие -->
+      <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef class="text-left"> Событие </th>
+        <td mat-cell *matCellDef="let element" class="text-left"> {{ element.event }} </td>
+      </ng-container>
+
+      <!-- Системные уведомления -->
+      <ng-container matColumnDef="system">
+        <th mat-header-cell *matHeaderCellDef> Системные </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.system" (change)="updateNotification(element.code, 'system', $event)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Email уведомления -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.email" (change)="updateNotification(element.code, 'email', $event)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Telegram уведомления -->
+      <ng-container matColumnDef="telegram">
+        <th mat-header-cell *matHeaderCellDef> Telegram </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.telegram" (change)="updateNotification(element.code, 'telegram', $event)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Заголовок таблицы -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Ряд данных -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>
+</div>

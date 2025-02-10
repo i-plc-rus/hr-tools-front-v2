@@ -1,0 +1,87 @@
+
+<!-- Контейнер с фото и кнопкой -->
+<div class="flex justify-between items-center mt-6">
+  <div class="flex items-center gap-4">
+    <!-- Контейнер для фото -->
+    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2" (click)="fileInput.click()">
+      @if (userPhotoPreview) {
+        <img [src]="userPhotoPreview" alt="Фото профиля" class="w-full h-full object-cover">
+      } @else if (userPhoto) {
+        <img [src]="userPhoto" alt="Фото профиля" class="w-full h-full object-cover">
+      } @else {
+        <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
+          <mat-icon svgIcon="add-a-photo" class="text-gray-500 text-2xl"></mat-icon>
+        </div>
+      }
+
+      <!-- Скрытый input для загрузки фото -->
+      <input #fileInput type="file" (change)="uploadPhoto($event)" hidden accept="image/*">
+    </div>
+
+  </div>
+  <button mat-flat-button class="btn-secondary" (click)="openChangePasswordModal()">Изменить пароль</button>
+</div>
+
+
+<!-- Форма -->
+<form [formGroup]="profileForm">
+  <div class="mt-6 grid grid-cols-3 gap-x-4 gap-y-2">
+    <mat-form-field appearance="outline">
+      <mat-label>Фамилия</mat-label>
+      <input matInput formControlName="lastName">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Имя</mat-label>
+      <input matInput formControlName="firstName">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Должность</mat-label>
+      <mat-select formControlName="job_title_id">
+        @for (job of jobTitles; track job.id) {
+          <mat-option [value]="job.id">{{ job.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Телефон</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Внутренний номер</mat-label>
+      <input matInput formControlName="internalNumber" type="number" />
+    </mat-form-field>
+
+  </div>
+
+  <!-- Переключатель "Персональная подпись" -->
+  <div class="flex items-center mt-2">
+    <mat-slide-toggle formControlName="personalSignature" class="mr-2 mat-mdc-slide-toggle"></mat-slide-toggle>
+    <span class="text-gray-500 text-sm">Персональная подпись</span>
+  </div>
+
+  <!-- Текстовое поле с редактором -->
+  <div class="mt-4 w-full">
+    <mat-label>Текст подписи</mat-label>
+    <quill-editor formControlName="signatureText" [modules]="quillConfig" placeholder="" class="w-full h-60"></quill-editor>
+  </div>
+
+  <!-- Кнопка "Сохранить" -->
+  <div class="mt-4">
+    <button
+      mat-flat-button
+      class="btn-primary"
+      (click)="saveProfile()"
+      [disabled]="profileForm.pristine || profileForm.invalid">
+      Сохранить
+    </button>
+  </div>
+</form>

@@ -5126,16 +5126,42 @@ export class ApiService {
    * @summary Создать нового пользователя
    * @request POST:/api/v1/users
    */
-  public v1UsersCreate(body: SpaceapimodelsCreateUser, options?: RequestOptions): Observable<void>;
+  public v1UsersCreate(
+    body: SpaceapimodelsCreateUser,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: string;
+    }
+  >;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
     options?: RequestOptions & { observe: "response" },
-  ): Observable<HttpResponse<void>>;
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: string;
+      }
+    >
+  >;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/users`, {
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: string;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: string;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: string;
+      }
+    >("POST", this.baseUrl + `/api/v1/users`, {
       body: body,
       ...(options as unknown as { observe: "response" }),
     });

@@ -1,16 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit, signal} from '@angular/core';
-import {MatCard} from '@angular/material/card';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {MatCell, MatHeaderCell, MatTable, MatTableModule} from '@angular/material/table';
-import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
-import {ApiService} from '../../../../../api/Api';
-import {FormsModule} from '@angular/forms';
+import {Component, OnInit, signal} from '@angular/core';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {HttpResponse} from '@angular/common/http';
+import {ApiService} from '../../../../../../api/Api';
 import {
   ModelsSpacePushSettingCode,
   SpaceapimodelsPushSettingData,
   SpaceapimodelsPushSettings
-} from '../../../../../api/data-contracts';
-import {HttpResponse} from '@angular/common/http';
+} from '../../../../../../api/data-contracts';
 
 export interface NotificationSetting {
   event: string;
@@ -21,18 +17,6 @@ export interface NotificationSetting {
 }
 @Component({
   selector: 'app-notifications',
-  standalone: true,
-  imports: [
-    MatCard,
-    MatRadioGroup,
-    MatRadioButton,
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatCheckbox,
-    MatTableModule,
-    FormsModule
-  ],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
 })
@@ -42,7 +26,7 @@ export class NotificationsComponent implements OnInit {
   notifications = signal<NotificationSetting[]>([]);
   pushEnabled = signal(false);
 
-  constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
+  constructor(private api: ApiService ) {}
 
   ngOnInit(): void {
     this.loadNotifications();

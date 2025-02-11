@@ -1,7 +1,4 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit} from '@angular/core';
-import {SpaceUser as User} from '../../../../models/SpaceUser';
-import {UsersModalService} from '../../../../services/users-modal.service';
-import {ApiService} from '../../../../api/Api';
 import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
@@ -10,9 +7,12 @@ import {MatInput} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {MatTooltip} from '@angular/material/tooltip';
-import {matchValidator} from '../../../../validators/match';
-import {SpaceapimodelsPasswordChange} from '../../../../api/data-contracts';
 import {CommonModule} from '@angular/common';
+import {matchValidator} from '../../../../../validators/match';
+import {UsersModalService} from '../../../../../services/users-modal.service';
+import {ApiService} from '../../../../../api/Api';
+import {SpaceapimodelsPasswordChange} from '../../../../../api/data-contracts';
+import {SpaceUser} from '../../../../../models/SpaceUser';
 
 @Component({
   selector: 'app-change-password-modal',
@@ -34,7 +34,7 @@ import {CommonModule} from '@angular/common';
   styleUrl: './change-password-modal.component.scss'
 })
 export class ChangePasswordModalComponent implements OnInit {
-  @Input() user?: User;
+  @Input() user?: SpaceUser;
   onSubmit = new EventEmitter<boolean>();
   isLoading = false;
   currentPasswordError: string | null = null;
@@ -55,9 +55,7 @@ export class ChangePasswordModalComponent implements OnInit {
 
   constructor(
     private modalService: UsersModalService,
-    private api: ApiService,
-    private cdRef: ChangeDetectorRef
-  ) {}
+    private api: ApiService) {}
 
   ngOnInit() {
     console.log('Форма создана:', this.user);

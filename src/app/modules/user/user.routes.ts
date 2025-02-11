@@ -13,12 +13,24 @@ import {VacancyDetailComponent} from './vacancy-detail/vacancy-detail.component'
 import {СandidateListComponent} from './candidate-list/candidate-list.component';
 import {CandidateDetailComponent} from './candidate-detail/candidate-detail.component';
 import {CandidateDuplicateComponent} from './candidate-duplicate/candidate-duplicate.component';
-import {UserProfileComponent} from './user-profile/user-profile';
-import {AccountComponent} from './user-profile/profile/account/account.component';
-import {ExternalAccountsComponent} from './user-profile/profile/external-accounts/external-accounts.component';
-import {NotificationsComponent} from './user-profile/profile/notifications/notifications.component';
-import {TemplatesComponent} from './user-profile/profile/templates/templates.component';
-import {InterfaceSettingsComponent} from './user-profile/profile/interface-settings/interface-settings.component';
+import {ProfileComponent} from './profile/profile.component';
+import {AccountComponent} from './profile/user-profile/profile/account/account.component';
+import {ExternalAccountsComponent} from './profile/user-profile/profile/external-accounts/external-accounts.component';
+import {NotificationsComponent} from './profile/user-profile/profile/notifications/notifications.component';
+import {TemplatesComponent} from './profile/user-profile/profile/templates/templates.component';
+import {
+  InterfaceSettingsComponent
+} from './profile/user-profile/profile/interface-settings/interface-settings.component';
+import {UserProfileComponent} from './profile/user-profile/user-profile';
+import {CompanyProfileComponent} from './profile/company-profile/company-profile.component';
+import {CompanyInfoComponent} from './profile/company-profile/sections/company-info/company-info.component';
+import {MembersComponent} from './profile/company-profile/sections/members/members.component';
+import {IntegrationsComponent} from './profile/company-profile/sections/integrations/integrations.component';
+import {DirectoriesComponent} from './profile/company-profile/sections/directories/directories.component';
+import {CommunicationsComponent} from './profile/company-profile/sections/communications/communications.component';
+import {
+  CompanyTemplatesComponent
+} from './profile/company-profile/sections/company-templates/company-templates.component';
 
 export const routes: Routes = [
   {
@@ -145,14 +157,34 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: UserProfileComponent,
+        component: ProfileComponent,
         children: [
-          { path: 'account', component: AccountComponent },
-          { path: 'external-accounts', component: ExternalAccountsComponent },
-          { path: 'notifications', component: NotificationsComponent },
-          { path: 'templates', component: TemplatesComponent },
-          { path: 'interface-settings', component: InterfaceSettingsComponent },
-          { path: '**', redirectTo: 'account' }
+          {
+            path: 'personal',
+            component: UserProfileComponent,
+            children: [
+              { path: 'account', component: AccountComponent },
+              { path: 'external-accounts', component: ExternalAccountsComponent },
+              { path: 'notifications', component: NotificationsComponent },
+              { path: 'templates', component: TemplatesComponent },
+              { path: 'interface-settings', component: InterfaceSettingsComponent },
+              { path: '**', redirectTo: 'account' }
+            ]
+          },
+          {
+            path: 'company',
+            component: CompanyProfileComponent,
+            children: [
+              { path: 'info', component: CompanyInfoComponent },
+              { path: 'members', component: MembersComponent },
+              { path: 'integrations', component: IntegrationsComponent },
+              { path: 'directories', component: DirectoriesComponent },
+              { path: 'communications', component: CommunicationsComponent },
+              { path: 'templates', component: CompanyTemplatesComponent },
+              { path: '**', redirectTo: 'info' }
+            ]
+          },
+          { path: '**', redirectTo: 'personal' }
         ]
       },
       {

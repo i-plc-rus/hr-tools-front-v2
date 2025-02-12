@@ -98,6 +98,8 @@ import {
 } from './profile/company-profile/sections/company-templates/company-templates.component';
 import {CompanyProfileComponent} from './profile/company-profile/company-profile.component';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatBadge} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -199,7 +201,9 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     MatSlideToggle,
     MatHeaderRow,
     MatRow,
-    MatTableModule
+    MatTableModule,
+    MatToolbar,
+    MatBadge
   ]
 
 })

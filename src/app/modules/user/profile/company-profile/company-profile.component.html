@@ -1,0 +1,13 @@
+<mat-tab-group class="mt-4 mb-2" mat-stretch-tabs="false" mat-align-tabs="start"
+               [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
+  <mat-tab label="Профиль" ></mat-tab>
+  <mat-tab label="Участники"></mat-tab>
+  <mat-tab label="Интеграция с сервисами"></mat-tab>
+  <mat-tab label="Просмотр справочников"></mat-tab>
+  <mat-tab label="Почта, календарь, видеоконференции"></mat-tab>
+  <mat-tab label="Шаблоны компании"></mat-tab>
+</mat-tab-group>
+
+<div class="flex-1 overflow-auto">
+  <router-outlet></router-outlet>
+</div>

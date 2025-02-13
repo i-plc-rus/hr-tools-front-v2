@@ -1,0 +1,15 @@
+<div class="py-8 px-4 w-full min-h-screen flex flex-col">
+  <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
+    <!-- Кнопки для переключения между профилями -->
+    <div class="flex gap-3">
+      <button mat-flat-button color="primary" [routerLink]="['/user', 'profile', 'personal']">
+        Личный профиль
+      </button>
+      <button mat-stroked-button color="primary" [routerLink]="['/user', 'profile', 'company']" routerLinkActive="active">
+        Настройки компании
+      </button>
+
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

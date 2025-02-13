@@ -68,6 +68,38 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {UserProfileComponent} from './profile/user-profile/user-profile';
+import {AccountComponent} from './profile/user-profile/profile/account/account.component';
+import {ProfileComponent} from './profile/profile.component';
+import {ExternalAccountsComponent} from './profile/user-profile/profile/external-accounts/external-accounts.component';
+import {NotificationsComponent} from './profile/user-profile/profile/notifications/notifications.component';
+import {TemplatesComponent} from './profile/user-profile/profile/templates/templates.component';
+import {
+  InterfaceSettingsComponent
+} from './profile/user-profile/profile/interface-settings/interface-settings.component';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatCard} from '@angular/material/card';
+import {
+  MatCell,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderRow,
+  MatRow,
+  MatTable,
+  MatTableModule
+} from '@angular/material/table';
+import {CommunicationsComponent} from './profile/company-profile/sections/communications/communications.component';
+import {CompanyInfoComponent} from './profile/company-profile/sections/company-info/company-info.component';
+import {DirectoriesComponent} from './profile/company-profile/sections/directories/directories.component';
+import {IntegrationsComponent} from './profile/company-profile/sections/integrations/integrations.component';
+import {MembersComponent} from './profile/company-profile/sections/members/members.component';
+import {
+  CompanyTemplatesComponent
+} from './profile/company-profile/sections/company-templates/company-templates.component';
+import {CompanyProfileComponent} from './profile/company-profile/company-profile.component';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatBadge} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -104,6 +136,21 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     VacancyIntegrationsComponent,
     VacancyTeamComponent,
     GenerateDescriptionModalComponent,
+    UserProfileComponent,
+    AccountComponent,
+    ProfileComponent,
+    ExternalAccountsComponent,
+    NotificationsComponent,
+    TemplatesComponent,
+    InterfaceSettingsComponent,
+    CommunicationsComponent,
+    CompanyInfoComponent,
+    DirectoriesComponent,
+    IntegrationsComponent,
+    MembersComponent,
+    CompanyTemplatesComponent,
+    CompanyProfileComponent
+
   ],
   imports: [
     CommonModule,
@@ -144,7 +191,20 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     MatDatepickerModule,
     MatCheckboxModule,
     DragDropModule,
-]
+    MatRadioButton,
+    MatRadioGroup,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatSlideToggle,
+    MatHeaderRow,
+    MatRow,
+    MatTableModule,
+    MatToolbar,
+    MatBadge
+  ]
 
 })
 export class UserModule { }

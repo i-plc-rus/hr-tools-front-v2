@@ -1,0 +1,84 @@
+.spacer {
+  flex: 1;
+}
+
+.toolbar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f57c00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-header-row {
+  background: transparent !important;
+  font-weight: bold;
+  box-shadow: none !important;
+}
+
+.mat-row {
+  background: white !important;
+  transition: background 0.3s ease-in-out;
+}
+
+.clicked {
+  background: var(--background-main) !important;
+}
+
+.mat-row.clicked td {
+  background: inherit !important;
+}
+
+.actions-container {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.email {
+  color: #666;
+}
+

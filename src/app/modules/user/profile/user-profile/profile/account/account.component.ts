@@ -1,9 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ApiService} from '../../../../../api/Api';
-import {UsersModalService} from '../../../../../services/users-modal.service';
 import {HttpResponse} from '@angular/common/http';
-import {DictapimodelsCompanyView, SpaceapimodelsSpaceUser} from '../../../../../api/data-contracts';
 import {MatButton} from '@angular/material/button';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatIcon} from '@angular/material/icon';
@@ -12,23 +9,12 @@ import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {QuillEditorComponent} from 'ngx-quill';
+import {UsersModalService} from '../../../../../../services/users-modal.service';
+import {DictapimodelsCompanyView, SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
+import {ApiService} from '../../../../../../api/Api';
 
 @Component({
   selector: 'app-account',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    MatSlideToggle,
-    QuillEditorComponent,
-    ReactiveFormsModule
-  ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss'
 })

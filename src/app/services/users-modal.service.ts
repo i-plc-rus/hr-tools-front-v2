@@ -6,7 +6,8 @@ import {DeleteUserModalComponent} from '../modules/user/users-list/delete-user-m
 import {SpaceUser as User} from '../models/SpaceUser';
 import {
   ChangePasswordModalComponent
-} from '../modules/user/user-profile/change-password-modal/change-password-modal.component';
+} from '../modules/user/profile/user-profile/change-password-modal/change-password-modal.component';
+
 
 @Injectable({
   providedIn: 'root'

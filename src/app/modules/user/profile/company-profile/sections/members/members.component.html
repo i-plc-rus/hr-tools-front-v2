@@ -72,5 +72,20 @@
     (click)="toggleRow(row)"
     [ngClass]="{'clicked': clickedRows.has(row)}"
   ></tr>
-
 </table>
+
+<mat-card class="mat-elevation-z0 mt-10">
+  <mat-card-content class="license-container">
+    <div class="license-info">
+      <span class="font-bold">Лицензия</span>
+      <mat-progress-bar mode="determinate" [value]="70"></mat-progress-bar>
+      <span>Срок действия до 23.11.2024 г.</span>
+    </div>
+    <div class="license-actions">
+      <button mat-button color="primary">Докупить</button>
+      <button mat-button color="primary">Как это работает?</button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+

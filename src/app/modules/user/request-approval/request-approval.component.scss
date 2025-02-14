@@ -1,0 +1,41 @@
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    @apply hidden;
+  }
+  
+  ::ng-deep app-text-input input[type="number"]::-webkit-outer-spin-button,
+  ::ng-deep app-text-input input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  
+  ::ng-deep div.mat-mdc-select-panel {
+    background-color: var(--notification-color-text) !important;
+  }
+  
+  ::ng-deep app-text-input input:not(:placeholder-shown),
+  app-text-input input:focus {
+    border: 1px solid black !important;
+  }
+  
+  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-floating-label {
+    color: #000 !important;
+  }
+  
+  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-floating-label--float-above {
+    font-weight: 500 !important;
+    color: var(--link-default) !important;
+  }
+  
+  ::ng-deep .mat-mdc-form-field-textarea-control {
+    height: 280px !important;
+  }
+  
+  textarea {
+    resize: none;
+  }
+  
+  ::ng-deep .mat-mdc-select {
+    color: #000 !important;
+  }
+  

@@ -101,6 +101,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -150,7 +151,8 @@ import {MatProgressBar} from '@angular/material/progress-bar';
     IntegrationsComponent,
     MembersComponent,
     CompanyTemplatesComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    LoadingWrapperComponent
 
   ],
   imports: [

@@ -1,17 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
-import {MatButton} from '@angular/material/button';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatIcon} from '@angular/material/icon';
-import {MatInput} from '@angular/material/input';
-import {MatOption} from '@angular/material/core';
-import {MatSelect} from '@angular/material/select';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {QuillEditorComponent} from 'ngx-quill';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
 import {DictapimodelsCompanyView, SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
+import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 
 @Component({
   selector: 'app-account',
@@ -38,7 +31,7 @@ export class AccountComponent implements OnInit{
     toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
   };
 
-  constructor(private api: ApiService, private modalService: UsersModalService) {}
+  constructor(private api: ApiService, private modalService: UsersModalService, private loadingService: LoadingWrapperService) {}
 
   ngOnInit(): void {
     this.loadUserData();
@@ -47,6 +40,7 @@ export class AccountComponent implements OnInit{
   }
 
   private loadUserData(): void {
+    this.loadingService.setLoading(true)
     this.api.v1AuthMeList().subscribe({
       next: (response) => {
         const httpResponse = response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>;
@@ -61,11 +55,20 @@ export class AccountComponent implements OnInit{
             internalNumber: user.text_sign || '',
             job_title_id: user.job_title_id || ''
           });
+          this.loadingService.setLoading(false)
+
         } else {
           console.warn('Данные отсутствуют в ответе.');
+          this.loadingService.setLoading(false)
+
         }
       },
-      error: (err) => console.error('Ошибка получения данных пользователя:', err)
+      error: (err) => {
+        console.error('Ошибка получения данных пользователя:', err)
+        this.loadingService.setLoading(false)
+
+      }
+
     });
   }
 

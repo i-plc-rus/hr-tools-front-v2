@@ -110,3 +110,33 @@ mat-progress-bar {
   display: flex;
   gap: 16px;
 }
+.members-container {
+  display: flex;
+  flex-direction: column;
+   // Высота всего экрана
+
+  .toolbar {
+    flex-shrink: 0;
+  }
+
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: calc(100vh - 275px);
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
+    min-height: 200px;
+  }
+
+  .license-card {
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+}
+

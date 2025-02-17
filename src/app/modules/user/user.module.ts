@@ -102,6 +102,7 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
+import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 
 @NgModule({
   declarations: [
@@ -152,7 +153,8 @@ import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrap
     MembersComponent,
     CompanyTemplatesComponent,
     CompanyProfileComponent,
-    LoadingWrapperComponent
+    LoadingWrapperComponent,
+    EditMemberModalComponent
 
   ],
   imports: [

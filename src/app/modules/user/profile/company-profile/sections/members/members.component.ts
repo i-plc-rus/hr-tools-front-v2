@@ -4,14 +4,17 @@ import {
   SpaceapimodelsSpaceUser,
   SpaceapimodelsSpaceUserFilter
 } from '../../../../../../api/data-contracts';
-import {HttpResponse} from '@angular/common/http';
 import {ApiService} from '../../../../../../api/Api';
-interface Participant {
-  avatar: string;
-  name: string;
-  phone: string;
-  email: string;
-  role: string;
+import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
+import {UsersModalService} from '../../../../../../services/users-modal.service';
+import {tap} from 'rxjs';
+
+enum TableColumns {
+  Avatar = 'avatar',
+  Name = 'name',
+  Contacts = 'contacts',
+  Role = 'role',
+  Actions = 'actions'
 }
 @Component({
   selector: 'app-members',
@@ -19,74 +22,122 @@ interface Participant {
   styleUrl: './members.component.scss'
 })
 export class MembersComponent implements OnInit{
-  participants: Participant[] = [];
+  participants: SpaceapimodelsSpaceUser[] = [];
+  avatarsMap = new Map<string, string>(); // Храним аватары отдельно
 
-  displayedColumns: string[] = ['avatar', 'name', 'contacts', 'role', 'actions'];
+  displayedColumns: string[] = [
+    TableColumns.Avatar,
+    TableColumns.Name,
+    TableColumns.Contacts,
+    TableColumns.Role,
+    TableColumns.Actions
+  ];
 
-  clickedRows = new Set<Participant>();
+  clickedRows = new Set<string>();
 
-  constructor(private api: ApiService) {
-  }
-  toggleRow(row: Participant) {
-    if (this.clickedRows.has(row)) {
-      this.clickedRows.delete(row);
-    } else {
-      this.clickedRows.add(row);
-    }
-  }
+  constructor(private api: ApiService, private loadingService: LoadingWrapperService, private modalService: UsersModalService) {}
 
   ngOnInit(): void {
-    this.loadUserData()
+    this.loadUserData();
   }
 
   private loadUserData(): void {
-    const filter: SpaceapimodelsSpaceUserFilter = { limit: 10, page: 1 };
+    this.loadingService.setLoading(true);
 
-    this.api.v1UsersListCreate(filter, { observe: "response" }).subscribe({
-      next: (response) => {
-        let responseBody: ApimodelsScrollerResponse & { data?: SpaceapimodelsSpaceUser[] };
-
-        if ("body" in response) {
-          responseBody = response.body as ApimodelsScrollerResponse & { data?: SpaceapimodelsSpaceUser[] };
-        } else {
-          responseBody = response as ApimodelsScrollerResponse & { data?: SpaceapimodelsSpaceUser[] };
-        }
-
-        if (responseBody?.data) {
-          this.participants = responseBody.data.map((user: SpaceapimodelsSpaceUser) => ({
-            avatar: "https://via.placeholder.com/40",
-            name: `${user.first_name ?? ''} ${user.last_name ?? ''}`.trim(),
-            phone: user.phone_number || "Не указан",
-            email: user.email || "Не указан",
-            role: user.role || "Не указана"
-          }));
-          this.loadUserAvatars();
-          console.log("Пользователи:", this.participants);
-        } else {
-          console.warn("Пустой ответ от API.");
-        }
-      },
-      error: (err) => console.error("Что-то пошло не так с загрузкой пользователей:", err),
+    this.api.v1UsersListCreate({ limit: 10, page: 1 }, { observe: 'response' }).subscribe({
+      next: (response) => this.handleUserResponse(response),
+      error: (err) => this.handleError(err, 'Ошибка загрузки пользователей')
     });
   }
 
   private loadUserAvatars(): void {
-    this.participants.forEach((participant, index) => {
-      this.api.v1UserProfilePhotoList({ observe: "response" }).subscribe({
-        next: (photoResponse) => {
-          if (photoResponse.ok && photoResponse.body !== null && typeof photoResponse.body === "object") {
-            const imageUrl = URL.createObjectURL(photoResponse.body as Blob);
-            this.participants[index].avatar = imageUrl;
-          } else {
-            this.participants[index].avatar = "assets/icons/ic-person.svg";
-          }
-        },
-        error: () => {
-          this.participants[index].avatar = "assets/icons/ic-person.svg";
-        }
+    this.participants.forEach((user) => {
+      if (!user.id) return;
+
+      this.api.v1UserProfilePhotoList({ responseType: 'blob' as 'json' }).subscribe({
+        next: (response: any) => this.handleAvatarResponse(user.id!, response),
+        error: (err) => this.handleError(err, `Ошибка згрузки фото ${user.id}`)
       });
     });
   }
 
+  deleteParticipant(user: SpaceapimodelsSpaceUser): void {
+    if (!user.id) return;
 
+    const confirmDelete = window.confirm(`Вы уверены, что хотите удалить пользователя ${user.last_name} ${user.first_name}?`);
+    if (!confirmDelete) return;
+
+    this.api.v1AdminPanelUserDeleteDelete(user.id).subscribe({
+      next: () => this.handleSuccessfulDeletion(user.id!),
+      error: (err) => this.handleError(err, `Ошибка при удалении ${user.last_name} ${user.first_name}`)
+    });
+  }
+
+  private handleUserResponse(response: any): void {
+    const responseBody = 'body' in response ? response.body : response;
+
+    if (responseBody?.data?.length) {
+      this.participants = responseBody.data;
+      this.loadUserAvatars();
+    } else {
+      console.warn('Пустой ответ от API.');
+    }
+
+    this.loadingService.setLoading(false);
+  }
+
+
+  private handleAvatarResponse(userId: string, response: any): void {
+    if (response instanceof Blob) {
+      const reader = new FileReader();
+      reader.onload = () => this.avatarsMap.set(userId, reader.result as string);
+      reader.readAsDataURL(response);
+    } else {
+      console.warn(`API вернул неожиданные данные для ${userId}:`, response);
+      this.avatarsMap.set(userId, 'assets/icons/ic-person.svg');
+    }
+  }
+
+  private handleSuccessfulDeletion(userId: string): void {
+    this.participants = this.participants.filter(p => p.id !== userId);
+  }
+
+
+  private handleError(err: any, message: string): void {
+    console.error(message, err);
+    this.loadingService.setLoading(false);
+  }
+
+  openEditMemberModal(user: SpaceapimodelsSpaceUser) {
+    if (user.id) {
+      this.modalService.editMemberModal(user.id).subscribe((updated) => {
+        if (updated) {
+          this.loadUserData();
+        }
+      });
+    }
+  }
+
+  openAddMemberModal(): void {
+    this.modalService.addMemberModal().subscribe((added) => {
+      if (added) {
+        this.loadUserData();
+      }
+    });
+  }
+
+
+  getAvatar(userId: string): string {
+    return this.avatarsMap.get(userId) || 'assets/icons/ic-person.svg';
+  }
+
+  toggleRow(participant: SpaceapimodelsSpaceUser) {
+    if (participant.id) {
+      if (this.clickedRows.has(participant.id)) {
+        this.clickedRows.delete(participant.id);
+      } else {
+        this.clickedRows.add(participant.id);
+      }
+    }
+  }
 }

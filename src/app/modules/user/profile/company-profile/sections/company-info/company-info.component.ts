@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../../../../../api/Api';
+import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 
 @Component({
   selector: 'app-company-info',
@@ -10,47 +11,132 @@ import {ApiService} from '../../../../../../api/Api';
 export class CompanyInfoComponent implements OnInit{
   companyForm!: FormGroup;
   companyLogoPreview: string | null = null;
-  timezones = [
-    { id: '01', name: 'Москва' },
-    { id: '02', name: 'Ижевск' },
-    { id: '03', name: 'Владимир' }
-  ];
   quillConfig = {
     toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
   };
-  constructor(private fb: FormBuilder, private api: ApiService) {}
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private fb: FormBuilder, private api: ApiService,   private cdr: ChangeDetectorRef, private loadingService: LoadingWrapperService
+  ) {}
   ngOnInit() {
+    this.initForm();
+    this.loadCompanyData();
+    this.loadCompanyLogo()
+  }
+
+  private initForm(): void {
     this.companyForm = this.fb.group({
-      companyName: ['Моя компания', Validators.required],
-      website: ['http://localhost:4200/user/profile/personal/notifications', Validators.required],
-      timezone: ['Ижевск', Validators.required],
+      companyName: ['', Validators.required],
+      website: ['', Validators.required],
+      timezone: [{ value: '', disabled: true }, Validators.required],
       description: ['']
     });
-    this.loadCompanyData()  }
-
-  saveCompanySettings() {
-    if (this.companyForm.valid) {
-      console.log('Сохранено:', this.companyForm.value);
-    }
   }
 
-  uploadLogo(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => this.companyLogoPreview = reader.result as string;
-      reader.readAsDataURL(file);
-    }
-  }
   private loadCompanyData(): void {
-    this.api.v1DictCompanyFindCreate({}).subscribe({
-      next: (response) => {
-          console.log('Респонс компании:', response);
-      },
-      error: (err) => console.error('Респонс с ошибкой:', err)
+    this.loadingService.setLoading(true)
+    this.api.v1SpaceProfileList({ observe: 'response' }).subscribe({
+      next: (response) => this.handleCompanyResponse(response),
+      error: (err) => this.handleError(err, 'Ошибка загрузки данных компании!')
     });
   }
 
+  /** Загружает текущий логотип компании */
+  private loadCompanyLogo(): void {
+    this.api.v1SpaceProfilePhotoList({ responseType: 'blob' as 'json' }).subscribe({
+      next: (response: any) => {
+        if (response instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => (this.companyLogoPreview = reader.result as string);
+          reader.readAsDataURL(response);
+        } else {
+          console.warn(response);
+        }
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  uploadPhoto(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (!input?.files?.length) {
+      console.warn('Файл не выбран.');
+      return;
+    }
+
+    const file = input.files[0];
+    this.generatePhotoPreview(file);
+    this.uploadPhotoToServer(file);
+  }
+
+  private generatePhotoPreview(file: File): void {
+    const reader = new FileReader();
+    reader.onload = () => (this.companyLogoPreview = reader.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  private uploadPhotoToServer(file: File): void {
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    this.api.v1SpaceProfilePhotoCreate(formData as any).subscribe({
+      next: () => {
+        this.loadCompanyLogo();
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  saveCompanySettings(): void {
+    if (this.companyForm.invalid) {
+      console.warn('Ошибки в форме.');
+      return;
+    }
+
+    const updatedData = {
+      organization_name: this.companyForm.get('companyName')?.value || '',
+      web: this.companyForm.get('website')?.value || '',
+      time_zone: this.companyForm.get('timezone')?.value || '',
+      description: this.companyForm.get('description')?.value || ''
+    };
+
+    this.api.v1SpaceProfileUpdate({ body: updatedData, observe: 'response' }).subscribe({
+      next: (response) => this.handleUpdateResponse(response),
+      error: (err) => this.handleError(err, 'Ошибка обновления данных компании!')
+    });
+  }
+
+  private handleUpdateResponse(response: any): void {
+    //здесь можно вывести уведомление об успешном обновлении
+    console.log('Данные компании успешно обновлены:', response);
+  }
+
+
+  private handleCompanyResponse(response: any): void {
+    const responseBody = 'body' in response ? response.body : response;
+
+    if (responseBody?.data) {
+      this.companyForm.setValue({
+        companyName: responseBody.data.organization_name || '',
+        website: responseBody.data.web || '',
+        timezone: responseBody.data.time_zone || '',
+        description: responseBody.data.description || ''
+      });
+
+      this.cdr.detectChanges();
+      this.loadingService.setLoading(false)
+
+    } else {
+      console.warn('Пустой ответ от API.');
+    }
+  }
+
+  private handleError(err: any, message: string): void {
+    console.error(message, err);
+  }
 }

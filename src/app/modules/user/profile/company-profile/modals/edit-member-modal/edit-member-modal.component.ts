@@ -58,6 +58,8 @@ export class EditMemberModalComponent implements OnInit{
     if (responseBody?.data) {
       this.memberForm.patchValue(responseBody.data);
     }
+    this.onSubmit.emit(true);
+
   }
 
   private updateUserData(): void {

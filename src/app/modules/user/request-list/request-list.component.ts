@@ -18,6 +18,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import dayjs from 'dayjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-request-list',
@@ -73,7 +74,8 @@ export class RequestListComponent implements OnInit {
   constructor(
     public screen: ScreenWidthService,
     private modalService: VacancyModalService,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -248,4 +250,8 @@ export class RequestListComponent implements OnInit {
       }
     });
   }
+
+  show(id: string): void {
+    this.router.navigate(['/user/request', id, 'approval'])
+   }
 }

@@ -182,7 +182,7 @@
               </mat-menu>
             </div>
             <div class="flex flex-col lg:flex-row justify-between gap-3 mt-1">
-              <h2 class="text-[32px] leading-10">{{ request.vacancy_name }}</h2>
+              <h2 class="text-[32px] leading-10 cursor-pointer" (click)="show(request.id)">{{ request.vacancy_name }}</h2>
               <span class="text-[22px] leading-7 lg:min-w-[200px] lg:text-right">
                 {{ request.city }}
               </span>

@@ -1,117 +1,160 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../api/Api';
-import { DictapimodelsCompanyStructView, DictapimodelsCompanyView, DictapimodelsDepartmentView, ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency } from '../../../api/data-contracts';
+import {
+  DictapimodelsCompanyData,
+  DictapimodelsCompanyStructView,
+  DictapimodelsCompanyView,
+  DictapimodelsDepartmentView,
+  ModelsEmployment,
+  ModelsExperience,
+  ModelsSchedule,
+  ModelsVRSelectionType,
+  ModelsVRStatus,
+  ModelsVRType,
+  ModelsVRUrgency,
+  VacancyapimodelsVacancyRequestCreateData,
+} from '../../../api/data-contracts';
 import { Observable, forkJoin, map, startWith, switchMap } from 'rxjs';
 import { DictapimodelsCityView } from '../../../api/data-contracts';
 import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
 import {employmentTypes, experienceTypes, scheduleTypes} from '../user-consts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-request-creation',
   templateUrl: './request-creation.component.html',
-  styleUrl: './request-creation.component.scss'
+  styleUrl: './request-creation.component.scss',
 })
 export class RequestCreationComponent implements OnInit {
-  @ViewChild('stepper') stepper! : MatStepper
+  @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('saveDraftDialog') saveDraftDialog!: TemplateRef<any>;
   @ViewChild('draftDialog') draftDialog!: TemplateRef<any>;
   showForm: boolean = false;
   isLastStep: boolean = false;
-  users: any = []
-  ModelsVRSelectionType = ModelsVRSelectionType
+  users: any = [];
+  ModelsVRSelectionType = ModelsVRSelectionType;
 
-  expiriences = experienceTypes;
+  experiences = experienceTypes;
 
   urgencys: {name: string; value: ModelsVRUrgency}[] = [
     {name: 'Срочно', value: ModelsVRUrgency.VRTypeUrgent},
     {name: 'В плановом порядке', value: ModelsVRUrgency.VRTypeNonUrgent}
   ]
 
-  request_types: {name: string; value: ModelsVRType}[] = [
-    {name: 'Новая позиция', value: ModelsVRType.VRTypeNew},
-    {name: 'Замена', value: ModelsVRType.VRTypeReplace}
-  ]
+  request_types: { name: string; value: ModelsVRType }[] = [
+    { name: 'Новая позиция', value: ModelsVRType.VRTypeNew },
+    { name: 'Замена', value: ModelsVRType.VRTypeReplace },
+  ];
 
   employments = employmentTypes;
   schedules = scheduleTypes;
   
   form = new FormGroup({
-    company_name: new FormControl('', [Validators.required]),
+    company_name: new FormControl<DictapimodelsCompanyData | null>(null, [
+      Validators.required,
+    ]),
+    // company_id: new FormControl('', Validators.required),
     vacancy_name: new FormControl('', [Validators.required]),
     department_id: new FormControl('', [Validators.required]),
     company_struct_id: new FormControl('', [Validators.required]),
     job_title_id: new FormControl('', [Validators.required]),
     place_of_work: new FormControl(''),
     chief_fio: new FormControl('', [Validators.required]),
-    cityId: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
-    opened_positions: new FormControl(null,  [Validators.required]),
-    urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
-    request_type: new FormControl<ModelsVRType | undefined>(undefined),
+    cityId: new FormControl<DictapimodelsCityView | null>(null, [
+      Validators.required,
+    ]),
+    opened_positions: new FormControl(null, [Validators.required]),
+    urgency: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
+    request_type: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
     requirements: new FormControl(''),
-    employment: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
-    expirience: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
-    schedule: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),
-    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
+    employment: new FormControl<ModelsEmployment | undefined>(undefined, [
+      Validators.required,
+    ]),
+    experience: new FormControl<ModelsExperience | undefined>(undefined, [
+      Validators.required,
+    ]),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined, [
+      Validators.required,
+    ]),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(
+      undefined,
+    ),
     interviewers: new FormArray([
       new FormGroup({
         space_user_id: new FormControl('', [Validators.required]),
-        stage: new FormControl(1)
-      })
+        stage: new FormControl(1),
+      }),
     ]),
+  });
 
-  })
+  city: DictapimodelsCityView[] = [];
+  filteredCity$!: Observable<DictapimodelsCityView[]>;
+  companyNameArray: DictapimodelsCompanyData[] = [];
+  filteredCompany$!: Observable<DictapimodelsCompanyData[]>;
+  companyStructureArray: DictapimodelsCompanyStructView[] = [];
+  companyDepartmentArray: DictapimodelsDepartmentView[] = [];
+  companyJobsNamesArray: DictapimodelsCompanyView[] = [];
 
-  city: DictapimodelsCityView[] = []
-  filteredCity$!: Observable<DictapimodelsCityView[]>; 
-  companyStructureArray: DictapimodelsCompanyStructView[] = []
-  companyDepartmentArray: DictapimodelsDepartmentView[] = []
-  companyJobsNamesArray: DictapimodelsCompanyView[] = []
-
-  constructor(private api: ApiService,
-    private dialog: MatDialog) {}
-
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     forkJoin({
+      companyName: this.api.v1DictCompanyFindCreate({}),
       companyStructure: this.api.v1DictCompanyStructFindCreate({}),
       city: this.api.v1DictCityFindCreate({}),
-      user: this.api.v1UsersListCreate({})
+      user: this.api.v1UsersListCreate({}),
     }).subscribe({
-      next: ({ companyStructure, city, user }:any) => {
+      next: ({ companyName, companyStructure, city, user }: any) => {
+        this.companyNameArray = companyName.body.data;
         this.companyStructureArray = companyStructure.body.data;
         this.city = city.body.data;
-        this.users = user.body.data
+        this.users = user.body.data;
         this.initializeCityAutocomplete();
+        this.initializeCompanyAutocomplete();
       },
       error: (err) => {
         console.error('Ошибка при загрузке данных:', err);
-      }
+      },
     });
 
-  this.form.get('company_struct_id')?.valueChanges.pipe(
-    switchMap((value) => {
-      this.form.get('department_id')?.reset(); 
-      return this.api.v1DictDepartmentFindCreate({ company_struct_id: String(value) });
-    })
-  ).subscribe({
-    next: (response: any) => {
-      this.companyDepartmentArray = response.body.data;
-    }
-  });
+    this.form
+      .get('company_struct_id')
+      ?.valueChanges.pipe(
+        switchMap((value) => {
+          this.form.get('department_id')?.reset();
+          return this.api.v1DictDepartmentFindCreate({
+            company_struct_id: String(value),
+          });
+        }),
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.companyDepartmentArray = response.body.data;
+        },
+      });
 
-  this.form.get('department_id')?.valueChanges.pipe(
-    switchMap((value) => {
-      this.form.get('job_title_id')?.reset(); 
-      return this.api.v1DictJobTitleFindCreate({ department_id: String(value) });
-    })
-  ).subscribe({
-    next: (response: any) => {
-      this.companyJobsNamesArray = response.body.data;
-    }
-  });
-}
+    this.form
+      .get('department_id')
+      ?.valueChanges.pipe(
+        switchMap((value) => {
+          this.form.get('job_title_id')?.reset();
+          return this.api.v1DictJobTitleFindCreate({
+            department_id: String(value),
+          });
+        }),
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.companyJobsNamesArray = response.body.data;
+        },
+      });
+  }
 
   get interviewers(): FormArray {
     return this.form.get('interviewers') as FormArray;
@@ -121,68 +164,126 @@ export class RequestCreationComponent implements OnInit {
     this.interviewers.push(
       new FormGroup({
         space_user_id: new FormControl('', [Validators.required]),
-        stage: new FormControl(this.interviewers.length + 1)
-      })
-    )}
+        stage: new FormControl(this.interviewers.length + 1),
+      }),
+    );
+  }
 
   removeInterviewer(index: number): void {
-    if (this.interviewers.length > 1) { 
+    if (this.interviewers.length > 1) {
       this.interviewers.removeAt(index);
-    }}
+    }
+  }
 
   updateStepNumbers() {
     this.interviewers.controls.forEach((control, index) => {
       control.get('stage')?.setValue(index + 1);
-    })}
-
+    });
+  }
 
   initializeCityAutocomplete(): void {
     this.filteredCity$ = this.form.controls['cityId'].valueChanges.pipe(
       startWith(''),
-      map(value => typeof value === 'string' ? value : value?.address),
-      map(address => address ? this._filterCities(address) : this.city.slice())
-    )}
+      map((value) => (typeof value === 'string' ? value : value?.address)),
+      map((address) =>
+        address ? this._filterCities(address) : this.city.slice(),
+      ),
+    );
+  }
 
   private _filterCities(address: string): DictapimodelsCityView[] {
     const filterValue = address.toLowerCase();
-    return this.city.filter(city => city.address?.toLowerCase().includes(filterValue));
+    return this.city.filter((city) =>
+      city.address?.toLowerCase().includes(filterValue),
+    );
   }
 
   displayCityName(city: DictapimodelsCityView): string {
     return city && city.address ? city.address : '';
   }
 
+  initializeCompanyAutocomplete(): void {
+    this.filteredCompany$ = this.form.controls[
+      'company_name'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((value) => (typeof value === 'string' ? value : value?.name)),
+      map((name) =>
+        name ? this._filterCompanies(name) : this.companyNameArray.slice(),
+      ),
+    );
+  }
+
+  private _filterCompanies(name: string): DictapimodelsCompanyData[] {
+    const filterValue = name.toLowerCase();
+    return this.companyNameArray.filter((company) =>
+      company.name?.toLowerCase().includes(filterValue),
+    );
+  }
+
+  displayCompanyName(company: DictapimodelsCompanyData): string {
+    return company && company.name ? company.name : '';
+  }
+
   startForm(value: ModelsVRSelectionType) {
     this.form.get('selection_type')?.setValue(value);
-    const dialogRef = this.dialog.open(this.draftDialog);
+    this.dialog.open(this.draftDialog);
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'useDraft') {
-        this.useDraft();
-      } else if (result === 'newRequest') {
-        this.newRequest();
-      }
-    })}
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result === 'useDraft') {
+    //     console.log('aaa')
+    //     this.useDraft();
+    //   } else if (result === 'newRequest') {
+    //     this.newRequest();
+    //   }
+    // });
+  }
 
   useDraft(): void {
     const draft = localStorage.getItem('draftFormData');
     if (draft) {
       const draftData = JSON.parse(draft);
-      this.form.patchValue(draftData); 
+      this.form.patchValue(draftData);
+      if (draftData.company_struct_id) {
+        this.form.get('department_id')?.setValue(draftData.department_id);
+      }
+      if (draftData.department_id) {
+        this.form.get('job_title_id')?.setValue(draftData.job_title_id);
+      }
+      if (typeof draftData.company_name === 'string') {
+        const companyObject = {
+          name: draftData.company_name,
+          id: null,
+        };
+        this.form.get('company_name')?.setValue(companyObject);
+      }
+      this.interviewers.clear();
+      draftData.interviewers.forEach((interviewer: any) => {
+        this.interviewers.push(
+            new FormGroup({
+                space_user_id: new FormControl(interviewer.space_user_id, [Validators.required]),
+                stage: new FormControl(interviewer.stage),
+            }),
+        );
+    });
       this.showForm = true;
+      console.log(this.form.value);
     } else {
       console.error('Нет данных черновика для загрузки.');
     }
-    this.dialog.closeAll()
+    // this.api.v1SpaceVacancyRequestListCreate({statuses: [ModelsVRStatus.VRStatusTemplate]}).subscribe({
+    //   next: (response: any) =>
+    // })
+    this.dialog.closeAll();
   }
 
   newRequest(): void {
-    this.showForm = true; 
-    this.dialog.closeAll()
+    this.showForm = true;
+    this.dialog.closeAll();
   }
 
   goToNextStep() {
-    this.stepper.next()
+    this.stepper.next();
   }
 
   onStepChange(event: any) {
@@ -198,46 +299,94 @@ export class RequestCreationComponent implements OnInit {
   }
 
   saveDraftAndExit(): void {
-      localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
-      console.log("Форма сохранена как черновик");
-      this.closeDialog(); 
+    localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
+    // const requestData = {
+    //   as_template: true,
+    //   company_name: this.form.controls.company_name.value || undefined,
+    //   vacancy_name: this.form.controls.vacancy_name.value || undefined,
+    //   department_id: this.form.controls.department_id.value || undefined,
+    //   company_struct_id:
+    //     this.form.controls.company_struct_id.value || undefined,
+    //   job_title_id: this.form.controls.job_title_id.value || undefined,
+    //   city_id: this.form.controls.cityId.value?.id || undefined,
+    //   place_of_work: this.form.controls.place_of_work.value || undefined,
+    //   chief_fio: this.form.controls.chief_fio.value || undefined,
+    //   opened_positions:
+    //     Number(this.form.controls.opened_positions.value) || undefined,
+    //   urgency: this.form.controls.urgency.value || undefined,
+    //   request_type: this.form.controls.request_type.value || undefined,
+    //   requirements: this.form.controls.requirements.value || undefined,
+    //   employment: this.form.controls.employment.value || undefined,
+    //   experience: this.form.controls.experience.value || undefined,
+    //   schedule: this.form.controls.schedule.value || undefined,
+    //   selection_type: this.form.controls.selection_type.value || undefined,
+    //   approval_stages:
+    //     this.form.controls.interviewers.value?.map((interviewer) => ({
+    //       space_user_id:
+    //         interviewer.space_user_id !== null
+    //           ? interviewer.space_user_id
+    //           : undefined,
+    //       stage: interviewer.stage || undefined,
+    //     })) || [],
+    // };
+    // this.api
+    //   .v1SpaceVacancyRequestCreate(requestData)
+    //   .subscribe((res) => console.log(res));
+    // console.log('Форма сохранена как черновик');
+    this.closeDialog();
+    this.router.navigate(['/user/request/list'])
   }
 
   goBack() {
-    this.showForm = false
+    this.router.navigate(['/user/request/list'])
   }
 
   onSubmit() {
-    const requestData = {
-      company_name: this.form.controls.company_name.value || undefined,
+    console.log(this.form.value);
+    let companyName = ''
+    if(this.form.value.company_name?.name) {
+      companyName = this.form.value.company_name.name
+    } else {
+      companyName = String(this.form.value.company_name)
+    }
+    const requestData: VacancyapimodelsVacancyRequestCreateData = {
+      company_name: companyName || undefined,
       vacancy_name: this.form.controls.vacancy_name.value || undefined,
       department_id: this.form.controls.department_id.value || undefined,
-      company_struct_id: this.form.controls.company_struct_id.value || undefined,
+      company_struct_id:
+        this.form.controls.company_struct_id.value || undefined,
       job_title_id: this.form.controls.job_title_id.value || undefined,
       city_id: this.form.controls.cityId.value?.id || undefined,
       place_of_work: this.form.controls.place_of_work.value || undefined,
       chief_fio: this.form.controls.chief_fio.value || undefined,
-      opened_positions: Number(this.form.controls.opened_positions.value) || undefined,
+      opened_positions:
+        Number(this.form.controls.opened_positions.value) || undefined,
       urgency: this.form.controls.urgency.value || undefined,
       request_type: this.form.controls.request_type.value || undefined,
       requirements: this.form.controls.requirements.value || undefined,
       employment: this.form.controls.employment.value || undefined,
-      expirience: this.form.controls.expirience.value || undefined,
+      experience: this.form.controls.experience.value || undefined,
       schedule: this.form.controls.schedule.value || undefined,
       selection_type: this.form.controls.selection_type.value || undefined,
-      
-      approval_stages: this.form.controls.interviewers.value?.map(interviewer => ({
-        space_user_id: interviewer.space_user_id !== null ? interviewer.space_user_id : undefined,
-        stage: interviewer.stage || undefined
-    })) || []
+      approval_stages:
+        this.form.controls.interviewers.value?.map((interviewer) => ({
+          space_user_id:
+            interviewer.space_user_id !== null
+              ? interviewer.space_user_id
+              : undefined,
+          stage: interviewer.stage || undefined,
+        })) || [],
     };
 
-    if(this.form.valid) {
-    this.api.v1SpaceVacancyRequestCreate(requestData).subscribe(res => console.log(res))
+    if (this.form.valid) {
+      this.api
+        .v1SpaceVacancyRequestCreate(requestData)
+        .subscribe((res) => {
+          console.log(res)
+          this.router.navigate(['/user/request/list'])
+        });
     } else {
-      console.log('Не заполнены обязательные параметры')
+      console.log('Не заполнены обязательные параметры');
     }
-  
   }
-
 }

@@ -46,7 +46,7 @@ export class MembersComponent implements OnInit{
 
     this.api.v1UsersListCreate({ limit: 10, page: 1 }, { observe: 'response' }).subscribe({
       next: (response) => this.handleUserResponse(response),
-      error: (err) => this.handleError(err, 'Ошибка загрузки пользователей')
+      error: (err) => this.handleError(err, 'Ошибка загрузки пользователей!')
     });
   }
 

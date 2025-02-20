@@ -21,6 +21,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
 import {employmentTypes, experienceTypes, scheduleTypes} from '../user-consts';
 import { Router } from '@angular/router';
+import {VacancyModalService} from '../../../services/vacancy-modal.service';
 
 @Component({
   selector: 'app-request-creation',
@@ -50,8 +51,9 @@ export class RequestCreationComponent implements OnInit {
 
   employments = employmentTypes;
   schedules = scheduleTypes;
-  
+
   form = new FormGroup({
+    description: new FormControl(''),
     company_name: new FormControl<DictapimodelsCompanyData | null>(null, [
       Validators.required,
     ]),
@@ -100,7 +102,8 @@ export class RequestCreationComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private vacancyModal: VacancyModalService,
   ) {}
 
   ngOnInit(): void {
@@ -389,4 +392,9 @@ export class RequestCreationComponent implements OnInit {
       console.log('Не заполнены обязательные параметры');
     }
   }
+
+  openGenerateCommentModal() {
+    this.vacancyModal.openGenerateModal(this.form.controls['description'] as FormControl);
+  }
+
 }

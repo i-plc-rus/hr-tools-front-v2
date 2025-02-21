@@ -38,11 +38,14 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Должность</mat-label>
-      <mat-select formControlName="job_title_id">
-        @for (job of jobTitles; track job.id) {
-          <mat-option [value]="job.id">{{ job.name }}</mat-option>
-        }
-      </mat-select>
+      <input matInput formControlName="job_title_name">
+
+<!--      Логика под дропдаун, если он понадобится. Вроде бы обсуждали что нужен будет-->
+<!--      <mat-select formControlName="job_title_id">-->
+<!--                @for (job of jobTitles; track job.id) {-->
+<!--                  <mat-option [value]="job.id">{{ job.name }}</mat-option>-->
+<!--                }-->
+<!--      </mat-select>-->
     </mat-form-field>
 
     <mat-form-field appearance="outline">

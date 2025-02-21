@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
-import {DictapimodelsCompanyView, SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
+import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 
@@ -11,93 +11,79 @@ import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss'
 })
-export class AccountComponent implements OnInit{
-  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
+export class AccountComponent implements OnInit {
+  @ViewChild('fileInput', {static: false}) fileInput!: ElementRef;
+
   profileForm = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required]),
     job_title_id: new FormControl(''),
+    job_title_name: new FormControl(''),
     phone: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     internalNumber: new FormControl(''),
     signatureText: new FormControl(''),
     personalSignature: new FormControl(false)
   });
+
   userId: string | null = null;
   userPhoto: string | null = null;
   userPhotoPreview: string | null = null;
-  jobTitles: { id: string; name: string }[] = [];
-  quillConfig = {
-    toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
-  };
 
-  constructor(private api: ApiService, private modalService: UsersModalService, private loadingService: LoadingWrapperService) {}
+  quillConfig = {toolbar: [['bold', 'italic', 'underline']]};
+
+  constructor(
+    private api: ApiService,
+    private modalService: UsersModalService,
+    private loadingService: LoadingWrapperService
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadUserData();
     this.loadUserPhoto();
-    this.loadJobTitles();
   }
 
   private loadUserData(): void {
-    this.loadingService.setLoading(true)
+    this.loadingService.setLoading(true);
     this.api.v1AuthMeList().subscribe({
-      next: (response) => {
-        const httpResponse = response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>;
-        if (httpResponse.body?.data) {
-          const user = httpResponse.body.data;
-          this.userId = user.id || null;
-          this.profileForm.patchValue({
-            email: user.email || '',
-            firstName: user.first_name || '',
-            lastName: user.last_name || '',
-            phone: user.phone_number || '',
-            internalNumber: user.text_sign || '',
-            job_title_id: user.job_title_id || ''
-          });
-          this.loadingService.setLoading(false)
+      next: (response) => this.handleUserResponse(response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>),
+      error: (err) => this.handleError(err, '')
+    });
+  }
 
+  private loadUserPhoto(): void {
+    this.api.v1UserProfilePhotoList({responseType: 'blob' as 'json'}).subscribe({
+      next: (response: any) => {
+        if (response instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => (this.userPhoto = reader.result as string);
+          reader.readAsDataURL(response);
+          this.handleSuccessfulAction('Фото загружено')
         } else {
-          console.warn('Данные отсутствуют в ответе.');
-          this.loadingService.setLoading(false)
-
+          this.logWarning(response)
         }
       },
-      error: (err) => {
-        console.error('Ошибка получения данных пользователя:', err)
-        this.loadingService.setLoading(false)
-
-      }
-
+      error: (err) => this.handleError(err, '')
     });
   }
 
   saveProfile(): void {
     if (this.profileForm.valid && this.userId) {
-      const updateData: SpaceapimodelsSpaceUser = {
-        email: this.profileForm.value.email!,
-        first_name: this.profileForm.value.firstName!,
-        last_name: this.profileForm.value.lastName!,
-        phone_number: this.profileForm.value.phone!,
-        job_title_id: this.profileForm.value.job_title_id!,
-        text_sign: this.profileForm.value.internalNumber!
-      };
-      this.api.v1UsersUpdate(this.userId, updateData).subscribe({
-        next: () => {
-          console.log('Данные пользователя успешно сохранены.');
-          this.profileForm.markAsPristine();
-        },
-        error: (err) => console.error('Ошибка сохранения данных пользователя:', err)
+      this.api.v1UsersUpdate(this.userId, this.getUserUpdateData()).subscribe({
+        next: () => this.handleProfileResponse(),
+        error: (err) => this.handleError(err, '')
       });
     } else {
-      console.warn('Форма невалидна или отсутствует ID пользователя.');
+      this.logWarning('Форма невалидна');
     }
   }
+
 
   uploadPhoto(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     if (!input?.files?.length) {
-      console.warn('Файл не выбран.');
+      this.logWarning('Файл не выбран')
       return;
     }
     const file = input.files[0];
@@ -105,11 +91,56 @@ export class AccountComponent implements OnInit{
     this.uploadPhotoToServer(file);
   }
 
+  private handleUserResponse(response: HttpResponse<{ data: SpaceapimodelsSpaceUser }>): void {
+    const user = this.extractUserData(response);
+    if (!user) return;
+    this.userId = user.id || null;
+    this.updateProfileForm(user);
+    this.loadingService.setLoading(false);
+  }
+
+  private handleProfileResponse(): void {
+    this.profileForm.markAsPristine();
+    this.handleSuccessfulAction('Данные сохранены')
+  }
+
+  private extractUserData(response: HttpResponse<{ data: SpaceapimodelsSpaceUser }>): SpaceapimodelsSpaceUser | null {
+    const user = response.body?.data;
+    if (!user) {
+      this.loadingService.setLoading(false);
+      return null;
+    }
+    return user;
+  }
+
+  private updateProfileForm(user: SpaceapimodelsSpaceUser): void {
+    this.profileForm.patchValue({
+      email: user.email || '',
+      firstName: user.first_name || '',
+      lastName: user.last_name || '',
+      phone: user.phone_number || '',
+      internalNumber: user.text_sign || '',
+      job_title_id: user.job_title_id || '',
+      signatureText: user.text_sign || '',
+      job_title_name: user.job_title_name || '!'
+    });
+  }
+
+  private getUserUpdateData(): SpaceapimodelsSpaceUser {
+    return {
+      email: this.profileForm.value.email ?? '',
+      first_name: this.profileForm.value.firstName ?? '',
+      last_name: this.profileForm.value.lastName ?? '',
+      phone_number: this.profileForm.value.phone ?? '',
+      job_title_id: this.profileForm.value.job_title_id ?? '',
+      text_sign: this.profileForm.value.signatureText ?? ''
+    };
+  }
+
+
   private generatePhotoPreview(file: File): void {
     const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) this.userPhotoPreview = reader.result.toString();
-    };
+    reader.onload = () => (this.userPhotoPreview = reader.result as string);
     reader.readAsDataURL(file);
   }
 
@@ -117,45 +148,27 @@ export class AccountComponent implements OnInit{
     const formData = new FormData();
     formData.append('photo', file);
     this.api.v1UserProfilePhotoCreate(formData as any).subscribe({
-      next: () => {
-        console.log('Фото успешно загружено.');
-        this.loadUserPhoto();
-      },
-      error: (err) => console.error('Ошибка загрузки фото:', err)
-    });
-  }
-
-  private loadUserPhoto(): void {
-    this.api.v1UserProfilePhotoList({ responseType: 'blob' as 'json' }).subscribe({
-      next: (response: any) => {
-        if (response instanceof Blob) {
-          const reader = new FileReader();
-          reader.onload = () => (this.userPhoto = reader.result as string);
-          reader.readAsDataURL(response);
-        } else {
-          console.warn('API вернул неожиданные данные:', response);
-        }
-      },
-      error: (err) => console.error('Ошибка загрузки фото:', err)
-    });
-  }
-
-  private loadJobTitles(): void {
-    this.api.v1DictJobTitleFindCreate({ department_id: '', name: '' }).subscribe({
-      next: (response) => {
-        if (response?.data) {
-          this.jobTitles = response.data.filter(
-            (job: DictapimodelsCompanyView): job is { id: string; name: string } => !!job.id && !!job.name
-          );
-        } else {
-          console.warn('API вернул пустой список должностей.');
-        }
-      },
-      error: (err) => console.error('Ошибка загрузки списка должностей:', err)
+      next: () => this.loadUserPhoto(),
+      error: (err) => this.handleError(err, 'ошибка загрузки фото!')
     });
   }
 
   openChangePasswordModal(): void {
-    this.modalService.changePasswordModal().subscribe(() => console.log('Пароль успешно изменен'));
+    this.modalService.changePasswordModal().subscribe(() => this.handleSuccessfulAction('пароль изменён!'));
+  }
+
+
+  // Тут можно вывести всплывашки с предупреждениями
+  private handleError(err: any, message: string): void {
+    console.error(message, err);
+    this.loadingService.setLoading(false);
+  }
+
+  private logWarning(message: string): void {
+    console.warn(message);
+  }
+
+  private handleSuccessfulAction(message: string): void {
+    console.log(message);
   }
 }

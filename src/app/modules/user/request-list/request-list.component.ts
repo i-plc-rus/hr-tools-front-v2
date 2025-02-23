@@ -238,6 +238,17 @@ export class RequestListComponent implements OnInit {
     });
   }
 
+  publishVacancy(id: string) {
+    this.api.v1SpaceVacancyRequestPublishUpdate(id, {observe: 'response'}).subscribe({
+      next: () => {
+        this.getRequests();
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
   getUsers() {
     this.api.v1UsersListCreate({}).subscribe({
       next: (res: any) => {

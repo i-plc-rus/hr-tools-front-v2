@@ -74,43 +74,46 @@
       <mat-tab-group fitInkBarToContent>
         <mat-tab label="Резюме">
           <div class="p-6">
-            <div class="w-full flex justify-between items-center mt-4">
-              @if (!resume) {
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  class="hidden"
-                  (change)="uploadResume($event)"
-                  #resumeInput />
-                <button mat-flat-button class="btn-secondary" (click)="resumeInput.click()">
-                  <mat-icon>add</mat-icon>
-                  Добавить резюме
-                </button>
-              } @else {
-                <div class="flex gap-1 flex-wrap">
-                  <button mat-button class="btn-secondary">
-                    <mat-icon>attach_file</mat-icon>
-                    {{ applicant?.resume_title || 'Резюме' }}
-                  </button>
-                </div>
+            @if (!resume || !resumeUint) {
+              <input type="file" accept="application/pdf" class="hidden" (change)="uploadResume($event)" #resumeInput />
+              <button mat-flat-button class="btn-secondary" (click)="resumeInput.click()">
+                <mat-icon>add</mat-icon>
+                Добавить резюме
+              </button>
+            } @else {
+              <div class="w-full flex flex-col">
+                <div class="w-full flex justify-between items-center my-4">
+                  <div class="flex gap-1 flex-wrap">
+                    <button mat-button class="btn-secondary">
+                      <mat-icon>attach_file</mat-icon>
+                      {{ resume.name || 'Резюме' }}
+                    </button>
+                  </div>
 
-                <!-- <span class="text-[16px] leading-6 text-[var(--text-alter)]">Дата добавления резюме: 20.01.2024</span> -->
-                <div class="flex gap-3">
-                  <button mat-icon-button class="btn-primary" disabled>
-                    <mat-icon svgIcon="share" />
-                  </button>
-                  <button mat-icon-button class="btn-primary" disabled>
-                    <mat-icon svgIcon="print" />
-                  </button>
-                  <button mat-icon-button class="btn-primary" (click)="downloadResume()">
-                    <mat-icon svgIcon="download" />
-                  </button>
-                  <button mat-icon-button class="btn-primary" (click)="deleteResume()">
-                    <mat-icon svgIcon="delete" />
-                  </button>
+                  <div class="flex gap-3">
+                    <!-- <button mat-icon-button class="btn-primary">
+                      <mat-icon svgIcon="share" />
+                    </button> -->
+                    <button mat-icon-button class="btn-primary" (click)="printResume()">
+                      <mat-icon svgIcon="print" />
+                    </button>
+                    <button mat-icon-button class="btn-primary" (click)="downloadResume()">
+                      <mat-icon svgIcon="download" />
+                    </button>
+                    <button mat-icon-button class="btn-primary" (click)="deleteResume()">
+                      <mat-icon svgIcon="delete" />
+                    </button>
+                  </div>
                 </div>
-              }
-            </div>
+                <div class="flex items-center justify-center drop-shadow-xl">
+                  <pdf-viewer #resumeViewer
+                    [src]="resumeUint"
+                    [original-size]="false"
+                    style="width: 80%; min-width: 400px; height: 80vh;">
+                  </pdf-viewer>
+                </div>
+              </div>
+            }
           </div>
         </mat-tab>
         <mat-tab label="Документы">

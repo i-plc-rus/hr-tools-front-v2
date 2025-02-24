@@ -57,6 +57,7 @@
         <mat-label>Штатная должность</mat-label>
         <input
           matInput
+          (focus)="getJobTitles('')"
           (change)="autocompleteChange('job_title_id')"
           (blur)="vacancyForm.controls['job_title_id'].markAsTouched()"
           [matAutocomplete]="jobTitleAutocomplete"
@@ -78,6 +79,7 @@
         <mat-label>Структура</mat-label>
         <input
           matInput
+          (focus)="getCompanyStructures('')"
           (change)="autocompleteChange('company_struct_id')"
           (blur)="vacancyForm.controls['company_struct_id'].markAsTouched()"
           [matAutocomplete]="companyStructAutocomplete"
@@ -127,6 +129,7 @@
       <mat-label>Город</mat-label>
       <input
         matInput
+        (focus)="getCities('')"
         (change)="autocompleteChange('city_id')"
         (blur)="vacancyForm.controls['city_id'].markAsTouched()"
         [matAutocomplete]="cityAutocomplete"

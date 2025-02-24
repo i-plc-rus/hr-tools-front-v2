@@ -51,6 +51,10 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getUsers();
     this.setFormListeners();
+    if (!this.vacancyForm.get('department_id')?.value) {
+      this.vacancyForm.get('job_title_name')?.disable();
+      this.vacancyForm.get('company_struct_name')?.disable();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -61,6 +65,23 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
   }
 
   setFormListeners() {
+    this.vacancyForm.get('department_id')?.valueChanges.subscribe((departmentId) => {
+      if (!departmentId) {
+        this.vacancyForm.get('job_title_name')?.disable();
+        this.vacancyForm.get('company_struct_name')?.disable();
+
+        // Сбрасываем структуру, чтобы она не ограничивала поиск подразделений
+        this.vacancyForm.get('company_struct_id')?.setValue(null);
+        this.vacancyForm.get('company_struct_name')?.setValue(null);
+
+        // Загружаем все подразделения заново
+        this.getDepartments('');
+      } else {
+        this.vacancyForm.get('job_title_name')?.enable();
+        this.vacancyForm.get('company_struct_name')?.enable();
+      }
+    });
+
     this.vacancyForm.get('city')?.valueChanges
       .pipe(debounceTime(700), distinctUntilChanged())
       .subscribe((newValue) => {

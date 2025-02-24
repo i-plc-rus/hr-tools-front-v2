@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   DictapimodelsCityView,
   DictapimodelsCompanyStructView,
@@ -46,7 +46,8 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
     private router: Router,
     private vacancyModal: VacancyModalService,
     private api: ApiService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.getUsers();
@@ -55,6 +56,7 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
       this.vacancyForm.get('job_title_name')?.disable();
       this.vacancyForm.get('company_struct_name')?.disable();
     }
+    this.addSalaryValidation();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -63,6 +65,33 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
       this.getDepartments('');
     }
   }
+
+  addSalaryValidation() {
+    const salaryControls = ['in_hand', 'from', 'to', 'by_result'];
+
+    salaryControls.forEach(control => {
+      const formControl = this.vacancyForm.get(`salary.${control}`);
+      if (formControl) {
+        formControl.setValidators([
+          Validators.min(1),
+          Validators.pattern(/^[1-9]\d*$/)
+        ]);
+        formControl.updateValueAndValidity();
+      }
+    });
+  }
+
+  validateSalaryInput(event: any) {
+    let value = event.target.value;
+
+    if (/^-|^0+/.test(value)) {
+      value = '';
+    }
+
+    event.target.value = value;
+    this.vacancyForm.get(event.target.getAttribute('formControlName'))?.setValue(value);
+  }
+
 
   setFormListeners() {
     this.vacancyForm.get('department_id')?.valueChanges.subscribe((departmentId) => {
@@ -223,7 +252,8 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
       console.log('Не заполнены обязательные параметры');
       this.vacancyForm.markAllAsTouched();
       return;
-    };
+    }
+    ;
 
     const selection_type = this.vacancyForm.value.opened_positions > 1 ? ModelsVRSelectionType.VRSelectionTypeMass : ModelsVRSelectionType.VRSelectionTypePersonal;
     this.vacancyForm.controls['selection_type'].setValue(selection_type);

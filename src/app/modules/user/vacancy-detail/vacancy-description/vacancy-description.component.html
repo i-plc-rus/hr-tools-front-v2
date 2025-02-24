@@ -106,20 +106,44 @@
       <label class="text-[16px] leading-6 font-medium mb-2">Ожидаемая ЗП</label>
       <mat-form-field appearance="outline">
         <mat-label>Сумма на руки</mat-label>
-        <input matInput type="number" formControlName="salary" formControlName="in_hand" />
+        <input
+          matInput
+          type="number"
+          formControlName="in_hand"
+          (input)="validateSalaryInput($event)"
+        />
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>ЗП от</mat-label>
-        <input matInput type="number" formControlName="from" />
+        <input
+          matInput
+          type="number"
+          formControlName="from"
+          (input)="validateSalaryInput($event)"
+        />
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>ЗП до</mat-label>
-        <input matInput type="number" formControlName="to" />
+        <input
+          matInput
+          type="number"
+          formControlName="to"
+          (input)="validateSalaryInput($event)"
+        />
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>ЗП по результатам собеседования</mat-label>
-        <input matInput type="number" formControlName="by_result" />
+        <input
+          matInput
+          type="number"
+          formControlName="by_result"
+          (input)="validateSalaryInput($event)"
+        />
       </mat-form-field>
+
     </div>
   </div>
 

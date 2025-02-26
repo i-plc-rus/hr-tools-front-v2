@@ -82,7 +82,8 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Телефон</mat-label>
-          <input matInput [formControl]="userForm.controls['phone_number']">
+          <input matInput [formControl]="userForm.controls['phone_number']" 
+            placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00">
 
           @let isPhoneErrorRequired = userForm.controls['phone_number'].hasError('required') &&
           !userForm.controls['phone_number'].untouched;

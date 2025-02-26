@@ -100,6 +100,7 @@ import {CompanyProfileComponent} from './profile/company-profile/company-profile
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -203,7 +204,8 @@ import {MatBadge} from '@angular/material/badge';
     MatRow,
     MatTableModule,
     MatToolbar,
-    MatBadge
+    MatBadge,
+    MatSnackBarModule
   ]
 
 })

@@ -26,7 +26,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Пароль</mat-label>
-          <input matInput [formControl]="userForm.controls['password']">
+          <input matInput [formControl]="userForm.controls['password']" spellcheck="false">
 
           @let isPasswordErrorRequired = userForm.controls['password'].hasError('required') &&
           !userForm.controls['password'].untouched;
@@ -42,7 +42,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Подтверждение пароля</mat-label>
-          <input matInput [formControl]="userForm.controls['confirm_password']">
+          <input matInput [formControl]="userForm.controls['confirm_password']" spellcheck="false">
 
           @let isConfirmPasswordErrorRequired = userForm.controls['confirm_password'].hasError('required') &&
           !userForm.controls['confirm_password'].untouched;

@@ -2,15 +2,16 @@
 <div class="flex justify-between items-center mt-6">
   <div class="flex items-center gap-4">
     <!-- Контейнер для фото -->
-    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2" (click)="fileInput.click()">
-      @if (companyLogoPreview) {
-        <img [src]="companyLogoPreview" alt="Логотип компании" class="w-full h-full object-cover">
-      } @else {
+    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2" (click)="triggerFileInput()">
+      <img *ngIf="companyLogoPreview; else noPhoto" [src]="companyLogoPreview" alt="Логотип компании" class="w-full h-full object-cover">
+
+      <ng-template #noPhoto>
         <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
           <mat-icon svgIcon="add-a-photo" class="text-gray-500 text-2xl"></mat-icon>
         </div>
-      }
-      <input #fileInput type="file" (change)="uploadLogo($event)" hidden accept="image/*">
+      </ng-template>
+
+      <input #fileInput type="file" (change)="uploadPhoto($event)" hidden accept="image/*">
     </div>
   </div>
 </div>
@@ -30,9 +31,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Часовой пояс</mat-label>
-      <mat-select formControlName="timezone">
-        <mat-option *ngFor="let tz of timezones" [value]="tz.id">{{ tz.name }}</mat-option>
-      </mat-select>
+      <input matInput formControlName="timezone">
     </mat-form-field>
   </div>
 
@@ -46,7 +45,6 @@
     Этот текст будет опубликован на карьерной странице вашей компании. Постарайтесь кратко написать о том, чем занимается ваша компания и почему в ней классно работать.
   </p>
 
-  <!-- Кнопка "Сохранить" -->
   <div class="mt-4">
     <button mat-flat-button class="btn-primary" (click)="saveCompanySettings()" [disabled]="companyForm.pristine || companyForm.invalid">
       Сохранить

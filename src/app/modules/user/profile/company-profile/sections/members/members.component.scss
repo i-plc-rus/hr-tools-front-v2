@@ -82,3 +82,61 @@ table {
   color: #666;
 }
 
+//========Лицензия
+.license-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f8fafd;
+  border-radius: 8px;
+}
+
+.license-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+mat-progress-bar {
+  width: 100px;
+  height: 6px;
+  border-radius: 4px;
+  background: #d1d5db;
+}
+
+.license-actions {
+  display: flex;
+  gap: 16px;
+}
+.members-container {
+  display: flex;
+  flex-direction: column;
+   // Высота всего экрана
+
+  .toolbar {
+    flex-shrink: 0;
+  }
+
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: calc(100vh - 275px);
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
+    min-height: 200px;
+  }
+
+  .license-card {
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+}
+

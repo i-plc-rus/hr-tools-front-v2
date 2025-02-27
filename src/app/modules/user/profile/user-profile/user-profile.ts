@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {LoadingWrapperService} from "../services/loading-wrapper.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -10,7 +11,7 @@ export class UserProfileComponent implements OnInit{
   tabLinks = ['account', 'external-accounts', 'notifications', 'templates', 'interface-settings'];
   selectedIndex = 0;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute, public loadingService: LoadingWrapperService) {}
 
   ngOnInit() {
     // активный таб из маршрута

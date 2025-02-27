@@ -1,9 +1,9 @@
-
 <!-- Контейнер с фото и кнопкой -->
 <div class="flex justify-between items-center mt-6">
   <div class="flex items-center gap-4">
     <!-- Контейнер для фото -->
-    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2" (click)="fileInput.click()">
+    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2"
+         (click)="fileInput.click()">
       @if (userPhotoPreview) {
         <img [src]="userPhotoPreview" alt="Фото профиля" class="w-full h-full object-cover">
       } @else if (userPhoto) {
@@ -38,11 +38,14 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Должность</mat-label>
-      <mat-select formControlName="job_title_id">
-        @for (job of jobTitles; track job.id) {
-          <mat-option [value]="job.id">{{ job.name }}</mat-option>
-        }
-      </mat-select>
+      <input matInput formControlName="job_title_name">
+
+<!--      Логика под дропдаун, если он понадобится. Вроде бы обсуждали что нужен будет-->
+<!--      <mat-select formControlName="job_title_id">-->
+<!--                @for (job of jobTitles; track job.id) {-->
+<!--                  <mat-option [value]="job.id">{{ job.name }}</mat-option>-->
+<!--                }-->
+<!--      </mat-select>-->
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -57,7 +60,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Внутренний номер</mat-label>
-      <input matInput formControlName="internalNumber" type="number" />
+      <input matInput formControlName="internalNumber" type="number"/>
     </mat-form-field>
 
   </div>
@@ -71,7 +74,8 @@
   <!-- Текстовое поле с редактором -->
   <div class="mt-4 w-full">
     <mat-label>Текст подписи</mat-label>
-    <quill-editor formControlName="signatureText" [modules]="quillConfig" placeholder="" class="w-full h-60"></quill-editor>
+    <quill-editor formControlName="signatureText" [modules]="quillConfig" placeholder=""
+                  class="w-full h-60"></quill-editor>
   </div>
 
   <!-- Кнопка "Сохранить" -->
@@ -83,5 +87,7 @@
       [disabled]="profileForm.pristine || profileForm.invalid">
       Сохранить
     </button>
+
+
   </div>
 </form>

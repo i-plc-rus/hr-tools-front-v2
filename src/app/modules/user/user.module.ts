@@ -78,7 +78,7 @@ import {
   InterfaceSettingsComponent
 } from './profile/user-profile/profile/interface-settings/interface-settings.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {MatCard} from '@angular/material/card';
+import {MatCard, MatCardContent} from '@angular/material/card';
 import {
   MatCell,
   MatColumnDef,
@@ -100,6 +100,9 @@ import {CompanyProfileComponent} from './profile/company-profile/company-profile
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
+import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 
 @NgModule({
   declarations: [
@@ -149,7 +152,9 @@ import {MatBadge} from '@angular/material/badge';
     IntegrationsComponent,
     MembersComponent,
     CompanyTemplatesComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    LoadingWrapperComponent,
+    EditMemberModalComponent
 
   ],
   imports: [
@@ -203,7 +208,9 @@ import {MatBadge} from '@angular/material/badge';
     MatRow,
     MatTableModule,
     MatToolbar,
-    MatBadge
+    MatBadge,
+    MatCardContent,
+    MatProgressBar
   ]
 
 })

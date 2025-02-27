@@ -2,14 +2,19 @@
   <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     <!-- Кнопки для переключения между профилями -->
     <div class="flex gap-3">
-      <button mat-flat-button color="primary" [routerLink]="['/user', 'profile', 'personal']">
+      <button mat-flat-button
+              [routerLink]="['/user', 'profile', 'personal']"
+              [ngClass]="{'active-button': isActive('/user/profile/personal'), 'inactive-button': !isActive('/user/profile/personal')}">
         Личный профиль
       </button>
-      <button mat-stroked-button color="primary" [routerLink]="['/user', 'profile', 'company']" routerLinkActive="active">
+
+      <button mat-flat-button
+              [routerLink]="['/user', 'profile', 'company']"
+              [ngClass]="{'active-button': isActive('/user/profile/company'), 'inactive-button': !isActive('/user/profile/company')}">
         Настройки компании
       </button>
-
     </div>
+
     <router-outlet></router-outlet>
   </div>
 </div>

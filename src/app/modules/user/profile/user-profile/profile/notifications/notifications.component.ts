@@ -7,6 +7,7 @@ import {
   SpaceapimodelsPushSettingData,
   SpaceapimodelsPushSettings
 } from '../../../../../../api/data-contracts';
+import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 
 export interface NotificationSetting {
   event: string;
@@ -26,13 +27,15 @@ export class NotificationsComponent implements OnInit {
   notifications = signal<NotificationSetting[]>([]);
   pushEnabled = signal(false);
 
-  constructor(private api: ApiService ) {}
+  constructor(private api: ApiService, private loadingService: LoadingWrapperService) {
+  }
 
   ngOnInit(): void {
     this.loadNotifications();
   }
 
   loadNotifications(): void {
+   this.loadingService.setLoading(true)
     this.api.v1UserProfilePushSettingsList().subscribe({
       next: (response) => {
         const httpResponse = response as unknown as HttpResponse<{ data: SpaceapimodelsPushSettings }>;
@@ -40,36 +43,23 @@ export class NotificationsComponent implements OnInit {
         if (httpResponse.body?.data) {
           const settings = httpResponse.body.data.settings ?? [];
 
-          const updatedNotifications: NotificationSetting[] = this.notifications().map(existingItem => {
-            const updatedItem = settings.find(event => event.code === existingItem.code);
-            return updatedItem
-              ? {
-                event: updatedItem.name ?? '',
-                system: updatedItem.value?.system ?? false,
-                email: updatedItem.value?.email ?? false,
-                telegram: updatedItem.value?.tg ?? false,
-                code: updatedItem.code as ModelsSpacePushSettingCode
-              }
-              : existingItem;
-          });
-
-          settings.forEach(event => {
-            if (!updatedNotifications.some(item => item.code === event.code)) {
-              updatedNotifications.push({
-                event: event.name ?? '',
-                system: event.value?.system ?? false,
-                email: event.value?.email ?? false,
-                telegram: event.value?.tg ?? false,
-                code: event.code as ModelsSpacePushSettingCode
-              });
-            }
-          });
+          this.pushEnabled.set(httpResponse.body.data.is_active ?? false);
+          const updatedNotifications: NotificationSetting[] = settings.map(event => ({
+            event: event.name ?? '',
+            system: event.value?.system ?? false,
+            email: event.value?.email ?? false,
+            telegram: event.value?.tg ?? false,
+            code: event.code as ModelsSpacePushSettingCode
+          }));
 
           this.notifications.set(updatedNotifications);
         }
+        this.loadingService.setLoading(false)
       },
-      error: (err) => console.error('Ошиба получения уведомлений:', err)
-    });
+      error: (err) => {
+        console.error('Ошибка получения уведомлений:', err);
+        this.loadingService.setLoading(false)
+      }    });
   }
 
   togglePushNotifications(enabled: boolean): void {

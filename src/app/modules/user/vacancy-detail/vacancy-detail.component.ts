@@ -5,6 +5,7 @@ import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
 import {vacancyStatuses} from '../user-consts';
+import {UsersModalService} from '../../../services/users-modal.service';
 
 type VacancyDetailCategory = 'description' | 'publication' | 'stages' | 'integrations' | 'team';
 
@@ -52,7 +53,8 @@ export class VacancyDetailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private modalService: UsersModalService
   ) { }
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class VacancyDetailComponent implements OnInit {
       if (params['id']) {
         this.getVacancyById(params['id']);
       }
-      else 
+      else
         this.isNewVacancy = true;
     })
   }
@@ -97,6 +99,13 @@ export class VacancyDetailComponent implements OnInit {
       this.router.navigate(['user', 'vacancy', 'list']);
     else
       this.router.navigate(['user', 'vacancy', this.vacancy.id, 'candidates']);
+  }
+
+  generateSurvey() {
+    this.modalService.openGenerateSurveyModal().subscribe((confirmed) => {
+      if (confirmed) {
+      }
+    });
   }
 
 }

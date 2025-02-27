@@ -1,0 +1,69 @@
+<mat-card class="survey-card">
+  <h2 class="survey-title">Анкета</h2>
+
+  <div class="scroll-container" [formGroup]="surveyForm">
+    <p class="question">Насколько критичен опыт холодных B2B-продаж?</p>
+    <p class="subtext">Холодные продажи — основной канал, нужен приоритет</p>
+    <mat-radio-group class="radio-group" formControlName="b2bExperience">
+      <mat-radio-button value="required">Обязательно</mat-radio-button>
+      <mat-radio-button value="preferred">Желательно</mat-radio-button>
+      <mat-radio-button value="not-applicable">Вопрос не подходит</mat-radio-button>
+    </mat-radio-group>
+
+    <p class="question">Нужен ли опыт именно в сфере IT?</p>
+    <p class="subtext">Опыт в IT сокращает адаптацию</p>
+    <mat-radio-group class="radio-group" formControlName="itExperience">
+      <mat-radio-button value="required">Обязательно</mat-radio-button>
+      <mat-radio-button value="preferred">Желательно</mat-radio-button>
+      <mat-radio-button value="not-applicable">Вопрос не подходит</mat-radio-button>
+    </mat-radio-group>
+
+    <h3 class="question">Ключевые навыки</h3>
+
+    <div class="toggle-group">
+      <mat-slide-toggle [(ngModel)]="skillsToggle">Вопрос не подходит</mat-slide-toggle>
+    </div>
+    <mat-form-field class="full-width" *ngIf="!skillsToggle">
+      <mat-label>Какие ключевые навыки в продажах особенно важны?</mat-label>
+      <textarea matInput formControlName="keySkills" placeholder="Опишите критические навыки"></textarea>
+    </mat-form-field>
+
+    <p class="question">Если CRM — насколько глубокого нужно знание?</p>
+    <p class="subtext">Использование CRM — обязательная часть работы</p>
+    <mat-radio-group class="radio-group" formControlName="crmKnowledge">
+      <mat-radio-button value="deep">Глубокое владение (идеальный вариант)</mat-radio-button>
+      <mat-radio-button value="basic">Базовое</mat-radio-button>
+      <mat-radio-button value="trainable">Можно обучить</mat-radio-button>
+      <mat-radio-button value="not-applicable">Вопрос не подходит</mat-radio-button>
+    </mat-radio-group>
+
+    <p class="question">Личные качества</p>
+
+    <div class="toggle-group">
+      <mat-slide-toggle [(ngModel)]="softSkillsToggle">Вопрос не подходит</mat-slide-toggle>
+    </div>
+    <mat-form-field class="full-width" *ngIf="!softSkillsToggle">
+      <mat-label>Какие личные качества (soft skills) требуются?</mat-label>
+      <textarea matInput formControlName="softSkills" placeholder="Опишите, наиболее значимые качества"></textarea>
+    </mat-form-field>
+
+    <p class="question">Какие источники клиентов наиболее эффективны?</p>
+    <mat-radio-group class="radio-group" formControlName="clientSources">
+      <mat-radio-button value="cold-calls">Холодные звонки</mat-radio-button>
+      <mat-radio-button value="email">Email-рассылки</mat-radio-button>
+      <mat-radio-button value="linkedin">LinkedIn</mat-radio-button>
+      <mat-radio-button value="other">Другое</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field class="full-width">
+      <mat-label>Какие вопросы ещё важно учитывать?</mat-label>
+      <textarea matInput formControlName="additionalQuestions" placeholder="Опишите дополнительные аспекты"></textarea>
+    </mat-form-field>
+  </div>
+
+  <!-- Кнопки -->
+  <div class="button-group">
+    <button mat-button color="primary" (click)="cancel()">Отменить</button>
+    <button mat-raised-button color="accent" [disabled]="surveyForm.invalid" (click)="submit()">Сохранить</button>
+  </div>
+</mat-card>

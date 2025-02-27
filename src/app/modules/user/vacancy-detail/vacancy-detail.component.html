@@ -28,24 +28,35 @@
   </div>
 
   <div class="w-full p-6 bg-white rounded-3xl relative">
-    <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category" [class.pr-44]="category.value === 'stages'">
-      <mat-chip-option value="description" [selectable]="category.value !== 'description'">
-        Описание вакансии
-      </mat-chip-option>
-      <mat-chip-option value="publication" [selectable]="category.value !== 'publication'" [disabled]="isNewVacancy">
-        Публикация
-      </mat-chip-option>
-      <mat-chip-option value="stages" [selectable]="category.value !== 'stages'" [disabled]="isNewVacancy">
-        Этапы подбора
-      </mat-chip-option>
-      <!-- <mat-chip-option value="integrations" [selectable]="category.value !== 'integrations'" [disabled]="isNewVacancy">
-        Интеграции
-      </mat-chip-option> -->
-      <mat-chip-option value="team" [selectable]="category.value !== 'team'" [disabled]="isNewVacancy">
-        Команда
-      </mat-chip-option>
-    </mat-chip-listbox>
-
+    <div class="flex items-center justify-between">
+      <div>
+        <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category"
+                          [class.pr-44]="category.value === 'stages'">
+          <mat-chip-option value="description" [selectable]="category.value !== 'description'">
+            Описание вакансии
+          </mat-chip-option>
+          <mat-chip-option value="publication" [selectable]="category.value !== 'publication'"
+                           [disabled]="isNewVacancy">
+            Публикация
+          </mat-chip-option>
+          <mat-chip-option value="stages" [selectable]="category.value !== 'stages'" [disabled]="isNewVacancy">
+            Этапы подбора
+          </mat-chip-option>
+          <!-- <mat-chip-option value="integrations" [selectable]="category.value !== 'integrations'" [disabled]="isNewVacancy">
+            Интеграции
+          </mat-chip-option> -->
+          <mat-chip-option value="team" [selectable]="category.value !== 'team'" [disabled]="isNewVacancy">
+            Команда
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div>
+        <button mat-flat-button class="btn-secondary px-4 py-2 ml-4" (click)="generateSurvey()">
+          <mat-icon class="mr-2">bolt</mat-icon>
+          Сгенерировать анкету
+        </button>
+      </div>
+    </div>
     <app-vacancy-description
       [class.hidden]="category.value !== 'description'"
       [vacancyForm]="vacancyForm"

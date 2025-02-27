@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UsersModalService} from '../../../../services/users-modal.service';
 import {SpaceapimodelsCreateUser, SpaceapimodelsUpdateUser} from '../../../../api/data-contracts';
 import {SpaceUser as User} from '../../../../models/SpaceUser';
 import {ApiService} from '../../../../api/Api';
 import {matchValidator} from '../../../../validators/match';
+import {SnackBarService} from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-add-user-modal',
@@ -35,6 +36,7 @@ export class AddUserModalComponent implements OnInit {
   constructor(
     private modalService: UsersModalService,
     private api: ApiService,
+    private snackBar: SnackBarService
   ) {
 
     this.spaceId = localStorage.getItem('spaceId') || '';
@@ -70,7 +72,7 @@ export class AddUserModalComponent implements OnInit {
       password: this.userForm.controls.password.value || undefined,
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
-      phone_number: this.userForm.controls.phone_number.value || undefined,
+      phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || undefined,
       is_admin: this.userForm.controls.is_admin.value || undefined,
       space_id: this.spaceId,
     };
@@ -79,10 +81,13 @@ export class AddUserModalComponent implements OnInit {
       next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
+        this.snackBar.snackBarMessageSuccess('Пользователь успешно создан');
         this.modalService.closeModal();
       },
       error: (error) => {
-        console.log(error);
+        const errorMessage: string = JSON.parse(error.message).error.message;
+        console.log(errorMessage);
+        this.snackBar.snackBarMessageError(errorMessage);
         this.isLoading = false;
       }
     });
@@ -97,7 +102,7 @@ export class AddUserModalComponent implements OnInit {
       password: this.userForm.controls.password.value || undefined,
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
-      phone_number: this.userForm.controls.phone_number.value || undefined,
+      phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || undefined,
       is_admin: this.userForm.controls.is_admin.value || undefined
     };
 
@@ -105,10 +110,13 @@ export class AddUserModalComponent implements OnInit {
       next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
+        this.snackBar.snackBarMessageSuccess('Пользователь успешно обновлен');
         this.modalService.closeModal();
       },
       error: (error) => {
-        console.log(error);
+        const errorMessage: string = JSON.parse(error.message).error.message;
+        console.log(errorMessage);
+        this.snackBar.snackBarMessageError(errorMessage);
         this.isLoading = false;
       }
     });

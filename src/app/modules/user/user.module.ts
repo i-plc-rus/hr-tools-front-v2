@@ -104,6 +104,7 @@ import {MatBadge} from '@angular/material/badge';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
 import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -212,7 +213,8 @@ import {EditMemberModalComponent} from './profile/company-profile/modals/edit-me
     MatToolbar,
     MatBadge,
     MatCardContent,
-    MatProgressBar
+    MatProgressBar,
+    MatSnackBarModule
   ]
 
 })

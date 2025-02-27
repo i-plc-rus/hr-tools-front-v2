@@ -257,6 +257,33 @@ mat-option {
   --mat-option-hover-state-layer-color: var(--background-alter);
 }
 
+//material snackbar
+
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-shape: 12px;
+  &.snackbar-primary {
+    --mdc-snackbar-container-color: var(--status-color-success-text);
+    --mat-mdc-snack-bar-button-color: var(--background-main);
+    --mdc-snackbar-supporting-text-color: var(--background-alter);
+    --mdc-snackbar-container-shape: 12px;
+  }
+  &.snackbar-danger {
+    --mdc-snackbar-container-color: var(--error-alter);
+    --mat-mdc-snack-bar-button-color: var(--background-main);
+    --mdc-snackbar-supporting-text-color: var(--background-alter);
+  }
+  &.snackbar-warning {
+    --mdc-snackbar-container-color: var(--status-color-warning-text);
+    --mat-mdc-snack-bar-button-color: var(--background-main);
+    --mdc-snackbar-supporting-text-color: var(--background-alter);
+  }
+  &.snackbar-info {
+    --mdc-snackbar-container-color: var(--status-color-info-text);
+    --mat-mdc-snack-bar-button-color: var(--background-main);
+    --mdc-snackbar-supporting-text-color: var(--background-alter);
+  }
+}
+
 //ag-grid
 
 .ag-theme-material {

@@ -224,7 +224,7 @@
                 }
               </div>
               @if (request.status === 'Согласована') {
-                <button mat-flat-button class="btn-primary text-nowrap">Создать вакансию</button>
+                <button mat-flat-button class="btn-primary text-nowrap" (click)="publishVacancy(request.id)">Создать вакансию</button>
               }
             </div>
 

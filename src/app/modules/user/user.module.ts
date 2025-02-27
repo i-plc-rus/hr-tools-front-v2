@@ -51,6 +51,7 @@ import {TextInputComponent} from "../../components/text-input/text-input.compone
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
 import {NgxMaskDirective, NgxMaskPipe} from 'ngx-mask';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -178,6 +179,7 @@ import {EditMemberModalComponent} from './profile/company-profile/modals/edit-me
     DropdownContentDirective,
     NgxMaskDirective,
     NgxMaskPipe,
+    PdfViewerModule,
 
     MatIcon,
     MatIconModule,

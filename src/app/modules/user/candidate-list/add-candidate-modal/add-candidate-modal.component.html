@@ -44,7 +44,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Фамилия</mat-label>
-            <input matInput formControlName="last_name" />
+            <input matInput formControlName="last_name" autocomplete="new-last-name" />
 
             @let isLastNameErrorRequired =
               applicantForm.controls['last_name'].hasError('required') &&
@@ -57,7 +57,7 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Имя</mat-label>
-            <input matInput formControlName="first_name" />
+            <input matInput formControlName="first_name" autocomplete="new-first-name"/>
 
             @let isFirstNameErrorRequired =
               applicantForm.controls['first_name'].hasError('required') &&
@@ -71,18 +71,18 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Отчество</mat-label>
-            <input matInput [formControl]="applicantForm.controls['middle_name']" />
+            <input matInput [formControl]="applicantForm.controls['middle_name']" autocomplete="new-middle-name" />
           </mat-form-field>
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Адрес</mat-label>
-            <input matInput formControlName="address" />
+            <input matInput formControlName="address" autocomplete="new-address" />
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Дата рождения</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="birth_date" />
+            <input matInput [matDatepicker]="picker" formControlName="birth_date"  autocomplete="new-birth-date" />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -99,7 +99,7 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Гражданство</mat-label>
-            <input matInput formControlName="citizenship" />
+            <input matInput formControlName="citizenship" autocomplete="new-citizenship" />
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
@@ -117,7 +117,7 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>E-mail</mat-label>
-            <input matInput formControlName="email" />
+            <input matInput formControlName="email" autocomplete="new-email" />
 
             @let isEmailErrorEmail =
               applicantForm.controls['email'].hasError('email') && !applicantForm.controls['email'].untouched;
@@ -144,7 +144,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Опыт работ в месяцах</mat-label>
-            <input type="number" matInput formControlName="total_experience" />
+            <input type="number" matInput formControlName="total_experience" autocomplete="new-total-experience"/>
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
@@ -200,7 +200,7 @@
               <li class="flex flex-col items-center gap-x-4 lg:flex-row" [formGroup]="languageForm">
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Язык</mat-label>
-                  <input matInput formControlName="name" />
+                  <input matInput formControlName="name" autocomplete="new-name" />
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Уровень</mat-label>

@@ -1,0 +1,11 @@
+.active-button {
+  background-color: var(--link-default) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.inactive-button {
+  background-color: white !important;
+  color: var(--link-default) !important;
+  border: 1px solid var(--link-default) !important;
+}

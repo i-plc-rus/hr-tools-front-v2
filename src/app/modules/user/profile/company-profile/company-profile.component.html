@@ -8,6 +8,8 @@
   <mat-tab label="Шаблоны компании"></mat-tab>
 </mat-tab-group>
 
+<app-loading-wrapper [isLoading]="loadingService.getLoading()">
 <div class="flex-1 overflow-auto">
   <router-outlet></router-outlet>
 </div>
+</app-loading-wrapper>

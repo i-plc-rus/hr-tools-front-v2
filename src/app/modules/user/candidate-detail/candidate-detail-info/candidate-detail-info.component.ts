@@ -23,7 +23,7 @@ export class CandidateDetailInfoComponent {
 
   openEditModal() {
     if (!this.applicant) return;
-    this.modalService.editCandidateModal(this.applicant, this.photo, this.resume ? 'Файл резюме' : undefined).subscribe(() =>
+    this.modalService.editCandidateModal(this.applicant, this.photo, this.resume ? this.resume.name : undefined).subscribe(() =>
       this.onSubmit.emit(true)
     );
   }

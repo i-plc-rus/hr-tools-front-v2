@@ -7,6 +7,9 @@ import {SpaceUser as User} from '../models/SpaceUser';
 import {
   ChangePasswordModalComponent
 } from '../modules/user/profile/user-profile/change-password-modal/change-password-modal.component';
+import {
+  EditMemberModalComponent
+} from '../modules/user/profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 
 
 @Injectable({
@@ -14,7 +17,7 @@ import {
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent>;
+  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -65,6 +68,32 @@ export class UsersModalService {
 
   changePasswordModal(): EventEmitter<boolean> {
     this.portal = new ComponentPortal(ChangePasswordModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(this.portal);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  editMemberModal(user: string): EventEmitter<boolean> {
+    this.portal = new ComponentPortal(EditMemberModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(this.portal);
+
+    componentRef.instance.user = user;
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  addMemberModal(): EventEmitter<boolean> {
+    this.portal = new ComponentPortal(AddUserModalComponent);
     this.overlayRef = this.createOverlay(this.overlay);
     const componentRef = this.overlayRef.attach(this.portal);
 

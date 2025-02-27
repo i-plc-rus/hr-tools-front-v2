@@ -27,6 +27,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   docList?: FilesapimodelsFileView[];
   photo?: string;
   resume?: File;
+  resumeUint?: Uint8Array;
   changesLog?: ApplicantHistoryView[];
   changesCommentsOnly = new FormControl<boolean>(false);
   comment = new FormControl('');
@@ -82,10 +83,13 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   getResume() {
     if (!this.applicant) return;
     this.isLoading = true;
-    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
-      next: (data: any) => {
-        if (data.body && data.body.size > 0) {
-          this.resume = data.body;
+    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {observe: 'response', responseType: "arraybuffer"}).subscribe({
+      next: async (data: any) => {
+        if (data.body && data.body.byteLength > 0 && data.headers.get('content-type') === 'application/pdf') {
+          const blob = new Blob([data.body], {type: 'application/pdf'});
+          const fileName: string = data.headers.get('content-disposition').split('=')[1];
+          this.resume = new File([blob], fileName);
+          this.resumeUint = new Uint8Array(await this.resume.arrayBuffer());
         }
         this.isLoading = false;
       },
@@ -212,6 +216,12 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
         this.isLoading = false;
       },
     });
+  }
+
+  printResume() {
+    if (!this.resume) return;
+    const blobUrl = URL.createObjectURL(this.resume);
+    window.open(blobUrl, '_blank')?.print();
   }
 
   downloadResume() {

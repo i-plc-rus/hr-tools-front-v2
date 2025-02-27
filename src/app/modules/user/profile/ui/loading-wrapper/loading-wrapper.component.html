@@ -1,0 +1,9 @@
+<div class="loading-wrapper">
+  @if (isLoading) {
+    <div class="w-full h-full flex items-center justify-center">
+      <app-loader></app-loader>
+    </div>
+  } @else {
+    <ng-content></ng-content>
+  }
+</div>

@@ -51,6 +51,7 @@ import {TextInputComponent} from "../../components/text-input/text-input.compone
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
 import {NgxMaskDirective, NgxMaskPipe} from 'ngx-mask';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
 
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -78,7 +79,7 @@ import {
   InterfaceSettingsComponent
 } from './profile/user-profile/profile/interface-settings/interface-settings.component';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {MatCard} from '@angular/material/card';
+import {MatCard, MatCardContent} from '@angular/material/card';
 import {
   MatCell,
   MatColumnDef,
@@ -100,6 +101,9 @@ import {CompanyProfileComponent} from './profile/company-profile/company-profile
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
+import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
@@ -150,7 +154,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     IntegrationsComponent,
     MembersComponent,
     CompanyTemplatesComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    LoadingWrapperComponent,
+    EditMemberModalComponent
 
   ],
   imports: [
@@ -174,6 +180,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     DropdownContentDirective,
     NgxMaskDirective,
     NgxMaskPipe,
+    PdfViewerModule,
 
     MatIcon,
     MatIconModule,
@@ -205,6 +212,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatTableModule,
     MatToolbar,
     MatBadge,
+    MatCardContent,
+    MatProgressBar,
     MatSnackBarModule
   ]
 

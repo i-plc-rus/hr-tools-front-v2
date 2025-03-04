@@ -21,7 +21,7 @@ export class AccountComponent implements OnInit {
     job_title_name: new FormControl(''),
     phone: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    internalNumber: new FormControl(''),
+    internalNumber: new FormControl('', [Validators.min(0)]),
     signatureText: new FormControl(''),
     personalSignature: new FormControl(false)
   });

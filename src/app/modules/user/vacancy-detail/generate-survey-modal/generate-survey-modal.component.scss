@@ -1,0 +1,79 @@
+.survey-card {
+width: 748px;
+  height: 85vh;
+  margin: auto;
+  padding: 64px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.survey-title {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 32px;
+}
+
+.scroll-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 14px;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.question {
+  font-size: 24px;
+  font-weight: lighter;
+
+}
+
+.subtext {
+  font-size: 16px;
+  font-weight: lighter;
+  margin-bottom: 8px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 18px 0 ;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}

@@ -104,6 +104,7 @@ import {MatBadge} from '@angular/material/badge';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
 import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
+import {GenerateSurveyModalComponent} from './vacancy-detail/generate-survey-modal/generate-survey-modal.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
@@ -156,7 +157,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     CompanyTemplatesComponent,
     CompanyProfileComponent,
     LoadingWrapperComponent,
-    EditMemberModalComponent
+    EditMemberModalComponent,
+    GenerateSurveyModalComponent
 
   ],
   imports: [

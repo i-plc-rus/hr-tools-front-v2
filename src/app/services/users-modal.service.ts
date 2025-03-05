@@ -10,6 +10,9 @@ import {
 import {
   EditMemberModalComponent
 } from '../modules/user/profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
+import {
+  GenerateSurveyModalComponent
+} from '../modules/user/vacancy-detail/generate-survey-modal/generate-survey-modal.component';
 
 
 @Injectable({
@@ -17,7 +20,7 @@ import {
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent>;
+  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent | GenerateSurveyModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -84,6 +87,18 @@ export class UsersModalService {
     const componentRef = this.overlayRef.attach(this.portal);
 
     componentRef.instance.user = user;
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  openGenerateSurveyModal(): EventEmitter<boolean> {
+    this.portal = new ComponentPortal(GenerateSurveyModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(this.portal);
 
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();

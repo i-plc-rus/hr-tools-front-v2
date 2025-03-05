@@ -3,6 +3,7 @@ import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
+import {RequestOptions} from '../../../../../../api/http-client';
 
 enum TableColumns {
   Avatar = 'avatar',
@@ -48,14 +49,20 @@ export class MembersComponent implements OnInit {
 
   private loadUserAvatars(): void {
     this.participants.forEach((user) => {
-      if (!user.id) return;
 
-      this.api.v1UserProfilePhotoList({responseType: 'blob' as 'json'}).subscribe({
-        next: (response: any) => this.handleAvatarResponse(user.id!, response),
-        error: (err) => this.handleError(err, `Ошибка згрузки фото ${user.id}`)
+      if (!user.id) return;
+      this.api.v1UsersPhotoDetail(user.id, {responseType: 'blob'} as RequestOptions).subscribe({
+        next: (resp) => {
+          const blob: Blob = resp as unknown as Blob
+          if (blob.size) {
+            this.handleAvatarResponse(user.id!, resp)
+          }
+        },
+        error: (err) => this.handleError(err, `Ошибка загрузки фото ${user.id}`)
       });
     });
   }
+
 
   deleteParticipant(user: SpaceapimodelsSpaceUser): void {
     if (!user.id) return;
@@ -73,17 +80,19 @@ export class MembersComponent implements OnInit {
     if (response.body.data) {
       this.participants = response.body.data;
       this.loadUserAvatars();
+
     } else {
       console.warn('Пустой ответ от API.');
     }
     this.loadingService.setLoading(false);
   }
 
-  private handleAvatarResponse(userId: string, response: Blob): void {
+  private handleAvatarResponse(userId: string, response: any): void {
     const reader = new FileReader();
 
     reader.onload = () => this.avatarsMap.set(userId, reader.result as string);
     reader.readAsDataURL(response);
+    this.cdr.detectChanges()
   }
 
 

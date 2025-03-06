@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
+import {UsersModalService} from '../../../../services/users-modal.service';
 
 @Component({
   selector: 'app-generate-survey-modal',
@@ -16,7 +17,7 @@ export class GenerateSurveyModalComponent {
   softSkillsToggle = false;
   loading = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private modalService: UsersModalService) {
     this.surveyForm = this.fb.group({
       b2bExperience: [''],
       itExperience: [''],
@@ -24,8 +25,11 @@ export class GenerateSurveyModalComponent {
       crmKnowledge: [''],
       softSkills: [''],
       clientSources: [''],
-      additionalQuestions: ['']
+      additionalQuestions: [''],
+      skillsToggle: [false],
+      softSkillsToggle: [false]
     });
+
   }
 
   ngOnInit(): void {
@@ -55,7 +59,7 @@ export class GenerateSurveyModalComponent {
   }
 
   cancel(): void {
-    console.log('Отмена анкеты');
+    this.modalService.closeModal();
   }
 
   private handleSurveyResponse(response: HttpResponse<any>): void {

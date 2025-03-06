@@ -1,3 +1,4 @@
+
 .survey-card {
 width: 748px;
   height: 85vh;
@@ -6,6 +7,7 @@ width: 748px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 
 .survey-title {
@@ -25,7 +27,6 @@ width: 748px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0;
   border-radius: 4px;
 }
 
@@ -77,3 +78,40 @@ width: 748px;
   justify-content: space-between;
   margin-top: 16px;
 }
+
+.white-bg textarea.mat-input-element {
+  background-color: white !important;
+  color: black !important;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.custom-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  resize: vertical;
+  background-color: white;
+  color: black;
+}
+
+.custom-textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+

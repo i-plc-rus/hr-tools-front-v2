@@ -5,6 +5,7 @@ import {UsersModalService} from '../../../../../../services/users-modal.service'
 import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
+import {SnackBarService} from '../../../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-account',
@@ -35,7 +36,8 @@ export class AccountComponent implements OnInit {
   constructor(
     private api: ApiService,
     private modalService: UsersModalService,
-    private loadingService: LoadingWrapperService
+    private loadingService: LoadingWrapperService,
+    private snackBar: SnackBarService
   ) {
   }
 
@@ -48,7 +50,7 @@ export class AccountComponent implements OnInit {
     this.loadingService.setLoading(true);
     this.api.v1AuthMeList().subscribe({
       next: (response) => this.handleUserResponse(response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>),
-      error: (err) => this.handleError(err, '')
+      error: (err) => this.handleError(err, 'Ошибка при загрузке данных')
     });
   }
 
@@ -60,13 +62,12 @@ export class AccountComponent implements OnInit {
             const reader = new FileReader();
             reader.onload = () => (this.userPhoto = reader.result as string);
             reader.readAsDataURL(response);
-            this.handleSuccessfulAction('Фото загружено')
           }
         } else {
           this.logWarning(response)
         }
       },
-      error: (err) => this.handleError(err, '')
+      error: (err) => this.handleError(err, 'Ошибка загрузки фото')
     });
   }
 
@@ -91,6 +92,7 @@ export class AccountComponent implements OnInit {
     const file = input.files[0];
     this.generatePhotoPreview(file);
     this.uploadPhotoToServer(file);
+
   }
 
   private handleUserResponse(response: HttpResponse<{ data: SpaceapimodelsSpaceUser }>): void {
@@ -124,7 +126,7 @@ export class AccountComponent implements OnInit {
       internalNumber: user.text_sign || '',
       job_title_id: user.job_title_id || '',
       signatureText: user.text_sign || '',
-      job_title_name: user.job_title_name || '!'
+      job_title_name: user.job_title_name || ''
     });
   }
 
@@ -150,27 +152,31 @@ export class AccountComponent implements OnInit {
     const formData = new FormData();
     formData.append('photo', file);
     this.api.v1UserProfilePhotoCreate(formData as any).subscribe({
-      next: () => this.loadUserPhoto(),
-      error: (err) => this.handleError(err, 'ошибка загрузки фото!')
+      next: () => {
+        this.loadUserPhoto()
+        this.handleSuccessfulAction('Фото загружено')
+
+      },
+      error: (err) => this.handleError(err, 'Ошибка загрузки фото!')
     });
   }
 
   openChangePasswordModal(): void {
-    this.modalService.changePasswordModal().subscribe(() => this.handleSuccessfulAction('пароль изменён!'));
+    this.modalService.changePasswordModal().subscribe(() => this.handleSuccessfulAction('Пароль изменён!'));
   }
 
 
   // Тут можно вывести всплывашки с предупреждениями
   private handleError(err: any, message: string): void {
-    console.error(message, err);
+    this.snackBar.snackBarMessageError(message)
     this.loadingService.setLoading(false);
   }
 
   private logWarning(message: string): void {
-    console.warn(message);
+    this.snackBar.snackBarMessageWarning(message)
   }
 
   private handleSuccessfulAction(message: string): void {
-    console.log(message);
+    this.snackBar.snackBarMessageSuccess(message)
   }
 }

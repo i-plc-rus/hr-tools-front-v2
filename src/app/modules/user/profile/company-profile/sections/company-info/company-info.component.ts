@@ -47,9 +47,11 @@ export class CompanyInfoComponent implements OnInit{
     this.api.v1SpaceProfilePhotoList({ responseType: 'blob' as 'json' }).subscribe({
       next: (response: any) => {
         if (response instanceof Blob) {
-          const reader = new FileReader();
-          reader.onload = () => (this.companyLogoPreview = reader.result as string);
-          reader.readAsDataURL(response);
+          if(response.size > 0) {
+            const reader = new FileReader();
+            reader.onload = () => (this.companyLogoPreview = reader.result as string);
+            reader.readAsDataURL(response);
+          }
         } else {
           console.warn(response);
         }
@@ -57,6 +59,7 @@ export class CompanyInfoComponent implements OnInit{
       error: (err) => console.error(err)
     });
   }
+
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();

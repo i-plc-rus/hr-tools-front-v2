@@ -3,6 +3,7 @@ import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
+import {RequestOptions} from '../../../../../../api/http-client';
 
 enum TableColumns {
   Avatar = 'avatar',
@@ -48,11 +49,16 @@ export class MembersComponent implements OnInit {
 
   private loadUserAvatars(): void {
     this.participants.forEach((user) => {
-      if (!user.id) return;
 
-      this.api.v1UserProfilePhotoList({responseType: 'blob' as 'json'}).subscribe({
-        next: (response: any) => this.handleAvatarResponse(user.id!, response),
-        error: (err) => this.handleError(err, `Ошибка згрузки фото ${user.id}`)
+      if (!user.id) return;
+      this.api.v1UsersPhotoDetail(user.id, {responseType: 'blob'} as RequestOptions).subscribe({
+        next: (resp) => {
+          const blob: Blob = resp as unknown as Blob
+          if (blob.size) {
+            this.handleAvatarResponse(user.id!, blob)
+          }
+        },
+        error: (err) => this.handleError(err, `Ошибка загрузки фото ${user.id}`)
       });
     });
   }

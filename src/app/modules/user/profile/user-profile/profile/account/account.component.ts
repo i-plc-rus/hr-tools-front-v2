@@ -56,10 +56,12 @@ export class AccountComponent implements OnInit {
     this.api.v1UserProfilePhotoList({responseType: 'blob' as 'json'}).subscribe({
       next: (response: any) => {
         if (response instanceof Blob) {
-          const reader = new FileReader();
-          reader.onload = () => (this.userPhoto = reader.result as string);
-          reader.readAsDataURL(response);
-          this.handleSuccessfulAction('Фото загружено')
+          if(response.size > 0) {
+            const reader = new FileReader();
+            reader.onload = () => (this.userPhoto = reader.result as string);
+            reader.readAsDataURL(response);
+            this.handleSuccessfulAction('Фото загружено')
+          }
         } else {
           this.logWarning(response)
         }

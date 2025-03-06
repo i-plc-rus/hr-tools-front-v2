@@ -79,11 +79,12 @@ export class VacancyPublicationComponent implements OnInit {
   }
 
   getStatusHH(id: string) {
-    return this.api.v1SpaceExtHhAttachUpdate(id, {}, { observe: 'response' }).pipe(
+    return this.api.v1SpaceExtHhStatusDetail(id, { observe: 'response' }).pipe(
       tap({
         next: (res) => {
           if (res.body?.data) {
             this.statusHH = res.body.data;
+
           } else {
             this.statusHH = undefined;
           }

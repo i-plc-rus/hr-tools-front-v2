@@ -64,7 +64,12 @@ import {
   MsgtemplateapimodelsSendMessage,
   MsgtemplateapimodelsTemplateItem,
   NegotiationapimodelsCommentData,
+  NegotiationapimodelsMessageItem,
+  NegotiationapimodelsMessageListRequest,
+  NegotiationapimodelsMessengerAvailableRequest,
+  NegotiationapimodelsMessengerAvailableResponse,
   NegotiationapimodelsNegotiationView,
+  NegotiationapimodelsNewMessageRequest,
   NegotiationapimodelsStatusData,
   SpaceapimodelsCreateOrganization,
   SpaceapimodelsCreateUser,
@@ -79,6 +84,7 @@ import {
   SpaceapimodelsSpaceUserProfileView,
   SpaceapimodelsUpdateSpaceSettingValue,
   SpaceapimodelsUpdateUser,
+  SupersetapimodelsGuestTokenResponse,
   VacancyapimodelsApprovalStages,
   VacancyapimodelsExtVacancyInfo,
   VacancyapimodelsPersonFilter,
@@ -2931,11 +2937,11 @@ export class ApiService {
    * @description Статус размещения
    *
    * @tags Интеграция Avito
-   * @name V1SpaceExtAvitoStatusUpdate
+   * @name V1SpaceExtAvitoStatusDetail
    * @summary Статус размещения
-   * @request PUT:/api/v1/space/ext/avito/{id}/status
+   * @request GET:/api/v1/space/ext/avito/{id}/status
    */
-  public v1SpaceExtAvitoStatusUpdate(
+  public v1SpaceExtAvitoStatusDetail(
     id: string,
     options?: RequestOptions,
   ): Observable<
@@ -2943,7 +2949,7 @@ export class ApiService {
       data?: VacancyapimodelsExtVacancyInfo;
     }
   >;
-  public v1SpaceExtAvitoStatusUpdate(
+  public v1SpaceExtAvitoStatusDetail(
     id: string,
     options?: RequestOptions & { observe: "response" },
   ): Observable<
@@ -2953,7 +2959,7 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceExtAvitoStatusUpdate(
+  public v1SpaceExtAvitoStatusDetail(
     id: string,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<
@@ -3107,11 +3113,11 @@ export class ApiService {
    * @description Статус размещения
    *
    * @tags Интеграция HeadHunter
-   * @name V1SpaceExtHhStatusUpdate
+   * @name V1SpaceExtHhStatusDetail
    * @summary Статус размещения
-   * @request PUT:/api/v1/space/ext/hh/{id}/status
+   * @request GET:/api/v1/space/ext/hh/{id}/status
    */
-  public v1SpaceExtHhStatusUpdate(
+  public v1SpaceExtHhStatusDetail(
     id: string,
     options?: RequestOptions,
   ): Observable<
@@ -3119,7 +3125,7 @@ export class ApiService {
       data?: VacancyapimodelsExtVacancyInfo;
     }
   >;
-  public v1SpaceExtHhStatusUpdate(
+  public v1SpaceExtHhStatusDetail(
     id: string,
     options?: RequestOptions & { observe: "response" },
   ): Observable<
@@ -3129,7 +3135,7 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceExtHhStatusUpdate(
+  public v1SpaceExtHhStatusDetail(
     id: string,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<
@@ -3168,6 +3174,127 @@ export class ApiService {
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/update`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Проверка доступности чата через работный сайт
+   *
+   * @tags Мессенджер
+   * @name V1SpaceMessengerJobIsAvailableList
+   * @summary Проверка доступности чата через работный сайт
+   * @request GET:/api/v1/space/messenger/job/is_available
+   */
+  public v1SpaceMessengerJobIsAvailableList(
+    body: NegotiationapimodelsMessengerAvailableRequest,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: NegotiationapimodelsMessengerAvailableResponse;
+    }
+  >;
+  public v1SpaceMessengerJobIsAvailableList(
+    body: NegotiationapimodelsMessengerAvailableRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: NegotiationapimodelsMessengerAvailableResponse;
+      }
+    >
+  >;
+  public v1SpaceMessengerJobIsAvailableList(
+    body: NegotiationapimodelsMessengerAvailableRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: NegotiationapimodelsMessengerAvailableResponse;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: NegotiationapimodelsMessengerAvailableResponse;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: NegotiationapimodelsMessengerAvailableResponse;
+      }
+    >("GET", this.baseUrl + `/api/v1/space/messenger/job/is_available`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получение списка сообщений чата с кандидатом через работный сайт
+   *
+   * @tags Мессенджер
+   * @name V1SpaceMessengerJobListCreate
+   * @summary Получение списка сообщений чата с кандидатом через работный сайт
+   * @request POST:/api/v1/space/messenger/job/list
+   */
+  public v1SpaceMessengerJobListCreate(
+    body: NegotiationapimodelsMessageListRequest,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: NegotiationapimodelsMessageItem;
+    }
+  >;
+  public v1SpaceMessengerJobListCreate(
+    body: NegotiationapimodelsMessageListRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: NegotiationapimodelsMessageItem;
+      }
+    >
+  >;
+  public v1SpaceMessengerJobListCreate(
+    body: NegotiationapimodelsMessageListRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: NegotiationapimodelsMessageItem;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: NegotiationapimodelsMessageItem;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: NegotiationapimodelsMessageItem;
+      }
+    >("POST", this.baseUrl + `/api/v1/space/messenger/job/list`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Отправка нового сообщение кандидату через работный сайт
+   *
+   * @tags Мессенджер
+   * @name V1SpaceMessengerJobSendMessageCreate
+   * @summary Отправка нового сообщение кандидату через работный сайт
+   * @request POST:/api/v1/space/messenger/job/send_message
+   */
+  public v1SpaceMessengerJobSendMessageCreate(
+    body: NegotiationapimodelsNewMessageRequest,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceMessengerJobSendMessageCreate(
+    body: NegotiationapimodelsNewMessageRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceMessengerJobSendMessageCreate(
+    body: NegotiationapimodelsNewMessageRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/messenger/job/send_message`, {
+      body: body,
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -3270,16 +3397,16 @@ export class ApiService {
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
     options?: RequestOptions,
-  ): Observable<void>;
+  ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
     options?: RequestOptions & { observe: "response" },
-  ): Observable<HttpResponse<void>>;
+  ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/msg-templates/send-email-msg`, {
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/send-email-msg`, {
       body: body,
       ...(options as unknown as { observe: "response" }),
     });
@@ -3417,6 +3544,264 @@ export class ApiService {
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать изображение логотипа компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesLogoDetail
+   * @summary Скачать изображение логотипа компании для шаблона
+   * @request GET:/api/v1/space/msg-templates/{id}/logo
+   */
+  public v1SpaceMsgTemplatesLogoDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesLogoDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesLogoDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить изображение логотипа компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesLogoCreate
+   * @summary Загрузить изображение логотипа компании для шаблона
+   * @request POST:/api/v1/space/msg-templates/{id}/logo
+   */
+  public v1SpaceMsgTemplatesLogoCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceMsgTemplatesLogoCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceMsgTemplatesLogoCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Удалить изображение логотипа компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesLogoDelete
+   * @summary Удалить изображение логотипа компании для шаблона
+   * @request DELETE:/api/v1/space/msg-templates/{id}/logo
+   */
+  public v1SpaceMsgTemplatesLogoDelete(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesLogoDelete(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesLogoDelete(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Предпросмотр pdf на основе шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesPreviewPdfDetail
+   * @summary Предпросмотр pdf на основе шаблона
+   * @request GET:/api/v1/space/msg-templates/{id}/preview_pdf
+   */
+  public v1SpaceMsgTemplatesPreviewPdfDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesPreviewPdfDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesPreviewPdfDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/preview_pdf`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать изображение подписи для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesSignDetail
+   * @summary Скачать изображение подписи для шаблона
+   * @request GET:/api/v1/space/msg-templates/{id}/sign
+   */
+  public v1SpaceMsgTemplatesSignDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesSignDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesSignDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить изображение подписи для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesSignCreate
+   * @summary Загрузить изображение подписи для шаблона
+   * @request POST:/api/v1/space/msg-templates/{id}/sign
+   */
+  public v1SpaceMsgTemplatesSignCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceMsgTemplatesSignCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceMsgTemplatesSignCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Удалить изображение подписи для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesSignDelete
+   * @summary Удалить изображение подписи для шаблона
+   * @request DELETE:/api/v1/space/msg-templates/{id}/sign
+   */
+  public v1SpaceMsgTemplatesSignDelete(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesSignDelete(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesSignDelete(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать изображение печати компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesStampDetail
+   * @summary Скачать изображение печати компании для шаблона
+   * @request GET:/api/v1/space/msg-templates/{id}/stamp
+   */
+  public v1SpaceMsgTemplatesStampDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesStampDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesStampDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Загрузить изображение печати компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesStampCreate
+   * @summary Загрузить изображение печати компании для шаблона
+   * @request POST:/api/v1/space/msg-templates/{id}/stamp
+   */
+  public v1SpaceMsgTemplatesStampCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceMsgTemplatesStampCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceMsgTemplatesStampCreate(
+    id: string,
+    data: {
+      /** Фото */
+      photo: File;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
+      body: data,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Удалить изображение печати компании для шаблона
+   *
+   * @tags Шаблоны сообщений
+   * @name V1SpaceMsgTemplatesStampDelete
+   * @summary Удалить изображение печати компании для шаблона
+   * @request DELETE:/api/v1/space/msg-templates/{id}/stamp
+   */
+  public v1SpaceMsgTemplatesStampDelete(id: string, options?: RequestOptions): Observable<void>;
+  public v1SpaceMsgTemplatesStampDelete(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceMsgTemplatesStampDelete(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -3617,14 +4002,17 @@ export class ApiService {
    * @summary Обновление профиля
    * @request PUT:/api/v1/space/profile
    */
-  public v1SpaceProfileUpdate(options?: RequestOptions): Observable<ApimodelsResponse>;
+  public v1SpaceProfileUpdate(body: SpaceapimodelsProfileData, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceProfileUpdate(
+    body: SpaceapimodelsProfileData,
     options?: RequestOptions & { observe: "response" },
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceProfileUpdate(
+    body: SpaceapimodelsProfileData,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/profile`, {
+      body: body,
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -3731,19 +4119,76 @@ export class ApiService {
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
     options?: RequestOptions,
-  ): Observable<void>;
+  ): Observable<ApimodelsResponse>;
   public v1SpaceSettingsUpdate(
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
     options?: RequestOptions & { observe: "response" },
-  ): Observable<HttpResponse<void>>;
+  ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceSettingsUpdate(
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/space/settings/${code}`, {
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/settings/${code}`, {
       body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получение гостевого токена
+   *
+   * @tags Superset
+   * @name V1SpaceSupersetGuestTokenList
+   * @summary Получение гостевого токена
+   * @request GET:/api/v1/space/superset/guest_token
+   */
+  public v1SpaceSupersetGuestTokenList(
+    query?: {
+      /** Код дашборда */
+      dashboard_code?: string;
+    },
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: SupersetapimodelsGuestTokenResponse;
+    }
+  >;
+  public v1SpaceSupersetGuestTokenList(
+    query?: {
+      /** Код дашборда */
+      dashboard_code?: string;
+    },
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SupersetapimodelsGuestTokenResponse;
+      }
+    >
+  >;
+  public v1SpaceSupersetGuestTokenList(
+    query?: {
+      /** Код дашборда */
+      dashboard_code?: string;
+    },
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SupersetapimodelsGuestTokenResponse;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SupersetapimodelsGuestTokenResponse;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SupersetapimodelsGuestTokenResponse;
+      }
+    >("GET", this.baseUrl + `/api/v1/space/superset/guest_token`, {
+      params: query,
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -5126,42 +5571,16 @@ export class ApiService {
    * @summary Создать нового пользователя
    * @request POST:/api/v1/users
    */
-  public v1UsersCreate(
-    body: SpaceapimodelsCreateUser,
-    options?: RequestOptions,
-  ): Observable<
-    ApimodelsResponse & {
-      data?: string;
-    }
-  >;
+  public v1UsersCreate(body: SpaceapimodelsCreateUser, options?: RequestOptions): Observable<void>;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
     options?: RequestOptions & { observe: "response" },
-  ): Observable<
-    HttpResponse<
-      ApimodelsResponse & {
-        data?: string;
-      }
-    >
-  >;
+  ): Observable<HttpResponse<void>>;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<
-    | HttpResponse<
-        ApimodelsResponse & {
-          data?: string;
-        }
-      >
-    | (ApimodelsResponse & {
-        data?: string;
-      })
-  > {
-    return this.http.request<
-      ApimodelsResponse & {
-        data?: string;
-      }
-    >("POST", this.baseUrl + `/api/v1/users`, {
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("POST", this.baseUrl + `/api/v1/users`, {
       body: body,
       ...(options as unknown as { observe: "response" }),
     });
@@ -5269,18 +5688,22 @@ export class ApiService {
    * @summary Обновить пользователя
    * @request PUT:/api/v1/users/{id}
    */
-  public v1UsersUpdate(id: string, body: SpaceapimodelsUpdateUser, options?: RequestOptions): Observable<void>;
+  public v1UsersUpdate(
+    id: string,
+    body: SpaceapimodelsUpdateUser,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
   public v1UsersUpdate(
     id: string,
     body: SpaceapimodelsUpdateUser,
     options?: RequestOptions & { observe: "response" },
-  ): Observable<HttpResponse<void>>;
+  ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UsersUpdate(
     id: string,
     body: SpaceapimodelsUpdateUser,
     options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/users/${id}`, {
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/users/${id}`, {
       body: body,
       ...(options as unknown as { observe: "response" }),
     });
@@ -5310,6 +5733,27 @@ export class ApiService {
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/users/${id}`, {
       body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Скачать фото
+   *
+   * @tags Пользователи space
+   * @name V1UsersPhotoDetail
+   * @summary Скачать фото
+   * @request GET:/api/v1/users/{id}/photo
+   */
+  public v1UsersPhotoDetail(id: string, options?: RequestOptions): Observable<void>;
+  public v1UsersPhotoDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<void>>;
+  public v1UsersPhotoDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>("GET", this.baseUrl + `/api/v1/users/${id}/photo`, {
       ...(options as unknown as { observe: "response" }),
     });
   }

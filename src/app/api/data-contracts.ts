@@ -419,6 +419,7 @@ export enum DbmodelsActionType {
   HistoryTypeDuplicate = "duplicate",
   HistoryTypeArchive = "archive",
   HistoryTypeReject = "reject",
+  HistoryTypeEmail = "reject",
 }
 
 export interface DbmodelsApplicantChange {
@@ -852,6 +853,8 @@ export interface MsgtemplateapimodelsMsgTemplateData {
   message?: string;
   /** Название шаблона */
   name?: string;
+  /** Текст шаблона оффера для генерации pdf с переменными шаблона (Пример шаблона: "<center>Ваш оффер!</center>Тут кокой то текст оффера с разными стилями: <b>bold</b>, <i>italic</i>, <u>underlined</u>, or <b><i><u>all at once</u></i></b>!<br><br><right>С уважением</right><right>Директор {{.CompanyName}}</right><right>{{.CompanyDirectorName}}</right>") */
+  pdf_message?: string;
   /** Тип шаблона */
   template_type?: ModelsTemplateType;
   /** Тема/заголовок письма с переменными шаблона (Пример шаблона: "Информация от {{.CompanyName}}") */
@@ -865,6 +868,8 @@ export interface MsgtemplateapimodelsMsgTemplateView {
   message?: string;
   /** Название шаблона */
   name?: string;
+  /** Текст шаблона оффера для генерации pdf с переменными шаблона (Пример шаблона: "<center>Ваш оффер!</center>Тут кокой то текст оффера с разными стилями: <b>bold</b>, <i>italic</i>, <u>underlined</u>, or <b><i><u>all at once</u></i></b>!<br><br><right>С уважением</right><right>Директор {{.CompanyName}}</right><right>{{.CompanyDirectorName}}</right>") */
+  pdf_message?: string;
   /** Тип шаблона */
   template_type?: ModelsTemplateType;
   /** Тема/заголовок письма с переменными шаблона (Пример шаблона: "Информация от {{.CompanyName}}") */
@@ -887,6 +892,32 @@ export interface MsgtemplateapimodelsTemplateItem {
 
 export interface NegotiationapimodelsCommentData {
   comment?: string;
+}
+
+export interface NegotiationapimodelsMessageItem {
+  /** ФИО автора */
+  author_full_name?: string;
+  id?: string;
+  /** Дата/время сообщения */
+  message_date_time?: string;
+  /** Сообщение от true - работодателя / false - кандидата */
+  self_message?: boolean;
+  /** Текст сообщения */
+  text?: string;
+}
+
+export interface NegotiationapimodelsMessageListRequest {
+  applicant_id?: string;
+}
+
+export interface NegotiationapimodelsMessengerAvailableRequest {
+  applicant_id?: string;
+}
+
+export interface NegotiationapimodelsMessengerAvailableResponse {
+  is_available?: boolean;
+  /** Avito/HeadHunter */
+  service?: string;
 }
 
 export interface NegotiationapimodelsNegotiationView {
@@ -924,6 +955,11 @@ export interface NegotiationapimodelsNegotiationView {
   step_time?: string;
   /** Автор вакансии */
   vacancy_author?: string;
+}
+
+export interface NegotiationapimodelsNewMessageRequest {
+  applicant_id?: string;
+  text?: string;
 }
 
 export interface NegotiationapimodelsStatusData {
@@ -964,6 +1000,10 @@ export interface SpaceapimodelsPasswordChange {
 }
 
 export interface SpaceapimodelsProfileData {
+  /** адрес организации */
+  company_address?: string;
+  /** контакт организации */
+  company_contact?: string;
   /** Описание компании */
   description?: string;
   /** ФИО руководителя */
@@ -1126,6 +1166,13 @@ export interface SpaceapimodelsUpdateUser {
   space_id?: string;
   /** Текст подписи */
   text_sign?: string;
+}
+
+export interface SupersetapimodelsGuestTokenResponse {
+  /** Идентификатор дашборда */
+  dashboard_id?: string;
+  /** Гостевой токен */
+  token?: string;
 }
 
 export interface VacancyapimodelsApprovalStageData {

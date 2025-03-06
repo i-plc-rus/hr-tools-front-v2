@@ -79,23 +79,25 @@ export class VacancyPublicationComponent implements OnInit {
   }
 
   getStatusHH(id: string) {
-    return this.api.v1SpaceExtHhStatusUpdate(id, {observe: 'response'}).pipe(
+    return this.api.v1SpaceExtHhAttachUpdate(id, {}, { observe: 'response' }).pipe(
       tap({
         next: (res) => {
           if (res.body?.data) {
             this.statusHH = res.body.data;
-          } else
+          } else {
             this.statusHH = undefined;
+          }
         },
         error: (error) => {
           console.log(error);
         }
       })
-    )
+    );
   }
 
+
   getStatusAvito(id: string) {
-    return this.api.v1SpaceExtAvitoStatusUpdate(id, {observe: 'response'}).pipe(
+    return this.api.v1SpaceExtAvitoStatusDetail(id, {observe: 'response'}).pipe(
       tap({
         next: (res) => {
           if (res.body?.data) {

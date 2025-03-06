@@ -105,7 +105,7 @@ export class CompanyInfoComponent implements OnInit{
       description: this.companyForm.get('description')?.value || ''
     };
 
-    this.api.v1SpaceProfileUpdate({ body: updatedData, observe: 'response' }).subscribe({
+    this.api.v1SpaceProfileUpdate(updatedData, { observe: 'response' }).subscribe({
       next: (response) => this.handleUpdateResponse(response),
       error: (err) => this.handleError(err, 'Ошибка обновления данных компании!')
     });

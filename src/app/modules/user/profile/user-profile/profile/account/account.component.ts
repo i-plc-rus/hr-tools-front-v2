@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
-import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
+import {SpaceapimodelsSpaceUserProfileView} from '../../../../../../api/data-contracts';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {SnackBarService} from '../../../../../../services/snackbar.service';
@@ -16,15 +16,15 @@ export class AccountComponent implements OnInit {
   @ViewChild('fileInput', {static: false}) fileInput!: ElementRef;
 
   profileForm = new FormGroup({
-    lastName: new FormControl('', [Validators.required]),
-    firstName: new FormControl('', [Validators.required]),
-    job_title_id: new FormControl(''),
+    last_name: new FormControl('', [Validators.required]),
+    first_name: new FormControl('', [Validators.required]),
     job_title_name: new FormControl(''),
-    phone: new FormControl('', [Validators.required]),
+    job_title_id: new FormControl(''),
+    phone_number: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    internalNumber: new FormControl('', [Validators.min(0)]),
-    signatureText: new FormControl(''),
-    personalSignature: new FormControl(false)
+    internal_phone_number: new FormControl('', [Validators.min(0)]),
+    text_sign: new FormControl(''),
+    use_personal_sign: new FormControl(false)
   });
 
   userId: string | null = null;
@@ -48,8 +48,8 @@ export class AccountComponent implements OnInit {
 
   private loadUserData(): void {
     this.loadingService.setLoading(true);
-    this.api.v1AuthMeList().subscribe({
-      next: (response) => this.handleUserResponse(response as HttpResponse<{ data: SpaceapimodelsSpaceUser }>),
+    this.api.v1UserProfileList().subscribe({
+      next: (response) => this.handleUserResponse(response),
       error: (err) => this.handleError(err, 'Ошибка при загрузке данных')
     });
   }
@@ -73,7 +73,7 @@ export class AccountComponent implements OnInit {
 
   saveProfile(): void {
     if (this.profileForm.valid && this.userId) {
-      this.api.v1UsersUpdate(this.userId, this.getUserUpdateData()).subscribe({
+      this.api.v1UserProfileUpdate(this.userId, this.getUserUpdateData()).subscribe({
         next: () => this.handleProfileResponse(),
         error: (err) => this.handleError(err, '')
       });
@@ -95,7 +95,7 @@ export class AccountComponent implements OnInit {
 
   }
 
-  private handleUserResponse(response: HttpResponse<{ data: SpaceapimodelsSpaceUser }>): void {
+  private handleUserResponse(response: any): void {
     const user = this.extractUserData(response);
     if (!user) return;
     this.userId = user.id || null;
@@ -108,7 +108,7 @@ export class AccountComponent implements OnInit {
     this.handleSuccessfulAction('Данные сохранены')
   }
 
-  private extractUserData(response: HttpResponse<{ data: SpaceapimodelsSpaceUser }>): SpaceapimodelsSpaceUser | null {
+  private extractUserData(response: HttpResponse<{ data: SpaceapimodelsSpaceUserProfileView }>): SpaceapimodelsSpaceUserProfileView | null {
     const user = response.body?.data;
     if (!user) {
       this.loadingService.setLoading(false);
@@ -116,31 +116,31 @@ export class AccountComponent implements OnInit {
     }
     return user;
   }
-
-  private updateProfileForm(user: SpaceapimodelsSpaceUser): void {
+  private updateProfileForm(user: SpaceapimodelsSpaceUserProfileView): void {
     this.profileForm.patchValue({
-      email: user.email || '',
-      firstName: user.first_name || '',
-      lastName: user.last_name || '',
-      phone: user.phone_number || '',
-      internalNumber: user.text_sign || '',
-      job_title_id: user.job_title_id || '',
-      signatureText: user.text_sign || '',
-      job_title_name: user.job_title_name || ''
+      last_name: user.last_name,
+      first_name:user.first_name,
+      job_title_name: user.job_title_name,
+      job_title_id: '',
+      phone_number: user.phone_number,
+      email: user.email,
+      internal_phone_number: user.internal_phone_number,
+      text_sign: user.text_sign,
+      use_personal_sign: user.use_personal_sign
     });
   }
 
-  private getUserUpdateData(): SpaceapimodelsSpaceUser {
+  private getUserUpdateData(): SpaceapimodelsSpaceUserProfileView {
     return {
       email: this.profileForm.value.email ?? '',
-      first_name: this.profileForm.value.firstName ?? '',
-      last_name: this.profileForm.value.lastName ?? '',
-      phone_number: this.profileForm.value.phone ?? '',
-      job_title_id: this.profileForm.value.job_title_id ?? '',
-      text_sign: this.profileForm.value.signatureText ?? ''
+      first_name: this.profileForm.value.first_name ?? '',
+      last_name: this.profileForm.value.last_name ?? '',
+      phone_number: this.profileForm.value.phone_number ?? '',
+      internal_phone_number: this.profileForm.value.internal_phone_number ?? '',
+      text_sign: this.profileForm.value.text_sign ?? '',
+      use_personal_sign: this.profileForm.value.use_personal_sign ?? false
     };
   }
-
 
   private generatePhotoPreview(file: File): void {
     const reader = new FileReader();

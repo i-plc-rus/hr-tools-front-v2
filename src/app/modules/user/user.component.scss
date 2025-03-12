@@ -5,3 +5,12 @@
     @apply absolute top-1/2 right-[-20px];
   }
 }
+
+.mat-mdc-menu-item:hover {
+  color: var(--link-default) !important;
+  background-color: transparent !important;
+}
+
+.mat-mdc-menu-item:hover .mat-icon {
+  color: var(--link-default) !important;
+}

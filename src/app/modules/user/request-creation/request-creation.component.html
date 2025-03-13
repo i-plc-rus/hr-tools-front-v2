@@ -1,311 +1,311 @@
 <div class="min-h-[836px] my-10 mx-6 p-6 bg-white rounded-3xl relative" style="height: calc(100vh - 100px)">
-    <p class="mb-10 text-[22px]">Создание заявки</p>
-    @if(!showForm) {
+  <p class="mb-10 text-[22px]">Создание заявки</p>
+  @if (!showForm) {
     <h1 class="text-[32px] mb-2">Направление подбора</h1>
     <p class="text-base mb-6">Выберите направление подбора к которому относится эта вакансия</p>
     <div class="flex gap-3">
-        <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-            (click)="startForm(ModelsVRSelectionType.VRSelectionTypeMass)">
-            <mat-icon class="!w-10 !h-10" svgIcon="profile-in-circle"></mat-icon>
-            <span>Массовый</span>
-        </button>
-        <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-            (click)="startForm(ModelsVRSelectionType.VRSelectionTypePersonal)">
-            <mat-icon class="!w-10 !h-10" svgIcon="business-bag"></mat-icon>
-            <span>Профессиональный</span>
-        </button>
+      <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
+              (click)="startForm(ModelsVRSelectionType.VRSelectionTypeMass)">
+        <mat-icon class="!w-10 !h-10" svgIcon="profile-in-circle"></mat-icon>
+        <span>Массовый</span>
+      </button>
+      <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
+              (click)="startForm(ModelsVRSelectionType.VRSelectionTypePersonal)">
+        <mat-icon class="!w-10 !h-10" svgIcon="business-bag"></mat-icon>
+        <span>Профессиональный</span>
+      </button>
     </div>
-    }
-    @if(showForm) {
+  }
+  @if (showForm) {
     <form [formGroup]="form" class="max-w-[580px] mb-[70px]">
-        <mat-stepper #stepper class="!bg-transparent" (selectionChange)="onStepChange($event)">
-            <mat-step>
-                <h2 class="text-3xl mb-4">Общая информация</h2>
-                <div class="flex flex-col gap-4">
+      <mat-stepper #stepper class="!bg-transparent" (selectionChange)="onStepChange($event)">
+        <mat-step>
+          <h2 class="text-3xl mb-4">Общая информация</h2>
+          <div class="flex flex-col gap-4">
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Название компании</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-label>Название компании</mat-label>
 
-                        <input type="text" matInput [formControl]="form.controls['company_name']"
-                            [matAutocomplete]="companyAuto">
+              <input type="text" matInput [formControl]="form.controls['company_name']"
+                     [matAutocomplete]="companyAuto">
 
-                        <mat-autocomplete #companyAuto="matAutocomplete" [displayWith]="displayCompanyName">
-                            @for(item of (filteredCompany$ | async); track item) {
-                            <mat-option [value]="item">
-                                {{ item.name }}
-                            </mat-option>
-                            }
-                        </mat-autocomplete>
-                        @if (form.get('company_name')?.invalid && !form.get('company_name')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+              <mat-autocomplete #companyAuto="matAutocomplete" [displayWith]="displayCompanyName">
+                @for (item of (filteredCompany$ | async); track item) {
+                  <mat-option [value]="item">
+                    {{ item.name }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+              @if (form.get('company_name')?.invalid && !form.get('company_name')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                    <app-text-input type="text" formControlName="vacancy_name" label="Название вакансии*">
-                        @if (form.get('vacancy_name')?.invalid && !form.get('vacancy_name')?.untouched) {
-                        <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
+            <app-text-input type="text" formControlName="vacancy_name" label="Название вакансии*">
+              @if (form.get('vacancy_name')?.invalid && !form.get('vacancy_name')?.untouched) {
+                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </app-text-input>
+              }
+            </app-text-input>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Структура</mat-label>
-                        <mat-select [formControl]="form.controls['company_struct_id']">
-                            @for (item of companyStructureArray; track $index) {
-                            <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
-                            }
-                        </mat-select>
+            <mat-form-field appearance="outline">
+              <mat-label>Структура</mat-label>
+              <mat-select [formControl]="form.controls['company_struct_id']">
+                @for (item of companyStructureArray; track $index) {
+                  <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
+                }
+              </mat-select>
 
-                        @if (form.get('company_struct_id')?.invalid && !form.get('company_struct_id')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+              @if (form.get('company_struct_id')?.invalid && !form.get('company_struct_id')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Подразделение</mat-label>
-                        <mat-select [formControl]="form.controls['department_id']">
-                            @for (item of companyDepartmentArray; track $index) {
-                            <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
-                            }
-                        </mat-select>
+            <mat-form-field appearance="outline">
+              <mat-label>Подразделение</mat-label>
+              <mat-select [formControl]="form.controls['department_id']">
+                @for (item of companyDepartmentArray; track $index) {
+                  <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
+                }
+              </mat-select>
 
-                        @if (form.get('department_id')?.invalid && !form.get('department_id')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+              @if (form.get('department_id')?.invalid && !form.get('department_id')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Штатная должность</mat-label>
-                        <mat-select [formControl]="form.controls['job_title_id']">
-                            @for (item of companyJobsNamesArray; track $index) {
-                            <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
-                            }
-                        </mat-select>
-                        @if (form.get('job_title_id')?.invalid && !form.get('job_title_id')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Штатная должность</mat-label>
+              <mat-select [formControl]="form.controls['job_title_id']">
+                @for (item of companyJobsNamesArray; track $index) {
+                  <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('job_title_id')?.invalid && !form.get('job_title_id')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                </div>
-            </mat-step>
+          </div>
+        </mat-step>
 
-            <mat-step>
-                <h2 class="text-3xl mb-4">Местоположение и контакты</h2>
-                <div class="flex flex-col gap-4">
+        <mat-step>
+          <h2 class="text-3xl mb-4">Местоположение и контакты</h2>
+          <div class="flex flex-col gap-4">
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Город</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-label>Город</mat-label>
 
-                        <input type="text" matInput [formControl]="form.controls['cityId']"
-                            [matAutocomplete]="cityAuto">
+              <input type="text" matInput [formControl]="form.controls['cityId']"
+                     [matAutocomplete]="cityAuto">
 
-                        <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayCityName">
-                            @for(item of (filteredCity$ | async); track item) {
-                            <mat-option [value]="item">
-                                {{ item.address }}
-                            </mat-option>
-                            }
-                        </mat-autocomplete>
-                        @if (form.get('cityId')?.invalid && !form.get('cityId')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+              <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayCityName">
+                @for (item of (filteredCity$ | async); track item) {
+                  <mat-option [value]="item">
+                    {{ item.address }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+              @if (form.get('cityId')?.invalid && !form.get('cityId')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                    <app-text-input type="text" formControlName="place_of_work" label="Адрес офиса">
-                    </app-text-input>
+            <app-text-input type="text" formControlName="place_of_work" label="Адрес офиса">
+            </app-text-input>
 
-                    <app-text-input type="text" formControlName="chief_fio" label="ФИО непосредственного руководителя*">
-                        @if (form.get('chief_fio')?.invalid && !form.get('chief_fio')?.untouched) {
-                        <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
+            <app-text-input type="text" formControlName="chief_fio" label="ФИО непосредственного руководителя*">
+              @if (form.get('chief_fio')?.invalid && !form.get('chief_fio')?.untouched) {
+                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </app-text-input>
-                </div>
-            </mat-step>
-            <mat-step>
-                <h2 class="text-3xl mb-4">Детали вакансии</h2>
-                <div class="flex flex-col gap-4">
-                    <app-text-input type="number" formControlName="opened_positions"
-                        label="Количество вакантных позиций*">
-                        @if (form.get('opened_positions')?.invalid && !form.get('opened_positions')?.untouched) {
-                        <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
+              }
+            </app-text-input>
+          </div>
+        </mat-step>
+        <mat-step>
+          <h2 class="text-3xl mb-4">Детали вакансии</h2>
+          <div class="flex flex-col gap-4">
+            <app-text-input type="number" formControlName="opened_positions"
+                            label="Количество вакантных позиций*">
+              @if (form.get('opened_positions')?.invalid && !form.get('opened_positions')?.untouched) {
+                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
                             <mat-icon svgIcon="error"></mat-icon>
                         </span>
-                        }
-                    </app-text-input>
+              }
+            </app-text-input>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Срочность</mat-label>
-                        <mat-select [formControl]="form.controls['urgency']">
-                            @for (urgency of urgencys; track $index) {
-                            <mat-option value="{{ urgency.value }}">{{ urgency.name }}</mat-option>
-                            }
-                        </mat-select>
-                        @if (form.get('urgency')?.invalid && !form.get('urgency')?.untouched) {
-                            <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Срочность</mat-label>
+              <mat-select [formControl]="form.controls['urgency']">
+                @for (urgency of urgencys; track $index) {
+                  <mat-option value="{{ urgency.value }}">{{ urgency.name }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('urgency')?.invalid && !form.get('urgency')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                                 <mat-icon svgIcon="error"></mat-icon>
                             </span>
-                         }
-                    </mat-form-field>
+              }
+            </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Тип заявки</mat-label>
-                        <mat-select [formControl]="form.controls['request_type']">
-                            @for (request_type of request_types; track $index) {
-                            <mat-option value="{{ request_type.value }}">{{ request_type.name }}</mat-option>
-                            }
-                        </mat-select>
-                        @if (form.get('request_type')?.invalid && !form.get('request_type')?.untouched) {
-                            <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Тип заявки</mat-label>
+              <mat-select [formControl]="form.controls['request_type']">
+                @for (request_type of request_types; track $index) {
+                  <mat-option value="{{ request_type.value }}">{{ request_type.name }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('request_type')?.invalid && !form.get('request_type')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                                 <mat-icon svgIcon="error"></mat-icon>
                             </span>
-                         }
-                    </mat-form-field>
-                  <div class="flex flex-col w-full">
-                    <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности, условия</label>
-                    <div class="flex flex-col w-full">
-                      <app-text-editor
-                        formControlName="description"
-                        (onActionBtnClick)="openGenerateCommentModal()"
-                        class="w-full"
-                        height="160px">
-                      </app-text-editor>
-                    </div>
+              }
+            </mat-form-field>
+            <div class="flex flex-col w-full">
+              <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности, условия</label>
+              <div class="flex flex-col w-full">
+                <app-text-editor
+                  formControlName="description"
+                  (onActionBtnClick)="openGenerateCommentModal()"
+                  class="w-full"
+                  height="160px">
+                </app-text-editor>
+              </div>
 
-                  </div>
+            </div>
 
-                        <label>Условия</label>
+            <label>Условия</label>
 
-                        <mat-form-field appearance="outline">
-                            <mat-label>Занятость</mat-label>
-                            <mat-select [formControl]="form.controls['employment']">
-                              @for (employment of employments; track $index) {
-                              <mat-option value="{{ employment.value }}">{{ employment.label }}</mat-option>
-                              }
-                            </mat-select>
-                            @if (form.get('employment')?.invalid && !form.get('employment')?.untouched) {
-                                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Занятость</mat-label>
+              <mat-select [formControl]="form.controls['employment']">
+                @for (employment of employments; track $index) {
+                  <mat-option value="{{ employment.value }}">{{ employment.label }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('employment')?.invalid && !form.get('employment')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                                     <mat-icon svgIcon="error"></mat-icon>
                                 </span>
-                             }
-                        </mat-form-field>
+              }
+            </mat-form-field>
 
-                        <mat-form-field appearance="outline">
-                            <mat-label>Опыт работы</mat-label>
-                            <mat-select [formControl]="form.controls['experience']">
-                              @for (experience of experiences; track $index) {
-                              <mat-option value="{{ experience.value }}">{{ experience.label }}</mat-option>
-                              }
-                            </mat-select>
-                            @if (form.get('experience')?.invalid && !form.get('experience')?.untouched) {
-                                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Опыт работы</mat-label>
+              <mat-select [formControl]="form.controls['experience']">
+                @for (experience of experiences; track $index) {
+                  <mat-option value="{{ experience.value }}">{{ experience.label }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('experience')?.invalid && !form.get('experience')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                                     <mat-icon svgIcon="error"></mat-icon>
                                 </span>
-                             }
-                        </mat-form-field>
+              }
+            </mat-form-field>
 
-                        <mat-form-field appearance="outline">
-                            <mat-label>Режим работы</mat-label>
-                            <mat-select [formControl]="form.controls['schedule']">
-                              @for (schedule of schedules; track $index) {
-                              <mat-option value="{{ schedule.value }}">{{ schedule.label }}</mat-option>
-                              }
-                            </mat-select>
-                            @if (form.get('schedule')?.invalid && !form.get('schedule')?.untouched) {
-                                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-form-field appearance="outline">
+              <mat-label>Режим работы</mat-label>
+              <mat-select [formControl]="form.controls['schedule']">
+                @for (schedule of schedules; track $index) {
+                  <mat-option value="{{ schedule.value }}">{{ schedule.label }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('schedule')?.invalid && !form.get('schedule')?.untouched) {
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
                                     <mat-icon svgIcon="error"></mat-icon>
                                 </span>
-                             }
-                        </mat-form-field>
-                    </div>
-                </mat-step>
+              }
+            </mat-form-field>
+          </div>
+        </mat-step>
 
-                <mat-step>
-                <h2 class="text-3xl mb-4">Цепочка согласования</h2>
-                <div formArrayName="interviewers">
-                    @for(interviewer of interviewers.controls; track $index) {
-                    <div class="mb-2" [formGroupName]="$index">
-                        <div class="flex justify-between items-center">
-                            <h3 class="h-[40px]">{{ interviewer.get('stage')?.value }}-й этап согласования</h3>
-                            @if($index > 0) {
-                            <button mat-icon-button (click)="removeInterviewer($index)">
-                                <mat-icon svgIcon="delete">delete</mat-icon>
-                            </button>
-                            }
-                        </div>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Выберите сотрудника</mat-label>
-                            <mat-select formControlName="space_user_id">
-                                @for(item of users; track item){
-                                <mat-option [value]="item.id">
-                                    {{ item.first_name }} {{ item.last_name }}
-                                </mat-option>
-                                }
-                                @if (form.get('space_user_id')?.invalid && !form.get('space_user_id')?.untouched) {
-                                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                                    <mat-icon svgIcon="error"></mat-icon>
-                                </span>
-                                }
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
+        <mat-step>
+          <h2 class="text-3xl mb-4">Цепочка согласования</h2>
+          <div formArrayName="interviewers">
+            @for (interviewer of interviewers.controls; track $index) {
+              <div class="mb-2" [formGroupName]="$index">
+                <div class="flex justify-between items-center">
+                  <h3 class="h-[40px]">{{ interviewer.get('stage')?.value }}-й этап согласования</h3>
+                  @if ($index > 0) {
+                    <button mat-icon-button (click)="removeInterviewer($index)">
+                      <mat-icon svgIcon="delete">delete</mat-icon>
+                    </button>
+                  }
+                </div>
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Выберите сотрудника</mat-label>
+                  <mat-select formControlName="space_user_id">
+                    @for (item of users; track item) {
+                      <mat-option [value]="item.id">
+                        {{ item.first_name }} {{ item.last_name }}
+                      </mat-option>
                     }
-                    <button class="w-[243px]" mat-flat-button (click)="addInterviewer()">Добавить этап
-                        согласования</button>
-                </div>
-            </mat-step>
-        </mat-stepper>
+                    @if (form.get('space_user_id')?.invalid && !form.get('space_user_id')?.untouched) {
+                      <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+                                    <mat-icon svgIcon="error"></mat-icon>
+                                </span>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            }
+            <button class="w-[243px]" mat-flat-button (click)="addInterviewer()">Добавить этап
+              согласования
+            </button>
+          </div>
+        </mat-step>
+      </mat-stepper>
 
     </form>
-    }
+  }
 
 
 
-    <div class="absolute bottom-6">
-        <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
-        @if(showForm) {
-        <button mat-flat-button class="mr-[130px]" (click)="openSaveDraftDialog()">Сохранить черновик</button>
-        @if(!isLastStep) {
+  <div class="absolute bottom-6">
+    <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
+    @if (showForm) {
+      <button mat-flat-button class="mr-[130px]" (click)="openSaveDraftDialog()">Сохранить черновик</button>
+      @if (!isLastStep) {
         <button mat-flat-button (click)="goToNextStep()">Продолжить</button>
-        }
-        @if(isLastStep) {
+      }
+      @if (isLastStep) {
         <button mat-flat-button (click)="onSubmit()">Отправить на согласование</button>
-        }
-        }
+      }
+    }
+  </div>
+  <ng-template #saveDraftDialog>
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <h2>Вы действительно хотите завершить создание заявки?</h2>
+        <div class="modal-actions">
+          <button mat-raised-button (click)="closeDialog()">Отмена</button>
+          <button mat-flat-button (click)="saveDraftAndExit()">Сохранить черновик и выйти</button>
+        </div>
+      </div>
     </div>
-    <ng-template #saveDraftDialog>
-        <div class="modal-overlay">
-            <div class="modal-content">
-                <h2>Вы действительно хотите завершить создание заявки?</h2>
-                <div class="modal-actions">
-                    <button mat-raised-button (click)="closeDialog()">Отмена</button>
-                    <button mat-flat-button (click)="saveDraftAndExit()">Сохранить черновик и выйти</button>
-                </div>
-            </div>
-        </div>
-    </ng-template>
+  </ng-template>
 
-    <ng-template #draftDialog>
-        <div class="modal-overlay">
-            <div class="modal-content">
-                <h2>Вы хотите использовать черновик или создать новую заявку?</h2>
-                <div class="modal-actions">
-                    <button mat-raised-button (click)="useDraft()">Использовать черновик</button>
-                    <button mat-flat-button (click)="newRequest()">Новая заявка</button>
-                </div>
-            </div>
-        </div>
-    </ng-template>
+  <ng-template #draftDialog>
+    <div class="modal-content">
+      <h2>Вы хотите использовать черновик или создать новую заявку?</h2>
+      <div class="modal-actions">
+        <button mat-raised-button (click)="useDraft()">Использовать черновик</button>
+        <button mat-flat-button (click)="newRequest()">Новая заявка</button>
+      </div>
+    </div>
+  </ng-template>
+
 </div>

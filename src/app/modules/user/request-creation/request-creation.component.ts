@@ -230,16 +230,10 @@ export class RequestCreationComponent implements OnInit {
 
   startForm(value: ModelsVRSelectionType) {
     this.form.get('selection_type')?.setValue(value);
-    this.dialog.open(this.draftDialog);
-
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result === 'useDraft') {
-    //     console.log('aaa')
-    //     this.useDraft();
-    //   } else if (result === 'newRequest') {
-    //     this.newRequest();
-    //   }
-    // });
+    const dialogRef = this.dialog.open(this.draftDialog, {
+      hasBackdrop: true,
+      disableClose: false
+    });
   }
 
   useDraft(): void {

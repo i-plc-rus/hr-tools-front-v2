@@ -1,5 +1,5 @@
 @if (vacancy || isNewVacancy) {
-  <div class="flex flex-col gap-4 mb-4">
+  <div class="flex flex-col gap-4 mb-4" style="height: 100%">
     <div class="w-full flex gap-3 items-center justify-between">
       <div class="flex gap-3 items-center">
         <button mat-icon-button (click)="onBack()" class="btn-secondary">
@@ -51,10 +51,16 @@
         </mat-chip-listbox>
       </div>
       <div>
-        <button mat-flat-button class="btn-secondary px-4 py-2 ml-4" (click)="generateSurvey()">
-          <mat-icon class="mr-2">bolt</mat-icon>
-          Сгенерировать анкету
-        </button>
+        @if (category.value !== 'stages') {
+          <button
+            mat-flat-button
+            class="btn-secondary px-4 py-2 ml-4"
+            (click)="generateSurvey()"
+          >
+            <mat-icon class="mr-2">bolt</mat-icon>
+            Сгенерировать анкету
+          </button>
+        }
       </div>
     </div>
     <app-vacancy-description

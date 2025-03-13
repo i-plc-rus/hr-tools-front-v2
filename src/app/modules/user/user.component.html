@@ -1,69 +1,72 @@
 <app-layout>
   <app-sidebar>
-    <div (click)="addMenuTrigger.openMenu()"
-      class="flex items-center justify-center w-14 h-14 bg-[var(--link-default)] rounded-2xl cursor-pointer sidebtn-with-menu">
+    <div mat-button
+            class="flex items-center justify-center w-14 h-14 bg-[var(--link-default)] rounded-2xl cursor-pointer sidebtn-with-menu"
+            [matMenuTriggerFor]="addMenu">
       <mat-icon svgIcon="add"></mat-icon>
-      <div #addMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="addMenu"></div>
     </div>
+
     <mat-menu #addMenu="matMenu" xPosition="after">
-      <button mat-menu-item [routerLink]="['/user', 'request', 'create']">
+      <button mat-menu-item disableRipple [routerLink]="['/user', 'request', 'create']">
         <mat-icon svgIcon="request"></mat-icon>
         Создать заявку
       </button>
-      <button mat-menu-item [routerLink]="['/user', 'vacancy', 'create']">
+      <button mat-menu-item disableRipple [routerLink]="['/user', 'vacancy', 'create']">
         <mat-icon svgIcon="add-bag"></mat-icon>
         Создать вакансию
       </button>
-      <button mat-menu-item [routerLink]="['/user', 'candidates', 'list']" [queryParams]="{ type: 'create' }">
+      <button mat-menu-item disableRipple [routerLink]="['/user', 'candidates', 'list']"
+              [queryParams]="{ type: 'create' }">
         <mat-icon svgIcon="add-person"></mat-icon>
         Создать кандидата
       </button>
     </mat-menu>
+
     <div class="pt-6 flex flex-col items-center gap-y-4">
-      <a [routerLink]="['/user', 'employees']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Сотрудники" [routerLink]="['/user', 'employees']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="employees"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Сотрудники</span>
       </a>
-      <a [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Заявки" [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="request"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Заявки</span>
       </a>
-      <a [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Вакансии" [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="bag"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Вакансии</span>
       </a>
-      <a [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Кандидаты" [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="people"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
       </a>
-      <a [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Офферы" [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="note"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Офферы</span>
       </a>
-      <a [routerLink]="['/user', 'calendar']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Календарь" [routerLink]="['/user', 'calendar']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="calendar"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Календарь</span>
       </a>
-      <a [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
-        class="flex flex-col items-center justify-center">
+      <a matTooltip="Аналитика" [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
+         class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="z-arrow"></mat-icon>
         </span>
@@ -111,5 +114,7 @@
       </span>
     </div>
   </app-sidebar>
-  <router-outlet></router-outlet>
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
 </app-layout>

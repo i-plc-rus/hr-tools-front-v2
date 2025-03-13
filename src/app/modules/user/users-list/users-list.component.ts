@@ -99,6 +99,7 @@ export class UsersListComponent implements OnInit {
           this.gridApi.setGridOption('rowData', this.usersList);
           this.gridApi.setGridOption('loading', false);
         }
+        console.log(this.usersList)
       },
       error: (error) => {
         console.log(error);

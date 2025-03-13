@@ -28,12 +28,12 @@
   <div class="mt-6 grid grid-cols-3 gap-x-4 gap-y-2">
     <mat-form-field appearance="outline">
       <mat-label>Фамилия</mat-label>
-      <input matInput formControlName="lastName">
+      <input matInput formControlName="last_name">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Имя</mat-label>
-      <input matInput formControlName="firstName">
+      <input matInput formControlName="first_name">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -50,7 +50,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Телефон</mat-label>
-      <input matInput formControlName="phone">
+      <input matInput formControlName="phone_number">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -60,21 +60,21 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Внутренний номер</mat-label>
-      <input matInput formControlName="internalNumber" type="number"/>
+      <input matInput formControlName="internal_phone_number"/>
     </mat-form-field>
 
   </div>
 
   <!-- Переключатель "Персональная подпись" -->
   <div class="flex items-center mt-2">
-    <mat-slide-toggle formControlName="personalSignature" class="mr-2 mat-mdc-slide-toggle"></mat-slide-toggle>
+    <mat-slide-toggle formControlName="use_personal_sign" class="mr-2 mat-mdc-slide-toggle"></mat-slide-toggle>
     <span class="text-gray-500 text-sm">Персональная подпись</span>
   </div>
 
   <!-- Текстовое поле с редактором -->
   <div class="mt-4 w-full">
     <mat-label>Текст подписи</mat-label>
-    <quill-editor formControlName="signatureText" [modules]="quillConfig" placeholder=""
+    <quill-editor formControlName="text_sign" [modules]="quillConfig" placeholder=""
                   class="w-full h-60"></quill-editor>
   </div>
 

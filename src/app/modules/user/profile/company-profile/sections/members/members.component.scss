@@ -1,3 +1,10 @@
+.members-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  overflow: hidden;
+}
+
 .spacer {
   flex: 1;
 }
@@ -5,6 +12,7 @@
 .toolbar {
   background: transparent !important;
   box-shadow: none !important;
+  flex-shrink: 0;
 }
 
 .title-container {
@@ -26,11 +34,34 @@
   color: white;
 }
 
-.header-container {
+.content-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.table-wrapper {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+.mat-header-row {
+  background-color: white !important;
+  font-weight: bold;
+  box-shadow: none !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  opacity: 1;
+}
+
+th.mat-header-cell {
+  background-color: white !important;
 }
 
 table {
@@ -41,10 +72,31 @@ table {
   box-shadow: none !important;
 }
 
-.mat-header-row {
-  background: transparent !important;
-  font-weight: bold;
-  box-shadow: none !important;
+::ng-deep .mat-table-wrapper {
+  background-color: white;
+}
+
+.mat-table-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: white;
+  z-index: 5;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mat-table-wrapper {
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 .mat-row {
@@ -72,17 +124,32 @@ table {
   opacity: 1;
 }
 
+.avatar-container {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+}
+
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .email {
   color: #666;
 }
 
-//========Лицензия
+.license-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+}
+
 .license-container {
   display: flex;
   align-items: center;
@@ -96,47 +163,13 @@ table {
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 100%;
 }
 
-mat-progress-bar {
-  width: 100px;
-  height: 6px;
-  border-radius: 4px;
-  background: #d1d5db;
+.info-icon {
+  color: var(--link-default);
 }
 
 .license-actions {
   display: flex;
   gap: 16px;
 }
-.members-container {
-  display: flex;
-  flex-direction: column;
-   // Высота всего экрана
-
-  .toolbar {
-    flex-shrink: 0;
-  }
-
-  .content-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    min-height: calc(100vh - 275px);
-    overflow: hidden;
-  }
-
-  .table-wrapper {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: calc(100vh - 250px);
-    min-height: 200px;
-  }
-
-  .license-card {
-    flex-shrink: 0;
-    margin-top: auto;
-  }
-}
-

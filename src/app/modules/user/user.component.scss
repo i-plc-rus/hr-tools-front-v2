@@ -14,3 +14,23 @@
 .mat-mdc-menu-item:hover .mat-icon {
   color: var(--link-default) !important;
 }
+
+
+app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+app-sidebar {
+  height: 100vh;
+  flex-shrink: 0;
+  overflow-y: hidden;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  height: 100vh;
+}

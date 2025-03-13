@@ -1,16 +1,20 @@
+<div class="px-4 py-4">
+  <div class="mb-4">
 <app-search-input
   class="w-full lg:w-[380px]"
   placeholder="Поиск сотрудника"
   [(ngModel)]="searchValue"
   (onSearch)="onSearch()">
 </app-search-input>
-<div class="w-full mt-4 bg-white rounded-3xl">
-  <div class="p-6 flex justify-between items-center">
+  </div>
+<div class="w-full p-6 bg-white rounded-3xl" style="height: calc(100vh - 150px)">
+  <div class="flex items-center justify-between">
     <h1 class="text-[22px]">Сотрудники организации</h1>
     <button mat-flat-button class="btn-secondary" (click)="openAddUserModal()">
       <mat-icon>add</mat-icon>
       <span>Добавить сотрудника</span>
     </button>
   </div>
-  <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material h-[600px] w-full" />
+  <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material  h-[80%] w-full" />
+</div>
 </div>

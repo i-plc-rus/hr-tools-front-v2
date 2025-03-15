@@ -64,7 +64,8 @@ export class AddCandidateModalComponent implements OnInit {
     first_name: new FormControl('', Validators.required),
     last_name: new FormControl('', Validators.required),
     middle_name: new FormControl(''),
-    gender: new FormControl<ModelsGenderType | ''>('', Validators.required),
+    gender: new FormControl<ModelsGenderType | null>(null, Validators.required),
+
     params: new FormGroup({
       driver_license_types: new FormControl<ModelsDriverLicenseType[]>([]),
       education: new FormControl<ModelsEducationType | ''>(''),

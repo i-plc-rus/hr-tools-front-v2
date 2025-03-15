@@ -327,4 +327,20 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   onBack() {
     this.router.navigate(['user', 'candidates', 'list']);
   }
+  cleanValue(field: string | undefined, value: string | undefined | null): string {
+    if (!field) return 'Не указано поле';
+    if (!value) return 'Не было значения';
+
+    if (field === 'Тэги') {
+      const cleaned = value.replace(/[\{\}\[\]A:&]/g, '');
+      return cleaned || 'Без тегов';
+    }
+
+    if (value.includes('<') || value.includes('&nbsp;')) {
+      const cleaned = value.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ');
+      return cleaned || 'Пусто';
+    }
+
+    return value;
+  }
 }

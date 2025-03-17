@@ -87,7 +87,22 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
       next: async (data: any) => {
         if (data.body && data.body.byteLength > 0 && data.headers.get('content-type') === 'application/pdf') {
           const blob = new Blob([data.body], {type: 'application/pdf'});
-          const fileName: string = data.headers.get('content-disposition').split('=')[1];
+
+          const contentDisposition = data.headers.get('content-disposition');
+          let fileName = 'resume.pdf';
+
+          if (contentDisposition) {
+            const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+            if (matches != null && matches[1]) {
+              const iso = matches[1].replace(/['"]/g, '');
+              const bytes = new Uint8Array(iso.length);
+              for (let i = 0; i < iso.length; i++) {
+                bytes[i] = iso.charCodeAt(i);
+              }
+              fileName = new TextDecoder('utf-8').decode(bytes);
+            }
+          }
+
           this.resume = new File([blob], fileName);
           this.resumeUint = new Uint8Array(await this.resume.arrayBuffer());
         }
@@ -99,6 +114,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
       },
     });
   }
+
 
   getDocList() {
     if (!this.applicant) return;
@@ -220,9 +236,26 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
 
   printResume() {
     if (!this.resume) return;
-    const blobUrl = URL.createObjectURL(this.resume);
-    window.open(blobUrl, '_blank')?.print();
+
+    const blob = new Blob([this.resume], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+
+    const printWindow = window.open(blobUrl, '_blank');
+
+    if (printWindow) {
+      printWindow.addEventListener('load', () => {
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      });
+
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 3000);
+    }
   }
+
+
 
   downloadResume() {
     if (!this.applicant || !this.resume) return;

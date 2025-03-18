@@ -71,7 +71,7 @@
         </form>
       </div>
 
-      <mat-tab-group fitInkBarToContent>
+      <mat-tab-group fitInkBarToContent [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab label="Резюме">
           <div class="p-6">
             @if (!resume || !resumeUint) {

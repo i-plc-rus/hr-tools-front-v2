@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges, OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -11,13 +21,14 @@ import {
   VacancyapimodelsSelectionStageView
 } from '../../../api/data-contracts';
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
+import {MatTabGroup} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-candidate-detail',
   templateUrl: './candidate-detail.component.html',
   styleUrl: './candidate-detail.component.scss',
 })
-export class CandidateDetailComponent implements OnInit, OnChanges {
+export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges, OnDestroy {
   @Input() applicantId: string = '';
   @Output() onClose = new EventEmitter();
   isLoading = false;
@@ -31,7 +42,12 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   changesLog?: ApplicantHistoryView[];
   changesCommentsOnly = new FormControl<boolean>(false);
   comment = new FormControl('');
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+  selectedTabIndex = 0;
 
+  private tabIndexTimeoutId?: number;
+  private printTimeoutId?: number;
+  private urlRevokeTimeoutId?: number;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -57,6 +73,18 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     );
   }
 
+  ngAfterViewInit() {
+    this.tabIndexTimeoutId = window.setTimeout(() => {
+      if (this.tabGroup) {
+        this.tabGroup.selectedIndex = this.selectedTabIndex;
+      }
+    });
+  }
+
+  onTabChange(index: number) {
+    this.selectedTabIndex = index;
+  }
+
   getApplicantById(id: string) {
     this.isLoading = true;
     this.api.v1SpaceApplicantDetail(id, {observe: 'response'}).subscribe({
@@ -72,7 +100,13 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
           this.getPhoto();
         }
         this.isLoading = false;
-      },
+        this.tabIndexTimeoutId = window.setTimeout(() => {
+          if (this.tabGroup) {
+            this.tabGroup.selectedIndex = this.selectedTabIndex;
+            console.log('Reset tab to:', this.selectedTabIndex);
+          }
+        });
+        },
       error: (error) => {
         console.log(error);
         this.isLoading = false;
@@ -244,17 +278,22 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
 
     if (printWindow) {
       printWindow.addEventListener('load', () => {
-        setTimeout(() => {
+        if (this.printTimeoutId) {
+          clearTimeout(this.printTimeoutId);
+        }
+        this.printTimeoutId = window.setTimeout(() => {
           printWindow.print();
         }, 500);
       });
 
-      setTimeout(() => {
+      if (this.urlRevokeTimeoutId) {
+        clearTimeout(this.urlRevokeTimeoutId);
+      }
+      this.urlRevokeTimeoutId = window.setTimeout(() => {
         URL.revokeObjectURL(blobUrl);
       }, 3000);
     }
   }
-
 
 
   downloadResume() {
@@ -375,5 +414,17 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     }
 
     return value;
+  }
+  ngOnDestroy() {
+    // Очистка всех таймаутов
+    if (this.tabIndexTimeoutId) {
+      clearTimeout(this.tabIndexTimeoutId);
+    }
+    if (this.printTimeoutId) {
+      clearTimeout(this.printTimeoutId);
+    }
+    if (this.urlRevokeTimeoutId) {
+      clearTimeout(this.urlRevokeTimeoutId);
+    }
   }
 }

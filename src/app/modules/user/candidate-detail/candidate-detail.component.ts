@@ -22,6 +22,7 @@ import {
 } from '../../../api/data-contracts';
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 import {MatTabGroup} from '@angular/material/tabs';
+import {SnackBarService} from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -52,7 +53,8 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     private modalService: CandidateModalService,
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -103,7 +105,6 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
         this.tabIndexTimeoutId = window.setTimeout(() => {
           if (this.tabGroup) {
             this.tabGroup.selectedIndex = this.selectedTabIndex;
-            console.log('Reset tab to:', this.selectedTabIndex);
           }
         });
         },
@@ -224,14 +225,19 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
   changeStage(stage_id?: string) {
     if (!this.applicant || !stage_id) return;
     const id = this.applicant.id;
-    this.api.v1SpaceApplicantChangeStageUpdate(id, {stage_id}).subscribe({
+
+    const stageName = this.stages?.find(stage => stage.id === stage_id)?.name || '';
+
+    this.api.v1SpaceApplicantChangeStageUpdate(id, { stage_id: stage_id }).subscribe({
       next: () => {
         this.getApplicantById(id);
-      },
+        this.snackBarService.snackBarMessageSuccess(`Кандидат успешно переведен на этап "${stageName}"`);
+        },
       error: (error) => {
         console.log(error);
+        this.snackBarService.snackBarMessageError(`Ошибка при переводе кандидата на новый этап`);
       }
-    })
+    });
   }
 
   openRejectModal() {

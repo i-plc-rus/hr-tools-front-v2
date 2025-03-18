@@ -17,6 +17,7 @@ import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {SpaceUser} from '../../../../models/SpaceUser';
 import {Router} from '@angular/router';
 import {employmentTypes, experienceTypes, scheduleTypes} from '../../user-consts';
+import {SnackBarService} from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-vacancy-description',
@@ -45,7 +46,8 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
   constructor(
     private router: Router,
     private vacancyModal: VacancyModalService,
-    private api: ApiService
+    private api: ApiService,
+    private snackBarService: SnackBarService
   ) {
   }
 
@@ -272,21 +274,27 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
 
     observable.subscribe({
       next: (data) => {
-        if (data.body?.data) {
-          if (this.isNewVacancy)
-            this.router.navigate(['/user/vacancy', data.body.data]);
-          else
+        if (data.status === 200) {
+          const vacancyId = data.body?.data || this.vacancyForm.value.id;
+          this.snackBarService.snackBarMessageSuccess('Форма успешно отправлена')
+
+          if (this.isNewVacancy && vacancyId) {
+            this.router.navigate(['/user/vacancy', vacancyId]);
+          } else {
             this.onUpdate.emit();
+          }
+        } else {
+          this.snackBarService.snackBarMessageSuccess('Ошибка при отправке формы')
         }
+
         this.isLoading = false;
       },
       error: (error) => {
-        console.log(error);
+        this.snackBarService.snackBarMessageSuccess('Ошибка')
         this.isLoading = false;
       }
     });
   }
-
   createCompany() {
     return this.api.v1DictCompanyCreate({name: this.vacancyForm.value.company_name}, {observe: 'response'})
   }

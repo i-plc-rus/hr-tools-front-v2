@@ -10,7 +10,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>E-mail</mat-label>
-          <input matInput [formControl]="userForm.controls['email']">
+          <input matInput [formControl]="userForm.controls['email']" placeholder="example@domain.com">
 
           @let isEmailErrorEmail = userForm.controls['email'].hasError('email') &&
           !userForm.controls['email'].untouched;
@@ -82,7 +82,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Телефон</mat-label>
-          <input matInput [formControl]="userForm.controls['phone_number']" 
+          <input matInput [formControl]="userForm.controls['phone_number']"
             placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00">
 
           @let isPhoneErrorRequired = userForm.controls['phone_number'].hasError('required') &&

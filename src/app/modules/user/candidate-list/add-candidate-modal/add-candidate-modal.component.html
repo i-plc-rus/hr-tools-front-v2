@@ -117,7 +117,7 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>E-mail</mat-label>
-            <input matInput formControlName="email" autocomplete="new-email" />
+            <input matInput formControlName="email" autocomplete="new-email"  placeholder="example@domain.com" />
 
             @let isEmailErrorEmail =
               applicantForm.controls['email'].hasError('email') && !applicantForm.controls['email'].untouched;

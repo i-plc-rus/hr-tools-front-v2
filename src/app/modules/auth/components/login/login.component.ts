@@ -6,6 +6,7 @@ import {TokenService} from '../../../../services/token.service';
 import {TextInputComponent} from '../../../../components/text-input/text-input.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
+import {SnackBarService} from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private tokenService: TokenService,
+    private snackBarService: SnackBarService
   ) {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -51,7 +53,10 @@ export class LoginComponent implements OnInit {
           this.tokenService.updateToken(response.body.data.token, response.body.data.refresh_token);
           this.router.navigate(['/user']);
         },
-        error: () => this.loading = false
+        error: (err) => {
+          this.loading = false
+          this.snackBarService.snackBarMessageError('Ошибка авторизации: неверный логин или пароль')
+        }
       })
   }
 

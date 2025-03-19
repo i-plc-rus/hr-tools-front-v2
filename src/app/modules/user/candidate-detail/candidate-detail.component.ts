@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges, OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -11,13 +21,15 @@ import {
   VacancyapimodelsSelectionStageView
 } from '../../../api/data-contracts';
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
+import {MatTabGroup} from '@angular/material/tabs';
+import {SnackBarService} from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-candidate-detail',
   templateUrl: './candidate-detail.component.html',
   styleUrl: './candidate-detail.component.scss',
 })
-export class CandidateDetailComponent implements OnInit, OnChanges {
+export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges, OnDestroy {
   @Input() applicantId: string = '';
   @Output() onClose = new EventEmitter();
   isLoading = false;
@@ -31,12 +43,18 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   changesLog?: ApplicantHistoryView[];
   changesCommentsOnly = new FormControl<boolean>(false);
   comment = new FormControl('');
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+  selectedTabIndex = 0;
 
+  private tabIndexTimeoutId?: number;
+  private printTimeoutId?: number;
+  private urlRevokeTimeoutId?: number;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -57,6 +75,18 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
     );
   }
 
+  ngAfterViewInit() {
+    this.tabIndexTimeoutId = window.setTimeout(() => {
+      if (this.tabGroup) {
+        this.tabGroup.selectedIndex = this.selectedTabIndex;
+      }
+    });
+  }
+
+  onTabChange(index: number) {
+    this.selectedTabIndex = index;
+  }
+
   getApplicantById(id: string) {
     this.isLoading = true;
     this.api.v1SpaceApplicantDetail(id, {observe: 'response'}).subscribe({
@@ -72,7 +102,12 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
           this.getPhoto();
         }
         this.isLoading = false;
-      },
+        this.tabIndexTimeoutId = window.setTimeout(() => {
+          if (this.tabGroup) {
+            this.tabGroup.selectedIndex = this.selectedTabIndex;
+          }
+        });
+        },
       error: (error) => {
         console.log(error);
         this.isLoading = false;
@@ -87,7 +122,22 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
       next: async (data: any) => {
         if (data.body && data.body.byteLength > 0 && data.headers.get('content-type') === 'application/pdf') {
           const blob = new Blob([data.body], {type: 'application/pdf'});
-          const fileName: string = data.headers.get('content-disposition').split('=')[1];
+
+          const contentDisposition = data.headers.get('content-disposition');
+          let fileName = 'resume.pdf';
+
+          if (contentDisposition) {
+            const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+            if (matches != null && matches[1]) {
+              const iso = matches[1].replace(/['"]/g, '');
+              const bytes = new Uint8Array(iso.length);
+              for (let i = 0; i < iso.length; i++) {
+                bytes[i] = iso.charCodeAt(i);
+              }
+              fileName = new TextDecoder('utf-8').decode(bytes);
+            }
+          }
+
           this.resume = new File([blob], fileName);
           this.resumeUint = new Uint8Array(await this.resume.arrayBuffer());
         }
@@ -99,6 +149,7 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
       },
     });
   }
+
 
   getDocList() {
     if (!this.applicant) return;
@@ -174,14 +225,19 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
   changeStage(stage_id?: string) {
     if (!this.applicant || !stage_id) return;
     const id = this.applicant.id;
-    this.api.v1SpaceApplicantChangeStageUpdate(id, {stage_id}).subscribe({
+
+    const stageName = this.stages?.find(stage => stage.id === stage_id)?.name || '';
+
+    this.api.v1SpaceApplicantChangeStageUpdate(id, { stage_id: stage_id }).subscribe({
       next: () => {
         this.getApplicantById(id);
-      },
+        this.snackBarService.snackBarMessageSuccess(`Кандидат успешно переведен на этап "${stageName}"`);
+        },
       error: (error) => {
         console.log(error);
+        this.snackBarService.snackBarMessageError(`Ошибка при переводе кандидата на новый этап`);
       }
-    })
+    });
   }
 
   openRejectModal() {
@@ -220,9 +276,31 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
 
   printResume() {
     if (!this.resume) return;
-    const blobUrl = URL.createObjectURL(this.resume);
-    window.open(blobUrl, '_blank')?.print();
+
+    const blob = new Blob([this.resume], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+
+    const printWindow = window.open(blobUrl, '_blank');
+
+    if (printWindow) {
+      printWindow.addEventListener('load', () => {
+        if (this.printTimeoutId) {
+          clearTimeout(this.printTimeoutId);
+        }
+        this.printTimeoutId = window.setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      });
+
+      if (this.urlRevokeTimeoutId) {
+        clearTimeout(this.urlRevokeTimeoutId);
+      }
+      this.urlRevokeTimeoutId = window.setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 3000);
+    }
   }
+
 
   downloadResume() {
     if (!this.applicant || !this.resume) return;
@@ -326,5 +404,33 @@ export class CandidateDetailComponent implements OnInit, OnChanges {
 
   onBack() {
     this.router.navigate(['user', 'candidates', 'list']);
+  }
+  cleanValue(field: string | undefined, value: string | undefined | null): string {
+    if (!field) return 'Не указано поле';
+    if (!value) return 'Не было значения';
+
+    if (field === 'Тэги') {
+      const cleaned = value.replace(/[\{\}\[\]A:&]/g, '');
+      return cleaned || 'Без тегов';
+    }
+
+    if (value.includes('<') || value.includes('&nbsp;')) {
+      const cleaned = value.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ');
+      return cleaned || 'Пусто';
+    }
+
+    return value;
+  }
+  ngOnDestroy() {
+    // Очистка всех таймаутов
+    if (this.tabIndexTimeoutId) {
+      clearTimeout(this.tabIndexTimeoutId);
+    }
+    if (this.printTimeoutId) {
+      clearTimeout(this.printTimeoutId);
+    }
+    if (this.urlRevokeTimeoutId) {
+      clearTimeout(this.urlRevokeTimeoutId);
+    }
   }
 }

@@ -20,7 +20,7 @@
             </button>
           }
           <button mat-button class="btn-danger" (click)="openRejectModal()">
-            <mat-icon svgIcon="cancel" />
+            <mat-icon svgIcon="cancel"/>
             <span>Отменить</span>
           </button>
           <button mat-button class="btn-primary" [matMenuTriggerFor]="changeStageContent">
@@ -35,11 +35,11 @@
             }
           </mat-menu>
           <button mat-button class="btn-primary" (click)="openCommentModal()">
-            <mat-icon svgIcon="comment" />
+            <mat-icon svgIcon="comment"/>
             <span class="text-[var(--text-main)]">Комментарий</span>
           </button>
           <button mat-button class="btn-primary" disabled>
-            <mat-icon svgIcon="mail" />
+            <mat-icon svgIcon="mail"/>
             <span class="text-[var(--text-main)]">Написать</span>
           </button>
         </div>
@@ -71,11 +71,11 @@
         </form>
       </div>
 
-      <mat-tab-group fitInkBarToContent>
+      <mat-tab-group fitInkBarToContent [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab label="Резюме">
           <div class="p-6">
             @if (!resume || !resumeUint) {
-              <input type="file" accept="application/pdf" class="hidden" (change)="uploadResume($event)" #resumeInput />
+              <input type="file" accept="application/pdf" class="hidden" (change)="uploadResume($event)" #resumeInput/>
               <button mat-flat-button class="btn-secondary" (click)="resumeInput.click()">
                 <mat-icon>add</mat-icon>
                 Добавить резюме
@@ -95,21 +95,21 @@
                       <mat-icon svgIcon="share" />
                     </button> -->
                     <button mat-icon-button class="btn-primary" (click)="printResume()">
-                      <mat-icon svgIcon="print" />
+                      <mat-icon svgIcon="print"/>
                     </button>
                     <button mat-icon-button class="btn-primary" (click)="downloadResume()">
-                      <mat-icon svgIcon="download" />
+                      <mat-icon svgIcon="download"/>
                     </button>
                     <button mat-icon-button class="btn-primary" (click)="deleteResume()">
-                      <mat-icon svgIcon="delete" />
+                      <mat-icon svgIcon="delete"/>
                     </button>
                   </div>
                 </div>
                 <div class="flex items-center justify-center drop-shadow-xl">
                   <pdf-viewer #resumeViewer
-                    [src]="resumeUint"
-                    [original-size]="false"
-                    style="width: 80%; min-width: 400px; height: 80vh;">
+                              [src]="resumeUint"
+                              [original-size]="false"
+                              style="width: 80%; min-width: 400px; height: 80vh;">
                   </pdf-viewer>
                 </div>
               </div>
@@ -123,13 +123,13 @@
               accept="application/pdf"
               class="hidden"
               (change)="uploadDocument($event)"
-              #documentInput />
+              #documentInput/>
             <button mat-flat-button class="btn-secondary" (click)="documentInput.click()">
               <mat-icon>attach_file</mat-icon>
               Прикрепить документ
             </button>
             @for (doc of docList; track $index) {
-              <hr class="w-full h-[1px] bg-[var(--background-alter)] my-2" />
+              <hr class="w-full h-[1px] bg-[var(--background-alter)] my-2"/>
               <div class="w-full flex justify-between">
                 <button mat-button class="btn-secondary">
                   <mat-icon>attach_file</mat-icon>
@@ -137,10 +137,10 @@
                 </button>
                 <div class="flex gap-3">
                   <button mat-icon-button class="btn-primary" (click)="downloadDocument(doc.id, doc.name)">
-                    <mat-icon svgIcon="download" />
+                    <mat-icon svgIcon="download"/>
                   </button>
                   <button mat-icon-button class="btn-primary" (click)="deleteDocument(doc.id)">
-                    <mat-icon svgIcon="delete" />
+                    <mat-icon svgIcon="delete"/>
                   </button>
                 </div>
               </div>
@@ -150,7 +150,7 @@
         <mat-tab label="Действия">
           <div class="p-6">
             <mat-chip-listbox hideSingleSelectionIndicator [formControl]="changesCommentsOnly">
-              <mat-chip-option [value]="false" [selectable]="changesCommentsOnly.value === true"> Все </mat-chip-option>
+              <mat-chip-option [value]="false" [selectable]="changesCommentsOnly.value === true"> Все</mat-chip-option>
               <mat-chip-option [value]="true" [selectable]="changesCommentsOnly.value === false">
                 Комментарии
               </mat-chip-option>
@@ -197,7 +197,7 @@
                           </span>
                         </span>
                       }
-                      <input type="checkbox" class="hidden" #viewChanges />
+                      <input type="checkbox" class="hidden" #viewChanges/>
                       @if (logItem.changes?.data) {
                         <span
                           class="text-[14px] leading-5 text-[var(--text-alter)] cursor-pointer"
@@ -210,12 +210,30 @@
                   @if (logItem.changes?.data && viewChanges.checked) {
                     <div class="flex gap-4">
                       <div class="w-[120px]"></div>
-                      <div class="flex flex-col gap-2">
+                      <div class="w-full">
                         @for (data of logItem.changes?.data; track $index) {
-                          <span class="text-[14px] leading-5 text-[var(--text-alter)]">
-                            {{ data.field }}
-                          </span>
-                          <span class="text-[14px] leading-5"> {{ data.old_value }} -> {{ data.new_value }} </span>
+                          <div
+                            class="mb-3 p-3 border-l-4 border-l-[var(--link-default)] border-t border-r border-b rounded-r-lg bg-white">
+                            <div class="font-medium mb-2">{{ data.field }}</div>
+
+                            <div class="ml-2 flex gap-3 items-center">
+                              <div class="flex-1">
+                                @if (!data.old_value) {
+                                  <span class="text-[var(--text-alter)] italic">Не было значения</span>
+                                } @else {
+                                  <span class="text-[var(--text-alter)]">
+                                    {{ cleanValue(data.field, data.old_value) }}
+                                  </span>
+                                }
+                              </div>
+
+                              <mat-icon class="text-[var(--text-alter)]">arrow_forward</mat-icon>
+
+                              <div class="flex-1 font-medium">
+                                {{ cleanValue(data.field, data.new_value) }}
+                              </div>
+                            </div>
+                          </div>
                         }
                       </div>
                     </div>

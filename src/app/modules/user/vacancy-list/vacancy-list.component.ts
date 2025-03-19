@@ -194,7 +194,12 @@ export class VacancyListComponent implements OnInit {
     this.searchCity.reset();
     this.searchAuthor.reset();
     this.searchRequestAuthor.reset();
+
+    this.filterForm.reset();
+
+    this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
   }
+
 
   sort() {
     this.sortByDesc = !this.sortByDesc;

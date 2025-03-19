@@ -60,11 +60,15 @@ export class AddCandidateModalComponent implements OnInit {
     birth_date: new FormControl(''),
     citizenship: new FormControl(''),
     comment: new FormControl(''),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    ]),
     first_name: new FormControl('', Validators.required),
     last_name: new FormControl('', Validators.required),
     middle_name: new FormControl(''),
-    gender: new FormControl<ModelsGenderType | ''>('', Validators.required),
+    gender: new FormControl<ModelsGenderType | null>(null, Validators.required),
+
     params: new FormGroup({
       driver_license_types: new FormControl<ModelsDriverLicenseType[]>([]),
       education: new FormControl<ModelsEducationType | ''>(''),

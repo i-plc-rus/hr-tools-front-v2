@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ScreenWidthService} from '../../../services/screen-width.service';
 import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
@@ -16,16 +16,17 @@ import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {StatusTag} from '../../../models/StatusTag';
 import {FormControl, FormGroup} from '@angular/forms';
 import {SpaceUser} from '../../../models/SpaceUser';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'
 })
-export class RequestListComponent implements OnInit {
+export class RequestListComponent implements OnInit, OnDestroy {
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -71,6 +72,9 @@ export class RequestListComponent implements OnInit {
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
 
+  private destroy$ = new Subject<void>();
+
+
   constructor(
     public screen: ScreenWidthService,
     private modalService: VacancyModalService,
@@ -91,7 +95,7 @@ export class RequestListComponent implements OnInit {
       filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
     if (filter.search_to)
       filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
-    this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.favoritesCount = 0;
@@ -112,6 +116,7 @@ export class RequestListComponent implements OnInit {
 
   setFormListeners() {
     this.category.valueChanges
+      .pipe(takeUntil(this.destroy$))
       .subscribe((category) => {
         this.sortByDesc = true;
         this.filterForm.reset();
@@ -124,18 +129,26 @@ export class RequestListComponent implements OnInit {
       });
 
     this.searchCity.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
-      .subscribe((newValue) => {
+      .pipe(
+        debounceTime(700),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )      .subscribe((newValue) => {
         if (this.filterForm.controls.city_id.value !== '')
           this.filterForm.controls.city_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.getCities(newValue);
         else
           this.cities = [];
       });
 
+
     this.searchRequestAuthor.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(
+        debounceTime(700),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
@@ -146,7 +159,9 @@ export class RequestListComponent implements OnInit {
       });
 
     this.filterForm.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(debounceTime(700),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$))
       .subscribe(() => {
         this.getRequests();
       });
@@ -177,7 +192,7 @@ export class RequestListComponent implements OnInit {
     }
     console.log(id, status);
     if (observable)
-      observable.subscribe({
+      observable.pipe(takeUntil(this.destroy$)).subscribe({
         next: () => {
           this.getRequests();
         },
@@ -188,7 +203,7 @@ export class RequestListComponent implements OnInit {
   }
 
   toggleFavorite(id: string, set: boolean) {
-    this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.getRequests();
       },
@@ -199,7 +214,7 @@ export class RequestListComponent implements OnInit {
   }
 
   togglePin(id: string, set: boolean) {
-    this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.getRequests();
       },
@@ -226,7 +241,7 @@ export class RequestListComponent implements OnInit {
   }
 
   getCities(address: string) {
-    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.cities = data.body.data;
@@ -239,7 +254,7 @@ export class RequestListComponent implements OnInit {
   }
 
   publishVacancy(id: string) {
-    this.api.v1SpaceVacancyRequestPublishUpdate(id, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyRequestPublishUpdate(id, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.getRequests();
       },
@@ -250,7 +265,7 @@ export class RequestListComponent implements OnInit {
   }
 
   getUsers() {
-    this.api.v1UsersListCreate({}).subscribe({
+    this.api.v1UsersListCreate({}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         if (res.body.data) {
           this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));
@@ -265,4 +280,9 @@ export class RequestListComponent implements OnInit {
   show(id: string): void {
     this.router.navigate(['/user/request', id, 'approval'])
    }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

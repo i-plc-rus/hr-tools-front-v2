@@ -309,6 +309,7 @@ export class AddCandidateModalComponent implements OnInit {
   deletePhoto() {
     if (!this.isEdit) {
       this.newCandidatePhoto = undefined;
+      this.photo = undefined;
       return;
     }
     if (!this.applicant || !this.applicant.id) return;
@@ -327,6 +328,7 @@ export class AddCandidateModalComponent implements OnInit {
         },
       });
   }
+
 
   deleteResume() {
     if (!this.isEdit) {

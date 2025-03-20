@@ -34,3 +34,9 @@ app-sidebar {
   overflow-y: auto;
   height: 100vh;
 }
+::ng-deep .cdk-overlay-pane {
+  position: fixed !important;
+  top: 29% !important;
+  left: 90px !important;
+  transform: translateY(-50%) !important;
+}

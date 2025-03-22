@@ -6,6 +6,15 @@
   }
 }
 
+.profile-btn-with-menu {
+  @apply relative;
+
+  .mat-mdc-menu-trigger {
+    @apply absolute bottom-[10px] right-[-20px];
+  }
+}
+
+
 .mat-mdc-menu-item:hover {
   color: var(--link-default) !important;
   background-color: transparent !important;

@@ -73,20 +73,21 @@
         <span class="tracking-[0.5px] font-[500] text-xs">Аналитика</span>
       </a>
     </div>
-    <div class="mt-16 flex flex-col items-center gap-y-4">
-      <span
-        matTooltip="Настройки"
-        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
-        <mat-icon svgIcon="settings"></mat-icon>
-      </span>
+
+    <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4" style="width: inherit; max-width: inherit;">
+  <span
+    matTooltip="Настройки" matTooltipPosition="right"
+    class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
+    <mat-icon svgIcon="settings"></mat-icon>
+  </span>
       <span
         (click)="profileMenuTrigger.openMenu()"
-        matTooltip="Профиль"
-        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer sidebtn-with-menu">
-        <mat-icon svgIcon="profile"></mat-icon>
-      <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
-      </span>
-      <mat-menu #profileMenu="matMenu">
+        matTooltip="Профиль" matTooltipPosition="right"
+        class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer profile-btn-with-menu">
+    <mat-icon svgIcon="profile"></mat-icon>
+    <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
+  </span>
+      <mat-menu #profileMenu="matMenu" xPosition="after" panelClass="custom-menu-overlay">
         <button mat-menu-item [routerLink]="['/user', 'profile']">
           <mat-icon svgIcon="account-box"></mat-icon>
           Личный кабинет
@@ -108,10 +109,10 @@
         </button>
       </mat-menu>
       <span
-        matTooltip="Помощь"
+        matTooltip="Помощь" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
-        <mat-icon svgIcon="support"></mat-icon>
-      </span>
+    <mat-icon svgIcon="support"></mat-icon>
+  </span>
     </div>
   </app-sidebar>
   <div class="content-area">

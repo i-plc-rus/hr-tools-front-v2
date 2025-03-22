@@ -28,7 +28,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-scroll custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (city of cities; track $index) {
@@ -40,7 +40,7 @@
 
       <mat-expansion-panel class="mat-elevation-z">
         <mat-expansion-panel-header>Подразделение</mat-expansion-panel-header>
-        <div class="max-h-[200px] overflow-y-scroll overflow-x-hidden">
+        <div class="max-h-[200px] overflow-y-scroll overflow-x-hidden custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="department_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (department of departments; track $index) {

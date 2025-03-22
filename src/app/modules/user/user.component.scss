@@ -2,9 +2,18 @@
   @apply relative;
 
   .mat-mdc-menu-trigger {
-    @apply absolute top-1/2 right-[-20px];
+    @apply absolute top-[calc(50%-30px)] right-[-20px];
   }
 }
+
+.profile-btn-with-menu {
+  @apply relative;
+
+  .mat-mdc-menu-trigger {
+    @apply absolute bottom-[10px] right-[-20px];
+  }
+}
+
 
 .mat-mdc-menu-item:hover {
   color: var(--link-default) !important;
@@ -34,3 +43,9 @@ app-sidebar {
   overflow-y: auto;
   height: 100vh;
 }
+//::ng-deep .cdk-overlay-pane {
+//  position: fixed !important;
+//  top: 112px !important;
+//  left: 90px !important;
+//  transform: translateY(-50%) !important;
+//}

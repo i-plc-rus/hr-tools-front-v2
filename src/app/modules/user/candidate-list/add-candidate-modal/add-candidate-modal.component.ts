@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../../../api/Api';
 import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
@@ -99,6 +99,9 @@ export class AddCandidateModalComponent implements OnInit {
   vacancyList: VacancyView[] = [];
   newCandidateResume?: File;
   newCandidatePhoto?: File;
+
+  @ViewChild('resumeUpload') resumeUpload?: ElementRef;
+
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -306,6 +309,7 @@ export class AddCandidateModalComponent implements OnInit {
   deletePhoto() {
     if (!this.isEdit) {
       this.newCandidatePhoto = undefined;
+      this.photo = undefined;
       return;
     }
     if (!this.applicant || !this.applicant.id) return;
@@ -325,9 +329,13 @@ export class AddCandidateModalComponent implements OnInit {
       });
   }
 
+
   deleteResume() {
     if (!this.isEdit) {
       this.newCandidateResume = undefined;
+      if (this.resumeUpload) {
+        this.resumeUpload.nativeElement.value = '';
+      }
       return;
     }
     if (!this.applicant || !this.applicant.id) return;

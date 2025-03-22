@@ -90,6 +90,10 @@ export class VacancyListComponent implements OnInit {
               this.favoritesCount++;
             return new VacancyView(vacancy);
           });
+
+          if (this.category.value === 'favorites' && this.favoritesCount === 0) {
+            this.category.setValue('all');
+          }
         }
         this.isLoading = false;
       },
@@ -99,6 +103,7 @@ export class VacancyListComponent implements OnInit {
       },
     });
   }
+
 
   changeStatus(id: string, status: ModelsVacancyStatus) {
     this.api.v1SpaceVacancyChangeStatusUpdate(id, {status}, {observe: 'response'}).subscribe({
@@ -114,6 +119,9 @@ export class VacancyListComponent implements OnInit {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyFavoriteUpdate(id, {set}, {observe: 'response'}).subscribe({
       next: () => {
+        if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
+          this.category.setValue('all');
+        }
         this.getVacancyList();
       },
       error: (error) => {
@@ -121,6 +129,7 @@ export class VacancyListComponent implements OnInit {
       },
     })
   }
+
 
   togglePin(id: string, set: boolean) {
     this.api.v1SpaceVacancyPinUpdate(id, {set}, {observe: 'response'}).subscribe({

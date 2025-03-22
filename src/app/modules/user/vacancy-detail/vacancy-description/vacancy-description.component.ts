@@ -276,7 +276,7 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
       next: (data) => {
         if (data.status === 200) {
           const vacancyId = data.body?.data || this.vacancyForm.value.id;
-          this.snackBarService.snackBarMessageSuccess('Форма успешно отправлена')
+          this.snackBarService.snackBarMessageSuccess('Данные успешно сохранены')
 
           if (this.isNewVacancy && vacancyId) {
             this.router.navigate(['/user/vacancy', vacancyId]);
@@ -284,7 +284,7 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
             this.onUpdate.emit();
           }
         } else {
-          this.snackBarService.snackBarMessageSuccess('Ошибка при отправке формы')
+          this.snackBarService.snackBarMessageError('Ошибка при отправке формы')
         }
 
         this.isLoading = false;

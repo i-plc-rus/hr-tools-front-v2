@@ -7,7 +7,8 @@
     </div>
 
     <mat-menu #addMenu="matMenu" xPosition="after" panelClass="custom-menu-overlay">
-      <button mat-menu-item [routerLink]="['/user', 'request', 'create']" [ngStyle]="{'background-color': 'transparent', 'width': '220px'}">
+      <button mat-menu-item [routerLink]="['/user', 'request', 'create']"
+              [ngStyle]="{'background-color': 'transparent', 'width': '220px'}">
 
         <mat-icon svgIcon="request"></mat-icon>
         Создать заявку
@@ -74,7 +75,8 @@
       </a>
     </div>
 
-    <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4" style="width: inherit; max-width: inherit;">
+    <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4"
+         style="width: inherit; max-width: inherit;">
   <span
     matTooltip="Настройки" matTooltipPosition="right"
     class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
@@ -84,11 +86,12 @@
         (click)="profileMenuTrigger.openMenu()"
         matTooltip="Профиль" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer profile-btn-with-menu">
-    <mat-icon svgIcon="profile"></mat-icon>
-    <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
-  </span>
+  <mat-icon svgIcon="profile"></mat-icon>
+  <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
+</span>
+
       <mat-menu #profileMenu="matMenu" xPosition="after" panelClass="custom-menu-overlay">
-        <button mat-menu-item [routerLink]="['/user', 'profile']">
+        <button mat-menu-item [routerLink]="['/user', 'profile']" [ngStyle]="{'background-color': 'transparent'}">
           <mat-icon svgIcon="account-box"></mat-icon>
           Личный кабинет
         </button>
@@ -103,11 +106,13 @@
             <app-notification-bubble [value]="1"></app-notification-bubble>
           </div>
         </button>
-        <button mat-menu-item (click)="logout()">
+        <button mat-menu-item class="logout-button" (click)="logout()">
           <mat-icon class="!text-[var(--status-color-danger-text)]" svgIcon="logout"></mat-icon>
           <span class="text-[var(--status-color-danger-text)]">Выйти</span>
         </button>
       </mat-menu>
+
+
       <span
         matTooltip="Помощь" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">

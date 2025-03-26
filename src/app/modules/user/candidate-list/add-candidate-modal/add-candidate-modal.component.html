@@ -1,7 +1,7 @@
 <div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:w-[950px] lg:max-h-[1200px]">
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     <div class="flex justify-between items-center">
-      <input type="file" accept="image/png, image/jpeg" (change)="onPhotoSelected($event)" class="hidden" #photoUpload />
+      <input type="file" #photoUpload accept="image/png, image/jpeg" (change)="onPhotoSelected($event)" class="hidden" />
       <div class="flex gap-2 items-center">
         <div class="flex w-14 h-14 items-center justify-center bg-[var(--background-main)] rounded-full"
           (click)="!photo ? photoUpload.click() : null" [class.cursor-pointer]="!photo">

@@ -154,11 +154,11 @@ export class VacancyListComponent implements OnInit {
       });
 
     this.searchCity.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(debounceTime(200), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.city_id.value !== '')
           this.filterForm.controls.city_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.getCities(newValue);
         else
           this.cities = [];

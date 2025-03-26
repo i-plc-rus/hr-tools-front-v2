@@ -250,7 +250,7 @@ export class СandidateListComponent {
       .subscribe((newValue) => {
         if (this.filterForm.controls.city.value !== '')
           this.filterForm.controls.city.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.getCities(newValue);
         else
           this.cities = [];

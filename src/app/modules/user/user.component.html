@@ -31,27 +31,38 @@
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Сотрудники</span>
       </a>
-      <a matTooltip="Заявки" [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
+      <a matTooltip="Заявки" [routerLink]="['/user', 'request', 'list']"
+         routerLinkActive #requestActive="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="request"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!requestActive.isActive" svgIcon="request"></mat-icon>
+    <mat-icon *ngIf="requestActive.isActive" svgIcon="request-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Заявки</span>
       </a>
-      <a matTooltip="Вакансии" [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
+      <a matTooltip="Вакансии" [routerLink]="['/user', 'vacancy']"
+         routerLinkActive #vacancyActive="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="bag"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!vacancyActive.isActive" svgIcon="bag"></mat-icon>
+    <mat-icon *ngIf="vacancyActive.isActive" svgIcon="bag-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Вакансии</span>
       </a>
-      <a matTooltip="Кандидаты" [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
+
+      <a matTooltip="Кандидаты" [routerLink]="['/user', 'candidates']"
+         routerLinkActive #rla="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="people"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!rla.isActive" svgIcon="people"></mat-icon>
+    <mat-icon *ngIf="rla.isActive" svgIcon="people-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
       </a>
+
       <a matTooltip="Офферы" [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">

@@ -7,7 +7,8 @@
     </div>
 
     <mat-menu #addMenu="matMenu" xPosition="after" panelClass="custom-menu-overlay">
-      <button mat-menu-item [routerLink]="['/user', 'request', 'create']" [ngStyle]="{'background-color': 'transparent', 'width': '220px'}">
+      <button mat-menu-item [routerLink]="['/user', 'request', 'create']"
+              [ngStyle]="{'background-color': 'transparent', 'width': '220px'}">
 
         <mat-icon svgIcon="request"></mat-icon>
         Создать заявку
@@ -30,27 +31,38 @@
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Сотрудники</span>
       </a>
-      <a matTooltip="Заявки" [routerLink]="['/user', 'request', 'list']" [routerLinkActive]="['active-link']"
+      <a matTooltip="Заявки" [routerLink]="['/user', 'request', 'list']"
+         routerLinkActive #requestActive="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="request"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!requestActive.isActive" svgIcon="request"></mat-icon>
+    <mat-icon *ngIf="requestActive.isActive" svgIcon="request-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Заявки</span>
       </a>
-      <a matTooltip="Вакансии" [routerLink]="['/user', 'vacancy']" [routerLinkActive]="['active-link']"
+      <a matTooltip="Вакансии" [routerLink]="['/user', 'vacancy']"
+         routerLinkActive #vacancyActive="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="bag"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!vacancyActive.isActive" svgIcon="bag"></mat-icon>
+    <mat-icon *ngIf="vacancyActive.isActive" svgIcon="bag-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Вакансии</span>
       </a>
-      <a matTooltip="Кандидаты" [routerLink]="['/user', 'candidates']" [routerLinkActive]="['active-link']"
+
+      <a matTooltip="Кандидаты" [routerLink]="['/user', 'candidates']"
+         routerLinkActive #rla="routerLinkActive"
+         [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="people"></mat-icon>
-        </span>
+  <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+    <mat-icon *ngIf="!rla.isActive" svgIcon="people"></mat-icon>
+    <mat-icon *ngIf="rla.isActive" svgIcon="people-filled"></mat-icon>
+  </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
       </a>
+
       <a matTooltip="Офферы" [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
@@ -74,7 +86,8 @@
       </a>
     </div>
 
-    <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4" style="width: inherit; max-width: inherit;">
+    <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4"
+         style="width: inherit; max-width: inherit;">
   <span
     matTooltip="Настройки" matTooltipPosition="right"
     class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
@@ -84,11 +97,12 @@
         (click)="profileMenuTrigger.openMenu()"
         matTooltip="Профиль" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer profile-btn-with-menu">
-    <mat-icon svgIcon="profile"></mat-icon>
-    <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
-  </span>
+  <mat-icon svgIcon="profile"></mat-icon>
+  <div #profileMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="profileMenu"></div>
+</span>
+
       <mat-menu #profileMenu="matMenu" xPosition="after" panelClass="custom-menu-overlay">
-        <button mat-menu-item [routerLink]="['/user', 'profile']">
+        <button mat-menu-item [routerLink]="['/user', 'profile']" [ngStyle]="{'background-color': 'transparent'}">
           <mat-icon svgIcon="account-box"></mat-icon>
           Личный кабинет
         </button>
@@ -103,11 +117,13 @@
             <app-notification-bubble [value]="1"></app-notification-bubble>
           </div>
         </button>
-        <button mat-menu-item (click)="logout()">
+        <button mat-menu-item class="logout-button" (click)="logout()">
           <mat-icon class="!text-[var(--status-color-danger-text)]" svgIcon="logout"></mat-icon>
           <span class="text-[var(--status-color-danger-text)]">Выйти</span>
         </button>
       </mat-menu>
+
+
       <span
         matTooltip="Помощь" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">

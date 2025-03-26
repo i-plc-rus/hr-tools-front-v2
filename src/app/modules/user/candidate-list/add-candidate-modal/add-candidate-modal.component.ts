@@ -101,6 +101,7 @@ export class AddCandidateModalComponent implements OnInit {
   newCandidatePhoto?: File;
 
   @ViewChild('resumeUpload') resumeUpload?: ElementRef;
+  @ViewChild('photoUpload') photoUpload?: ElementRef;
 
   constructor(
     private modalService: CandidateModalService,
@@ -310,8 +311,14 @@ export class AddCandidateModalComponent implements OnInit {
     if (!this.isEdit) {
       this.newCandidatePhoto = undefined;
       this.photo = undefined;
+
+      if (this.photoUpload) {
+        this.photoUpload.nativeElement.value = '';
+      }
+
       return;
     }
+
     if (!this.applicant || !this.applicant.id) return;
 
     this.isLoading = true;

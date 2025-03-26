@@ -133,4 +133,8 @@ export class UsersListComponent implements OnInit {
     this.gridApi.setGridOption('quickFilterText', this.searchValue);
   }
 
+  onSearchChange(value: string) {
+    this.searchValue = value;
+    this.onSearch();
+  }
 }

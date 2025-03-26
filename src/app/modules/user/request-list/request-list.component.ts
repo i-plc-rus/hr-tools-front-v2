@@ -19,7 +19,7 @@ import {SpaceUser} from '../../../models/SpaceUser';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import {Subject} from 'rxjs';
+import {Subject, Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-request-list',
@@ -71,6 +71,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   isLoading = false;
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
+  private searchSubscription: Subscription = new Subscription();
 
   private destroy$ = new Subject<void>();
 
@@ -90,15 +91,23 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   getRequests() {
     this.isLoading = true;
-    const filter: VacancyapimodelsVrFilter = this.filterForm.value as VacancyapimodelsVrFilter;
-    if (filter.search_from)
-      filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
-    if (filter.search_to)
-      filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+    const filter: VacancyapimodelsVrFilter = {...this.filterForm.value} as VacancyapimodelsVrFilter;
+
+    if (filter.search_period && filter.search_period !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      filter.search_from = '';
+      filter.search_to = '';
+    } else if (filter.search_from || filter.search_to) {
+      if (filter.search_from)
+        filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
+      if (filter.search_to)
+        filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+    }
+
     this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.favoritesCount = 0;
+
           this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
             if (request.favorite)
               this.favoritesCount++;
@@ -109,9 +118,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error('Ошибка при получении списка заявок:', error);
       },
-    })
+    });
   }
 
   setFormListeners() {
@@ -165,6 +174,19 @@ export class RequestListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.getRequests();
       });
+
+
+     this.searchValue.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$),
+        switchMap(value => {
+          this.filterForm.controls.search.setValue(value);
+          return [];
+        })
+      )
+       .subscribe();
   }
 
   openComment(comment: string) {
@@ -284,5 +306,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 }

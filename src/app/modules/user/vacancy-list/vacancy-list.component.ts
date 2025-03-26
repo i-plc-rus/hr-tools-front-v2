@@ -94,6 +94,9 @@ export class VacancyListComponent implements OnInit {
           if (this.category.value === 'favorites' && this.favoritesCount === 0) {
             this.category.setValue('all');
           }
+        } else {
+          this.vacancyList = [];
+          this.favoritesCount = 0;
         }
         this.isLoading = false;
       },

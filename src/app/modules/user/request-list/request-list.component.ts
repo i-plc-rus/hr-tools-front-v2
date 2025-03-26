@@ -91,15 +91,23 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   getRequests() {
     this.isLoading = true;
-    const filter: VacancyapimodelsVrFilter = this.filterForm.value as VacancyapimodelsVrFilter;
-    if (filter.search_from)
-      filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
-    if (filter.search_to)
-      filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+    const filter: VacancyapimodelsVrFilter = {...this.filterForm.value} as VacancyapimodelsVrFilter;
+
+    if (filter.search_period && filter.search_period !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      filter.search_from = '';
+      filter.search_to = '';
+    } else if (filter.search_from || filter.search_to) {
+      if (filter.search_from)
+        filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
+      if (filter.search_to)
+        filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+    }
+
     this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.favoritesCount = 0;
+
           this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
             if (request.favorite)
               this.favoritesCount++;
@@ -110,9 +118,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error('Ошибка при получении списка заявок:', error);
       },
-    })
+    });
   }
 
   setFormListeners() {

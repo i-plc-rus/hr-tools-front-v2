@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -18,13 +18,14 @@ import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
+import {Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-vacancy-list',
   templateUrl: './vacancy-list.component.html',
   styleUrl: './vacancy-list.component.scss'
 })
-export class VacancyListComponent implements OnInit {
+export class VacancyListComponent implements OnInit, OnDestroy {
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -63,6 +64,7 @@ export class VacancyListComponent implements OnInit {
   isLoading: boolean = false;
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
+  private searchSubscription: Subscription = new Subscription();
 
   constructor(
     private modalService: VacancyModalService,
@@ -194,6 +196,18 @@ export class VacancyListComponent implements OnInit {
       .subscribe(() => {
         this.getVacancyList();
       });
+
+    this.searchSubscription = this.searchValue.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(value => {
+          this.filterForm.controls.search.setValue(value);
+          return [];
+        })
+      )
+      .subscribe();
+
   }
 
   search() {
@@ -259,5 +273,10 @@ export class VacancyListComponent implements OnInit {
         console.log(error);
       }
     });
+  }
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 }

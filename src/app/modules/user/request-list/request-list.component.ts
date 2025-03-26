@@ -19,7 +19,7 @@ import {SpaceUser} from '../../../models/SpaceUser';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import {Subject} from 'rxjs';
+import {Subject, Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-request-list',
@@ -71,6 +71,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   isLoading = false;
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
+  private searchSubscription: Subscription = new Subscription();
 
   private destroy$ = new Subject<void>();
 
@@ -165,6 +166,19 @@ export class RequestListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.getRequests();
       });
+
+
+     this.searchValue.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$),
+        switchMap(value => {
+          this.filterForm.controls.search.setValue(value);
+          return [];
+        })
+      )
+       .subscribe();
   }
 
   openComment(comment: string) {
@@ -284,5 +298,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 }

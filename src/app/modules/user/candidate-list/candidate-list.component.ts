@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
@@ -27,13 +27,14 @@ import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes} from '../user-consts';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
+import {Subscription, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-candidate-list',
   templateUrl: './candidate-list.component.html',
   styleUrl: './candidate-list.component.scss',
 })
-export class СandidateListComponent {
+export class СandidateListComponent implements OnDestroy{
   // фильтр
   filterForm = new FormGroup({
     added_day: new FormControl(''),
@@ -158,6 +159,7 @@ export class СandidateListComponent {
       pinned: 'left',
     },
   }
+  private searchSubscription: Subscription = new Subscription();
 
   constructor(
     private modalService: CandidateModalService,
@@ -261,6 +263,17 @@ export class СandidateListComponent {
       .subscribe(() => {
         this.getApplicants()
       });
+
+    this.searchSubscription = this.searchValue.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(value => {
+          this.filterForm.controls.search.setValue(value);
+          return [];
+        })
+      )
+      .subscribe();
   }
 
   openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {
@@ -314,6 +327,12 @@ export class СandidateListComponent {
     this.searchCity.reset();
     this.searchVacancy.reset();
     this.searchValue.reset();
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 
 }

@@ -4,6 +4,7 @@
   class="w-full lg:w-[380px]"
   placeholder="Поиск сотрудника"
   [(ngModel)]="searchValue"
+  (ngModelChange)="onSearchChange($event)"
   (onSearch)="onSearch()">
 </app-search-input>
   </div>

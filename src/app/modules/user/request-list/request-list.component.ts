@@ -7,7 +7,7 @@ import {
   ModelsVRSelectionType,
   ModelsVRStatus,
   SpaceapimodelsSpaceUser,
-  VacancyapimodelsSearchPeriod,
+  VacancyapimodelsSearchPeriod, VacancyapimodelsVacancyRequestData,
   VacancyapimodelsVacancyRequestView,
   VacancyapimodelsVrFilter,
   VacancyapimodelsVrSort
@@ -20,6 +20,8 @@ import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
 import {Subject, Subscription, switchMap} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
+import {SnackBarService} from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-request-list',
@@ -80,7 +82,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
     public screen: ScreenWidthService,
     private modalService: VacancyModalService,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -194,34 +197,60 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(id: string, status: ModelsVRStatus) {
+    const request = this.requestList.find(item => item.id === id);
+    if (!request) return;
+
+    const body: VacancyapimodelsVacancyRequestData = {
+      vacancy_name: request.vacancy_name,
+      opened_positions: request.opened_positions,
+      urgency: request.urgency,
+      selection_type: request.selection_type,
+      city_id: request.city_id,
+      company_id: request.company_id,
+      job_title_id: request.job_title_id,
+      schedule: request.schedule,
+      employment: request.employment,
+      request_type: request.request_type,
+      description: request.description,
+      requirements: request.requirements,
+      short_info: request.short_info,
+      department_id: request.department_id,
+      company_struct_id: request.company_struct_id,
+      chief_fio: request.chief_fio,
+      confidential: request.confidential,
+      place_of_work: request.place_of_work,
+      in_interaction: request.in_interaction,
+      out_interaction: request.out_interaction,
+      interviewer: request.interviewer,
+    };
+
     let observable;
     switch (status) {
       case ModelsVRStatus.VRStatusAccepted:
-        observable = this.api.v1SpaceVacancyRequestApproveUpdate(id, {});
+        observable = this.api.v1SpaceVacancyRequestApproveUpdate(id, body, {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusNotAccepted:
-        observable = this.api.v1SpaceVacancyRequestRejectUpdate(id, {});
+        observable = this.api.v1SpaceVacancyRequestRejectUpdate(id, body, {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusCanceled:
-        observable = this.api.v1SpaceVacancyRequestCancelUpdate(id, {});
+        observable = this.api.v1SpaceVacancyRequestCancelUpdate(id, {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusUnderAccepted:
-        observable = this.api.v1SpaceVacancyRequestOnApprovalUpdate(id, {});
+        observable = this.api.v1SpaceVacancyRequestOnApprovalUpdate(id,  {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusUnderRevision:
-        observable = this.api.v1SpaceVacancyRequestToRevisionUpdate(id, {});
+        observable = this.api.v1SpaceVacancyRequestToRevisionUpdate(id,  {observe: 'response'});
         break;
     }
-    console.log(id, status);
-    if (observable)
+
+    if (observable) {
       observable.pipe(takeUntil(this.destroy$)).subscribe({
-        next: () => {
-          this.getRequests();
-        },
+        next: () => this.getRequests(),
         error: (error) => {
-          console.log(error);
+          this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
         }
-      })
+      });
+    }
   }
 
   toggleFavorite(id: string, set: boolean) {

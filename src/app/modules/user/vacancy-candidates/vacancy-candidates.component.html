@@ -168,15 +168,26 @@
     }
 
     <div class="flex">
-      <ag-grid-angular
-        [gridOptions]="gridOptions"
-        class="ag-theme-material h-[800px] {{ detailsSelectedId ? 'w-1/4 max-w-[350px]' : 'w-full' }}" />
+      <div
+        class="h-[800px] ag-theme-material overflow-hidden"
+        [ngClass]="{
+      'w-[350px] shrink-0': detailsSelectedId,
+      'w-full': !detailsSelectedId
+    }"
+      >
+        <ag-grid-angular [gridOptions]="gridOptions" class="w-full h-full" />
+      </div>
+
       @if (detailsSelectedId) {
-        <app-candidate-detail
-          #candidateDetail
-          [applicantId]="detailsSelectedId.applicantId"
-          (onClose)="closeDetails()"></app-candidate-detail>
+        <div class="flex-1 overflow-auto">
+          <app-candidate-detail
+            #candidateDetail
+            [applicantId]="detailsSelectedId.applicantId"
+            (onClose)="closeDetails()"
+          ></app-candidate-detail>
+        </div>
       }
     </div>
+
   </div>
 </div>

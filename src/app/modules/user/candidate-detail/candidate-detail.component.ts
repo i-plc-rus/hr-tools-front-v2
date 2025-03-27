@@ -117,23 +117,27 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
 
   getResume() {
     if (!this.applicant) return;
+
+    this.resume = undefined;
+    this.resumeUint = undefined;
+
     this.isLoading = true;
-    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {observe: 'response', responseType: "arraybuffer"}).subscribe({
+    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {
+      observe: 'response',
+      responseType: "arraybuffer"
+    }).subscribe({
       next: async (data: any) => {
         if (data.body && data.body.byteLength > 0 && data.headers.get('content-type') === 'application/pdf') {
-          const blob = new Blob([data.body], {type: 'application/pdf'});
+          const blob = new Blob([data.body], { type: 'application/pdf' });
 
           const contentDisposition = data.headers.get('content-disposition');
           let fileName = 'resume.pdf';
-
           if (contentDisposition) {
             const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
-            if (matches != null && matches[1]) {
+            if (matches?.[1]) {
               const iso = matches[1].replace(/['"]/g, '');
               const bytes = new Uint8Array(iso.length);
-              for (let i = 0; i < iso.length; i++) {
-                bytes[i] = iso.charCodeAt(i);
-              }
+              for (let i = 0; i < iso.length; i++) bytes[i] = iso.charCodeAt(i);
               fileName = new TextDecoder('utf-8').decode(bytes);
             }
           }
@@ -145,10 +149,13 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
       },
       error: (error) => {
         console.log(error);
+        this.resume = undefined;
+        this.resumeUint = undefined;
         this.isLoading = false;
       },
     });
   }
+
 
 
   getDocList() {

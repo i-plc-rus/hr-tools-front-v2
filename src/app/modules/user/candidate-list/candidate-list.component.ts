@@ -158,9 +158,13 @@ export class СandidateListComponent implements OnDestroy{
     selectionColumnDef: {
       pinned: 'left',
     },
+    suppressScrollOnNewData: true
   }
   private searchSubscription: Subscription = new Subscription();
-
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -175,10 +179,28 @@ export class СandidateListComponent implements OnDestroy{
         this.router.navigate([], { queryParams: {}, replaceUrl: true, relativeTo: this.activatedRoute });
       }
     });
+
     this.gridApi = params.api;
+
+    this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
+
     this.getApplicants();
     this.setFormListeners();
   }
+
+  onGridScroll = (event: any) => {
+    if (this.loading || this.allDataLoaded) return;
+
+    const api = event.api;
+    const lastVisibleRow = api.getLastDisplayedRowIndex();
+    const rowCount = api.getDisplayedRowCount();
+
+    if (lastVisibleRow >= rowCount - 5) {
+      this.getApplicants(true);
+    }
+  }
+
+
 
   onCellClicked(event: CellClickedEvent) {
     if (event.colDef.field !== 'status' && event.colDef.colId !== 'ag-Grid-ControlsColumn')
@@ -190,23 +212,47 @@ export class СandidateListComponent implements OnDestroy{
     this.selectedSameVacancy = this.selectedApplicants.every(applicant => applicant.vacancy_id === this.selectedApplicants[0].vacancy_id);
   }
 
-  getApplicants() {
+  getApplicants(loadMore = false) {
+    if (this.loading || this.allDataLoaded) return;
+
+    this.loading = true;
+
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.applicantsList = [];
+      this.allDataLoaded = false;
+      this.gridApi.setGridOption('loading', true);
+    }
+
     const filter = this.filterForm.value as ApplicantapimodelsApplicantFilter;
-    this.gridApi.setGridOption('loading', true);
+    filter.page = this.currentPage;
+    filter.limit = this.pageSize;
+
     this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'}).subscribe({
       next: (res) => {
         if (res.body?.data) {
-          this.applicantsList = res.body?.data.map((applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant));
+          const newApplicants = res.body.data.map(
+            (applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant)
+          );
+
+          this.applicantsList = [...this.applicantsList, ...newApplicants];
           this.gridApi.setGridOption('rowData', this.applicantsList);
+
+          if (newApplicants.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
+          }
         }
         this.gridApi.setGridOption('loading', false);
-
+        this.loading = false;
       },
       error: (error) => {
         console.log(error);
         this.gridApi.setGridOption('loading', false);
+        this.loading = false;
       }
-    })
+    });
   }
 
   getVacancyList(search: string) {
@@ -332,6 +378,9 @@ export class СandidateListComponent implements OnDestroy{
   ngOnDestroy(): void {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
+    }
+    if (this.gridApi && !this.gridApi.isDestroyed()) {
+      this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }
   }
 

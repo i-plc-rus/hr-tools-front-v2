@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UsersModalService} from '../../../services/users-modal.service';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams} from 'ag-grid-community';
 import {TableButtonComponent} from './table-button/table-button.component';
@@ -13,7 +13,7 @@ import {SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss'
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
   private gridApi!: GridApi<User>;
   searchValue: string = '';
 
@@ -75,7 +75,14 @@ export class UsersListComponent implements OnInit {
     overlayNoRowsTemplate: '<span class="text-[32px] leading-10">Пользователи отсутствуют</span>',
     loadingOverlayComponent: LoaderComponent,
     loading: true,
+    suppressScrollOnNewData: true,
   }
+
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
+
 
   constructor(
     private modalService: UsersModalService,
@@ -87,26 +94,62 @@ export class UsersListComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
     this.getUsers();
   }
 
-  getUsers() {
-    this.gridApi.setGridOption('loading', true);
-    this.api.v1UsersListCreate({}).subscribe({
+  onGridScroll = (event: any) => {
+    if (this.loading || this.allDataLoaded) return;
+
+    const api = event.api;
+    const lastVisibleRow = api.getLastDisplayedRowIndex();
+    const rowCount = api.getDisplayedRowCount();
+
+    if (lastVisibleRow >= rowCount - 5) {
+      this.getUsers(true);
+    }
+  }
+
+
+  getUsers(loadMore = false) {
+    if (this.loading || this.allDataLoaded) return;
+
+    this.loading = true;
+
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.usersList = [];
+      this.allDataLoaded = false;
+      this.gridApi.setGridOption('loading', true);
+    }
+
+    this.api.v1UsersListCreate({
+      page: this.currentPage,
+      limit: this.pageSize
+    }).subscribe({
       next: (res: any) => {
         if (res.body.data) {
-          this.usersList = res.body.data.map((user: SpaceapimodelsSpaceUser) => new User(user));
+          const newUsers = res.body.data.map((user: SpaceapimodelsSpaceUser) => new User(user));
+          this.usersList = [...this.usersList, ...newUsers];
           this.gridApi.setGridOption('rowData', this.usersList);
-          this.gridApi.setGridOption('loading', false);
+
+          if (newUsers.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
+          }
         }
-        console.log(this.usersList)
+        this.gridApi.setGridOption('loading', false);
+        this.loading = false;
       },
       error: (error) => {
         console.log(error);
         this.gridApi.setGridOption('loading', false);
+        this.loading = false;
       }
     });
   }
+
 
   openAddUserModal() {
     this.modalService.addUserModal().subscribe(() => {
@@ -137,4 +180,11 @@ export class UsersListComponent implements OnInit {
     this.searchValue = value;
     this.onSearch();
   }
+
+  ngOnDestroy(): void {
+    if (this.gridApi && !this.gridApi.isDestroyed()) {
+      this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
+    }
+  }
+
 }

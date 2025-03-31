@@ -29,7 +29,8 @@
           </button>
           <mat-menu #changeStageContent="matMenu">
             @for (stage of stages; track $index) {
-              <button mat-menu-item (click)="changeStage(stage.id)">
+              <button mat-menu-item (click)="changeStage(stage.id)"
+                      [disabled]="isStageDisabled(stage)">
                 {{ stage.name }}
               </button>
             }

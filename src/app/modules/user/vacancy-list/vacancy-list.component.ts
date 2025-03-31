@@ -69,7 +69,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 
   private currentPage = 1;
-  private pageSize = 10;
+  private pageSize = 50;
   private loading = false;
   private allDataLoaded = false;
 

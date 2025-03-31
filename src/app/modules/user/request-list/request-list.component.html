@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <div class="p-6 pt-4 flex flex-col gap-4 w-full">
+    <div #requestContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[80vh] overflow-y-auto">
       @for (request of requestList; track $index) {
         <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
           <div class="flex flex-col gap-1 w-full">

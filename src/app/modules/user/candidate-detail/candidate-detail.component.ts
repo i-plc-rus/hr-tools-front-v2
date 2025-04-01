@@ -49,6 +49,8 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
   private tabIndexTimeoutId?: number;
   private printTimeoutId?: number;
   private urlRevokeTimeoutId?: number;
+
+  currentStageOrder = 0;
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -92,6 +94,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     this.api.v1SpaceApplicantDetail(id, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
+          this.currentStageOrder = data.body.data.current_stage_order;
           this.applicant = new ApplicantViewExt(data.body.data);
           this.comment.setValue(this.applicant.comment);
           if (this.applicant.vacancy_id)
@@ -428,6 +431,18 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
 
     return value;
   }
+
+  isStageDisabled(stage: VacancyapimodelsSelectionStageView): boolean {
+    if (!this.applicant?.selection_stage_id || !this.stages?.length) return true;
+
+    const currentStage = this.stages.find(s => s.id === this.applicant!.selection_stage_id);
+    if (!currentStage || currentStage.stage_order === undefined) return true;
+
+    return (stage.stage_order ?? 0) <= currentStage.stage_order;
+  }
+
+
+
   ngOnDestroy() {
     // Очистка всех таймаутов
     if (this.tabIndexTimeoutId) {

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -25,7 +25,7 @@ import {Subscription, switchMap} from 'rxjs';
   templateUrl: './vacancy-list.component.html',
   styleUrl: './vacancy-list.component.scss'
 })
-export class VacancyListComponent implements OnInit, OnDestroy {
+export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -66,10 +66,18 @@ export class VacancyListComponent implements OnInit, OnDestroy {
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
 
+  @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
+
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
+
   constructor(
     private modalService: VacancyModalService,
     private api: ApiService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.getVacancyList();
@@ -78,14 +86,50 @@ export class VacancyListComponent implements OnInit, OnDestroy {
     this.setFormListeners();
   }
 
-  getVacancyList() {
-    this.isLoading = true;
+  ngAfterViewInit(): void {
+    if (this.vacancyContainer && this.vacancyContainer.nativeElement) {
+      this.vacancyContainer.nativeElement.addEventListener('scroll', this.onScroll);
+    }
+  }
+
+  onScroll = (event: Event) => {
+    if (this.loading || this.allDataLoaded) return;
+
+    const element = event.target as HTMLElement;
+    const scrollPosition = element.scrollTop;
+    const totalHeight = element.scrollHeight;
+    const viewportHeight = element.clientHeight;
+
+    if (scrollPosition + viewportHeight > totalHeight * 0.8) {
+      const currentScrollPosition = element.scrollTop;
+      this.getVacancyList(true);
+      setTimeout(() => {
+        element.scrollTop = currentScrollPosition;
+      });
+    }
+  };
+
+
+  getVacancyList(loadMore = false) {
+    if (this.loading || this.allDataLoaded) return;
+
+    this.loading = true;
+
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.vacancyList = [];
+      this.allDataLoaded = false;
+      this.favoritesCount = 0;
+    }
+
     const filter: VacancyapimodelsVacancyFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
+    filter.page = this.currentPage;
+    filter.limit = this.pageSize;
+
     this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
-          this.favoritesCount = 0;
-          this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
+          const newVacancies = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
             if (vacancy.selection_stages)
               vacancy.selection_stages = vacancy.selection_stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
             if (vacancy.favorite)
@@ -93,18 +137,19 @@ export class VacancyListComponent implements OnInit, OnDestroy {
             return new VacancyView(vacancy);
           });
 
-          if (this.category.value === 'favorites' && this.favoritesCount === 0) {
-            this.category.setValue('all');
+          this.vacancyList = [...this.vacancyList, ...newVacancies];
+
+          if (newVacancies.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
           }
-        } else {
-          this.vacancyList = [];
-          this.favoritesCount = 0;
         }
-        this.isLoading = false;
+        this.loading = false;
       },
       error: (error) => {
-        this.isLoading = false;
         console.log(error);
+        this.loading = false;
       },
     });
   }
@@ -274,9 +319,17 @@ export class VacancyListComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   ngOnDestroy(): void {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
+
+    if (this.vacancyContainer && this.vacancyContainer.nativeElement) {
+      this.vacancyContainer.nativeElement.removeEventListener('scroll', this.onScroll);
+    } else {
+      window.removeEventListener('scroll', this.onScroll);
+    }
   }
+
 }

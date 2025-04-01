@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ScreenWidthService} from '../../../services/screen-width.service';
 import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
@@ -28,7 +28,7 @@ import {SnackBarService} from '../../../services/snackbar.service';
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'
 })
-export class RequestListComponent implements OnInit, OnDestroy {
+export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -77,6 +77,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
+
+  @ViewChild('requestContainer') requestContainer!: ElementRef;
 
   constructor(
     public screen: ScreenWidthService,
@@ -92,8 +98,38 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.setFormListeners();
   }
 
-  getRequests() {
-    this.isLoading = true;
+  ngAfterViewInit(): void {
+    if (this.requestContainer && this.requestContainer.nativeElement) {
+      this.requestContainer.nativeElement.addEventListener('scroll', this.onScroll);
+    }
+  }
+
+  onScroll = (event: Event) => {
+    if (this.loading || this.allDataLoaded) return;
+
+    const element = event.target as HTMLElement;
+    const scrollPosition = element.scrollTop;
+    const totalHeight = element.scrollHeight;
+    const viewportHeight = element.clientHeight;
+
+    if (scrollPosition + viewportHeight > totalHeight * 0.8) {
+      this.getRequests(true);
+    }
+  };
+
+
+  getRequests(loadMore = false): void {
+    if (this.loading || this.allDataLoaded) return;
+
+    this.loading = true;
+
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.requestList = [];
+      this.allDataLoaded = false;
+      this.favoritesCount = 0;
+    }
+
     const filter: VacancyapimodelsVrFilter = {...this.filterForm.value} as VacancyapimodelsVrFilter;
 
     if (filter.search_period && filter.search_period !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
@@ -106,25 +142,35 @@ export class RequestListComponent implements OnInit, OnDestroy {
         filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
     }
 
+    filter.page = this.currentPage;
+    filter.limit = this.pageSize;
+
     this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         if (data.body?.data) {
-          this.favoritesCount = 0;
-
-          this.requestList = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
+          const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
             if (request.favorite)
               this.favoritesCount++;
-            return new VacancyRequestView(request)
+            return new VacancyRequestView(request);
           });
+
+          this.requestList = [...this.requestList, ...newRequests];
+
+          if (newRequests.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
+          }
         }
-        this.isLoading = false;
+        this.loading = false;
       },
       error: (error) => {
-        this.isLoading = false;
         console.error('Ошибка при получении списка заявок:', error);
+        this.loading = false;
       },
     });
   }
+
 
   setFormListeners() {
     this.category.valueChanges
@@ -335,8 +381,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
+
+    if (this.requestContainer && this.requestContainer.nativeElement) {
+      this.requestContainer.nativeElement.removeEventListener('scroll', this.onScroll);
     }
   }
+
 }

@@ -86,12 +86,25 @@
       </div>
     }
 
-    <div class="flex">
-      <ag-grid-angular
-        [gridOptions]="gridOptions"
-        class="ag-theme-material h-[800px] {{ detailsSelectedId ? 'w-1/4 max-w-[350px]' : 'w-full' }}" />
+    <div class="flex h-[800px]">
+      <div
+        class="ag-theme-material overflow-hidden"
+        [ngClass]="{
+      'w-[350px] shrink-0': detailsSelectedId,
+      'w-full': !detailsSelectedId
+    }"
+      >
+        <ag-grid-angular [gridOptions]="gridOptions" class="w-full h-full" />
+      </div>
+
       @if (detailsSelectedId) {
-        <app-negotiation-detail #negotiationDetail [negotiationId]="detailsSelectedId.negotiationId" (onClose)="closeDetails()"></app-negotiation-detail>
+        <div class="flex-1 overflow-auto">
+          <app-negotiation-detail
+            #negotiationDetail
+            [negotiationId]="detailsSelectedId.negotiationId"
+            (onClose)="closeDetails()"
+          ></app-negotiation-detail>
+        </div>
       }
     </div>
   </div>

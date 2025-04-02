@@ -39,11 +39,11 @@
         <mat-expansion-panel-header>Возраст</mat-expansion-panel-header>
         <div class="flex items-center gap-2">
           <mat-form-field appearance="outline">
-            <input matInput type="number" formControlName="age_from" />
+            <input matInput type="number" min="0" formControlName="age_from" />
           </mat-form-field>
           <div class="mb-5">-</div>
           <mat-form-field appearance="outline">
-            <input matInput type="number" formControlName="age_to" />
+            <input matInput type="number" min="0" formControlName="age_to" />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -52,11 +52,11 @@
         <mat-expansion-panel-header>Опыт работы</mat-expansion-panel-header>
         <div class="flex items-center gap-2">
           <mat-form-field appearance="outline">
-            <input matInput type="number" formControlName="total_experience_from" />
+            <input matInput type="number" min="0" formControlName="total_experience_from" />
           </mat-form-field>
           <div class="mb-5">-</div>
           <mat-form-field appearance="outline">
-            <input matInput type="number" formControlName="total_experience_to" />
+            <input matInput type="number" min="0" formControlName="total_experience_to" />
           </mat-form-field>
         </div>
       </mat-expansion-panel>

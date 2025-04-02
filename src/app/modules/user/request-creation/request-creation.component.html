@@ -1,4 +1,4 @@
-<div class="min-h-[836px] my-10 mx-6 p-6 bg-white rounded-3xl relative" style="height: calc(100vh - 100px)">
+<div class="min-h-[836px] my-10 mx-6 p-6 bg-white rounded-3xl relative">
   <p class="mb-10 text-[22px]">Создание заявки</p>
   @if (!showForm) {
     <h1 class="text-[32px] mb-2">Направление подбора</h1>
@@ -42,17 +42,18 @@
               }
             </mat-form-field>
 
-            <app-text-input
-              type="text"
-              [formControl]="getControl(StepForm.Step1, Step1Fields.VacancyName)"
-              label="Название вакансии*">
+            <mat-form-field appearance="outline">
+              <mat-label>Название вакансии</mat-label>
+              <input type="text"
+                     matInput
+                     [formControl]="getControl(StepForm.Step1, Step1Fields.VacancyName)">
               @if (getControl(StepForm.Step1, Step1Fields.VacancyName)?.invalid &&
               !getControl(StepForm.Step1, Step1Fields.VacancyName)?.untouched) {
-                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+            <mat-icon svgIcon="error"></mat-icon>
+    </span>
               }
-            </app-text-input>
+            </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Структура</mat-label>
@@ -126,39 +127,42 @@
               }
             </mat-form-field>
 
-            <app-text-input
-              type="text"
-              [formControl]="getControl(StepForm.Step2, Step2Fields.PlaceOfWork)"
-              label="Адрес офиса">
-            </app-text-input>
+            <mat-form-field appearance="outline">
+              <mat-label>Адрес офиса</mat-label>
+              <input type="text"
+                     matInput
+                     [formControl]="getControl(StepForm.Step2, Step2Fields.PlaceOfWork)">
+            </mat-form-field>
 
-            <app-text-input
-              type="text"
-              [formControl]="getControl(StepForm.Step2, Step2Fields.ChiefFio)"
-              label="ФИО непосредственного руководителя*">
+            <mat-form-field appearance="outline">
+              <mat-label>ФИО непосредственного руководителя</mat-label>
+              <input type="text"
+                     matInput
+                     [formControl]="getControl(StepForm.Step2, Step2Fields.ChiefFio)">
               @if (getControl(StepForm.Step2, Step2Fields.ChiefFio)?.invalid &&
               !getControl(StepForm.Step2, Step2Fields.ChiefFio)?.untouched) {
-                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
+      <mat-icon svgIcon="error"></mat-icon>
+    </span>
               }
-            </app-text-input>
+            </mat-form-field>
           </div>
         </mat-step>
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step3)">
           <h2 class="text-3xl mb-4">Детали вакансии</h2>
           <div class="flex flex-col gap-4">
-            <app-text-input
-              type="number"
-              [formControl]="getControl(StepForm.Step3, Step3Fields.OpenedPositions)"
-              label="Количество вакантных позиций*">
+            <mat-form-field appearance="outline">
+              <mat-label>Количество вакантных позиций</mat-label>
+              <input type="number"
+                     matInput
+                     [formControl]="getControl(StepForm.Step3, Step3Fields.OpenedPositions)">
               @if (getControl(StepForm.Step3, Step3Fields.OpenedPositions)?.invalid &&
               !getControl(StepForm.Step3, Step3Fields.OpenedPositions)?.untouched) {
                 <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+      <mat-icon svgIcon="error"></mat-icon>
+    </span>
               }
-            </app-text-input>
+            </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Срочность</mat-label>
@@ -291,18 +295,18 @@
     </form>
   }
 
-
-
   <div class="absolute bottom-6">
     <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
     @if (showForm) {
       <button mat-flat-button class="mr-[130px]"
               [disabled]="getCurrentStepGroup()?.invalid"
-              (click)="openSaveDraftDialog()">Сохранить черновик</button>
+              (click)="openSaveDraftDialog()">Сохранить черновик
+      </button>
       @if (!isLastStep) {
         <button mat-flat-button
                 [disabled]="getCurrentStepGroup()?.invalid"
-                (click)="goToNextStep()">Продолжить</button>
+                (click)="goToNextStep()">Продолжить
+        </button>
       }
       @if (isLastStep) {
         <button mat-flat-button (click)="onSubmit()">Отправить на согласование</button>

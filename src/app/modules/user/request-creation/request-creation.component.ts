@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {employmentTypes, experienceTypes, scheduleTypes} from '../user-consts';
 import { Router } from '@angular/router';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
+import {SnackBarService} from '../../../services/snackbar.service';
 
 export enum StepForm {
   Step1 = 'step1',
@@ -144,6 +145,7 @@ export class RequestCreationComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private vacancyModal: VacancyModalService,
+    private snackBarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -294,7 +296,7 @@ export class RequestCreationComponent implements OnInit {
     const draft = localStorage.getItem('draftFormData');
 
     if (!draft) {
-      console.error('Нет данных черновика для загрузки.');
+      this.snackBarService.snackBarMessageError('Нет данных черновика для загрузки.')
       this.dialog.closeAll();
       return;
     }
@@ -334,10 +336,14 @@ export class RequestCreationComponent implements OnInit {
     );
 
     this.showForm = true;
-    console.log('Загружен черновик:', this.form.value);
+    this.snackBarService.snackBarMessageSuccess('Загружен черновик')
     this.dialog.closeAll();
   }
 
+  hasDraft(): boolean {
+    const draft = localStorage.getItem('draftFormData');
+    return !!draft;
+  }
 
   newRequest(): void {
     this.showForm = true;

@@ -298,12 +298,13 @@
   <div class="absolute bottom-6">
     <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
     @if (showForm) {
-      <button mat-flat-button class="mr-[130px]"
+      <button mat-flat-button class="btn-primary mr-[130px]"
               [disabled]="getCurrentStepGroup()?.invalid"
               (click)="openSaveDraftDialog()">Сохранить черновик
       </button>
       @if (!isLastStep) {
         <button mat-flat-button
+                class="btn-primary"
                 [disabled]="getCurrentStepGroup()?.invalid"
                 (click)="goToNextStep()">Продолжить
         </button>
@@ -329,8 +330,11 @@
     <div class="modal-content">
       <h2>Вы хотите использовать черновик или создать новую заявку?</h2>
       <div class="modal-actions">
-        <button mat-raised-button (click)="useDraft()">Использовать черновик</button>
-        <button mat-flat-button (click)="newRequest()">Новая заявка</button>
+        <button mat-flat-button
+                class="btn-secondary"
+                [disabled]="!hasDraft()"
+                (click)="useDraft()">Использовать черновик</button>
+        <button mat-flat-button class="btn-primary" (click)="newRequest()">Новая заявка</button>
       </div>
     </div>
   </ng-template>

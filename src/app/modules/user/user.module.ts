@@ -106,6 +106,7 @@ import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrap
 import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 import {GenerateSurveyModalComponent} from './vacancy-detail/generate-survey-modal/generate-survey-modal.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -216,7 +217,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatBadge,
     MatCardContent,
     MatProgressBar,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinner
   ]
 
 })

@@ -95,10 +95,46 @@ export class UsersModalService {
     return componentRef.instance.onSubmit;
   }
 
+
+
+  /**
+   * Создаёт специальный оверлей для модального окна анкеты.
+   *
+   * Решает проблему когда при открытии модалка сначала появляется в верхнем левом углу,
+   * а потом перемещается в центр экрана. Используем noop() вместо block()
+   * и добавляем специальный класс для стилизации только этого типа модалки.
+   *
+   * Был конфлик при позиционировании, при использовании инпутов Материал
+   */
+  private createSurveyOverlay(overlay: Overlay): OverlayRef {
+    return overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'bg-[var(--overlay)]',
+      panelClass: 'survey-modal-overlay', // класс для стилизации
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+      positionStrategy: this.overlay
+        .position()
+        .global()
+        .centerHorizontally()
+        .centerVertically()
+    });
+  }
+
   openGenerateSurveyModal(): EventEmitter<boolean> {
     this.portal = new ComponentPortal(GenerateSurveyModalComponent);
-    this.overlayRef = this.createOverlay(this.overlay);
+    this.overlayRef = this.createSurveyOverlay(this.overlay);
+
+    if (!this.overlayRef) {
+      throw new Error('');
+    }
+
     const componentRef = this.overlayRef.attach(this.portal);
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        this.overlayRef.updatePosition();
+      }
+    }, 0);
 
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();

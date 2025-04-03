@@ -1,13 +1,15 @@
-.survey-card {
-width: 748px;
-  height: 85vh;
-  margin: auto;
-  padding: 64px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
+:host {
+  @apply py-8 px-4 w-screen lg:w-auto;
 }
-
+//.survey-card {
+//width: 748px;
+//  height: 85vh;
+//  padding: 64px;
+//  border-radius: 8px;
+//  display: flex;
+//  flex-direction: column;
+//}
+//
 .survey-title {
   text-align: center;
   margin-bottom: 16px;
@@ -74,6 +76,17 @@ width: 748px;
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 16px;
   margin-top: 16px;
+}
+
+.scroll-container {
+  overflow-y: auto;
+
+}
+
+.form-field-container {
+  position: relative;
+  z-index: 1;
 }

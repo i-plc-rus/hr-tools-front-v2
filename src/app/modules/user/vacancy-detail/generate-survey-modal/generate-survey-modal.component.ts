@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
 
 @Component({
@@ -7,72 +7,91 @@ import {HttpResponse} from '@angular/common/http';
   templateUrl: './generate-survey-modal.component.html',
   styleUrl: './generate-survey-modal.component.scss'
 })
-export class GenerateSurveyModalComponent {
+export class GenerateSurveyModalComponent implements OnInit{
   @Output() onSubmit: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() user?: any;
 
-  surveyForm: FormGroup;
-  skillsToggle = false;
-  softSkillsToggle = false;
+  surveyForm = new FormGroup({
+    b2bExperience: new FormControl('', Validators.required),
+    itExperience: new FormControl('', Validators.required),
+    keySkills: new FormControl('', Validators.required),
+    keySkillsToggle: new FormControl(false),
+    crmKnowledge: new FormControl('', Validators.required),
+    softSkills: new FormControl('', Validators.required),
+    softSkillsToggle: new FormControl(false),
+  });
+
   loading = false;
 
-  constructor(private fb: FormBuilder) {
-    this.surveyForm = this.fb.group({
-      b2bExperience: [''],
-      itExperience: [''],
-      keySkills: [''],
-      crmKnowledge: [''],
-      softSkills: [''],
-      clientSources: [''],
-      additionalQuestions: ['']
+  ngOnInit(): void {
+    this.setupFormListeners();
+  }
+
+  private setupFormListeners(): void {
+    this.surveyForm.controls.keySkillsToggle.valueChanges.subscribe(isToggled => {
+      const keySkillsControl = this.surveyForm.controls.keySkills;
+
+      if (isToggled) {
+        keySkillsControl.clearValidators();
+      } else {
+        keySkillsControl.setValidators(Validators.required);
+      }
+
+      keySkillsControl.updateValueAndValidity();
+    });
+
+    this.surveyForm.controls.softSkillsToggle.valueChanges.subscribe(isToggled => {
+      const softSkillsControl = this.surveyForm.controls.softSkills;
+
+      if (isToggled) {
+        softSkillsControl.clearValidators();
+      } else {
+        softSkillsControl.setValidators(Validators.required);
+      }
+
+      softSkillsControl.updateValueAndValidity();
+    });
+
+    this.surveyForm.controls.itExperience.valueChanges.subscribe(value => {
+      this.onSkillsToggleChange(!!this.surveyForm.controls.keySkillsToggle.value);
+      this.onSoftSkillsToggleChange(!!this.surveyForm.controls.softSkillsToggle.value);
     });
   }
+  onSkillsToggleChange(isToggled: boolean): void {
+    const keySkillsControl = this.surveyForm.controls.keySkills;
 
-  ngOnInit(): void {
-    this.loadSurveyData();
+    if (isToggled) {
+      keySkillsControl.clearValidators();
+    } else {
+      keySkillsControl.setValidators(Validators.required);
+    }
+
+    keySkillsControl.updateValueAndValidity();
   }
 
-  private loadSurveyData(): void {
-    this.setLoading(true);
-    // this.api.getSurveyData().subscribe({
-    //   next: (response) => this.handleSurveyResponse(response),
-    //   error: (err) => this.handleError(err, 'Ошибка загрузки анкеты')
-    // });
-    this.setLoading(false);
+  onSoftSkillsToggleChange(isToggled: boolean): void {
+    const softSkillsControl = this.surveyForm.controls.softSkills;
+
+    if (isToggled) {
+      softSkillsControl.clearValidators();
+    } else {
+      softSkillsControl.setValidators(Validators.required);
+    }
+
+    softSkillsControl.updateValueAndValidity();
   }
 
   submit(): void {
     if (this.surveyForm.valid) {
-      this.setLoading(true);
-      // this.api.submitSurvey(this.surveyForm.value).subscribe({
-      //   next: () => this.handleSuccess('Анкета успешно отправлена'),
-      //   error: (err) => this.handleError(err, 'Ошибка при отправке анкеты')
-      // });
-      this.setLoading(false);
+      console.log('Form values:', this.surveyForm.value);
+      this.onSubmit.emit(true);
     } else {
-      this.handleError('','')
+      console.log('Form is invalid!', this.surveyForm);
     }
   }
 
   cancel(): void {
-    console.log('Отмена анкеты');
-  }
-
-  private handleSurveyResponse(response: HttpResponse<any>): void {
-    if (response.body) {
-      this.surveyForm.patchValue(response.body);
-    }
-    this.setLoading(false);
-  }
-
-  private handleSuccessfulAction(message: string): void {
-    this.setLoading(false);
-    console.log(message);
-  }
-
-  private handleError(error: any, message: string): void {
-    this.setLoading(false);
-    console.error(message, error);
+    console.log('Survey canceled');
   }
 
   private setLoading(isLoading: boolean): void {

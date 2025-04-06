@@ -291,7 +291,12 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (observable) {
       observable.pipe(takeUntil(this.destroy$)).subscribe({
-        next: () => this.getRequests(),
+        next: () => {
+          this.currentPage = 1;
+          this.allDataLoaded = false;
+          this.requestList = [];
+          this.getRequests();
+        },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
         }

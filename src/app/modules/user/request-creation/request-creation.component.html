@@ -262,9 +262,9 @@
                   <div class="flex justify-between items-center">
                     <h3 class="h-[40px]">{{ interviewer.get('stage')?.value }}-й этап согласования</h3>
                     @if ($index > 0) {
-                      <button mat-icon-button (click)="removeInterviewer($index)">
-                        <mat-icon svgIcon="delete">delete</mat-icon>
-                      </button>
+                      <span class="text-red-600 cursor-pointer" (click)="removeInterviewer($index)">
+                      Удалить
+                      </span>
                     }
                   </div>
                   <mat-form-field appearance="outline" class="w-full">
@@ -284,7 +284,7 @@
                   </mat-form-field>
                 </div>
               }
-              <button class="w-[243px]" mat-flat-button (click)="addInterviewer()">
+              <button class="w-[243px]" mat-flat-button class="btn-primary" (click)="addInterviewer()">
                 Добавить этап согласования
               </button>
             </div>
@@ -310,7 +310,7 @@
         </button>
       }
       @if (isLastStep) {
-        <button mat-flat-button (click)="onSubmit()">Отправить на согласование</button>
+        <button mat-flat-button class="btn-primary" (click)="onSubmit()">Отправить на согласование</button>
       }
     }
   </div>
@@ -333,7 +333,8 @@
         <button mat-flat-button
                 class="btn-secondary"
                 [disabled]="!hasDraft()"
-                (click)="useDraft()">Использовать черновик</button>
+                (click)="useDraft()">Использовать черновик
+        </button>
         <button mat-flat-button class="btn-primary" (click)="newRequest()">Новая заявка</button>
       </div>
     </div>

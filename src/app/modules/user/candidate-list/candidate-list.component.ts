@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, DestroyRef, inject, OnDestroy} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
@@ -28,6 +28,7 @@ import {relocationTypes} from '../user-consts';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
 import {Subscription, switchMap} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-candidate-list',
@@ -165,6 +166,9 @@ export class СandidateListComponent implements OnDestroy{
   private pageSize = 50;
   private loading = false;
   private allDataLoaded = false;
+
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -173,7 +177,10 @@ export class СandidateListComponent implements OnDestroy{
   ) { }
 
   onGridReady(params: GridReadyEvent) {
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(params => {
       if (params['type'] === 'create') {
         this.openAddApplicantModal();
         this.router.navigate([], { queryParams: {}, replaceUrl: true, relativeTo: this.activatedRoute });
@@ -228,7 +235,9 @@ export class СandidateListComponent implements OnDestroy{
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
 
-    this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'}).subscribe({
+    this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (res) => {
         if (res.body?.data) {
           const newApplicants = res.body.data.map(
@@ -257,7 +266,9 @@ export class СandidateListComponent implements OnDestroy{
 
   getVacancyList(search: string) {
     const filter = {search} as VacancyapimodelsVacancyFilter;
-    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy));
@@ -270,7 +281,9 @@ export class СandidateListComponent implements OnDestroy{
   }
 
   getCities(address: string) {
-    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.cities = data.body.data;
@@ -284,7 +297,7 @@ export class СandidateListComponent implements OnDestroy{
 
   setFormListeners() {
     this.searchVacancy.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(700), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.vacancy_id.value !== '')
           this.filterForm.controls.vacancy_id.setValue('');
@@ -294,7 +307,7 @@ export class СandidateListComponent implements OnDestroy{
           this.vacancyList = [];
       });
     this.searchCity.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(700), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.city.value !== '')
           this.filterForm.controls.city.setValue('');
@@ -305,13 +318,14 @@ export class СandidateListComponent implements OnDestroy{
       });
 
     this.filterForm.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(200), distinctUntilChanged())
       .subscribe(() => {
         this.getApplicants()
       });
 
     this.searchSubscription = this.searchValue.valueChanges
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         debounceTime(300),
         distinctUntilChanged()
       )
@@ -329,19 +343,25 @@ export class СandidateListComponent implements OnDestroy{
   openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {
     if (!Array.isArray(applicants))
       applicants = [applicants];
-    this.modalService.rejectCandidateModal(applicants).subscribe(() =>
+    this.modalService.rejectCandidateModal(applicants)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() =>
       this.getApplicants()
     );
   }
 
   openChangeStageModal(applicants: ApplicantView[]) {
-    this.modalService.changeStageModal(applicants).subscribe(() =>
+    this.modalService.changeStageModal(applicants)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() =>
       this.getApplicants()
     );
   }
 
   openAddApplicantModal() {
-    this.modalService.addCandidateModal().subscribe(() =>
+    this.modalService.addCandidateModal()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() =>
       this.getApplicants()
     );
   }
@@ -351,7 +371,9 @@ export class СandidateListComponent implements OnDestroy{
       filter: this.filterForm.value as ApplicantapimodelsApplicantFilter,
       ids: this.selectedApplicants.map((applicant: ApplicantView) => applicant.id)
     };
-    this.api.v1SpaceApplicantMultiActionsExportXlsUpdate(request, {observe: 'response', responseType: 'blob'}).subscribe({
+    this.api.v1SpaceApplicantMultiActionsExportXlsUpdate(request, {observe: 'response', responseType: 'blob'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body) {
           const blob = new Blob([data.body], {type: 'application/octet-stream'});

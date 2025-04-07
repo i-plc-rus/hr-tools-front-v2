@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -19,6 +19,7 @@ import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
 import {Subscription, switchMap} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-vacancy-list',
@@ -73,6 +74,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   private loading = false;
   private allDataLoaded = false;
 
+  private destroyRef = inject(DestroyRef);
+
+
   constructor(
     private modalService: VacancyModalService,
     private api: ApiService
@@ -126,7 +130,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
 
-    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body?.data) {
           const newVacancies = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
@@ -156,7 +162,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   changeStatus(id: string, status: ModelsVacancyStatus) {
-    this.api.v1SpaceVacancyChangeStatusUpdate(id, {status}, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyChangeStatusUpdate(id, {status}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         this.getVacancyList();
       },
@@ -167,7 +175,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleFavorite(id: string, set: boolean) {
-    this.api.v1SpaceVacancyFavoriteUpdate(id, {set}, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyFavoriteUpdate(id, {set}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
           this.category.setValue('all');
@@ -182,7 +192,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   togglePin(id: string, set: boolean) {
-    this.api.v1SpaceVacancyPinUpdate(id, {set}, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyPinUpdate(id, {set}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         this.getVacancyList();
       },
@@ -194,6 +206,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setFormListeners() {
     this.category.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((category) => {
         if (!category)
           category = 'all';
@@ -204,7 +217,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.searchCity.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(200), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.city_id.value !== '')
           this.filterForm.controls.city_id.setValue('');
@@ -215,7 +228,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.searchAuthor.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(700), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
@@ -226,7 +239,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.searchRequestAuthor.valueChanges
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(700), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.request_author_id.value !== '')
           this.filterForm.controls.request_author_id.setValue('');
@@ -237,13 +250,14 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.filterForm.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged())
+      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(200), distinctUntilChanged())
       .subscribe(() => {
         this.getVacancyList();
       });
 
     this.searchSubscription = this.searchValue.valueChanges
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         debounceTime(300),
         distinctUntilChanged()
       )
@@ -283,7 +297,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getCities(address: string) {
-    this.api.v1DictCityFindCreate({address}, {observe: 'response'}).subscribe({
+    this.api.v1DictCityFindCreate({address}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.cities = data.body.data;
@@ -296,7 +312,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getDepartments() {
-    this.api.v1DictDepartmentFindCreate({}, {observe: 'response'}).subscribe({
+    this.api.v1DictDepartmentFindCreate({}, {observe: 'response'})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.departments = data.body.data;
@@ -309,7 +327,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getUsers() {
-    this.api.v1UsersListCreate({}).subscribe({
+    this.api.v1UsersListCreate({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (res: any) => {
         if (res.body.data) {
           this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));

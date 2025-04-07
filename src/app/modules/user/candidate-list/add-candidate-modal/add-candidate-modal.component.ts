@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../../../api/Api';
 import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
@@ -31,7 +31,9 @@ import {
   searchStatusTypes,
   tripReadinessTypes
 } from '../../user-consts';
-import {forkJoin, of, switchMap} from 'rxjs';
+import {forkJoin, of, Subject, switchMap} from 'rxjs';
+import {MatSelect} from '@angular/material/select';
+import {takeUntil} from 'rxjs/operators';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -47,7 +49,7 @@ class LanguageFormControls extends FormGroup {
   templateUrl: './add-candidate-modal.component.html',
   styleUrl: './add-candidate-modal.component.scss',
 })
-export class AddCandidateModalComponent implements OnInit {
+export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() applicant?: ApplicantView | ApplicantViewExt;
   @Input() photo?: string;
   @Input() resumeName?: string;
@@ -103,6 +105,15 @@ export class AddCandidateModalComponent implements OnInit {
   @ViewChild('resumeUpload') resumeUpload?: ElementRef;
   @ViewChild('photoUpload') photoUpload?: ElementRef;
 
+  searchVacancy = new FormControl<string | null>('');
+  isLoadingMoreVacancies = false;
+  private vacancyCurrentPage = 1;
+  private vacancyPageSize = 50;
+  private vacancyAllDataLoaded = false;
+  @ViewChild('vacancySelect') vacancySelect!: MatSelect;
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
@@ -122,9 +133,109 @@ export class AddCandidateModalComponent implements OnInit {
         }))
       });
     }
-    this.getVacancyList();
+    this.loadInitialVacancies();
   }
 
+  ngAfterViewInit() {
+    this.vacancySelect.openedChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(opened => {
+      if (opened && this.vacancySelect.panel) {
+        const panel = this.vacancySelect.panel.nativeElement;
+        panel.addEventListener('scroll', this.onVacancyScroll.bind(this));
+      }
+    });
+  }
+
+  loadInitialVacancies() {
+    this.vacancyCurrentPage = 1;
+    this.vacancyList = [];
+    this.vacancyAllDataLoaded = false;
+    this.isLoading = true;
+
+    const filter = {
+      page: this.vacancyCurrentPage,
+      limit: this.vacancyPageSize
+    } as VacancyapimodelsVacancyFilter;
+
+    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          const newVacancies = data.body.data.map(
+            (vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy)
+          );
+
+          this.vacancyList = newVacancies;
+
+          if (newVacancies.length < this.vacancyPageSize) {
+            this.vacancyAllDataLoaded = true;
+          } else {
+            this.vacancyCurrentPage++;
+          }
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+
+  onVacancyScroll(event: any) {
+    if (this.isLoadingMoreVacancies || this.vacancyAllDataLoaded) return;
+
+    const panel = event.target;
+    const scrollPosition = panel.scrollTop + panel.clientHeight;
+    const scrollThreshold = panel.scrollHeight * 0.8;
+
+    if (scrollPosition >= scrollThreshold) {
+      this.loadMoreVacancies();
+    }
+  }
+
+  loadMoreVacancies() {
+    if (this.isLoadingMoreVacancies) return;
+
+    this.isLoadingMoreVacancies = true;
+
+    const filter = {
+      search: this.searchVacancy.value || '',
+      page: this.vacancyCurrentPage,
+      limit: this.vacancyPageSize
+    } as VacancyapimodelsVacancyFilter;
+
+    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          const newVacancies = data.body.data.map(
+            (vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy)
+          );
+
+          const existingIds = new Set(this.vacancyList.map(v => v.id));
+          const uniqueNewVacancies = newVacancies.filter((v: VacancyView) => !existingIds.has(v.id));
+
+
+          this.vacancyList = [...this.vacancyList, ...uniqueNewVacancies];
+
+          if (newVacancies.length < this.vacancyPageSize) {
+            this.vacancyAllDataLoaded = true;
+          } else {
+            this.vacancyCurrentPage++;
+          }
+        }
+        this.isLoadingMoreVacancies = false;
+      },
+      error: (error) => {
+        this.isLoadingMoreVacancies = false;
+      }
+    });
+  }
   mapFormToApplicant(): ApplicantapimodelsApplicantData {
     const birth_date = this.applicantForm.controls.birth_date.value ? dayjs(this.applicantForm.controls.birth_date.value).format('DD.MM.YYYY') : '';
     const applicantData = {
@@ -193,7 +304,9 @@ export class AddCandidateModalComponent implements OnInit {
         }
         return forkJoin(observables);
       })
-    ).subscribe({
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
@@ -213,7 +326,9 @@ export class AddCandidateModalComponent implements OnInit {
     const updatedApplicant = this.mapFormToApplicant();
     const applicantId = this.applicant.id;
 
-    this.api.v1SpaceApplicantUpdate(applicantId, updatedApplicant, {observe: 'response'}).subscribe({
+    this.api.v1SpaceApplicantUpdate(applicantId, updatedApplicant, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: () => {
         this.onSubmit.emit(true);
         this.isLoading = false;
@@ -230,30 +345,14 @@ export class AddCandidateModalComponent implements OnInit {
   closeModal() {
     this.modalService.closeModal();
   }
-
-  getVacancyList() {
-    this.isLoading = true;
-    const filter = {} as VacancyapimodelsVacancyFilter;
-    this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'}).subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy));
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.log(error);
-      },
-    });
-  }
-
   onResumeSelected(event: Event) {
     const target = event.target as HTMLInputElement;
     if (!target.files?.length) return;
     if (this.isEdit && this.applicant && this.applicant.id) {
       this.isLoading = true;
-      this.uploadResume(this.applicant.id, target.files[0]).subscribe({
+      this.uploadResume(this.applicant.id, target.files[0])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: () => {
           this.isLoading = false;
           this.resumeName = target.files?.[0]?.name;
@@ -275,7 +374,9 @@ export class AddCandidateModalComponent implements OnInit {
     if (!target.files?.length) return;
     if (this.isEdit && this.applicant && this.applicant.id) {
       this.isLoading = true;
-      this.uploadPhoto(this.applicant.id, target.files[0]).subscribe({
+      this.uploadPhoto(this.applicant.id, target.files[0])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: () => {
           this.isLoading = false;
           if (target.files?.[0])
@@ -323,6 +424,7 @@ export class AddCandidateModalComponent implements OnInit {
 
     this.isLoading = true;
     this.api.v1SpaceApplicantPhotoDelete(this.applicant.id, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.isLoading = false;
@@ -349,6 +451,7 @@ export class AddCandidateModalComponent implements OnInit {
 
     this.isLoading = true;
     this.api.v1SpaceApplicantResumeDelete(this.applicant.id, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.isLoading = false;
@@ -368,6 +471,25 @@ export class AddCandidateModalComponent implements OnInit {
 
   get languages() {
     return this.params.controls['languages'] as FormArray<LanguageFormControls>;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    if (this.vacancySelect?.panel) {
+      const panel = this.vacancySelect.panel.nativeElement;
+      panel.removeEventListener('scroll', this.onVacancyScroll);
+    }
+
+    const matSelectElement = document.querySelector('mat-select[formControlName="vacancy_id"]');
+    if (matSelectElement) {
+      matSelectElement.removeEventListener('scroll', this.onVacancyScroll);
+    }
+  }
+
+  trackByVacancyAndIndex(index: number, vacancy: VacancyView): string {
+    return `${vacancy.id}_${index}`;
   }
 
 }

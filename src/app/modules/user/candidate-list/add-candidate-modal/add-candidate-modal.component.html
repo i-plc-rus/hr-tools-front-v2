@@ -229,10 +229,16 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Выбор вакансии</mat-label>
-            <mat-select formControlName="vacancy_id" panelClass="fit-content">
-              @for (vacancy of vacancyList; track $index) {
-                <mat-option [value]="vacancy.id">{{ vacancy.vacancy_name }}</mat-option>
-              }
+            <mat-select formControlName="vacancy_id" panelClass="fit-content" #vacancySelect>
+              <mat-option *ngFor="let vacancy of vacancyList; let i = index; trackBy: trackByVacancyAndIndex" [value]="vacancy.id">
+                {{ vacancy.vacancy_name }}
+              </mat-option>
+
+              <mat-option *ngIf="isLoadingMoreVacancies" disabled>
+                <div class="flex justify-center">
+                  <mat-spinner diameter="24"></mat-spinner>
+                </div>
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">

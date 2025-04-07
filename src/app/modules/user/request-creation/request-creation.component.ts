@@ -1,4 +1,13 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../api/Api';
 import {
@@ -12,10 +21,10 @@ import {
   ModelsVRSelectionType,
   ModelsVRStatus,
   ModelsVRType,
-  ModelsVRUrgency,
+  ModelsVRUrgency, SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestCreateData,
 } from '../../../api/data-contracts';
-import {Observable, forkJoin, map, startWith, switchMap, of} from 'rxjs';
+import {Observable, forkJoin, map, startWith, switchMap, of, Subject} from 'rxjs';
 import { DictapimodelsCityView } from '../../../api/data-contracts';
 import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,6 +32,8 @@ import {employmentTypes, experienceTypes, scheduleTypes} from '../user-consts';
 import { Router } from '@angular/router';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {SnackBarService} from '../../../services/snackbar.service';
+import {MatSelect} from '@angular/material/select';
+import {takeUntil} from 'rxjs/operators';
 
 export enum StepForm {
   Step1 = 'step1',
@@ -63,7 +74,7 @@ export enum Step4Fields {
   templateUrl: './request-creation.component.html',
   styleUrl: './request-creation.component.scss',
 })
-export class RequestCreationComponent implements OnInit {
+export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDestroy {
   StepForm = StepForm;
   Step1Fields = Step1Fields;
   Step2Fields = Step2Fields;
@@ -140,6 +151,19 @@ export class RequestCreationComponent implements OnInit {
   companyDepartmentArray: DictapimodelsDepartmentView[] = [];
   companyJobsNamesArray: DictapimodelsCompanyView[] = [];
 
+  @ViewChild('userSelect') userSelect!: MatSelect;
+
+  searchUser = new FormControl<string | null>('');
+  isLoadingMoreUsers = false;
+  private userCurrentPage = 1;
+  private userPageSize = 50;
+  private userAllDataLoaded = false;
+
+  private _selectInitialized = false;
+
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -154,7 +178,9 @@ export class RequestCreationComponent implements OnInit {
       companyStructure: this.api.v1DictCompanyStructFindCreate({}),
       city: this.api.v1DictCityFindCreate({}),
       user: this.api.v1UsersListCreate({}),
-    }).subscribe({
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: ({ companyName, companyStructure, city, user }: any) => {
         this.companyNameArray = companyName.body.data;
         this.companyStructureArray = companyStructure.body.data;
@@ -181,6 +207,7 @@ export class RequestCreationComponent implements OnInit {
             : of({ body: { data: [] } });
         })
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: any) => {
           this.companyDepartmentArray = response.body.data;
@@ -192,6 +219,7 @@ export class RequestCreationComponent implements OnInit {
 
     step1.get(Step1Fields.DepartmentId)?.valueChanges
       .pipe(
+        takeUntil(this.destroy$),
         switchMap((value: string | null) => {
           const department_id = value ? String(value) : '';
           step1.get(Step1Fields.JobTitleId)?.reset();
@@ -209,7 +237,69 @@ export class RequestCreationComponent implements OnInit {
           console.error('Ошибка при загрузке должностей:', err);
         },
       });
+
+
   }
+
+  ngAfterViewChecked(): void {
+    if (!this._selectInitialized && this.userSelect) {
+      this._selectInitialized = true;
+
+      this.userSelect.openedChange
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(opened => {
+          if (opened && this.userSelect.panel) {
+            const panel = this.userSelect.panel.nativeElement;
+            panel.addEventListener('scroll', this.onUserScroll.bind(this));
+          }
+        });
+    }
+  }
+
+  onUserScroll(event: any) {
+    if (this.isLoadingMoreUsers || this.userAllDataLoaded) return;
+
+    const panel = event.target;
+    const scrollPosition = panel.scrollTop + panel.clientHeight;
+    const scrollThreshold = panel.scrollHeight * 0.8;
+
+    if (scrollPosition >= scrollThreshold) {
+      this.loadMoreUsers();
+    }
+  }
+
+  loadMoreUsers() {
+    this.isLoadingMoreUsers = true;
+
+    const filter = {
+      page: this.userCurrentPage,
+      limit: this.userPageSize,
+      search: this.searchUser.value || '',
+    };
+
+    this.api.v1UsersListCreate(filter, { observe: 'response' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          console.log(res)
+          const newUsers = res.body?.data || [];
+
+          const existingIds = new Set(this.users.map((u: SpaceapimodelsSpaceUser) => u.id));
+          const uniqueNewUsers = newUsers.filter((u: SpaceapimodelsSpaceUser) => !existingIds.has(u.id));
+
+          this.users = [...this.users, ...uniqueNewUsers];
+
+          if (newUsers.length < this.userPageSize) {
+            this.userAllDataLoaded = true;
+          } else {
+            this.userCurrentPage++;
+          }
+        },
+        complete: () => (this.isLoadingMoreUsers = false),
+        error: () => (this.isLoadingMoreUsers = false),
+      });
+  }
+
   get interviewers(): FormArray {
     return this.form.get(`${StepForm.Step4}.${Step4Fields.Interviewers}`) as unknown as FormArray;
   }
@@ -231,16 +321,11 @@ export class RequestCreationComponent implements OnInit {
     }
   }
 
-  updateStepNumbers() {
-    this.interviewers.controls.forEach((control, index) => {
-      control.get('stage')?.setValue(index + 1);
-    });
-  }
-
   initializeCityAutocomplete(): void {
     const step2 = this.form.get(StepForm.Step2) as FormGroup;
 
     this.filteredCity$ = step2.get(Step2Fields.CityId)!.valueChanges.pipe(
+      takeUntil(this.destroy$),
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value?.address)),
       map((address) =>
@@ -265,6 +350,7 @@ export class RequestCreationComponent implements OnInit {
     const step1 = this.form.get(StepForm.Step1) as FormGroup;
 
     this.filteredCompany$ = step1.get(Step1Fields.CompanyName)!.valueChanges.pipe(
+      takeUntil(this.destroy$),
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value?.name)),
       map((name) =>
@@ -368,39 +454,6 @@ export class RequestCreationComponent implements OnInit {
 
   saveDraftAndExit(): void {
     localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
-    // const requestData = {
-    //   as_template: true,
-    //   company_name: this.form.controls.company_name.value || undefined,
-    //   vacancy_name: this.form.controls.vacancy_name.value || undefined,
-    //   department_id: this.form.controls.department_id.value || undefined,
-    //   company_struct_id:
-    //     this.form.controls.company_struct_id.value || undefined,
-    //   job_title_id: this.form.controls.job_title_id.value || undefined,
-    //   city_id: this.form.controls.cityId.value?.id || undefined,
-    //   place_of_work: this.form.controls.place_of_work.value || undefined,
-    //   chief_fio: this.form.controls.chief_fio.value || undefined,
-    //   opened_positions:
-    //     Number(this.form.controls.opened_positions.value) || undefined,
-    //   urgency: this.form.controls.urgency.value || undefined,
-    //   request_type: this.form.controls.request_type.value || undefined,
-    //   requirements: this.form.controls.requirements.value || undefined,
-    //   employment: this.form.controls.employment.value || undefined,
-    //   experience: this.form.controls.experience.value || undefined,
-    //   schedule: this.form.controls.schedule.value || undefined,
-    //   selection_type: this.form.controls.selection_type.value || undefined,
-    //   approval_stages:
-    //     this.form.controls.interviewers.value?.map((interviewer) => ({
-    //       space_user_id:
-    //         interviewer.space_user_id !== null
-    //           ? interviewer.space_user_id
-    //           : undefined,
-    //       stage: interviewer.stage || undefined,
-    //     })) || [],
-    // };
-    // this.api
-    //   .v1SpaceVacancyRequestCreate(requestData)
-    //   .subscribe((res) => console.log(res));
-    // console.log('Форма сохранена как черновик');
     this.closeDialog();
     this.router.navigate(['/user/request/list'])
   }
@@ -450,7 +503,9 @@ export class RequestCreationComponent implements OnInit {
     };
 
     if (this.form.valid) {
-      this.api.v1SpaceVacancyRequestCreate(requestData).subscribe({
+      this.api.v1SpaceVacancyRequestCreate(requestData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
         next: (res) => {
           this.router.navigate(['/user/request/list']);
         },
@@ -486,6 +541,16 @@ export class RequestCreationComponent implements OnInit {
 
   getStepFormGroup(stepName: StepForm): FormGroup {
     return this.form.get(stepName) as FormGroup;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    const panel = this.userSelect?.panel?.nativeElement;
+    if (panel) {
+      panel.removeEventListener('scroll', this.onUserScroll.bind(this));
+    }
   }
 }
 

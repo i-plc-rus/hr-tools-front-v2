@@ -315,3 +315,81 @@ quill-editor {
 }
 
 
+//=======радио баттон=====
+:root {
+  --mdc-radio-state-layer-size: 40px;
+  --mdc-radio-state-layer-radius: 50%;
+  --mdc-radio-disabled-selected-icon-opacity: 0.38;
+  --mdc-radio-disabled-unselected-icon-opacity: 0.38;
+  --mdc-radio-unselected-focus-icon-color: var(--mdc-radio-unselected-icon-color, rgba(0, 0, 0, 0.54));
+  --mdc-radio-unselected-hover-icon-color: var(--mdc-radio-unselected-icon-color, rgba(0, 0, 0, 0.54));
+  --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-radio-unselected-pressed-icon-color: var(--mdc-radio-unselected-icon-color, rgba(0, 0, 0, 0.54));
+  --mdc-radio-selected-focus-icon-color: var(--link-default);
+  --mdc-radio-selected-hover-icon-color: var(--link-default);
+  --mdc-radio-selected-icon-color: var(--link-default);
+  --mdc-radio-selected-pressed-icon-color: var(--link-default);
+
+  //=====свич===
+  --mdc-switch-selected-handle-color: #ffffff;
+  --mdc-switch-selected-track-color: #5066B3;
+  --mdc-switch-unselected-handle-color: #b2b2b2;
+  --mdc-switch-unselected-track-color: rgba(59, 59, 59, 0.1);
+  --mdc-switch-selected-hover-handle-color: #ffffff;
+  --mdc-switch-selected-hover-track-color: #5066B3;
+  --mdc-switch-selected-focus-handle-color: #ffffff;
+  --mdc-switch-selected-focus-track-color: #5066B3;
+  --mdc-switch-selected-pressed-handle-color: #ffffff;
+  --mdc-switch-selected-pressed-track-color: #5066B3;
+
+  --mdc-switch-unselected-focus-handle-color: #b2b2b2;
+  --mdc-switch-unselected-focus-track-color: rgba(59, 59, 59, 0.1);
+
+}
+.mat-mdc-radio-button {
+  .mdc-radio__background::before,
+  .mat-mdc-radio-ripple,
+  .mat-mdc-radio-touch-target,
+  .mat-ripple {
+    display: none !important;
+  }
+
+  .mdc-radio__native-control,
+  .mdc-radio__inner-circle,
+  .mdc-radio__outer-circle {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.survey-modal-overlay {
+  position: static !important;
+  margin: auto;
+}
+
+//========тоггл====
+
+.mat-slide-toggle .mdc-switch__icon,
+.mdc-switch__icon--on,
+.mdc-switch__icon--off,
+.mat-slide-toggle svg {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+//==================
+.survey-modal-overlay {
+  position: static !important;
+  margin: auto;
+}
+.cdk-overlay-container:has(.survey-modal-overlay) .cdk-global-overlay-wrapper {
+  position: fixed !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

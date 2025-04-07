@@ -130,48 +130,72 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.favoritesCount = 0;
     }
 
-    const filter: VacancyapimodelsVrFilter = {...this.filterForm.value} as VacancyapimodelsVrFilter;
-
-    if (filter.search_period && filter.search_period !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
-      filter.search_from = '';
-      filter.search_to = '';
-    } else if (filter.search_from || filter.search_to) {
-      if (filter.search_from)
-        filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
-      if (filter.search_to)
-        filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+    let searchPeriod = this.filterForm.controls.search_period.value;
+    if ((this.filterForm.controls.search_from.value || this.filterForm.controls.search_to.value) &&
+      !searchPeriod) {
+      searchPeriod = VacancyapimodelsSearchPeriod.SearchByPeriod;
     }
 
-    filter.page = this.currentPage;
-    filter.limit = this.pageSize;
+    const rawFilter = {
+      author_id: this.filterForm.controls.author_id.value ?? '',
+      city_id: this.filterForm.controls.city_id.value ?? '',
+      favorite: this.filterForm.controls.favorite.value ?? undefined,
+      search: this.filterForm.controls.search.value ?? '',
+      search_from: this.filterForm.controls.search_from.value ?? '',
+      search_to: this.filterForm.controls.search_to.value ?? '',
+      search_period: searchPeriod || undefined,
+      selection_type: this.filterForm.controls.selection_type.value ?? undefined,
+      sort: this.filterForm.controls.sort.value ?? {created_at_desc: this.sortByDesc},
+      statuses: this.filterForm.controls.statuses.value ?? [],
+    };
 
-    this.api.v1SpaceVacancyRequestListCreate(filter, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
-            if (request.favorite)
-              this.favoritesCount++;
-            return new VacancyRequestView(request);
-          });
+    const filter: VacancyapimodelsVrFilter = {
+      ...rawFilter,
+      page: this.currentPage,
+      limit: this.pageSize,
+    };
 
-          this.requestList = [...this.requestList, ...newRequests];
+    if (filter.search_period === VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      if (filter.search_from) {
+        filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
+      }
+      if (filter.search_to) {
+        filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
+      }
+    } else {
+      filter.search_from = '';
+      filter.search_to = '';
+    }
 
-          if (newRequests.length < this.pageSize) {
-            this.allDataLoaded = true;
-          } else {
-            this.currentPage++;
+    this.api.v1SpaceVacancyRequestListCreate(filter, { observe: 'response' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          if (data.body?.data) {
+            const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
+              if (request.favorite) {
+                this.favoritesCount++;
+              }
+              return new VacancyRequestView(request);
+            });
+
+            this.requestList = [...this.requestList, ...newRequests];
+
+            if (newRequests.length < this.pageSize) {
+              this.allDataLoaded = true;
+            } else {
+              this.currentPage++;
+            }
           }
-        }
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Ошибка при получении списка заявок:', error);
-        this.loading = false;
-      },
-    });
+
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Ошибка при получении списка заявок:', error);
+          this.loading = false;
+        },
+      });
   }
-
-
   setFormListeners() {
     this.category.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -217,25 +241,32 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.filterForm.valueChanges
-      .pipe(debounceTime(700),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$))
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
+        this.allDataLoaded = false;
+        this.loading = false;
+        this.currentPage = 1;
+        this.requestList = [];
         this.getRequests();
       });
 
 
-     this.searchValue.valueChanges
+
+    this.searchValue.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        takeUntil(this.destroy$),
-        switchMap(value => {
-          this.filterForm.controls.search.setValue(value);
-          return [];
-        })
+        takeUntil(this.destroy$)
       )
-       .subscribe();
+      .subscribe(value => {
+        // this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.currentPage = 1;
+        this.requestList = [];
+        this.getRequests();
+      });
+
+
   }
 
   openComment(comment: string) {
@@ -291,7 +322,12 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (observable) {
       observable.pipe(takeUntil(this.destroy$)).subscribe({
-        next: () => this.getRequests(),
+        next: () => {
+          this.currentPage = 1;
+          this.allDataLoaded = false;
+          this.requestList = [];
+          this.getRequests();
+        },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
         }

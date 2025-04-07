@@ -313,13 +313,17 @@ export class СandidateListComponent implements OnDestroy{
     this.searchSubscription = this.searchValue.valueChanges
       .pipe(
         debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(value => {
-          this.filterForm.controls.search.setValue(value);
-          return [];
-        })
+        distinctUntilChanged()
       )
-      .subscribe();
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.currentPage = 1;
+        this.applicantsList = [];
+        this.gridApi.setGridOption('loading', true);
+        this.getApplicants();
+      });
+
   }
 
   openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {

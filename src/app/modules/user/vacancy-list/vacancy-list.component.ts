@@ -245,14 +245,15 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.searchSubscription = this.searchValue.valueChanges
       .pipe(
         debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(value => {
-          this.filterForm.controls.search.setValue(value);
-          return [];
-        })
+        distinctUntilChanged()
       )
-      .subscribe();
-
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.currentPage = 1;
+        this.vacancyList = [];
+        this.getVacancyList();
+      });
   }
 
   search() {

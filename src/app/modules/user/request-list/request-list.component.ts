@@ -225,17 +225,21 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
 
-     this.searchValue.valueChanges
+    this.searchValue.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        takeUntil(this.destroy$),
-        switchMap(value => {
-          this.filterForm.controls.search.setValue(value);
-          return [];
-        })
+        takeUntil(this.destroy$)
       )
-       .subscribe();
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.currentPage = 1;
+        this.requestList = [];
+        this.getRequests();
+      });
+
+
   }
 
   openComment(comment: string) {

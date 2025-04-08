@@ -1,5 +1,5 @@
 @if (vacancy || isNewVacancy) {
-  <div class="flex flex-col gap-4 mb-4">
+  <div class="flex flex-col gap-4 mb-2 ">
     <div class="w-full flex gap-3 items-center justify-between">
       <div class="flex gap-3 items-center">
         <button mat-icon-button (click)="onBack()" class="btn-secondary">
@@ -26,8 +26,9 @@
       }
     </div>
   </div>
+  <div class="py-4 px-4 w-full min-h-screen flex flex-col overflow-hidden">
 
-  <div class="w-full p-6 bg-white rounded-3xl relative">
+  <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     <div class="flex items-center justify-between">
       <div>
         <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category"
@@ -74,6 +75,7 @@
     <app-vacancy-stages [class.hidden]="category.value !== 'stages'" [vacancy]="vacancy"></app-vacancy-stages>
     <app-vacancy-integrations [class.hidden]="category.value !== 'integrations'"></app-vacancy-integrations>
     <app-vacancy-team [class.hidden]="category.value !== 'team'" [vacancyId]="vacancy?.id || ''"></app-vacancy-team>
+  </div>
   </div>
 } @else {
   <div class="w-full h-full flex items-center justify-center">

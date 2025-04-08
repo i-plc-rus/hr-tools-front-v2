@@ -1,41 +1,100 @@
-::ng-deep .mat-mdc-form-field-subscript-wrapper {
-    @apply hidden;
-  }
-  
-  ::ng-deep app-text-input input[type="number"]::-webkit-outer-spin-button,
-  ::ng-deep app-text-input input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  
-  ::ng-deep div.mat-mdc-select-panel {
-    background-color: var(--notification-color-text) !important;
-  }
-  
-  ::ng-deep app-text-input input:not(:placeholder-shown),
-  app-text-input input:focus {
-    border: 1px solid black !important;
-  }
-  
-  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled)
-    .mdc-floating-label {
-    color: #000 !important;
-  }
-  
-  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled)
-    .mdc-floating-label--float-above {
-    font-weight: 500 !important;
-    color: var(--link-default) !important;
-  }
-  
-  ::ng-deep .mat-mdc-form-field-textarea-control {
-    height: 280px !important;
-  }
-  
-  textarea {
-    resize: none;
-  }
-  
-  ::ng-deep .mat-mdc-select {
-    color: #000 !important;
-  }
-  
+// mat-stepper {
+//     background-color: transparent;
+// }
+
+::ng-deep .mat-horizontal-content-container {
+  @apply p-0;
+}
+
+::ng-deep app-text-input input[type="number"]::-webkit-outer-spin-button,
+::ng-deep app-text-input input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper{
+  @apply hidden;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex place-items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-white p-10 rounded-lg max-w-md text-center;
+}
+
+.modal-actions {
+  @apply flex justify-between mt-5;
+}
+
+::ng-deep div.mat-mdc-select-panel  {
+  background-color: var(--notification-color-text) !important;
+}
+
+::ng-deep app-text-input input:not(:placeholder-shown),
+app-text-input input:focus {
+  border: 1px solid black !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #000 !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
+  font-weight: 500 !important;
+  color: var(--link-default) !important;
+}
+
+
+::ng-deep .mat-step-label {
+  min-width: 0 !important;
+}
+
+::ng-deep .mat-step-label {
+  width: 0;
+}
+
+::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
+  margin-right: 0;
+}
+::ng-deep .mat-horizontal-stepper-header:hover,
+::ng-deep .mat-step-header:hover,
+::ng-deep .mat-horizontal-stepper-header-active,
+::ng-deep .mat-step-header.mat-step-header-active,
+::ng-deep .mat-step-header.cdk-keyboard-focused,
+::ng-deep .mat-step-header.cdk-program-focused,
+::ng-deep .mat-step-header.mat-active,
+::ng-deep .mat-step-header:active,
+::ng-deep .mat-step-header.mat-focused {
+  background: transparent !important;
+}
+
+::ng-deep .mat-ripple-element {
+  display: none !important;
+}
+
+::ng-deep .mat-step-header {
+  background-color: transparent !important;
+  transition: none !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
+  margin-right: 0 !important;
+}
+
+
+
+::ng-deep .mat-step-icon {
+  background-color: var(--background-main) !important;
+  color:  var(--link-default) !important;
+}
+
+::ng-deep .mat-mdc-stepper {
+  --mat-stepper-header-selected-state-icon-background-color: var(--link-default);
+  --mat-stepper-header-selected-state-icon-foreground-color: white;
+}
+
+::ng-deep .mat-step-icon-selected {
+  background-color: var(--link-default) !important;
+  color: white !important;
+}

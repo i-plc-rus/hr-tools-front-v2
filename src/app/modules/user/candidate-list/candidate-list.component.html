@@ -39,11 +39,11 @@
         <mat-expansion-panel-header>Возраст</mat-expansion-panel-header>
         <div class="flex items-center gap-2">
           <mat-form-field appearance="outline">
-            <input matInput type="number" min="0" formControlName="age_from" />
+            <input matInput type="number" formControlName="age_from" />
           </mat-form-field>
           <div class="mb-5">-</div>
           <mat-form-field appearance="outline">
-            <input matInput type="number" min="0" formControlName="age_to" />
+            <input matInput type="number" formControlName="age_to" />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -52,11 +52,11 @@
         <mat-expansion-panel-header>Опыт работы</mat-expansion-panel-header>
         <div class="flex items-center gap-2">
           <mat-form-field appearance="outline">
-            <input matInput type="number" min="0" formControlName="total_experience_from" />
+            <input matInput type="number" formControlName="total_experience_from" />
           </mat-form-field>
           <div class="mb-5">-</div>
           <mat-form-field appearance="outline">
-            <input matInput type="number" min="0" formControlName="total_experience_to" />
+            <input matInput type="number" formControlName="total_experience_to" />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -124,8 +124,9 @@
   </form>
 </app-filter>
 
-<div class="py-8 px-4 w-full h-full">
-  <div class="flex gap-3">
+<div class="py-8 px-4 w-full h-screen flex flex-col overflow-hidden">
+  <!-- Блок поиска -->
+  <div class="flex gap-3 mb-4">
     <app-search-input
       class="w-[380px]"
       placeholder="ФИО, почта и тег"
@@ -135,7 +136,8 @@
     <app-filter-toggle #toggleFilter />
   </div>
 
-  <div class="w-full mt-4 bg-white rounded-3xl" style="height: calc(100vh - 150px)">
+  <!-- Основной контент  -->
+  <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     <div class="flex justify-between items-center p-6 pb-4">
       <div class="flex gap-6">
         <h2 class="text-[22px]">Кандидаты</h2>
@@ -161,6 +163,6 @@
         </button>
       </div>
     </div>
-    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material h-[800px] w-full'" />
+    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material flex-1 w-full" />
   </div>
 </div>

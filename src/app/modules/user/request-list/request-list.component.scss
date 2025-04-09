@@ -6,3 +6,9 @@
   --mdc-icon-button-state-layer-size: 30px;
   --mdc-icon-button-icon-size: 24px;
 }
+
+app-filter {
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}

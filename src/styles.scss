@@ -345,6 +345,42 @@ quill-editor {
   --mdc-switch-unselected-focus-handle-color: #b2b2b2;
   --mdc-switch-unselected-focus-track-color: rgba(59, 59, 59, 0.1);
 
+  //чекбокс
+
+  --mat-checkbox-ripple-radius: 0;
+  --mdc-checkbox-state-layer-size: 0;
+  --mdc-checkbox-state-layer-radius: 0;
+  --mdc-checkbox-ripple-opacity: 0;
+  --mdc-checkbox-container-opacity: 1;
+  --mat-ripple-color: transparent;
+  --mat-ripple-opacity: 0;
+
+  --mdc-checkbox-selected-checkmark-color: #ffffff;
+  --mdc-checkbox-selected-focus-icon-color: var(--link-default);
+  --mdc-checkbox-selected-focus-state-layer-color: transparent;
+  --mdc-checkbox-selected-focus-state-layer-opacity: 0;
+  --mdc-checkbox-selected-hover-icon-color: var(--link-default);
+  --mdc-checkbox-selected-hover-state-layer-color: transparent;
+  --mdc-checkbox-selected-hover-state-layer-opacity: 0;
+  --mdc-checkbox-selected-icon-color: var(--link-default);
+  --mdc-checkbox-selected-pressed-icon-color: var(--link-default);
+  --mdc-checkbox-selected-pressed-state-layer-color: transparent;
+  --mdc-checkbox-selected-pressed-state-layer-opacity: 0;
+
+  --mdc-checkbox-unselected-focus-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-checkbox-unselected-focus-state-layer-color: transparent;
+  --mdc-checkbox-unselected-focus-state-layer-opacity: 0;
+  --mdc-checkbox-unselected-hover-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-checkbox-unselected-hover-state-layer-color: transparent;
+  --mdc-checkbox-unselected-hover-state-layer-opacity: 0;
+  --mdc-checkbox-unselected-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-checkbox-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+  --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
+  --mdc-checkbox-unselected-pressed-state-layer-opacity: 0;
+
+
+
+
 }
 .mat-mdc-radio-button {
   .mdc-radio__background::before,
@@ -383,6 +419,8 @@ quill-editor {
 }
 
 //==================
+
+//=====
 .survey-modal-overlay {
   position: static !important;
   margin: auto;

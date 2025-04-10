@@ -7,7 +7,7 @@
 }
 
 .vacancy-candidate-detail {
-  @apply flex flex-col grow border-l border-[var(--link-disabled)] w-full h-[800px] overflow-y-auto;
+  @apply flex flex-col grow border-l border-[var(--link-disabled)] w-full overflow-y-auto;
 }
 
 .candidate-detail {

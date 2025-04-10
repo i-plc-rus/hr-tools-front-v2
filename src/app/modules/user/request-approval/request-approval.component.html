@@ -1,4 +1,5 @@
-<div class="min-h-[836px] my-10 mx-6 p-6 bg-white rounded-3xl relative">
+<div class="py-8 px-4 w-full min-h-screen flex flex-col" style="overflow: hidden;">
+  <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     @if (isLoading) {
       <form [formGroup]="form" class="max-w-[580px] mb-[70px]">
         <mat-stepper #stepper class="!bg-transparent" (selectionChange)="onStepChange($event)">
@@ -11,7 +12,7 @@
                 label="Название компании"
               >
               </app-text-input>
-  
+
               <app-text-input
                 type="text"
                 formControlName="vacancy_name"
@@ -28,7 +29,7 @@
                   </span>
                 }
               </app-text-input>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Структура</mat-label>
                 <mat-select [formControl]="form.controls['company_struct_id']">
@@ -36,7 +37,7 @@
                     <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
                   }
                 </mat-select>
-  
+
                 @if (
                   form.get("company_struct_id")?.invalid &&
                   !form.get("company_struct_id")?.untouched
@@ -48,7 +49,7 @@
                   </span>
                 }
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Подразделение</mat-label>
                 <mat-select [formControl]="form.controls['department_id']">
@@ -56,7 +57,7 @@
                     <mat-option value="{{ item.id }}">{{ item.name }}</mat-option>
                   }
                 </mat-select>
-  
+
                 @if (
                   form.get("department_id")?.invalid &&
                   !form.get("department_id")?.untouched
@@ -68,7 +69,7 @@
                   </span>
                 }
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Штатная должность</mat-label>
                 <mat-select [formControl]="form.controls['job_title_id']">
@@ -89,20 +90,20 @@
               </mat-form-field>
             </div>
           </mat-step>
-  
+
           <mat-step>
             <h2 class="text-3xl mb-4">Местоположение и контакты</h2>
             <div class="flex flex-col gap-4">
               <mat-form-field appearance="outline">
                 <mat-label>Город</mat-label>
-  
+
                 <input
                   type="text"
                   matInput
                   [formControl]="form.controls['city_id']"
                   [matAutocomplete]="auto"
                 />
-  
+
                 <mat-autocomplete
                   #auto="matAutocomplete"
                   [displayWith]="displayCityName"
@@ -123,14 +124,14 @@
                   </span>
                 }
               </mat-form-field>
-  
+
               <app-text-input
                 type="text"
                 formControlName="place_of_work"
                 label="Адрес офиса"
               >
               </app-text-input>
-  
+
               <app-text-input
                 type="text"
                 formControlName="chief_fio"
@@ -149,9 +150,10 @@
               </app-text-input>
             </div>
           </mat-step>
-  
+
           <mat-step>
             <h2 class="text-3xl mb-4">Детали вакансии</h2>
+            <div style="max-height: 65vh; overflow-y: auto; padding: 20px; padding-right: 20px;">
             <div class="flex flex-col gap-4">
               <app-text-input
                 type="number"
@@ -169,7 +171,7 @@
                   </span>
                 }
               </app-text-input>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Срочность</mat-label>
                 <mat-select [formControl]="form.controls['urgency']">
@@ -180,7 +182,7 @@
                   }
                 </mat-select>
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Тип заявки</mat-label>
                 <mat-select [formControl]="form.controls['request_type']">
@@ -191,15 +193,15 @@
                   }
                 </mat-select>
               </mat-form-field>
-  
+
               <label>Требования, обязанности</label>
               <app-text-editor
                 height="160px"
                 formControlName="requirements"
               ></app-text-editor>
-  
+
               <label>Условия</label>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Занятость</mat-label>
                 <mat-select [formControl]="form.controls['employment']">
@@ -220,7 +222,7 @@
                   </span>
                 }
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Опыт работы</mat-label>
                 <mat-select [formControl]="form.controls['experience']">
@@ -241,7 +243,7 @@
                   </span>
                 }
               </mat-form-field>
-  
+
               <mat-form-field appearance="outline">
                 <mat-label>Режим работы</mat-label>
                 <mat-select [formControl]="form.controls['schedule']">
@@ -263,8 +265,9 @@
                 }
               </mat-form-field>
             </div>
+            </div>
           </mat-step>
-  
+
           <mat-step>
             <h2 class="text-3xl mb-4">Комментарий к заявке</h2>
             <div class="flex flex-col gap-4">
@@ -276,16 +279,17 @@
           </mat-step>
         </mat-stepper>
       </form>
-  
-      <div class="absolute bottom-6 flex gap-4">
+
+      <div class="absolute bottom-20 flex gap-4">
         <button class="btn-secondary mr-[130px]" mat-flat-button (click)="goBack()">Отменить</button>
-  
+
         @if(!isLastStep) {
-        <button mat-flat-button (click)="goToNextStep()">Продолжить</button>
+        <button mat-flat-button
+                class="btn-primary" (click)="goToNextStep()">Продолжить</button>
         }
         @if(isLastStep && status !== 'Согласована') {
-          <button mat-flat-button (click)="rejectClaim()" class="btn-danger">Отклонить</button>
-          <button mat-flat-button (click)="approveClaim()">Согласовать</button>
+          <button mat-flat-button   class="btn-secondary-red" (click)="rejectClaim()" class="btn-danger">Отклонить</button>
+          <button mat-flat-button  class="btn-primary" (click)="approveClaim()">Согласовать</button>
         }
         @if(isLastStep && status === 'Согласована') {
           <button mat-flat-button (click)="createVacancy()">Создать вакансию</button>
@@ -293,4 +297,4 @@
     </div>
     }
   </div>
-  
+</div>

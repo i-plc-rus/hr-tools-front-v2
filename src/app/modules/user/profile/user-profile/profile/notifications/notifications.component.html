@@ -2,8 +2,8 @@
 <div class="notifications-container">
   <!-- Плашка Push-уведомлений -->
   <mat-card class="push-settings mt-4">
-    <h3>Push-уведомления</h3>
-    <p>Подключите push-уведомления, чтобы быть в курсе событий, даже когда вкладка HR-tools закрыта</p>
+    <h3 style="color: var(--text-main); font-weight: normal; font-size: 16px; margin-bottom: 10px;">Push-уведомления</h3>
+    <p style="margin-bottom: 10px;">Подключите push-уведомления, чтобы быть в курсе событий, даже когда вкладка HR-tools закрыта</p>
     <mat-radio-group [value]="pushEnabled()" (change)="togglePushNotifications($event.value)">
       <mat-radio-button [value]="true">Вкл.</mat-radio-button>
       <mat-radio-button [value]="false">Выкл.</mat-radio-button>
@@ -22,8 +22,8 @@
 
       <!-- Системные уведомления -->
       <ng-container matColumnDef="system">
-        <th mat-header-cell *matHeaderCellDef> Системные </th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell class="mat-text-center"   style="text-align: center;"*matHeaderCellDef> Системные </th>
+        <td mat-cell class="mat-text-center"  style="text-align: center;" *matCellDef="let element">
           <mat-checkbox [checked]="element.system" (change)="updateNotification(element.code, 'system', $event)">
           </mat-checkbox>
         </td>
@@ -31,8 +31,8 @@
 
       <!-- Email уведомления -->
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell class="mat-text-center"  style="text-align: center; padding-left: 31px;" *matHeaderCellDef> Email </th>
+        <td mat-cell class="mat-text-center"  style="text-align: center;" *matCellDef="let element">
           <mat-checkbox [checked]="element.email" (change)="updateNotification(element.code, 'email', $event)">
           </mat-checkbox>
         </td>
@@ -40,8 +40,8 @@
 
       <!-- Telegram уведомления -->
       <ng-container matColumnDef="telegram">
-        <th mat-header-cell *matHeaderCellDef> Telegram </th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell class="mat-text-center"  style="text-align: center;" *matHeaderCellDef> Telegram </th>
+        <td mat-cell  class="mat-text-center"  style="text-align: center;" *matCellDef="let element">
           <mat-checkbox [checked]="element.telegram" (change)="updateNotification(element.code, 'telegram', $event)">
           </mat-checkbox>
         </td>

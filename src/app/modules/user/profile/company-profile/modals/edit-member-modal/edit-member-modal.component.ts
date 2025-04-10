@@ -58,7 +58,6 @@ export class EditMemberModalComponent implements OnInit{
     if (responseBody?.data) {
       this.memberForm.patchValue(responseBody.data);
     }
-    this.onSubmit.emit(true);
 
   }
 
@@ -70,8 +69,15 @@ export class EditMemberModalComponent implements OnInit{
   }
 
   private handleSuccessfulUpdate(): void {
+    const updatedUser = {
+      id: this.user!,
+      ...this.memberForm.value
+    };
+
+    this.onSubmit.emit(updatedUser);
     this.modalService.closeModal();
   }
+
 
   private handleError(message: string, err: any): void {
     console.error(message, err);

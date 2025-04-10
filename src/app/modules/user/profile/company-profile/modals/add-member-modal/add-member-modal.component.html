@@ -1,0 +1,123 @@
+<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:max-w-[748px] lg:max-h-[800px]">
+  <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">
+      {{ isEdit ? 'Редактирование сотрудника' : 'Добавить нового участника' }}
+    </h2>
+    <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6">
+
+      <form [formGroup]="userForm"
+            class="flex justify-center items-stretch flex-col w-full box-border grow-0 shrink-0 basis-auto">
+
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput [formControl]="userForm.controls['email']" placeholder="example@domain.com">
+
+          @let isEmailErrorEmail = userForm.controls['email'].hasError('email') &&
+          !userForm.controls['email'].untouched;
+          @let isEmailErrorRequired = userForm.controls['email'].hasError('required') &&
+          !userForm.controls['email'].untouched;
+
+          @if (isEmailErrorEmail || isEmailErrorRequired) {
+            <mat-icon matSuffix
+                      [matTooltip]="isEmailErrorEmail ? 'Некорректный адрес электронной почты' : 'Обязательное поле'"
+                      svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput [formControl]="userForm.controls['password']" spellcheck="false">
+
+          @let isPasswordErrorRequired = userForm.controls['password'].hasError('required') &&
+          !userForm.controls['password'].untouched;
+          @let isPasswordErrorMinLength = userForm.controls['password'].hasError('minlength') &&
+          !userForm.controls['password'].untouched;
+
+          @if (isPasswordErrorRequired || isPasswordErrorMinLength) {
+            <mat-icon matSuffix
+                      [matTooltip]="isPasswordErrorMinLength ? 'Пароль должен содержать не менее 8 символов' : 'Обязательное поле'"
+                      svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Подтверждение пароля</mat-label>
+          <input matInput [formControl]="userForm.controls['confirm_password']" spellcheck="false">
+
+          @let isConfirmPasswordErrorRequired = userForm.controls['confirm_password'].hasError('required') &&
+          !userForm.controls['confirm_password'].untouched;
+          @let isPasswordMatch = userForm.controls['confirm_password'].hasError('matching') &&
+          !userForm.controls['confirm_password'].untouched;
+
+          @if (isConfirmPasswordErrorRequired || isPasswordMatch) {
+            <mat-icon matSuffix
+                      [matTooltip]="isConfirmPasswordErrorRequired ? 'Обязательное поле' : 'Пароли должны совпадать'"
+                      svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Имя</mat-label>
+          <input matInput [formControl]="userForm.controls['first_name']">
+
+          @let isFirstNameErrorRequired = userForm.controls['first_name'].hasError('required') &&
+          !userForm.controls['first_name'].untouched;
+
+          @if (isFirstNameErrorRequired) {
+            <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Фамилия</mat-label>
+          <input matInput [formControl]="userForm.controls['last_name']">
+
+          @let isLastNameErrorRequired = userForm.controls['last_name'].hasError('required') &&
+          !userForm.controls['last_name'].untouched;
+
+          @if (isLastNameErrorRequired) {
+            <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Телефон</mat-label>
+          <input matInput [formControl]="userForm.controls['phone_number']"
+                 placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00">
+
+          @let isPhoneErrorRequired = userForm.controls['phone_number'].hasError('required') &&
+          !userForm.controls['phone_number'].untouched;
+
+          @if (isPhoneErrorRequired) {
+            <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Выберите роль</mat-label>
+          <mat-select [formControl]="userForm.controls['is_admin']">
+            @for (role of roles; track $index) {
+              <mat-option [value]="role.value">{{ role.name }}</mat-option>
+            }
+          </mat-select>
+
+          @let isRoleErrorRequired = userForm.controls['is_admin'].hasError('required') &&
+          !userForm.controls['is_admin'].untouched;
+
+          @if (isRoleErrorRequired) {
+            <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
+          }
+        </mat-form-field>
+
+      </form>
+
+      <div
+        class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
+        <button mat-flat-button class="btn-primary" [disabled]="userForm.invalid || isLoading" (click)="submit()">
+          {{ isEdit ? 'Добавить' : 'Добавить' }}
+        </button>
+        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отменить</button>
+      </div>
+    </div>
+  </div>
+</div>

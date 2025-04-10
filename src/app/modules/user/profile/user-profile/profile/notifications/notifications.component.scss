@@ -1,3 +1,23 @@
+:host ::ng-deep {
+  .mat-mdc-table {
+    background: transparent !important;
+  }
+
+  .mat-mdc-table .mat-mdc-row td {
+    border-bottom-color: var(--link-disabled);
+  }
+
+  .mat-mdc-table th {
+    color: var(--text-alter);
+    font-weight: normal;
+  }
+  .mat-mdc-header-cell {
+    border-bottom-color: var(--link-disabled);
+  }
+
+}
+
+
 .notifications-container {
   display: flex;
   flex-direction: column;
@@ -7,7 +27,7 @@
 .push-settings {
   padding: 24px;
   border-radius: 12px;
-  background: var(--background-main);
+  background: #F8FBFF;
   box-shadow: var(--mat-elevation-2);
 }
 

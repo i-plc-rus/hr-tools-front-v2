@@ -16,3 +16,10 @@
 .dropdown-chip:hover, .dropdown-chip:focus {
   @apply border-[var(--text-main)] text-[var(--text-main)];
 }
+
+app-filter {
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+

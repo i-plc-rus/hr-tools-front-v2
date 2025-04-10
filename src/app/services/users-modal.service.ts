@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {ComponentRef, EventEmitter, Injectable} from '@angular/core';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {AddUserModalComponent} from '../modules/user/users-list/add-user-modal/add-user-modal.component';
@@ -13,6 +13,13 @@ import {
 import {
   GenerateSurveyModalComponent
 } from '../modules/user/vacancy-detail/generate-survey-modal/generate-survey-modal.component';
+import {
+  AddMemberModalComponent
+} from '../modules/user/profile/company-profile/modals/add-member-modal/add-member-modal.component';
+import {SpaceapimodelsSpaceUser} from '../api/data-contracts';
+import {
+  LicenseExtensionModalComponent
+} from '../modules/user/profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 
 
 @Injectable({
@@ -20,7 +27,7 @@ import {
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal<AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent | GenerateSurveyModalComponent>;
+  portal?: ComponentPortal< AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent | GenerateSurveyModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -143,10 +150,22 @@ export class UsersModalService {
     return componentRef.instance.onSubmit;
   }
 
-  addMemberModal(): EventEmitter<boolean> {
-    this.portal = new ComponentPortal(AddUserModalComponent);
+  addMemberModal(): EventEmitter<SpaceapimodelsSpaceUser> {
+    const portal = new ComponentPortal(AddMemberModalComponent);
     this.overlayRef = this.createOverlay(this.overlay);
-    const componentRef = this.overlayRef.attach(this.portal);
+    const componentRef: ComponentRef<AddMemberModalComponent> = this.overlayRef.attach(portal);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  openLicenseExtensionModal(): EventEmitter<any> {
+    const portal = new ComponentPortal(LicenseExtensionModalComponent);
+    this.overlayRef = this.createOverlay(this.overlay);
+    const componentRef = this.overlayRef.attach(portal);
 
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();

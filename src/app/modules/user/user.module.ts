@@ -107,6 +107,10 @@ import {EditMemberModalComponent} from './profile/company-profile/modals/edit-me
 import {GenerateSurveyModalComponent} from './vacancy-detail/generate-survey-modal/generate-survey-modal.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {AddMemberModalComponent} from './profile/company-profile/modals/add-member-modal/add-member-modal.component';
+import {
+  LicenseExtensionModalComponent
+} from './profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 
 @NgModule({
   declarations: [
@@ -159,8 +163,9 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     CompanyProfileComponent,
     LoadingWrapperComponent,
     EditMemberModalComponent,
-    GenerateSurveyModalComponent
-
+    GenerateSurveyModalComponent,
+    AddMemberModalComponent,
+    LicenseExtensionModalComponent
   ],
   imports: [
     CommonModule,

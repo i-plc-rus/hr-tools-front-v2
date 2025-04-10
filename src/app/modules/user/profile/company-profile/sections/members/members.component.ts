@@ -1,139 +1,218 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
+import {Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
+import {ColDef, GridApi, GridOptions, GridReadyEvent} from 'ag-grid-community';
 import {ApiService} from '../../../../../../api/Api';
-import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
+import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
-import {RequestOptions} from '../../../../../../api/http-client';
-
-enum TableColumns {
-  Avatar = 'avatar',
-  Name = 'name',
-  Contacts = 'contacts',
-  Role = 'role',
-  Actions = 'actions'
-}
+import {LoaderComponent} from '../../../../../../components/loader/loader.component';
+import {CellMemberAvatarComponent} from './ag-grid-cells/cell-member-avatar/cell-member-avatar.component';
+import {CellMemberContactsComponent} from './ag-grid-cells/cell-member-contacts/cell-member-contacts.component';
+import {TableButtonComponent} from '../../../../users-list/table-button/table-button.component';
+import {SpaceUser as User} from '../../../../../../models/SpaceUser';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrl: './members.component.scss'
+  styleUrls: ['./members.component.scss']
 })
-export class MembersComponent implements OnInit {
-  participants: SpaceapimodelsSpaceUser[] = [];
-  avatarsMap = new Map<string, string>(); // Храним аватары отдельно
+export class MembersComponent implements OnInit, OnDestroy {
+  private gridApi!: GridApi<SpaceapimodelsSpaceUser>;
 
-  displayedColumns: string[] = [
-    TableColumns.Avatar,
-    TableColumns.Name,
-    TableColumns.Contacts,
-    TableColumns.Role,
-    TableColumns.Actions
+  participants: SpaceapimodelsSpaceUser[] = [];
+
+  colDefs: ColDef<SpaceapimodelsSpaceUser>[] = [
+
+    {
+      headerName: 'ФИО',
+      headerClass: 'font-medium custom-sort-header',
+      width: 368,
+      cellRenderer: CellMemberAvatarComponent,
+      sortable: true,
+      comparator: (valueA, valueB, nodeA, nodeB) => {
+        const userA = nodeA.data;
+        const userB = nodeB.data;
+
+        const lastNameA = userA?.last_name || '';
+        const lastNameB = userB?.last_name || '';
+
+        const lastNameComparison = lastNameA.localeCompare(lastNameB, 'ru');
+
+        if (lastNameComparison === 0) {
+          const firstNameA = userA?.first_name || '';
+          const firstNameB = userB?.first_name || '';
+          return firstNameA.localeCompare(firstNameB, 'ru');
+        }
+
+        return lastNameComparison;
+      }
+    },
+    {
+      headerName: 'Контакты',
+      headerClass: 'font-medium',
+      flex: 2,
+      cellRenderer: CellMemberContactsComponent,
+      sortable: false,
+    },
+    {
+      headerName: 'Роль',
+      headerClass: 'font-medium',
+      flex: 1,
+      field: 'role',
+      sortable: false,
+    },
+    {
+      headerName: '',
+      cellClass: 'flex justify-center items-center',
+      width: 150,
+      sortable: false,
+      cellRenderer: TableButtonComponent,
+      cellRendererParams: {
+        onEdit: this.openEditMemberModal.bind(this),
+        onDelete: this.openDeleteMemberModal.bind(this),
+      }
+    }
   ];
 
-  clickedRows = new Set<string>();
+  gridOptions: GridOptions = {
+    onGridReady: this.onGridReady.bind(this),
+    columnDefs: this.colDefs,
+    rowData: this.participants,
+    overlayNoRowsTemplate: '<span class="text-[32px] leading-10">Кандидаты отсутствуют</span>',
+    loadingOverlayComponent: LoaderComponent,
+    loading: true,
+    suppressScrollOnNewData: true,
+    rowHeight: 72,
+    headerHeight: 48,
+    suppressMovableColumns: true,
+    suppressMenuHide: false,
+    unSortIcon: true
+  };
 
-  constructor(private api: ApiService, private loadingService: LoadingWrapperService, private modalService: UsersModalService, private cdr: ChangeDetectorRef) {
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
+
+  private destroyRef = inject(DestroyRef);
+
+
+  constructor(
+    private api: ApiService,
+    private modalService: UsersModalService
+  ) {}
+
+  ngOnInit(): void {}
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
+    this.getParticipants();
   }
 
-  ngOnInit(): void {
-    this.loadUserData();
-  }
+  onGridScroll = (event: any) => {
+    if (this.loading || this.allDataLoaded) return;
 
-  private loadUserData(): void {
-    this.loadingService.setLoading(true);
-    this.api.v1UsersListCreate({}).subscribe({
-      next: (response) => this.handleUserResponse(response),
-      error: (err) => this.handleError(err, 'Ошибка загрузки пользователей!')
-    });
-  }
+    const api = event.api;
+    const lastVisibleRow = api.getLastDisplayedRowIndex();
+    const rowCount = api.getDisplayedRowCount();
 
-  private loadUserAvatars(): void {
-    this.participants.forEach((user) => {
-
-      if (!user.id) return;
-      this.api.v1UsersPhotoDetail(user.id, {responseType: 'blob'} as RequestOptions).subscribe({
-        next: (resp) => {
-          const blob: Blob = resp as unknown as Blob
-          if (blob.size) {
-            this.handleAvatarResponse(user.id!, blob)
-          }
-        },
-        error: (err) => this.handleError(err, `Ошибка загрузки фото ${user.id}`)
-      });
-    });
-  }
-
-  deleteParticipant(user: SpaceapimodelsSpaceUser): void {
-    if (!user.id) return;
-
-    const confirmDelete = window.confirm(`Вы уверены, что хотите удалить пользователя ${user.last_name} ${user.first_name}?`);
-    if (!confirmDelete) return;
-
-    this.api.v1AdminPanelUserDeleteDelete(user.id).subscribe({
-      next: () => this.handleSuccessfulDeletion(user.id!),
-      error: (err) => this.handleError(err, `Ошибка при удалении ${user.last_name} ${user.first_name}`)
-    });
-  }
-
-  private handleUserResponse(response: any): void {
-    if (response.body.data) {
-      this.participants = response.body.data;
-      this.loadUserAvatars();
-    } else {
-      console.warn('Пустой ответ от API.');
+    if (lastVisibleRow >= rowCount - 5) {
+      this.getParticipants(true);
     }
-    this.loadingService.setLoading(false);
   }
 
-  private handleAvatarResponse(userId: string, response: Blob): void {
-    const reader = new FileReader();
+  getParticipants(loadMore = false): void {
+    if (this.loading || this.allDataLoaded) return;
 
-    reader.onload = () => this.avatarsMap.set(userId, reader.result as string);
-    reader.readAsDataURL(response);
-  }
+    this.loading = true;
 
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.participants = [];
+      this.allDataLoaded = false;
+      this.gridApi.setGridOption('loading', true);
+    }
 
-  private handleSuccessfulDeletion(userId: string): void {
-    this.participants = this.participants.filter(p => p.id !== userId);
-  }
+    this.api.v1UsersListCreate({
+      page: this.currentPage,
+      limit: this.pageSize
+    }).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+      next: (res: any) => {
+        if (res.body?.data) {
+          const newParticipants = res.body.data;
+          this.participants = [...this.participants, ...newParticipants];
+          this.gridApi.setGridOption('rowData', this.participants);
 
+          if (newParticipants.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
+          }
+        }
 
-  private handleError(err: any, message: string): void {
-    console.error(message, err);
-    this.loadingService.setLoading(false);
-  }
-
-  openEditMemberModal(user: SpaceapimodelsSpaceUser) {
-    if (!user.id) return;
-
-    this.modalService.editMemberModal(user.id).subscribe((updated) => {
-      if (updated) {
-        this.loadUserData();
+        this.gridApi.setGridOption('loading', false);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.gridApi.setGridOption('loading', false);
+        this.loading = false;
       }
     });
   }
 
   openAddMemberModal(): void {
-    this.modalService.addMemberModal().subscribe((added) => {
-      if (added) {
-        this.loadUserData();
-        this.cdr.detectChanges()
+    this.modalService.addMemberModal()
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((newUser: SpaceapimodelsSpaceUser | undefined) => {
+      if (newUser) {
+        this.participants = [newUser, ...this.participants];
+        this.gridApi.setGridOption('rowData', [...this.participants]);
       }
     });
   }
 
-  getAvatar(userId: string): string {
-    return this.avatarsMap.get(userId) || 'assets/icons/ic-person.svg';
+
+  openEditMemberModal(user: SpaceapimodelsSpaceUser): void {
+    this.modalService.editMemberModal(user.id!).subscribe((updatedUser: SpaceapimodelsSpaceUser | undefined) => {
+      if (updatedUser) {
+        console.log('Пользователь отредактирован!', updatedUser);
+
+        const index = this.participants.findIndex(p => p.id === updatedUser.id);
+        if (index !== -1) {
+          this.participants[index] = updatedUser;
+
+          this.gridApi.setGridOption('rowData', [...this.participants]);
+        }
+      } else {
+        console.log('Редактирование отменено или не сохранено.');
+      }
+    });
   }
 
 
-  toggleRow(participant: SpaceapimodelsSpaceUser) {
-    if (participant.id) {
-      if (this.clickedRows.has(participant.id)) {
-        this.clickedRows.delete(participant.id);
-      } else {
-        this.clickedRows.add(participant.id);
+
+
+  openDeleteMemberModal(user: SpaceapimodelsSpaceUser): void {
+    const wrappedUser = new User(user);
+    this.modalService.deleteUserModal(wrappedUser)
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.getParticipants();
+    });
+  }
+
+  openLicenseExtensionModal(): void {
+    this.modalService.openLicenseExtensionModal()
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((formData: any) => {
+      if (formData) {
+        console.log('Получены данные формы:', formData);
       }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.gridApi && !this.gridApi.isDestroyed()) {
+      this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }
   }
 }

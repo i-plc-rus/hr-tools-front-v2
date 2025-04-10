@@ -95,6 +95,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('people-filled', this.setPath(`${this.svgPath}/ic-people-filled.svg`))
       .addSvgIcon('bag-filled', this.setPath(`${this.svgPath}/ic-bag-filled.svg`))
       .addSvgIcon('request-filled', this.setPath(`${this.svgPath}/ic-request-filled.svg`))
+      .addSvgIcon('chat-info', this.setPath(`${this.svgPath}/ic-chat-info.svg`))
 
 
   }

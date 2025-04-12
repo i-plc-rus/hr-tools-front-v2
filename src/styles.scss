@@ -379,7 +379,13 @@ quill-editor {
   --mdc-checkbox-unselected-pressed-state-layer-opacity: 0;
 
 
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: var(--link-default);
+  }
 
+  .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+    color: var(--link-default);
+  }
 
 }
 .mat-mdc-radio-button {

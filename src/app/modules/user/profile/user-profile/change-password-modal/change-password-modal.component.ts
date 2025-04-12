@@ -13,6 +13,8 @@ import {UsersModalService} from '../../../../../services/users-modal.service';
 import {ApiService} from '../../../../../api/Api';
 import {SpaceapimodelsPasswordChange} from '../../../../../api/data-contracts';
 import {SpaceUser} from '../../../../../models/SpaceUser';
+import {TextInputComponent} from '../../../../../components/text-input/text-input.component';
+import {SnackBarService} from '../../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-change-password-modal',
@@ -28,7 +30,8 @@ import {SpaceUser} from '../../../../../models/SpaceUser';
     MatOption,
     MatSelect,
     MatSuffix,
-    MatTooltip
+    MatTooltip,
+    TextInputComponent
   ],
   templateUrl: './change-password-modal.component.html',
   styleUrl: './change-password-modal.component.scss'
@@ -55,7 +58,9 @@ export class ChangePasswordModalComponent implements OnInit {
 
   constructor(
     private modalService: UsersModalService,
-    private api: ApiService) {}
+    private api: ApiService,
+    private snackBarService: SnackBarService
+  ) {}
 
   ngOnInit() {
     console.log('Форма создана:', this.user);
@@ -63,30 +68,35 @@ export class ChangePasswordModalComponent implements OnInit {
 
   savePassword() {
     if (this.changePasswordForm.valid) {
+      const currentPassword = this.changePasswordForm.get('currentPassword')?.value ?? '';
+      const newPassword = this.changePasswordForm.get('newPassword')?.value ?? '';
+
       this.isLoading = true;
       this.currentPasswordError = null;
 
       const requestBody: SpaceapimodelsPasswordChange = {
-        current_password: this.changePasswordForm.value.currentPassword!,
-        new_password: this.changePasswordForm.value.newPassword!,
+        current_password: currentPassword,
+        new_password: newPassword,
       };
 
       this.api.v1UserProfileChangePasswordUpdate(requestBody).subscribe({
         next: () => {
-          console.log('Пароль успешно изменён');
           this.isLoading = false;
+          this.snackBarService.snackBarMessageSuccess('Пароль успешно изменён!')
           this.closeModal();
         },
         error: (error) => {
           console.error('Ошибка изменения пароля:', error);
           this.isLoading = false;
-          //ToDo: проверка на код ошибки
           this.currentPasswordError =
-            'Текущий пароль указан неверно. Попробуйте снова.';
+            'Текущий пароль указан неверно.';
         },
       });
+    } else {
+      console.error('Форма не валидна:', this.changePasswordForm);
     }
   }
+
 
   closeModal() {
     this.modalService.closeModal();

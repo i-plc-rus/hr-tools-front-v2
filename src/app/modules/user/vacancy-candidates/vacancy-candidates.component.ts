@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsVacancyStatus} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
@@ -17,7 +17,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
   templateUrl: './vacancy-candidates.component.html',
   styleUrl: './vacancy-candidates.component.scss',
 })
-export class VacancyСandidatesComponent implements OnInit {
+export class VacancyСandidatesComponent implements OnInit, OnDestroy {
   vacancy?: VacancyView;
   // фильтр
   filterForm = new FormGroup({
@@ -131,7 +131,12 @@ export class VacancyСandidatesComponent implements OnInit {
     loadingOverlayComponent: LoaderComponent,
     loading: true,
     suppressMovableColumns: true,
+    suppressScrollOnNewData: true
   }
+  private currentPage = 1;
+  private pageSize = 50;
+  private loading = false;
+  private allDataLoaded = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -145,6 +150,9 @@ export class VacancyСandidatesComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+
+    this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
+
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['stage'])
         this.filterForm.controls.stage_name.setValue(params['stage']);
@@ -211,25 +219,60 @@ export class VacancyСandidatesComponent implements OnInit {
     })
   }
 
-  getApplicants() {
+  getApplicants(loadMore = false) {
+    if (this.loading || (loadMore && this.allDataLoaded)) return;
+
+    this.loading = true;
+
+    if (!loadMore) {
+      this.currentPage = 1;
+      this.applicantsList = [];
+      this.allDataLoaded = false;
+      this.gridApi.setGridOption('loading', true);
+    }
+
     const filter = this.filterForm.value as ApplicantapimodelsApplicantFilter;
-    this.gridApi.setGridOption('loading', true);
+    filter.page = this.currentPage;
+    filter.limit = this.pageSize;
+
     this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'}).subscribe({
       next: (res) => {
         if (res.body?.data) {
-          this.applicantsList = res.body?.data.map((applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant));
+          const newApplicants = res.body.data.map(
+            (applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant)
+          );
+
+          this.applicantsList = [...this.applicantsList, ...newApplicants];
           this.gridApi.setGridOption('rowData', this.applicantsList);
+
+          if (newApplicants.length < this.pageSize) {
+            this.allDataLoaded = true;
+          } else {
+            this.currentPage++;
+          }
         }
         this.gridApi.setGridOption('loading', false);
-
+        this.loading = false;
       },
       error: (error) => {
         console.log(error);
         this.gridApi.setGridOption('loading', false);
+        this.loading = false;
       }
-    })
+    });
   }
 
+  onGridScroll = (event: any) => {
+    if (this.loading || this.allDataLoaded) return;
+
+    const api = event.api;
+    const lastVisibleRow = api.getLastDisplayedRowIndex();
+    const rowCount = api.getDisplayedRowCount();
+
+    if (lastVisibleRow >= rowCount - 5) {
+      this.getApplicants(true);
+    }
+  }
   getVacancyById(id: string) {
     this.api.v1SpaceVacancyDetail(id, {observe: 'response'}).subscribe({
       next: (data) => {
@@ -270,4 +313,9 @@ export class VacancyСandidatesComponent implements OnInit {
     this.router.navigate(['user', 'vacancy', 'list']);
   }
 
+  ngOnDestroy(): void {
+    if (this.gridApi && !this.gridApi.isDestroyed()) {
+      this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
+    }
+  }
 }

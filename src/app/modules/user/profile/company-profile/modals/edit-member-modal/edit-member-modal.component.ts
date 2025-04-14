@@ -11,9 +11,8 @@ import {ApiService} from '../../../../../../api/Api';
 export class EditMemberModalComponent implements OnInit{
   onSubmit = new EventEmitter<boolean>();
   memberForm: FormGroup;
-  @Input() user: string | null = null; //id
+  @Input() user: string | null = null;
   @ViewChild('firstInput') firstInput!: ElementRef;
-
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +32,7 @@ export class EditMemberModalComponent implements OnInit{
 
   ngOnInit() {
     this.loadUserData();
-    setTimeout(() => this.firstInput.nativeElement.focus(), 0); //ставлю фокус на первый инпут
+    setTimeout(() => this.firstInput.nativeElement.focus(), 0);
   }
 
   private loadUserData(): void {
@@ -42,8 +41,25 @@ export class EditMemberModalComponent implements OnInit{
   }
 
   saveProfile(): void {
-    if (!this.memberForm.valid || !this.user) return;
+    if (!this.memberForm.valid) {
+    }
+
+    if (!this.user) {
+      return;
+    }
+
     this.updateUserData();
+  }
+
+  getFormValidationErrors() {
+    const errors: any = {};
+    Object.keys(this.memberForm.controls).forEach(key => {
+      const control = this.memberForm.get(key);
+      if (control && control.errors) {
+        errors[key] = control.errors;
+      }
+    });
+    return errors;
   }
 
   private fetchUserData(): void {
@@ -55,16 +71,43 @@ export class EditMemberModalComponent implements OnInit{
 
   private handleUserResponse(response: any): void {
     const responseBody = 'body' in response ? response.body : response;
-    if (responseBody?.data) {
-      this.memberForm.patchValue(responseBody.data);
-    }
 
+    if (responseBody?.data) {
+      const userData = {...responseBody.data};
+
+      if ('is_admin' in userData) {
+        const role = userData.is_admin ? 'Администратор' : 'Пользователь';
+        userData.role = role;
+      }
+
+      this.memberForm.patchValue(userData);
+      this.memberForm.markAsPristine();
+    }
   }
 
   private updateUserData(): void {
-    this.api.v1UsersUpdate(this.user!, this.memberForm.value).subscribe({
-      next: () => this.handleSuccessfulUpdate(),
-      error: (err) => this.handleError('Ошибка в  updateUserData() ', err)
+    const formValues = {...this.memberForm.value};
+    const role = formValues.role;
+    const isAdmin = role === 'Администратор';
+
+    delete formValues.role;
+    formValues.is_admin = isAdmin;
+
+
+    this.api.v1UsersUpdate(this.user!, formValues).subscribe({
+      next: (response) => {
+
+        const updatedUser = {
+          id: this.user!,
+          ...formValues,
+          role: isAdmin ? 'Администратор' : 'Пользователь',
+          is_admin: isAdmin
+        };
+
+        this.onSubmit.emit(updatedUser);
+        this.modalService.closeModal();
+      },
+      error: (err) => this.handleError('Ошибка в updateUserData() ', err)
     });
   }
 
@@ -74,10 +117,14 @@ export class EditMemberModalComponent implements OnInit{
       ...this.memberForm.value
     };
 
+
+    if (this.memberForm.get('role')?.value) {
+      updatedUser.role = this.memberForm.get('role')?.value;
+    }
+
     this.onSubmit.emit(updatedUser);
     this.modalService.closeModal();
   }
-
 
   private handleError(message: string, err: any): void {
     console.error(message, err);

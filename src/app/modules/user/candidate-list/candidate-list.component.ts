@@ -1,5 +1,5 @@
-import {Component, DestroyRef, inject, OnDestroy} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Component, OnDestroy} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
   ApplicantapimodelsApplicantView,
@@ -16,19 +16,29 @@ import {
   VacancyapimodelsVacancyView
 } from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
-import {CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, SelectionChangedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
+import {
+  CellClickedEvent,
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  SelectionChangedEvent,
+  ValueFormatterParams,
+  ValueGetterParams
+} from 'ag-grid-community';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {CellCandidateNameComponent} from '../../../components/cell-candidate-name/cell-candidate-name.component';
-import {CellCandidateContactsComponent} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
+import {
+  CellCandidateContactsComponent
+} from '../../../components/cell-candidate-contacts/cell-candidate-contacts.component';
 import {ApplicantView} from '../../../models/Applicant';
 import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes} from '../user-consts';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
-import {Subscription, switchMap} from 'rxjs';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-candidate-list',
@@ -36,13 +46,12 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
   styleUrl: './candidate-list.component.scss',
 })
 export class СandidateListComponent implements OnDestroy{
-  // фильтр
   filterForm = new FormGroup({
     added_day: new FormControl(''),
     added_period: new FormControl<ModelsApAddedPeriodType | undefined>(undefined),
     added_type: new FormControl<ModelsAddedType | undefined>(undefined),
-    age_from: new FormControl(0, {nonNullable: true}),
-    age_to: new FormControl(0, {nonNullable: true}),
+    age_from: new FormControl<number | null>(null, { validators: [this.validatePositiveNumber] }),
+    age_to: new FormControl<number | null>(null, { validators: [this.validatePositiveNumber] }),
     city: new FormControl('', {nonNullable: true}),
     gender: new FormControl<ModelsGenderType | undefined>(undefined),
     language: new FormControl(''),
@@ -53,8 +62,8 @@ export class СandidateListComponent implements OnDestroy{
     stage_name: new FormControl(''),
     status: new FormControl<ModelsApplicantStatus | undefined>(undefined),
     tag: new FormControl(''),
-    total_experience_from: new FormControl(0, {nonNullable: true}),
-    total_experience_to: new FormControl(0, {nonNullable: true}),
+    total_experience_from: new FormControl<number | null>(null, { validators: [this.validatePositiveNumber] }),
+    total_experience_to: new FormControl<number | null>(null, { validators: [this.validatePositiveNumber] }),
     vacancy_id: new FormControl('', {nonNullable: true}),
     vacancy_name: new FormControl(''),
   });
@@ -161,13 +170,12 @@ export class СandidateListComponent implements OnDestroy{
     },
     suppressScrollOnNewData: true
   }
-  private searchSubscription: Subscription = new Subscription();
+
   private currentPage = 1;
   private pageSize = 50;
-  private loading = false;
+  private isLoading = false;
   private allDataLoaded = false;
-
-  private destroyRef = inject(DestroyRef);
+  private destroy$ = new Subject<void>();
 
   constructor(
     private modalService: CandidateModalService,
@@ -178,25 +186,22 @@ export class СandidateListComponent implements OnDestroy{
 
   onGridReady(params: GridReadyEvent) {
     this.activatedRoute.queryParams
-      .pipe(takeUntilDestroyed(this.destroyRef)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
-      if (params['type'] === 'create') {
-        this.openAddApplicantModal();
-        this.router.navigate([], { queryParams: {}, replaceUrl: true, relativeTo: this.activatedRoute });
-      }
-    });
+        if (params['type'] === 'create') {
+          this.openAddApplicantModal();
+          this.router.navigate([], { queryParams: {}, replaceUrl: true, relativeTo: this.activatedRoute });
+        }
+      });
 
     this.gridApi = params.api;
-
     this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
-
     this.getApplicants();
     this.setFormListeners();
   }
 
   onGridScroll = (event: any) => {
-    if (this.loading || this.allDataLoaded) return;
+    if (this.isLoading || this.allDataLoaded) return;
 
     const api = event.api;
     const lastVisibleRow = api.getLastDisplayedRowIndex();
@@ -206,8 +211,6 @@ export class СandidateListComponent implements OnDestroy{
       this.getApplicants(true);
     }
   }
-
-
 
   onCellClicked(event: CellClickedEvent) {
     if (event.colDef.field !== 'status' && event.colDef.colId !== 'ag-Grid-ControlsColumn')
@@ -220,84 +223,94 @@ export class СandidateListComponent implements OnDestroy{
   }
 
   getApplicants(loadMore = false) {
-    if (this.loading || this.allDataLoaded) return;
+    if (this.isLoading) return;
+    if (this.allDataLoaded && loadMore) return;
 
-    this.loading = true;
+    if (!this.filterForm.valid) return;
+
+    this.isLoading = true;
 
     if (!loadMore) {
       this.currentPage = 1;
       this.applicantsList = [];
       this.allDataLoaded = false;
       this.gridApi.setGridOption('loading', true);
+      this.gridApi.setGridOption('rowData', []);
     }
 
-    const filter = this.filterForm.value as ApplicantapimodelsApplicantFilter;
+    const filter = { ...this.filterForm.value } as ApplicantapimodelsApplicantFilter;
+
+    filter.age_from = filter.age_from || undefined;
+    filter.age_to = filter.age_to || undefined;
+    filter.total_experience_from = filter.total_experience_from || undefined;
+    filter.total_experience_to = filter.total_experience_to || undefined;
+
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
 
     this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'})
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: (res) => {
-        if (res.body?.data) {
-          const newApplicants = res.body.data.map(
-            (applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant)
-          );
+        next: (res) => {
+          if (res.body?.data) {
+            const newApplicants = res.body.data.map(
+              (applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant)
+            );
 
-          this.applicantsList = [...this.applicantsList, ...newApplicants];
-          this.gridApi.setGridOption('rowData', this.applicantsList);
+            this.applicantsList = [...this.applicantsList, ...newApplicants];
+            this.gridApi.setGridOption('rowData', this.applicantsList);
 
-          if (newApplicants.length < this.pageSize) {
-            this.allDataLoaded = true;
-          } else {
-            this.currentPage++;
+            if (newApplicants.length < this.pageSize) {
+              this.allDataLoaded = true;
+            } else {
+              this.currentPage++;
+            }
           }
+          this.gridApi.setGridOption('loading', false);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.gridApi.setGridOption('loading', false);
+          this.isLoading = false;
         }
-        this.gridApi.setGridOption('loading', false);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.gridApi.setGridOption('loading', false);
-        this.loading = false;
-      }
-    });
+      });
   }
 
   getVacancyList(search: string) {
     const filter = {search} as VacancyapimodelsVacancyFilter;
     this.api.v1SpaceVacancyListCreate(filter, {observe: 'response'})
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy));
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+        next: (data) => {
+          if (data.body?.data) {
+            this.vacancyList = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => new VacancyView(vacancy));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   getCities(address: string) {
     this.api.v1DictCityFindCreate({address}, {observe: 'response'})
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: (data) => {
-        if (data.body?.data) {
-          this.cities = data.body.data;
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+        next: (data) => {
+          if (data.body?.data) {
+            this.cities = data.body.data;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   setFormListeners() {
     this.searchVacancy.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.vacancy_id.value !== '')
           this.filterForm.controls.vacancy_id.setValue('');
@@ -306,8 +319,9 @@ export class СandidateListComponent implements OnDestroy{
         else
           this.vacancyList = [];
       });
+
     this.searchCity.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(700), distinctUntilChanged())
+      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged())
       .subscribe((newValue) => {
         if (this.filterForm.controls.city.value !== '')
           this.filterForm.controls.city.setValue('');
@@ -318,52 +332,65 @@ export class СandidateListComponent implements OnDestroy{
       });
 
     this.filterForm.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(200), distinctUntilChanged())
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+      )
       .subscribe(() => {
-        this.getApplicants()
+        if (this.filterForm.valid) {
+          this.allDataLoaded = false;
+          this.isLoading = false;
+          this.currentPage = 1;
+          this.applicantsList = [];
+          this.gridApi.setGridOption('loading', true);
+          this.gridApi.setGridOption('rowData', []);
+          this.getApplicants();
+        }
       });
 
-    this.searchSubscription = this.searchValue.valueChanges
+    this.searchValue.valueChanges
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
+        takeUntil(this.destroy$),
         debounceTime(300),
         distinctUntilChanged()
       )
       .subscribe(value => {
         this.filterForm.controls.search.setValue(value);
         this.allDataLoaded = false;
+        this.isLoading = false;
         this.currentPage = 1;
         this.applicantsList = [];
         this.gridApi.setGridOption('loading', true);
+        this.gridApi.setGridOption('rowData', []);
         this.getApplicants();
       });
-
   }
 
   openRejectCandidateModal(applicants: ApplicantView | ApplicantView[]) {
     if (!Array.isArray(applicants))
       applicants = [applicants];
     this.modalService.rejectCandidateModal(applicants)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() =>
-      this.getApplicants()
-    );
+        this.getApplicants()
+      );
   }
 
   openChangeStageModal(applicants: ApplicantView[]) {
     this.modalService.changeStageModal(applicants)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() =>
-      this.getApplicants()
-    );
+        this.getApplicants()
+      );
   }
 
   openAddApplicantModal() {
     this.modalService.addCandidateModal()
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() =>
-      this.getApplicants()
-    );
+        this.getApplicants()
+      );
   }
 
   exportXls() {
@@ -372,26 +399,33 @@ export class СandidateListComponent implements OnDestroy{
       ids: this.selectedApplicants.map((applicant: ApplicantView) => applicant.id)
     };
     this.api.v1SpaceApplicantMultiActionsExportXlsUpdate(request, {observe: 'response', responseType: 'blob'})
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: (data) => {
-        if (data.body) {
-          const blob = new Blob([data.body], {type: 'application/octet-stream'});
+        next: (data) => {
+          if (data.body) {
+            const blob = new Blob([data.body], {type: 'application/octet-stream'});
 
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = 'Кандидаты.xlsx';
-          link.click();
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Кандидаты.xlsx';
+            link.click();
+          }
+        },
+        error: (error) => {
+          console.log(error);
         }
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+      });
   }
 
   onSearch() {
     this.filterForm.controls.search.setValue(this.searchValue.value);
+    this.allDataLoaded = false;
+    this.isLoading = false;
+    this.currentPage = 1;
+    this.applicantsList = [];
+    this.gridApi.setGridOption('loading', true);
+    this.gridApi.setGridOption('rowData', []);
+    this.getApplicants();
   }
 
   onReset() {
@@ -399,15 +433,36 @@ export class СandidateListComponent implements OnDestroy{
     this.searchCity.reset();
     this.searchVacancy.reset();
     this.searchValue.reset();
+    this.allDataLoaded = false;
+    this.isLoading = false;
+    this.currentPage = 1;
+    this.applicantsList = [];
+    this.gridApi.setGridOption('loading', true);
+    this.gridApi.setGridOption('rowData', []);
+    this.getApplicants();
+  }
+
+  validatePositiveNumber(control: AbstractControl) {
+    const value = control.value;
+
+    if (value === null || value === '') {
+      return null;
+    }
+
+    const numValue = Number(value);
+    if (isNaN(numValue) || numValue < 0) {
+      return { invalidNumber: true };
+    }
+
+    return null;
   }
 
   ngOnDestroy(): void {
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
+
     if (this.gridApi && !this.gridApi.isDestroyed()) {
       this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }
   }
-
 }

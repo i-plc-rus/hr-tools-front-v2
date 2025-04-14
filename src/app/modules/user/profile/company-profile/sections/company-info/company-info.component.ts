@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {SnackBarService} from '../../../../../../services/snackbar.service';
+import {TIMEZONES} from './timezones';
 
 @Component({
   selector: 'app-company-info',
@@ -17,7 +18,7 @@ export class CompanyInfoComponent implements OnInit {
   };
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-
+  timezones = TIMEZONES;
   constructor(private fb: FormBuilder,
               private api: ApiService,
               private cdr: ChangeDetectorRef,

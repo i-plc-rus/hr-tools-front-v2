@@ -31,6 +31,7 @@ import {CommunicationsComponent} from './profile/company-profile/sections/commun
 import {
   CompanyTemplatesComponent
 } from './profile/company-profile/sections/company-templates/company-templates.component';
+import {AnalyticsComponent} from './analytics/analytics.component';
 
 export const routes: Routes = [
   {
@@ -153,7 +154,7 @@ export const routes: Routes = [
       },
       {
         path: 'analytics',
-        component: DevelopmentComponent,
+        component: AnalyticsComponent,
       },
       {
         path: 'profile',

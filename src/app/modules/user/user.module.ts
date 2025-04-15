@@ -112,6 +112,7 @@ import {
   LicenseExtensionModalComponent
 } from './profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 import {DevelopmentComponent} from "../../components/development/development.component";
+import {AnalyticsComponent} from './analytics/analytics.component';
 
 @NgModule({
   declarations: [
@@ -166,7 +167,8 @@ import {DevelopmentComponent} from "../../components/development/development.com
     EditMemberModalComponent,
     GenerateSurveyModalComponent,
     AddMemberModalComponent,
-    LicenseExtensionModalComponent
+    LicenseExtensionModalComponent,
+    AnalyticsComponent
   ],
     imports: [
         CommonModule,

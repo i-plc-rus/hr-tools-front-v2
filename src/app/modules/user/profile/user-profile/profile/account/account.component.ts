@@ -22,8 +22,10 @@ export class AccountComponent implements OnInit {
     first_name: new FormControl('', [Validators.required]),
     job_title_name: new FormControl(''),
     job_title_id: new FormControl(''),
-    phone_number: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    phone_number: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]{10,15}$')
+    ]),    email: new FormControl('', [Validators.required, Validators.email]),
     internal_phone_number: new FormControl('', [Validators.min(0)]),
     text_sign: new FormControl(''),
     use_personal_sign: new FormControl(false)
@@ -369,4 +371,13 @@ export class AccountComponent implements OnInit {
   private handleSuccessfulAction(message: string): void {
     this.snackBar.snackBarMessageSuccess(message)
   }
+  onPhoneNumberInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input) {
+      input.value = input.value.replace(/[^0-9+]/g, '');
+    }
+  }
+
+
+
 }

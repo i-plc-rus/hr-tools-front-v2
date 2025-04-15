@@ -7,7 +7,7 @@
 
       <ng-template #noPhoto>
         <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
-          <mat-icon svgIcon="add-a-photo" class="text-gray-500 text-2xl"></mat-icon>
+          <mat-icon class="text-[var(--link-default)]" svgIcon="add-a-photo" />
         </div>
       </ng-template>
 
@@ -31,19 +31,31 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Часовой пояс</mat-label>
-      <input matInput formControlName="timezone">
+      <mat-select formControlName="timezone">
+        <mat-option *ngFor="let timezone of timezones" [value]="timezone">
+          {{ timezone }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </div>
 
   <!-- Описание компании -->
   <div class="mt-4 w-full">
     <mat-label>Описание компании</mat-label>
-    <quill-editor formControlName="description" [modules]="quillConfig" placeholder="Введите описание компании..." class="w-full h-60"></quill-editor>
+    <app-text-editor
+      formControlName="description"
+      placeholder="Введите описание компании..."
+      class="w-full h-60"
+    ></app-text-editor>
   </div>
 
-  <p class="text-gray-500 text-sm mt-2">
-    Этот текст будет опубликован на карьерной странице вашей компании. Постарайтесь кратко написать о том, чем занимается ваша компания и почему в ней классно работать.
-  </p>
+
+      <div class="license-info mt-6">
+        <span>
+          Этот текст будет опубликован на карьерной странице вашей компании. Постарайтесь кратко написать о том, чем занимается ваша компания
+          <br>и почему в ней классно работать.
+        </span>
+      </div>
 
   <div class="mt-4">
     <button mat-flat-button class="btn-primary" (click)="saveCompanySettings()" [disabled]="companyForm.pristine || companyForm.invalid">

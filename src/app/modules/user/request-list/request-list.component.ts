@@ -260,10 +260,10 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(value => {
         this.filterForm.controls.search.setValue(value);
-        this.allDataLoaded = false;
-        this.currentPage = 1;
-        this.requestList = [];
-        this.getRequests();
+        // this.allDataLoaded = false;
+        // this.currentPage = 1;
+        // this.requestList = [];
+        // this.getRequests();
       });
 
 

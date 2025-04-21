@@ -45,4 +45,5 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
 }

@@ -77,6 +77,7 @@ import {
   SpaceapimodelsProfileData,
   SpaceapimodelsPushSettingData,
   SpaceapimodelsPushSettings,
+  SpaceapimodelsSalesRequest,
   SpaceapimodelsSpaceSettingView,
   SpaceapimodelsSpaceUser,
   SpaceapimodelsSpaceUserFilter,
@@ -85,6 +86,10 @@ import {
   SpaceapimodelsUpdateSpaceSettingValue,
   SpaceapimodelsUpdateUser,
   SupersetapimodelsGuestTokenResponse,
+  SurveyapimodelsApplicantSurveyResponses,
+  SurveyapimodelsApplicantSurveyView,
+  SurveyapimodelsHRSurvey,
+  SurveyapimodelsHRSurveyView,
   VacancyapimodelsApprovalStages,
   VacancyapimodelsExtVacancyInfo,
   VacancyapimodelsPersonFilter,
@@ -1852,6 +1857,81 @@ export class ApiService {
   ): Observable<HttpResponse<void> | void> {
     return this.http.request<void>("GET", this.baseUrl + `/api/v1/organizations/suggest`, {
       params: query,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получение анкеты
+   *
+   * @tags Анкета кандидата
+   * @name V1PublicSurveyDetail
+   * @summary Получение анкеты
+   * @request GET:/api/v1/public/survey/{id}
+   */
+  public v1PublicSurveyDetail(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: SurveyapimodelsApplicantSurveyView;
+    }
+  >;
+  public v1PublicSurveyDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsApplicantSurveyView;
+      }
+    >
+  >;
+  public v1PublicSurveyDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SurveyapimodelsApplicantSurveyView;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SurveyapimodelsApplicantSurveyView;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsApplicantSurveyView;
+      }
+    >("GET", this.baseUrl + `/api/v1/public/survey/${id}`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Сохранение ответов
+   *
+   * @tags Анкета кандидата
+   * @name V1PublicSurveyUpdate
+   * @summary Сохранение ответов
+   * @request PUT:/api/v1/public/survey/{id}
+   */
+  public v1PublicSurveyUpdate(
+    id: string,
+    body: SurveyapimodelsApplicantSurveyResponses,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1PublicSurveyUpdate(
+    id: string,
+    body: SurveyapimodelsApplicantSurveyResponses,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1PublicSurveyUpdate(
+    id: string,
+    body: SurveyapimodelsApplicantSurveyResponses,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/public/survey/${id}`, {
+      body: body,
       ...(options as unknown as { observe: "response" }),
     });
   }
@@ -4068,6 +4148,31 @@ export class ApiService {
     });
   }
   /**
+   * @description Отправка заявки на связь с отделом продаж
+   *
+   * @tags Профиль организации
+   * @name V1SpaceProfileSendLicenseRequestUpdate
+   * @summary Отправка заявки на связь с отделом продаж
+   * @request PUT:/api/v1/space/profile/send_license_request
+   */
+  public v1SpaceProfileSendLicenseRequestUpdate(
+    body: SpaceapimodelsSalesRequest,
+    options?: RequestOptions,
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceProfileSendLicenseRequestUpdate(
+    body: SpaceapimodelsSalesRequest,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceProfileSendLicenseRequestUpdate(
+    body: SpaceapimodelsSalesRequest,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/profile/send_license_request`, {
+      body: body,
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
    * @description Список настроек
    *
    * @tags Настройки space
@@ -4642,6 +4747,104 @@ export class ApiService {
         data?: VacancyapimodelsSelectionStageView[];
       }
     >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/stage/list`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Получение анкеты HR (генерация, в случае отсутствия)
+   *
+   * @tags Анкета HR по вакансии
+   * @name V1SpaceVacancySurveyDetail
+   * @summary Получение анкеты HR (генерация, в случае отсутствия)
+   * @request GET:/api/v1/space/vacancy/{id}/survey
+   */
+  public v1SpaceVacancySurveyDetail(
+    id: string,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: SurveyapimodelsHRSurveyView;
+    }
+  >;
+  public v1SpaceVacancySurveyDetail(
+    id: string,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      }
+    >
+  >;
+  public v1SpaceVacancySurveyDetail(
+    id: string,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SurveyapimodelsHRSurveyView;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      }
+    >("GET", this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
+      ...(options as unknown as { observe: "response" }),
+    });
+  }
+  /**
+   * @description Сохранение анкеты HR (перегенерация вопросов в случае если вопрос не подходит)
+   *
+   * @tags Анкета HR по вакансии
+   * @name V1SpaceVacancySurveyCreate
+   * @summary Сохранение анкеты HR (перегенерация вопросов в случае если вопрос не подходит)
+   * @request POST:/api/v1/space/vacancy/{id}/survey
+   */
+  public v1SpaceVacancySurveyCreate(
+    id: string,
+    body: SurveyapimodelsHRSurvey,
+    options?: RequestOptions,
+  ): Observable<
+    ApimodelsResponse & {
+      data?: SurveyapimodelsHRSurveyView;
+    }
+  >;
+  public v1SpaceVacancySurveyCreate(
+    id: string,
+    body: SurveyapimodelsHRSurvey,
+    options?: RequestOptions & { observe: "response" },
+  ): Observable<
+    HttpResponse<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      }
+    >
+  >;
+  public v1SpaceVacancySurveyCreate(
+    id: string,
+    body: SurveyapimodelsHRSurvey,
+    options: RequestOptions & { observe: "response" } = { observe: "response" },
+  ): Observable<
+    | HttpResponse<
+        ApimodelsResponse & {
+          data?: SurveyapimodelsHRSurveyView;
+        }
+      >
+    | (ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      })
+  > {
+    return this.http.request<
+      ApimodelsResponse & {
+        data?: SurveyapimodelsHRSurveyView;
+      }
+    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
+      body: body,
       ...(options as unknown as { observe: "response" }),
     });
   }

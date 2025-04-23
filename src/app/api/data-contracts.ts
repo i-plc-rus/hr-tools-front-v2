@@ -202,6 +202,19 @@ export interface ApplicantapimodelsApplicantSourceData {
   total_source?: ApplicantapimodelsSourceData;
 }
 
+export interface ApplicantapimodelsApplicantSurvey {
+  /** Порог адаптивного фильтра */
+  hrThreshold?: number;
+  /** Анкета заполнена кандидатом и может использоваться для оценки */
+  isFilledOut?: boolean;
+  /** Анкета получила оценку от нейросети */
+  isScored?: boolean;
+  /** Итоговая оцена кандидата */
+  score?: number;
+  /** Ссылка на анкету для кандидата */
+  url?: string;
+}
+
 export interface ApplicantapimodelsApplicantView {
   /** Дата добавления */
   accept_date?: string;
@@ -257,6 +270,8 @@ export interface ApplicantapimodelsApplicantView {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
+  /** анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantSurvey;
   /** Опыт работ в месяцах */
   total_experience?: number;
   /** Идентификатор вакансии */
@@ -324,6 +339,8 @@ export interface ApplicantapimodelsApplicantViewExt {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
+  /** анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantSurvey;
   tags?: string[];
   /** Опыт работ в месяцах */
   total_experience?: number;
@@ -420,6 +437,7 @@ export enum DbmodelsActionType {
   HistoryTypeArchive = "archive",
   HistoryTypeReject = "reject",
   HistoryTypeEmail = "reject",
+  HistoryAIScore = "ai_score",
 }
 
 export interface DbmodelsApplicantChange {
@@ -455,6 +473,39 @@ export interface DbmodelsApplicantParams {
   search_status?: ModelsSearchStatusType;
   /** Готовность к командировкам */
   trip_readiness?: ModelsTripReadinessType;
+}
+
+export interface DbmodelsApplicantSurveyQuestion {
+  /** Варианты ответов */
+  answers?: string[];
+  /** Комментарий */
+  comment?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Тип вопроса */
+  question_type?: string;
+  /** Ответ кандидата */
+  selected?: string;
+  weight?: number;
+}
+
+export interface DbmodelsHRSurveyQuestion {
+  /** Варианты ответов */
+  answers?: DbmodelsSurveyAnswers[];
+  /** Комментарий */
+  comment?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Тип вопроса */
+  question_type?: string;
+  /** Выбранный ответ */
+  selected?: string;
+  /** Вес вопроса, заполняется автоматически */
+  weight?: number;
 }
 
 export interface DbmodelsLanguage {
@@ -505,6 +556,10 @@ export interface DbmodelsNegotiationFilter {
   trip_readiness?: ModelsTripReadinessType;
   /** идентификатор вакансии */
   vacancy_id?: string;
+}
+
+export interface DbmodelsSurveyAnswers {
+  value?: string;
 }
 
 export interface DictapimodelsCityData {
@@ -1048,6 +1103,11 @@ export interface SpaceapimodelsPushSettings {
   settings?: SpaceapimodelsPushSettingView[];
 }
 
+export interface SpaceapimodelsSalesRequest {
+  /** Текст заявки */
+  text?: string;
+}
+
 export interface SpaceapimodelsSpaceSettingView {
   /** Код настройки */
   code?: ModelsSpaceSettingCode;
@@ -1173,6 +1233,33 @@ export interface SupersetapimodelsGuestTokenResponse {
   dashboard_id?: string;
   /** Гостевой токен */
   token?: string;
+}
+
+export interface SurveyapimodelsApplicantSurveyAnswer {
+  /** Ответ кандидата */
+  answer?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+}
+
+export interface SurveyapimodelsApplicantSurveyResponses {
+  responses?: SurveyapimodelsApplicantSurveyAnswer[];
+}
+
+export interface SurveyapimodelsApplicantSurveyView {
+  /** "анкета полностью заполнена" */
+  is_filled_out?: boolean;
+  questions?: DbmodelsApplicantSurveyQuestion[];
+}
+
+export interface SurveyapimodelsHRSurvey {
+  questions?: DbmodelsHRSurveyQuestion[];
+}
+
+export interface SurveyapimodelsHRSurveyView {
+  /** "анкета полностью заполнена" */
+  is_filled_out?: boolean;
+  questions?: DbmodelsHRSurveyQuestion[];
 }
 
 export interface VacancyapimodelsApprovalStageData {
@@ -1540,6 +1627,8 @@ export interface VacancyapimodelsVacancyRequestView {
   /** ид штатной должности */
   job_title_id?: string;
   job_title_name?: string;
+  /** кол-во вакансий открытых по заявке */
+  open_vacancies?: number;
   /** кол-во открытых позиций */
   opened_positions?: number;
   /** внешнее взаимодействие */

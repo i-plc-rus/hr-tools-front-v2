@@ -20,7 +20,8 @@ export class EditMemberModalComponent implements OnInit{
     private modalService: UsersModalService
   ) {
     this.memberForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+      ]],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],

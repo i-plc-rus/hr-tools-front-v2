@@ -27,9 +27,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Телефон</mat-label>
           <input matInput formControlName="phone_number"
-                 mask="(000) 000 00 00"
-                 prefix="+7"
-                 placeholder="(XXX) XXX XX XX" />
+                 placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00">
           <mat-error *ngIf="memberForm.get('phone_number')?.hasError('pattern') && !memberForm.get('phone_number')?.pristine">
             Неверный формат телефона.
           </mat-error>

@@ -1,15 +1,32 @@
-<mat-tab-group class="mt-4 mb-2" mat-stretch-tabs="false" mat-align-tabs="start"
-               [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
-  <mat-tab label="Профиль" ></mat-tab>
-  <mat-tab label="Участники"></mat-tab>
-  <mat-tab label="Интеграция с сервисами"></mat-tab>
-  <mat-tab label="Просмотр справочников"></mat-tab>
-  <mat-tab label="Почта, календарь, видеоконференции"></mat-tab>
-  <mat-tab label="Шаблоны компании"></mat-tab>
-</mat-tab-group>
+<div class="flex items-center justify-between border-b px-4 pt-4 bg-white">
+  <mat-tab-group class="flex-1"
+                 mat-stretch-tabs="false"
+                 mat-align-tabs="start"
+                 [(selectedIndex)]="selectedIndex"
+                 (selectedIndexChange)="onTabChange($event)">
+    <mat-tab label="Профиль"></mat-tab>
+    <mat-tab label="Участники"></mat-tab>
+    <mat-tab label="Интеграция с сервисами"></mat-tab>
+    <mat-tab label="Просмотр справочников"></mat-tab>
+    <mat-tab label="Почта, календарь, видеоконференции"></mat-tab>
+    <mat-tab label="Шаблоны компании"></mat-tab>
+  </mat-tab-group>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-2">
+    <mat-icon>more_horiz</mat-icon>
+  </button>
+</div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Шаблоны офферов</button>
+  <button mat-menu-item>Настройка списка кандидата</button>
+  <button mat-menu-item>Генерация токенов</button>
+  <button mat-menu-item>Продление и покупка лицензий</button>
+  <button mat-menu-item>ИИ-помощник</button>
+</mat-menu>
 
 <app-loading-wrapper [isLoading]="loadingService.getLoading()">
-<div class="flex-1 overflow-auto">
-  <router-outlet></router-outlet>
-</div>
+  <div class="flex-1 overflow-auto p-4">
+    <router-outlet></router-outlet>
+  </div>
 </app-loading-wrapper>

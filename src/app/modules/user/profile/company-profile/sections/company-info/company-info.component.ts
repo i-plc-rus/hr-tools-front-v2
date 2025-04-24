@@ -4,6 +4,7 @@ import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {SnackBarService} from '../../../../../../services/snackbar.service';
 import {TIMEZONES} from './timezones';
+import {first} from 'rxjs';
 
 @Component({
   selector: 'app-company-info',
@@ -138,11 +139,18 @@ export class CompanyInfoComponent implements OnInit {
         description: responseBody.data.description || ''
       });
 
-      this.cdr.detectChanges();
-      this.loadingService.setLoading(false)
+      this.companyForm.get('description')?.valueChanges
+        .pipe(first())
+        .subscribe(() => {
+          this.companyForm.get('description')?.markAsPristine();
+        });
 
+      this.companyForm.markAsPristine();
+
+      this.cdr.detectChanges();
+      this.loadingService.setLoading(false);
     } else {
-      this.snackBar.snackBarMessageWarning('Нет данных')
+      this.snackBar.snackBarMessageWarning('Нет данных');
     }
   }
 

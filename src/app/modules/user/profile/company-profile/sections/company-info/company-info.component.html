@@ -2,11 +2,11 @@
 <div class="flex justify-between items-center mt-6">
   <div class="flex items-center gap-4">
     <!-- Контейнер для фото -->
-    <div class="photo-upload relative cursor-pointer w-20 h-20 rounded-full overflow-hidden mb-2" (click)="triggerFileInput()">
+    <div class="photo-upload relative cursor-pointer w-14 h-14 rounded-full overflow-hidden mb-2" (click)="triggerFileInput()">
       <img *ngIf="companyLogoPreview; else noPhoto" [src]="companyLogoPreview" alt="Логотип компании" class="w-full h-full object-cover">
 
       <ng-template #noPhoto>
-        <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
+        <div class="w-full h-full flex items-center justify-center bg-[var(--background-main)] rounded-full">
           <mat-icon class="text-[var(--link-default)]" svgIcon="add-a-photo" />
         </div>
       </ng-template>
@@ -49,8 +49,8 @@
     ></app-text-editor>
   </div>
 
-
-      <div class="license-info mt-6">
+  <div class="license-info mt-6"
+       style="display: inline-flex; align-items: center; padding-right: 80px;">
         <span>
           Этот текст будет опубликован на карьерной странице вашей компании. Постарайтесь кратко написать о том, чем занимается ваша компания
           <br>и почему в ней классно работать.

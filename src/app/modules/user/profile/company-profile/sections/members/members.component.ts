@@ -88,10 +88,12 @@ export class MembersComponent implements OnInit, OnDestroy {
     unSortIcon: true
   };
 
+  rowCount= 0
   private currentPage = 1;
   private pageSize = 50;
   private loading = false;
   private allDataLoaded = false;
+
 
   private destroyRef = inject(DestroyRef);
 
@@ -143,6 +145,8 @@ export class MembersComponent implements OnInit, OnDestroy {
           const newParticipants = res.body.data;
           this.participants = [...this.participants, ...newParticipants];
           this.gridApi.setGridOption('rowData', this.participants);
+
+          this.rowCount = res.body?.row_count ?? this.rowCount;
 
           if (newParticipants.length < this.pageSize) {
             this.allDataLoaded = true;

@@ -296,8 +296,11 @@
                 class="btn-primary" (click)="goToNextStep()">Продолжить</button>
         }
         @if(isLastStep && status !== 'Согласована') {
-          <button mat-flat-button   class="btn-secondary-red" (click)="rejectClaim()" class="btn-danger">Отклонить</button>
-          <button mat-flat-button  class="btn-primary" (click)="approveClaim()">Согласовать</button>
+          <div class="flex gap-4">
+            <button mat-flat-button class="btn-secondary-red" (click)="rejectClaim()">Отклонить</button>
+            <button mat-flat-button class="btn-primary" (click)="approveClaim()">Согласовать</button>
+          </div>
+
         }
         @if(isLastStep && status === 'Согласована') {
           <button mat-flat-button class="btn-primary" (click)="createVacancy()">Создать вакансию</button>

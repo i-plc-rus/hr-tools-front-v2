@@ -106,7 +106,7 @@
       mat-flat-button
       class="btn-primary"
       (click)="saveProfile()"
-      [disabled]="profileForm.pristine || profileForm.invalid">
+      [disabled]="profileForm.invalid || profileForm.pristine ">
       Сохранить
     </button>
 

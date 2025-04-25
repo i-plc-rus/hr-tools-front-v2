@@ -67,9 +67,12 @@
       <mat-expansion-panel class="mat-elevation-z">
         <mat-expansion-panel-header>Дата создания</mat-expansion-panel-header>
         <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="search_period">
-          @for (searchPeriodType of searchPeriodTypes; track $index) {
-            <mat-chip-option [value]="searchPeriodType.value">{{ searchPeriodType.label }}</mat-chip-option>
-          }
+          <mat-chip-option
+            *ngFor="let searchPeriodType of searchPeriodTypes; trackBy: trackByValue"
+            [value]="searchPeriodType.value"
+            (click)="onSearchPeriodClick(searchPeriodType.value)">
+            {{ searchPeriodType.label }}
+          </mat-chip-option>
         </mat-chip-listbox>
         <mat-form-field class="w-full mt-2" appearance="outline" floatLabel="always">
           <mat-label>Введите диапазон дат</mat-label>

@@ -39,6 +39,7 @@ import {SnackBarService} from '../../../../../services/snackbar.service';
 export class ChangePasswordModalComponent implements OnInit {
   @Input() user?: SpaceUser;
   onSubmit = new EventEmitter<boolean>();
+
   isLoading = false;
   currentPasswordError: string | null = null;
 
@@ -59,46 +60,42 @@ export class ChangePasswordModalComponent implements OnInit {
   constructor(
     private modalService: UsersModalService,
     private api: ApiService,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
   ) {}
 
   ngOnInit() {
-    console.log('Форма создана:', this.user);
   }
 
-  savePassword() {
-    if (this.changePasswordForm.valid) {
-      const currentPassword = this.changePasswordForm.get('currentPassword')?.value ?? '';
-      const newPassword = this.changePasswordForm.get('newPassword')?.value ?? '';
-
-      this.isLoading = true;
-      this.currentPasswordError = null;
-
-      const requestBody: SpaceapimodelsPasswordChange = {
-        current_password: currentPassword,
-        new_password: newPassword,
-      };
-
-      this.api.v1UserProfileChangePasswordUpdate(requestBody).subscribe({
-        next: () => {
-          this.isLoading = false;
-          this.snackBarService.snackBarMessageSuccess('Пароль успешно изменён!')
-          this.closeModal();
-        },
-        error: (error) => {
-          console.error('Ошибка изменения пароля:', error);
-          this.isLoading = false;
-          this.currentPasswordError =
-            'Текущий пароль указан неверно.';
-        },
-      });
-    } else {
-      console.error('Форма не валидна:', this.changePasswordForm);
+  savePassword(): void {
+    if (this.changePasswordForm.invalid) {
+      return;
     }
+
+    const currentPassword = this.changePasswordForm.get('currentPassword')?.value ?? '';
+    const newPassword = this.changePasswordForm.get('newPassword')?.value ?? '';
+
+    this.isLoading = true;
+    this.currentPasswordError = null;
+
+    const requestBody: SpaceapimodelsPasswordChange = {
+      current_password: currentPassword,
+      new_password: newPassword,
+    };
+
+    this.api.v1UserProfileChangePasswordUpdate(requestBody).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.snackBarService.snackBarMessageSuccess('Пароль успешно изменён!');
+        this.closeModal();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.currentPasswordError = 'Текущий пароль указан неверно.';
+      }
+    });
   }
 
-
-  closeModal() {
+  closeModal(): void {
     this.modalService.closeModal();
   }
 }

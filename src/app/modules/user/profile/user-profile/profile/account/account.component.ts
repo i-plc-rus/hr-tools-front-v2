@@ -6,7 +6,7 @@ import {SpaceapimodelsSpaceUserProfileView} from '../../../../../../api/data-con
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {SnackBarService} from '../../../../../../services/snackbar.service';
-import {forkJoin, of} from 'rxjs';
+import {first, forkJoin, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 @Component({
@@ -25,8 +25,11 @@ export class AccountComponent implements OnInit {
     phone_number: new FormControl('', [
       Validators.required,
       Validators.pattern('^[0-9]{10,15}$')
-    ]),    email: new FormControl('', [Validators.required, Validators.email]),
-    internal_phone_number: new FormControl('', [Validators.min(0)]),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    ]),    internal_phone_number: new FormControl('', [Validators.min(0)]),
     text_sign: new FormControl(''),
     use_personal_sign: new FormControl(false)
   });
@@ -57,6 +60,8 @@ export class AccountComponent implements OnInit {
       }
     });
   }
+
+
 
   private loadCachedJobTitles(): void {
     try {
@@ -235,8 +240,16 @@ export class AccountComponent implements OnInit {
   private handleUserResponse(response: any): void {
     const user = this.extractUserData(response);
     if (!user) return;
+
     this.userId = user.id || null;
     this.updateProfileForm(user);
+
+    this.profileForm.get('text_sign')?.valueChanges
+      .pipe(first())
+      .subscribe(() => {
+        this.profileForm.get('text_sign')?.markAsPristine();
+      });
+
     this.loadingService.setLoading(false);
 
     if (user.job_title_name) {
@@ -251,7 +264,9 @@ export class AccountComponent implements OnInit {
     }
 
     this.profileForm.markAsPristine();
+    Object.values(this.profileForm.controls).forEach(control => control.markAsPristine());
   }
+
 
   private handleProfileResponse(): void {
     this.profileForm.markAsPristine();
@@ -279,7 +294,11 @@ export class AccountComponent implements OnInit {
       text_sign: user.text_sign,
       use_personal_sign: user.use_personal_sign
     });
+
+    this.profileForm.markAsPristine();
+    Object.values(this.profileForm.controls).forEach(control => control.markAsPristine());
   }
+
 
   private getUserUpdateData(): any {
     const formData = this.profileForm.value;

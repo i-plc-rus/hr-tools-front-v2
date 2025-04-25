@@ -130,38 +130,30 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.favoritesCount = 0;
     }
 
-    let searchPeriod = this.filterForm.controls.search_period.value;
-    if ((this.filterForm.controls.search_from.value || this.filterForm.controls.search_to.value) &&
-      !searchPeriod) {
-      searchPeriod = VacancyapimodelsSearchPeriod.SearchByPeriod;
+    const formValues = this.filterForm.getRawValue();
+
+    const isPeriodSearch = formValues.search_period === VacancyapimodelsSearchPeriod.SearchByPeriod;
+
+    if (isPeriodSearch && (!formValues.search_from || !formValues.search_to)) {
+      this.snackBarService.snackBarMessageError('Пожалуйста, укажите начало и конец периода');
+      return;
     }
-
-    const rawFilter = {
-      author_id: this.filterForm.controls.author_id.value ?? '',
-      city_id: this.filterForm.controls.city_id.value ?? '',
-      favorite: this.filterForm.controls.favorite.value ?? undefined,
-      search: this.filterForm.controls.search.value ?? '',
-      search_from: this.filterForm.controls.search_from.value ?? '',
-      search_to: this.filterForm.controls.search_to.value ?? '',
-      search_period: searchPeriod || undefined,
-      selection_type: this.filterForm.controls.selection_type.value ?? undefined,
-      sort: this.filterForm.controls.sort.value ?? {created_at_desc: this.sortByDesc},
-      statuses: this.filterForm.controls.statuses.value ?? [],
-    };
-
     const filter: VacancyapimodelsVrFilter = {
-      ...rawFilter,
+      author_id: formValues.author_id ?? '',
+      city_id: formValues.city_id ?? '',
+      favorite: formValues.favorite ?? undefined,
+      search: formValues.search ?? '',
+      search_period: formValues.search_period ?? undefined,
+      selection_type: formValues.selection_type ?? undefined,
+      sort: formValues.sort ?? {created_at_desc: this.sortByDesc},
+      statuses: formValues.statuses ?? [],
       page: this.currentPage,
       limit: this.pageSize,
     };
 
-    if (filter.search_period === VacancyapimodelsSearchPeriod.SearchByPeriod) {
-      if (filter.search_from) {
-        filter.search_from = dayjs(filter.search_from).format('DD.MM.YYYY');
-      }
-      if (filter.search_to) {
-        filter.search_to = dayjs(filter.search_to).format('DD.MM.YYYY');
-      }
+    if (isPeriodSearch) {
+      filter.search_from = formValues.search_from ? dayjs(formValues.search_from).format('DD.MM.YYYY') : '';
+      filter.search_to = formValues.search_to ? dayjs(formValues.search_to).format('DD.MM.YYYY') : '';
     } else {
       filter.search_from = '';
       filter.search_to = '';
@@ -266,8 +258,59 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.getRequests();
       });
 
+    this.filterForm.get('search_period')!.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+          this.filterForm.patchValue({
+            search_from: '',
+            search_to: ''
+          }, { emitEvent: false });
+        }
+
+      });
+
+    this.filterForm.get('search_from')!.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value) {
+          if (this.filterForm.get('search_period')!.value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+            this.filterForm.get('search_period')!.setValue(VacancyapimodelsSearchPeriod.SearchByPeriod);
+          }
+        }
+      });
+
+    this.filterForm.get('search_to')!.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value) {
+          if (this.filterForm.get('search_period')!.value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+            this.filterForm.get('search_period')!.setValue(VacancyapimodelsSearchPeriod.SearchByPeriod);
+          }
+        }
+      });
 
   }
+
+  onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
+    const current = this.filterForm.get('search_period')!.value;
+
+    if (current !== value) {
+      this.filterForm.patchValue({
+        search_period: value,
+        search_from: '',
+        search_to: ''
+      });
+    } else {
+      if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+        this.filterForm.patchValue({
+          search_from: '',
+          search_to: ''
+        });
+      }
+    }
+  }
+
 
   openComment(comment: string) {
     this.modalService.openCommentModal(comment);
@@ -421,6 +464,10 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.requestContainer && this.requestContainer.nativeElement) {
       this.requestContainer.nativeElement.removeEventListener('scroll', this.onScroll);
     }
+  }
+
+  trackByValue(index: number, item: { value: VacancyapimodelsSearchPeriod }) {
+    return item.value;
   }
 
 }

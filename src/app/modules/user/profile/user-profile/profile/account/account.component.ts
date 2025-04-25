@@ -25,8 +25,11 @@ export class AccountComponent implements OnInit {
     phone_number: new FormControl('', [
       Validators.required,
       Validators.pattern('^[0-9]{10,15}$')
-    ]),    email: new FormControl('', [Validators.required, Validators.email]),
-    internal_phone_number: new FormControl('', [Validators.min(0)]),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    ]),    internal_phone_number: new FormControl('', [Validators.min(0)]),
     text_sign: new FormControl(''),
     use_personal_sign: new FormControl(false)
   });

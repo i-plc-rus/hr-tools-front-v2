@@ -1,14 +1,23 @@
-import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {VacancyView} from '../../../../models/Vacancy';
-import {ApiService} from '../../../../api/Api';
-import {MatDialog} from '@angular/material/dialog';
-import {ModelsVacancyPubStatus, VacancyapimodelsExtVacancyInfo} from '../../../../api/data-contracts';
-import {forkJoin, tap} from 'rxjs';
+import {
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { VacancyView } from '../../../../models/Vacancy';
+import { ApiService } from '../../../../api/Api';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  ModelsVacancyPubStatus,
+  VacancyapimodelsExtVacancyInfo,
+} from '../../../../api/data-contracts';
+import { forkJoin, tap } from 'rxjs';
 
 @Component({
   selector: 'app-vacancy-publication',
   templateUrl: './vacancy-publication.component.html',
-  styleUrl: './vacancy-publication.component.scss'
+  styleUrl: './vacancy-publication.component.scss',
 })
 export class VacancyPublicationComponent implements OnInit {
   @Input() vacancy?: VacancyView;
@@ -25,7 +34,7 @@ export class VacancyPublicationComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getStatuses();
@@ -40,7 +49,7 @@ export class VacancyPublicationComponent implements OnInit {
       this.checkHHConnected(),
       this.checkAvitoConnected(),
       this.getStatusHH(this.vacancy.id),
-      this.getStatusAvito(this.vacancy.id)
+      this.getStatusAvito(this.vacancy.id),
     ]).subscribe({
       next: () => {
         this.isLoading = false;
@@ -48,8 +57,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         console.log(error);
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   checkHHConnected() {
@@ -60,9 +69,9 @@ export class VacancyPublicationComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-        }
-      })
-    )
+        },
+      }),
+    );
   }
 
   checkAvitoConnected() {
@@ -73,9 +82,9 @@ export class VacancyPublicationComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-        }
-      })
-    )
+        },
+      }),
+    );
   }
 
   getStatusHH(id: string) {
@@ -84,33 +93,32 @@ export class VacancyPublicationComponent implements OnInit {
         next: (res) => {
           if (res.body?.data) {
             this.statusHH = res.body.data;
-
           } else {
             this.statusHH = undefined;
           }
         },
         error: (error) => {
           console.log(error);
-        }
-      })
+        },
+      }),
     );
   }
 
-
   getStatusAvito(id: string) {
-    return this.api.v1SpaceExtAvitoStatusDetail(id, {observe: 'response'}).pipe(
-      tap({
-        next: (res) => {
-          if (res.body?.data) {
-            this.statusAvito = res.body.data;
-          } else
-            this.statusAvito = undefined;
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
-    )
+    return this.api
+      .v1SpaceExtAvitoStatusDetail(id, { observe: 'response' })
+      .pipe(
+        tap({
+          next: (res) => {
+            if (res.body?.data) {
+              this.statusAvito = res.body.data;
+            } else this.statusAvito = undefined;
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        }),
+      );
   }
 
   connectHH() {
@@ -126,8 +134,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         console.log(error);
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   connectAvito() {
@@ -143,8 +151,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         console.log(error);
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   publishHHVacancy() {
@@ -152,16 +160,18 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    this.api.v1SpaceExtHhPublishUpdate(this.vacancy.id, {observe: 'response'}).subscribe({
-      next: () => {
-        this.getStatuses();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessageHH = JSON.parse(error.message).error.message;
-        this.isLoading = false;
-      }
-    })
+    this.api
+      .v1SpaceExtHhPublishUpdate(this.vacancy.id, { observe: 'response' })
+      .subscribe({
+        next: () => {
+          this.getStatuses();
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.errorMessageHH = JSON.parse(error.message).error.message;
+          this.isLoading = false;
+        },
+      });
   }
 
   publishAvitoVacancy() {
@@ -169,16 +179,18 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    this.api.v1SpaceExtAvitoPublishUpdate(this.vacancy.id, {observe: 'response'}).subscribe({
-      next: () => {
-        this.getStatuses();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessageAvito = JSON.parse(error.message).error.message;
-        this.isLoading = false;
-      }
-    })
+    this.api
+      .v1SpaceExtAvitoPublishUpdate(this.vacancy.id, { observe: 'response' })
+      .subscribe({
+        next: () => {
+          this.getStatuses();
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.errorMessageAvito = JSON.parse(error.message).error.message;
+          this.isLoading = false;
+        },
+      });
   }
 
   updateHHVacancy() {
@@ -194,8 +206,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageHH = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   updateAvitoVacancy() {
@@ -211,8 +223,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageAvito = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   closeHHVacancy() {
@@ -228,8 +240,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageHH = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   closeAvitoVacancy() {
@@ -245,15 +257,14 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageAvito = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   attachVacancy(inputValue: string) {
     if (this.attachDialogType === 'hh') {
       this.attachHH(inputValue);
-    }
-    else if (this.attachDialogType === 'avito') {
+    } else if (this.attachDialogType === 'avito') {
       this.attachAvito(parseInt(inputValue));
     }
   }
@@ -263,7 +274,7 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    this.api.v1SpaceExtHhAttachUpdate(this.vacancy.id, {url}).subscribe({
+    this.api.v1SpaceExtHhAttachUpdate(this.vacancy.id, { url }).subscribe({
       next: () => {
         this.closeDialog();
         this.getStatuses();
@@ -272,8 +283,8 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageHH = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   attachAvito(id?: number) {
@@ -281,7 +292,7 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    this.api.v1SpaceExtAvitoAttachUpdate(this.vacancy.id, {id}).subscribe({
+    this.api.v1SpaceExtAvitoAttachUpdate(this.vacancy.id, { id }).subscribe({
       next: () => {
         this.closeDialog();
         this.getStatuses();
@@ -290,13 +301,13 @@ export class VacancyPublicationComponent implements OnInit {
       error: (error) => {
         this.errorMessageAvito = JSON.parse(error.message).error.message;
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   openAttachDialog(type: 'hh' | 'avito') {
     this.attachDialogType = type;
-    this.dialog.open(this.attachDialog, {panelClass: 'w-full'});
+    this.dialog.open(this.attachDialog, { width: '748px', maxWidth: '748px' });
   }
 
   closeDialog() {
@@ -306,15 +317,13 @@ export class VacancyPublicationComponent implements OnInit {
   goToHHVacancy() {
     if (!this.vacancy) return;
     const url = this.statusHH?.url;
-    if (url)
-      window.open(url, '_blank');
+    if (url) window.open(url, '_blank');
   }
 
   goToAvitoVacancy() {
     if (!this.vacancy) return;
     const url = this.statusAvito?.url;
-    if (url)
-      window.open(url, '_blank');
+    if (url) window.open(url, '_blank');
   }
 
   clearErrors() {
@@ -323,22 +332,17 @@ export class VacancyPublicationComponent implements OnInit {
   }
 
   get currentHHStatus(): ModelsVacancyPubStatus | 'Не подключена' | undefined {
-    if (!this.vacancy || !this.statusHH)
-      return undefined;
-    else
-      if (!this.isHHConnected)
-        return 'Не подключена';
-      else
-        return this.statusHH.status;
+    if (!this.vacancy || !this.statusHH) return undefined;
+    else if (!this.isHHConnected) return 'Не подключена';
+    else return this.statusHH.status;
   }
 
-  get currentAvitoStatus(): ModelsVacancyPubStatus | 'Не подключена' | 'Ожидание' {
-    if (!this.vacancy || !this.statusAvito)
-      return 'Ожидание'
-    else
-      if (!this.isAvitoConnected)
-        return 'Не подключена';
-      else
-        return this.statusAvito.status || 'Ожидание';
+  get currentAvitoStatus():
+    | ModelsVacancyPubStatus
+    | 'Не подключена'
+    | 'Ожидание' {
+    if (!this.vacancy || !this.statusAvito) return 'Ожидание';
+    else if (!this.isAvitoConnected) return 'Не подключена';
+    else return this.statusAvito.status || 'Ожидание';
   }
 }

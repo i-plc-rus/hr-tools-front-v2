@@ -115,8 +115,10 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getVacancyList(loadMore = false) {
-    if (this.loading || this.allDataLoaded) return;
 
+    // if (this.loading || this.allDataLoaded) return;
+    if (this.loading) return
+    
     this.loading = true;
 
     if (!loadMore) {
@@ -125,6 +127,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.allDataLoaded = false;
       this.favoritesCount = 0;
     }
+    
 
     const filter: VacancyapimodelsVacancyFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
     filter.page = this.currentPage;

@@ -257,6 +257,19 @@ mat-option {
   --mat-option-hover-state-layer-color: var(--background-alter);
 }
 
+::-webkit-scrollbar {
+  width: 28px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 9px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 50px;
+  background-color: #E6EBF4;
+  cursor: pointer;
+}
+
+
 //material snackbar
 
 .mat-mdc-snack-bar-container {

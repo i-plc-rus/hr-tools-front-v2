@@ -1,3 +1,7 @@
 :host {
   @apply px-4 pt-44 flex flex-col items-center md:w-screen md:h-screen md:bg-[var(--background-main)] relative
 }
+
+.login-button:enabled {
+  background-color: #5368a6;
+}

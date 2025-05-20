@@ -9,7 +9,7 @@ export class DateAdapterRus extends NativeDateAdapter {
 
   override parse(value: any, parseFormat?: any): Date | null {
     if (parseFormat == 'DD.MM.YYYY') {
-      var regex = /(\..*){2,}/;
+      let regex = /(\..*){2,}/;
       let dotcheck = regex.test(value);
       let dateParts = dotcheck ? value.match(/(\d{1,2}).(\d{1,2}).(\d{2,4})/) : value.match(/(\d{1,2})(\d{1,2})(\d{2,4})/);
       if (dateParts) {

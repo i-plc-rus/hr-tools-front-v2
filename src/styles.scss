@@ -258,7 +258,7 @@ mat-option {
 }
 
 mat-option:hover {
-  color: #5066b3;
+  color: var(--link-default);
 }
 
 
@@ -270,7 +270,7 @@ mat-option:hover {
   border: 9px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
   border-radius: 50px;
-  background-color: #E6EBF4;
+  background-color: var(--scrollbar-thumb);
   cursor: pointer;
 }
 

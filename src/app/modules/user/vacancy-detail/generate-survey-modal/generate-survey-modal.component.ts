@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
+import { UsersModalService } from '../../../../services/users-modal.service';
+import { ApiService } from '../../../../api/Api';
+import { GptmodelsGenVacancyDescRequest } from '../../../../api/data-contracts';
 
 @Component({
   selector: 'app-generate-survey-modal',
@@ -20,6 +23,11 @@ export class GenerateSurveyModalComponent implements OnInit{
     softSkills: new FormControl('', Validators.required),
     softSkillsToggle: new FormControl(false),
   });
+
+  constructor(
+      private modalService: UsersModalService,
+      private api: ApiService,
+    ) { }
 
   loading = false;
 
@@ -84,6 +92,18 @@ export class GenerateSurveyModalComponent implements OnInit{
   submit(): void {
     if (this.surveyForm.valid) {
       console.log('Form values:', this.surveyForm.value);
+      const newBlank: GptmodelsGenVacancyDescRequest = {
+            text: JSON.stringify(this.surveyForm.value),
+          };
+      this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
+        next: () => {
+          this.onSubmit.emit(true);
+          this.modalService.closeModal();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
       this.onSubmit.emit(true);
     } else {
       console.log('Form is invalid!', this.surveyForm);
@@ -92,6 +112,7 @@ export class GenerateSurveyModalComponent implements OnInit{
 
   cancel(): void {
     console.log('Survey canceled');
+    this.modalService.closeModal();
   }
 
   private setLoading(isLoading: boolean): void {

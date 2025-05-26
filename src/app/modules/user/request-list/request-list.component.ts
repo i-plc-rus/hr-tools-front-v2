@@ -22,11 +22,21 @@ import { Router } from '@angular/router';
 import {Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DateAdapterRus, RUS_DATE_FORMATS } from '../../../adapters/ru-date.adapter';
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
-  styleUrl: './request-list.component.scss'
+  styleUrl: './request-list.component.scss',
+  providers: [
+    {
+        provide: DateAdapter, useClass: DateAdapterRus
+    },
+    {
+        provide: MAT_DATE_FORMATS, useValue: RUS_DATE_FORMATS
+    },
+ ]
 })
 export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   // фильтр

@@ -424,6 +424,14 @@ quill-editor {
   pointer-events: none !important;
 }
 
+.mat-mdc-slide-toggle
+  .mdc-switch--unselected
+  .mdc-switch__handle:has(.mdc-switch__icons) {
+  width: 16px !important;
+  height: 16px !important;
+  margin-left: 7px !important;
+}
+
 //==================
 
 //=====

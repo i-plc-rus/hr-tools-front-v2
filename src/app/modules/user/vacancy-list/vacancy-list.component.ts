@@ -252,6 +252,10 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef),debounceTime(200), distinctUntilChanged())
       .subscribe(() => {
+        this.allDataLoaded = false;
+        this.loading = false;
+        this.currentPage = 1;
+        this.vacancyList = [];
         this.getVacancyList();
       });
 

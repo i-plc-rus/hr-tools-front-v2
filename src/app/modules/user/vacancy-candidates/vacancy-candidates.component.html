@@ -14,7 +14,7 @@
     <div class="w-full">
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Готовность к переезду</mat-expansion-panel-header>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="relocation">
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-auto" formControlName="relocation">
           @for (relocation of relocationTypes; track $index) {
             <mat-chip-option [value]="relocation.value">{{ relocation.label }}</mat-chip-option>
           }
@@ -54,7 +54,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city">
             @for (city of cities; track $index) {
               <mat-chip-option [value]="city.address">{{ city.address }}</mat-chip-option>

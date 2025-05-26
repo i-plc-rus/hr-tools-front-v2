@@ -269,7 +269,7 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
     const lastVisibleRow = api.getLastDisplayedRowIndex();
     const rowCount = api.getDisplayedRowCount();
 
-    if (lastVisibleRow >= rowCount - 5) {
+    if (lastVisibleRow >= 0 && lastVisibleRow >= rowCount - 5) {
       this.getApplicants(true);
     }
   }

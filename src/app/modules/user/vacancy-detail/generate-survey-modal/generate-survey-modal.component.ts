@@ -11,7 +11,7 @@ import { GptmodelsGenVacancyDescRequest } from '../../../../api/data-contracts';
   styleUrl: './generate-survey-modal.component.scss'
 })
 export class GenerateSurveyModalComponent implements OnInit{
-  @Output() onSubmit: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<any>();
   @Input() user?: any;
 
   surveyForm = new FormGroup({
@@ -91,20 +91,7 @@ export class GenerateSurveyModalComponent implements OnInit{
 
   submit(): void {
     if (this.surveyForm.valid) {
-      console.log('Form values:', this.surveyForm.value);
-      const newBlank: GptmodelsGenVacancyDescRequest = {
-            text: JSON.stringify(this.surveyForm.value),
-          };
-      this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
-        next: () => {
-          this.onSubmit.emit(true);
-          this.modalService.closeModal();
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
-      this.onSubmit.emit(true);
+      this.onSubmit.emit(this.surveyForm.value);
     } else {
       console.log('Form is invalid!', this.surveyForm);
     }

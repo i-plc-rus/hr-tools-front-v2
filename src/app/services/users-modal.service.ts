@@ -27,7 +27,7 @@ import {
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal< AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent | GenerateSurveyModalComponent>;
+  portal?: ComponentPortal< AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent>;
 
   constructor(private overlay: Overlay) { }
 
@@ -127,15 +127,15 @@ export class UsersModalService {
     });
   }
 
-  openGenerateSurveyModal(): EventEmitter<boolean> {
-    this.portal = new ComponentPortal(GenerateSurveyModalComponent);
+  openGenerateSurveyModal(): EventEmitter<any> {
+    const portal = new ComponentPortal(GenerateSurveyModalComponent);
     this.overlayRef = this.createSurveyOverlay(this.overlay);
 
     if (!this.overlayRef) {
       throw new Error('');
     }
 
-    const componentRef = this.overlayRef.attach(this.portal);
+    const componentRef: ComponentRef<GenerateSurveyModalComponent> = this.overlayRef.attach(portal);
 
     setTimeout(() => {
       if (this.overlayRef) {

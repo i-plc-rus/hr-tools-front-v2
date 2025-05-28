@@ -305,20 +305,13 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
     const current = this.filterForm.get('search_period')!.value;
 
-    if (current !== value) {
+    if (current) {
       this.filterForm.patchValue({
         search_period: value,
         search_from: '',
         search_to: ''
       });
-    } else {
-      if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
-        this.filterForm.patchValue({
-          search_from: '',
-          search_to: ''
-        });
-      }
-    }
+    } 
   }
 
 

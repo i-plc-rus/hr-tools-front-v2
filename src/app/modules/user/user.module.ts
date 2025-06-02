@@ -113,6 +113,7 @@ import {
 } from './profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 import {DevelopmentComponent} from "../../components/development/development.component";
 import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey-success/generate-survey-success.component';
+import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 
 @NgModule({
   declarations: [
@@ -168,7 +169,8 @@ import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey
     GenerateSurveyModalComponent,
     AddMemberModalComponent,
     LicenseExtensionModalComponent,
-    GenerateSurveySuccessComponent
+    GenerateSurveySuccessComponent,
+    GenetateServeyErrorComponent
   ],
     imports: [
         CommonModule,

@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('request-filled', this.setPath(`${this.svgPath}/ic-request-filled.svg`))
       .addSvgIcon('chat-info', this.setPath(`${this.svgPath}/ic-chat-info.svg`))
       .addSvgIcon('flame', this.setPath(`${this.svgPath}/ic-flame.svg`))
-
+      .addSvgIcon('blue-error', this.setPath(`${this.svgPath}/ic-blue-error.svg`))
   }
 
   ngOnInit() {

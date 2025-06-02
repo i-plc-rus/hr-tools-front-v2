@@ -1,0 +1,15 @@
+<div class="bg-white overflow-hidden w-[748px] h-[450px] rounded-[28px]">
+  <div class="flex flex-col justify-center items-stretch py-64 px-2 lg:p-16">
+    <div class="flex justify-center">
+        <mat-icon class="error_icon" svgIcon="blue-error"></mat-icon>
+    </div>
+    
+    <p class="survey-title m-0 p-0">Возникла ошибка<br />в генерации анкеты</p>
+    
+
+    <div class="button-group mt-4 flex flex-row justify-end space-x-4">
+      <button mat-flat-button class="btn-secondary" (click)="submit()">К вакансии</button>
+      <button mat-flat-button class="btn-primary" (click)="repeat()">Повторить</button>
+    </div>
+  </div>
+</div>

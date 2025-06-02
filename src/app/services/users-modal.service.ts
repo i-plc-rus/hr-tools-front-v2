@@ -21,6 +21,7 @@ import {
   LicenseExtensionModalComponent
 } from '../modules/user/profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 import { GenerateSurveySuccessComponent } from '../modules/user/vacancy-detail/generate-survey-success/generate-survey-success.component';
+import { GenetateServeyErrorComponent } from '../modules/user/vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 
 
 @Injectable({
@@ -160,6 +161,29 @@ export class UsersModalService {
     }
 
     const componentRef: ComponentRef<GenerateSurveySuccessComponent> = this.overlayRef.attach(portal);
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        this.overlayRef.updatePosition();
+      }
+    }, 0);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  openGenerateSurveyErrorModal(): EventEmitter<boolean> {
+    const portal = new ComponentPortal(GenetateServeyErrorComponent);
+    this.overlayRef = this.createSurveyOverlay(this.overlay);
+
+    if (!this.overlayRef) {
+      throw new Error('');
+    }
+
+    const componentRef: ComponentRef<GenetateServeyErrorComponent> = this.overlayRef.attach(portal);
 
     setTimeout(() => {
       if (this.overlayRef) {

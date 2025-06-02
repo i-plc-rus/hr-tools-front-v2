@@ -26,7 +26,6 @@ export class GenerateSurveyModalComponent implements OnInit{
 
   constructor(
       private modalService: UsersModalService,
-      private api: ApiService,
     ) { }
 
   loading = false;

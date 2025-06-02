@@ -381,6 +381,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
+        const tempRequest = this.requestList.find(item => item.id === id);
+        tempRequest!.favorite = set;
         this.getRequests();
       },
       error: (error) => {
@@ -392,6 +394,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   togglePin(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
+        const tempRequest = this.requestList.find(item => item.id === id);
+        tempRequest!.pinned = set;
         this.getRequests();
       },
       error: (error) => {

@@ -132,39 +132,26 @@ export class VacancyDetailComponent implements OnInit {
   }
 
   generateSurvey() {
-    // this.modalService.openGenerateSurveyModal().subscribe((confirmedData: any | undefined) => {
-    //   if (confirmedData) {
-    //     const newBlank: GptmodelsGenVacancyDescRequest = {
-    //         text: JSON.stringify(confirmedData),
-    //       };
-    //   // this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
-    //   //   next: () => {
-    //   //     this.modalService.closeModal();
-    //   //   },
-    //   //   error: (error) => {
-    //   //     console.log(error);
-    //   //   }
-    //   // });
-    //   console.log('Получены данные формы:', newBlank, '/////////');
-    //   } else {
-    //     this.modalService.closeModal();
-    //   }
-    // });
-
-     this.modalService.openGenerateSurveySuccessModal().subscribe((confirmedData: any | undefined) => {
+    this.modalService.openGenerateSurveyModal().subscribe((confirmedData: any | undefined) => {
       if (confirmedData) {
-       
-      // this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
-      //   next: () => {
-      //     this.modalService.closeModal();
-      //   },
-      //   error: (error) => {
-      //     console.log(error);
-      //   }
-      // });
-      console.log('Получены данные формы:');
+        const newBlank: GptmodelsGenVacancyDescRequest = {
+            text: JSON.stringify(confirmedData),
+          };
+        this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
+          next: () => {
+            this.modalService.closeModal();
+            this.modalService.openGenerateSurveySuccessModal();
+          },
+          error: (error) => {
+            console.log(error);
+            this.modalService.closeModal();
+            this.modalService.openGenerateSurveyErrorModal();
+          }
+        });
       } else {
+        console.log("error");
         this.modalService.closeModal();
+        this.modalService.openGenerateSurveyErrorModal();
       }
     });
   }

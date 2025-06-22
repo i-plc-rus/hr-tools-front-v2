@@ -19,7 +19,11 @@ export const routes: Routes = [
     canActivateChild: [() => roleGuard(['ADMIN', 'SUPER_ADMIN'])]
   },
   {
+    path: 'video',
+    loadChildren: () => import('../app/modules/video-chat/video-chat.module').then(r => r.VideoChatModule),
+  },
+  {
     path: '**',
-    redirectTo: 'auth',
+    redirectTo: 'video',
   }
 ];

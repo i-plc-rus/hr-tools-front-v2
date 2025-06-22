@@ -1,0 +1,53 @@
+<mat-icon svgIcon="logo-hr" class="!w-[54px] !h-[64px]"> </mat-icon>
+<div class="h-[40px]"></div>
+<div class="bg-[white] w-full rounded-[28px] lg:w-[848px]">
+  <div class="flex flex-col justify-center items-stretch lg:px-[64px]">
+    
+    @if (questionNumber === 0) {
+      <h1 class="text-[45px] text-center leading-[52px] lg:pt-[40px] lg:pb-[12px]">Видео-интервью</h1>
+      <p class="text-[16px] text-center leading-[24px] mt-3">Прочитайте вопросы и запишите видеоответы, не превышая 5 минут на каждый</p>
+    } @else {
+      <div class="numbers flex justify-center items-stretch lg:mb-[48px] lg:mt-[64px]">
+        <div class="numberCircle" style="background-color: var(--link-default); color: white;">1</div>
+        <div class="line"></div>
+        <div class="numberCircle">2</div>
+        <div class="line"></div>
+        <div class="numberCircle">3</div>
+        <div class="line"></div>
+        <div class="numberCircle">4</div>
+        <div class="line"></div>
+        <div class="numberCircle">5</div>
+      </div>
+      <h1 class="text-[32px] text-center leading-[40px]">Какой у вас опыт холодных B2B-продаж? Или огромный текст который займет место более трех строчек</h1>
+    }
+    
+    <div class="h-[16px]"></div>
+    <div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[405px] mb-[16px] overflow-hidden">
+      <!-- <app-camera></app-camera> -->
+      <app-capture-video #captureComponent></app-capture-video>
+    </div>
+    
+    <!-- <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px]">
+      <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+      <p class="text-[16px] leading-[24px] mt-4">Отсутствует видео подключение. Включите камеру!</p>
+    </div>
+    <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px] ">
+      <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+      <p class="text-[16px] leading-[24px] mt-4">Ваш микрофон отключен, необходимо его включить!</p>
+    </div> -->
+    @if (questionNumber === 0) {
+      <div class="flex bg-[var(--background-primary)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg: mb-[16px] ">
+        <mat-icon svgIcon="chat-info" class="!w-[20px] !h-[20px] ml-[16px] mt-[20px] mr-[12px]"> </mat-icon>
+        <p class="text-[16px] leading-[24px] mt-4">Убедитесь, что камера и микрофон включены</p>
+      </div> 
+    }
+    <div class="flex justify-center lg:mb-[40px]">
+      <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
+        <button mat-flat-button class="btn-primary" (click)="captureVideo()">Начать</button>
+        <button mat-flat-button class="btn-secondary flex justify-center" (click)="captureVideo()">
+          <mat-icon class="stop">stop</mat-icon>Остановить запись
+        </button>
+        
+      </div>
+    </div>
+</div>

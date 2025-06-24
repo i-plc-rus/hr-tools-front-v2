@@ -98,6 +98,8 @@ export class AppComponent implements OnInit {
       .addSvgIcon('chat-info', this.setPath(`${this.svgPath}/ic-chat-info.svg`))
       .addSvgIcon('logo-hr', this.setPath(`${this.svgPath}/ic-logo-hr.svg`))
       .addSvgIcon('videocam', this.setPath(`${this.svgPath}/ic-videocam.svg`))
+      .addSvgIcon('mic', this.setPath(`${this.svgPath}/ic-mic.svg`))
+      .addSvgIcon('big-account-box', this.setPath(`${this.svgPath}/ic-big-account-box.svg`))
   }
 
   ngOnInit() {

@@ -1,15 +1,15 @@
-
 <div class="record-video-container w-full h-full flex justify-center">
-  <video [hidden]="isCapturingVideo || isVideoTaken" id="camera" autoplay class="video"></video>
+  
+  <!-- <video [hidden]="isCapturingVideo || isVideoTaken" id="camera" autoplay class="video"></video> -->
   <video [hidden]="!isCapturingVideo" id="preview" autoplay #preview class="video"></video>
-  <video [hidden]="isCapturingVideo || !isVideoTaken" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
-  <div class="controls w-full h-full flex justify-center pb-[12px]">
+  <video [hidden]="isCapturingVideo" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
+  <!-- <div class="controls w-full h-full flex justify-center pb-[12px]">
     <div class="camera-button">
-      <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+      <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]" (click)="stopCamera()"></mat-icon>
     </div>
     <div class="w-[16px]"></div>
-    <div class="camera-button">
-      <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+    <div class="mic-button">
+      <mat-icon svgIcon="mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
     </div>
-  </div>
+  </div> -->
 </div>

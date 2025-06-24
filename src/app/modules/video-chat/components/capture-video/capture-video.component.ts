@@ -11,13 +11,12 @@ export class CaptureVideoComponent implements OnInit {
   @ViewChild('recording', {static: false}) public recordingElement!: ElementRef;
   public videoButtonTitle: string = "Start Recording";
   public isCapturingVideo: boolean = false;
-  public videoContraints = {
+  public videoContraints:MediaStreamConstraints = {
     audio: true,
     video: { width: 720, height: 406, }
   }
   public isVideoTaken: boolean = false;
   public videoFile!: File;
-  public recordButtonColor: string = "coral";
 
   constructor(private renderer: Renderer2) {}
 
@@ -29,23 +28,23 @@ export class CaptureVideoComponent implements OnInit {
 
 
   setupCamera() {
-    navigator.mediaDevices.getUserMedia({
-      video: { width: 720, height: 406 },
-    }).then((stream) => {
+    navigator.mediaDevices.getUserMedia(this.videoContraints).then((stream) => {
         console.log(stream);
         this.videoRef.srcObject = stream;
     });
   }
 
+  turnCameraOff() {
+    this.stop(this.previewElement.nativeElement.srcObject);
+  };
+
   recordHandlre(): void {
 
     if (this.videoButtonTitle === "Start Recording" || this.videoButtonTitle === "Record Again") {
       this.isCapturingVideo = true;
-      this.recordButtonColor = "red";
       this.startRecording();
 
     } else if (this.videoButtonTitle === "Stop Recording") {
-      this.recordButtonColor = "coral";
       this.stop(this.previewElement.nativeElement.srcObject);
     }
   }
@@ -105,6 +104,14 @@ export class CaptureVideoComponent implements OnInit {
     return <File>theBlob;
   }
 
+  stopCamera() {
+    if (this.previewElement.nativeElement.srcObject) {
+      this.previewElement.nativeElement.srcObject.getVideoTracks().forEach(function(track: any) {
+      track.stop();
+    });
+      this.previewElement.nativeElement.srcObject = null; // Clear the stream reference
+    }
+  }
 
   stop(stream: any) {
     stream.getTracks().forEach(function(track: any) {

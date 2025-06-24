@@ -23,8 +23,8 @@
     
     <div class="h-[16px]"></div>
     <div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[405px] mb-[16px] overflow-hidden">
-      <!-- <app-camera></app-camera> -->
-      <app-capture-video #captureComponent></app-capture-video>
+      <app-camera></app-camera>
+      <!-- <app-capture-video #captureComponent></app-capture-video> -->
     </div>
     
     <!-- <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px]">
@@ -44,9 +44,9 @@
     <div class="flex justify-center lg:mb-[40px]">
       <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
         <button mat-flat-button class="btn-primary" (click)="captureVideo()">Начать</button>
-        <button mat-flat-button class="btn-secondary flex justify-center" (click)="captureVideo()">
+        <!-- <button mat-flat-button class="btn-secondary flex justify-center" (click)="captureVideo()">
           <mat-icon class="stop">stop</mat-icon>Остановить запись
-        </button>
+        </button> -->
         
       </div>
     </div>

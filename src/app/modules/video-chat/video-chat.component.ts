@@ -3,6 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
 import { CaptureVideoComponent } from './components/capture-video/capture-video.component';
+import { CameraComponent } from './components/camera/camera.component';
 
 @Component({
   selector: 'app-video-chat',
@@ -11,9 +12,10 @@ import { CaptureVideoComponent } from './components/capture-video/capture-video.
 })
 export class VideoChatComponent implements OnInit {
   @Input() questionNumber: number = 0;
-  @ViewChild('captureComponent', { static: false })
-  captureComponent!: CaptureVideoComponent;
+  @ViewChild('captureComponent', { static: false }) captureComponent!: CaptureVideoComponent;
   public numberBackColor: string = '#F0F4F9';
+  cameraAvailable: boolean | undefined;
+  micAvailable: boolean | undefined;
 
   constructor() {}
 
@@ -26,6 +28,13 @@ export class VideoChatComponent implements OnInit {
     // this.goToNextQuestion(this.questionNumber + 1);
   }
 
+  listenForCameraSwitch(event:any) {
+    this.cameraAvailable = event;
+  }
+
+  listenForMicSwitch(event:any) {
+    this.micAvailable = event;
+  }
 
   goToNextQuestion(state: number) {
     if (this.questionNumber < 6) {

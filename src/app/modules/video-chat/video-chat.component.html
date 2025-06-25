@@ -23,24 +23,29 @@
     
     <div class="h-[16px]"></div>
     <div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[405px] mb-[16px] overflow-hidden">
-      <app-camera></app-camera>
+      <app-camera (cameraStatus)="listenForCameraSwitch($event)" (micStatus)="listenForMicSwitch($event)"></app-camera>
       <!-- <app-capture-video #captureComponent></app-capture-video> -->
     </div>
-    
-    <!-- <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px]">
-      <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
-      <p class="text-[16px] leading-[24px] mt-4">Отсутствует видео подключение. Включите камеру!</p>
-    </div>
-    <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px] ">
-      <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
-      <p class="text-[16px] leading-[24px] mt-4">Ваш микрофон отключен, необходимо его включить!</p>
-    </div> -->
-    @if (questionNumber === 0) {
-      <div class="flex bg-[var(--background-primary)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg: mb-[16px] ">
-        <mat-icon svgIcon="chat-info" class="!w-[20px] !h-[20px] ml-[16px] mt-[20px] mr-[12px]"> </mat-icon>
-        <p class="text-[16px] leading-[24px] mt-4">Убедитесь, что камера и микрофон включены</p>
-      </div> 
+
+    @if (!cameraAvailable) {
+      <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px]">
+        <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+        <p class="text-[16px] leading-[24px] mt-4">Отсутствует видео подключение. Включите камеру!</p>
+      </div>
     }
+
+    @if (!micAvailable) {
+      <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px] ">
+        <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+        <p class="text-[16px] leading-[24px] mt-4">Ваш микрофон отключен, необходимо его включить!</p>
+      </div>      
+    }
+    
+    <div class="flex bg-[var(--background-primary)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg: mb-[16px] ">
+      <mat-icon svgIcon="chat-info" class="!w-[20px] !h-[20px] ml-[16px] mt-[20px] mr-[12px]"> </mat-icon>
+      <p class="text-[16px] leading-[24px] mt-4">Убедитесь, что камера и микрофон включены</p>
+    </div> 
+    
     <div class="flex justify-center lg:mb-[40px]">
       <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
         <button mat-flat-button class="btn-primary" (click)="captureVideo()">Начать</button>

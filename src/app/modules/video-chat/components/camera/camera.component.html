@@ -1,13 +1,16 @@
 <div class="record-video-container w-full h-full flex justify-center">
   <mat-icon svgIcon="big-account-box" class="!w-[94px] !h-[94px] mb-[175px]"></mat-icon>
-  <video [hidden]="!cameraAvailable" id="camera" autoplay class="video"></video>
+  <video #preview [hidden]="!cameraAvailable" id="camera" autoplay class="video" [muted]="!micAvailable"></video>
   <div class="controls w-full h-full flex justify-center pb-[12px]">
-    <div class="camera-button" (click)="switchVideo(cameraAvailable!)">
+    <div class="camera-button" id="camera-switch" (click)="switchVideo(cameraAvailable!)">
       <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
     </div>
     <div class="w-[16px]"></div>
-    <div class="camera-button" (click)="switchAudio(micAvailable!)">
+    <div class="camera-button" id="mic-switch" (click)="switchAudio(micAvailable!)">
       <mat-icon svgIcon="mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
     </div>
   </div>
 </div>
+
+
+    

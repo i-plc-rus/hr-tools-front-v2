@@ -1,16 +1,53 @@
-<div class="record-video-container w-full h-full flex justify-center">
-  <mat-icon svgIcon="big-account-box" class="!w-[94px] !h-[94px] mb-[175px]"></mat-icon>
-  <video #preview [hidden]="!cameraAvailable" id="camera" autoplay class="video" [muted]="!micAvailable"></video>
-  <div class="controls w-full h-full flex justify-center pb-[12px]">
-    <div class="camera-button" id="camera-switch" (click)="switchVideo(cameraAvailable!)">
-      <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
-    </div>
-    <div class="w-[16px]"></div>
-    <div class="camera-button" id="mic-switch" (click)="switchAudio(micAvailable!)">
-      <mat-icon svgIcon="mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+<h1 class="text-[45px] text-center leading-[52px] lg:pt-[40px] lg:pb-[12px]">Видео-интервью</h1>
+<p class="text-[16px] text-center leading-[24px] mt-3">Прочитайте вопросы и запишите видеоответы, не превышая 5 минут на каждый</p>
+<div class="h-[16px]"></div>
+
+<div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
+  <div class="record-video-container w-full h-full flex justify-center">
+    <mat-icon svgIcon="big-account-box" class="!w-[94px] !h-[94px] mb-[175px]"></mat-icon>
+    <video #preview [hidden]="!cameraAvailable" id="camera" autoplay class="video"></video>
+    <div class="controls w-full h-full flex justify-center pb-[12px]">
+      <div class="camera-button" id="camera-switch" (click)="switchVideo(cameraAvailable!)">
+        @if (cameraAvailable) {
+          <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+        } @else {
+          <mat-icon svgIcon="no-videocam" class="!w-[22px] !h-[22px] mt-[19.2px] ml-[17.18px]"></mat-icon>
+        }
+      </div>
+      <div class="w-[16px]"></div>
+      <div class="camera-button" id="mic-switch" (click)="switchAudio(micAvailable!)">
+        @if (micAvailable) {
+          <mat-icon svgIcon="mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+        } @else {
+          <mat-icon svgIcon="no-mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
+        }
+      </div>
     </div>
   </div>
 </div>
 
 
+@if (!cameraAvailable) {
+  <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px]">
+    <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+    <p class="text-[16px] leading-[24px] mt-4">Отсутствует видео подключение. Включите камеру!</p>
+  </div>
+}
+
+@if (!micAvailable) {
+  <div class="flex bg-[var(--background-error)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg:mb-[8px] ">
+    <mat-icon svgIcon="error" class="!w-[20px] !h-[20px] ml-[16px] mt-[18px] mr-[12px]"> </mat-icon>
+    <p class="text-[16px] leading-[24px] mt-4">Ваш микрофон отключен, необходимо его включить!</p>
+  </div>      
+}
     
+<div class="flex bg-[var(--background-primary)] w-full h-full rounded-[12px] lg:w-[720px] lg:h-[56px] lg: mb-[16px] ">
+  <mat-icon svgIcon="chat-info" class="!w-[20px] !h-[20px] ml-[16px] mt-[20px] mr-[12px]"> </mat-icon>
+  <p class="text-[16px] leading-[24px] mt-4">Убедитесь, что камера и микрофон включены</p>
+</div> 
+
+<div class="flex justify-center lg:mb-[40px]">
+  <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
+    <button mat-flat-button [disabled]="!cameraAvailable || !micAvailable" class="btn-primary" (click)="startInterview()">Начать</button>
+  </div>
+</div>

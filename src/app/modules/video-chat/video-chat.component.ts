@@ -10,46 +10,12 @@ import { CameraComponent } from './components/camera/camera.component';
   templateUrl: './video-chat.component.html',
   styleUrl: './video-chat.component.scss',
 })
-export class VideoChatComponent implements OnInit {
+export class VideoChatComponent {
   @Input() questionNumber: number = 0;
-  @ViewChild('captureComponent', { static: false }) captureComponent!: CaptureVideoComponent;
   public numberBackColor: string = '#F0F4F9';
-  cameraAvailable: boolean | undefined;
-  micAvailable: boolean | undefined;
+  isCameraCheck: boolean | undefined = true;
 
-  constructor() {}
-
-  ngOnInit(): void {
-    // this.checkMediaDevices()
-  }
-
-  captureVideo() {
-    this.captureComponent.recordHandlre();
-    // this.goToNextQuestion(this.questionNumber + 1);
-  }
-
-  listenForCameraSwitch(event:any) {
-    this.cameraAvailable = event;
-  }
-
-  listenForMicSwitch(event:any) {
-    this.micAvailable = event;
-  }
-
-  goToNextQuestion(state: number) {
-    if (this.questionNumber < 6) {
-      this.questionNumber = state;
-      document
-        .querySelectorAll<HTMLElement>('.numberCircle')
-        .forEach((element, index, array) => {
-          if (index + 1 === this.questionNumber) {
-            element.style.backgroundColor = '#5368A6';
-            element.style.color = 'white';
-          } else {
-            element.style.backgroundColor = '#F0F4F9';
-            element.style.color = '#5368A6';
-          }
-        });
-    }
+  listenForInterviewStart(event:any) {
+    this.isCameraCheck = event;
   }
 }

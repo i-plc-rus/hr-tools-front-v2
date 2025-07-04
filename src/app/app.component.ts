@@ -100,6 +100,8 @@ export class AppComponent implements OnInit {
       .addSvgIcon('logo-hr', this.setPath(`${this.svgPath}/ic-logo-hr.svg`))
       .addSvgIcon('videocam', this.setPath(`${this.svgPath}/ic-videocam.svg`))
       .addSvgIcon('mic', this.setPath(`${this.svgPath}/ic-mic.svg`))
+      .addSvgIcon('no-videocam', this.setPath(`${this.svgPath}/ic-no-videocam.svg`))
+      .addSvgIcon('no-mic', this.setPath(`${this.svgPath}/ic-no-mic.svg`))
       .addSvgIcon('big-account-box', this.setPath(`${this.svgPath}/ic-big-account-box.svg`))
   }
 

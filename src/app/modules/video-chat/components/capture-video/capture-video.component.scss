@@ -18,6 +18,36 @@ h1 {
     margin: 30px auto;
 }
 
+.numbers {
+    align-items: center;
+}
+
+.numberCircle {
+  background-color: var(--background-main);
+  color: var(--link-default);
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+.line {
+  width: 74px;
+  height: 1px;
+  margin-left: 32px;
+  margin-right: 32px;
+  background-color: var(--outline-variant);
+}
+
+.stop {
+  background-color: var(--link-default);
+  transform: scale(0.67);
+  border-radius: 2px !important;
+}
 
 .camera-button, .mic-button {
     width: 60px;

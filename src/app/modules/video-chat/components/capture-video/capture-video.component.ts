@@ -11,48 +11,77 @@ export class CaptureVideoComponent implements OnInit {
   @ViewChild('recording', {static: false}) public recordingElement!: ElementRef;
   public videoButtonTitle: string = "Start Recording";
   public isCapturingVideo: boolean = false;
-  public videoContraints:MediaStreamConstraints = {
+  public videoContraints = {
     audio: true,
     video: { width: 720, height: 406, }
   }
-  public isVideoTaken: boolean = false;
+  public repeatAllowed: boolean = true;
   public videoFile!: File;
+  public recordButtonColor: string = "coral";
+  public questionNumber: number = 1;
 
   constructor(private renderer: Renderer2) {}
 
   videoRef: any;
+
   ngOnInit(): void {
-    this.videoRef = document.getElementById('camera');
+    this.videoRef = document.getElementById('preview');
     this.setupCamera();
   }
 
 
   setupCamera() {
-    navigator.mediaDevices.getUserMedia(this.videoContraints).then((stream) => {
+    navigator.mediaDevices.getUserMedia({
+      video: { width: 720, height: 406 },
+    }).then((stream) => {
         console.log(stream);
         this.videoRef.srcObject = stream;
     });
   }
 
-  turnCameraOff() {
-    this.stop(this.previewElement.nativeElement.srcObject);
-  };
-
   recordHandlre(): void {
-
     if (this.videoButtonTitle === "Start Recording" || this.videoButtonTitle === "Record Again") {
       this.isCapturingVideo = true;
+      this.recordButtonColor = "red";
       this.startRecording();
 
     } else if (this.videoButtonTitle === "Stop Recording") {
+      this.recordButtonColor = "coral";
       this.stop(this.previewElement.nativeElement.srcObject);
     }
+  }
+
+
+  repeatAgain(): void {
+    this.repeatAllowed = false;
+  }
+
+  goToNextQuestion(state: number) {
+    if (this.questionNumber < 6) {
+      this.questionNumber = state;
+      document
+        .querySelectorAll<HTMLElement>('.numberCircle')
+        .forEach((element, index, array) => {
+          if (index + 1 === this.questionNumber) {
+            element.style.backgroundColor = '#5368A6';
+            element.style.color = 'white';
+          } else {
+            element.style.backgroundColor = '#F0F4F9';
+            element.style.color = '#5368A6';
+          }
+        });
+    }
+    this.repeatAllowed = true;
   }
 
   startRecording(): void {
     navigator.mediaDevices.getUserMedia(this.videoContraints).then((stream) => { this.bindStream(stream) })
       .then(() => this.startRecordingVideo(this.previewElement.nativeElement.captureStream()))
       .then((recordedChunks) => { this.recordChunks(recordedChunks) });
+
+    setTimeout(() => {
+      this.stop(this.previewElement.nativeElement.srcObject)
+    }, 6000);
   }
 
   bindStream(stream: any) {
@@ -64,7 +93,7 @@ export class CaptureVideoComponent implements OnInit {
   }
 
   wait(delayInMS: number) {
-        return new Promise(resolve => setTimeout(resolve, delayInMS));
+    return new Promise(resolve => setTimeout(resolve, delayInMS));
   }
 
   startRecordingVideo(stream: any) {
@@ -85,7 +114,6 @@ export class CaptureVideoComponent implements OnInit {
       () => recorder.state == "recording" && recorder.stop()
     );
 
-    this.isVideoTaken = true;
     return Promise.all([stopped, recorded]).then(() => data);
   }
 
@@ -104,14 +132,6 @@ export class CaptureVideoComponent implements OnInit {
     return <File>theBlob;
   }
 
-  stopCamera() {
-    if (this.previewElement.nativeElement.srcObject) {
-      this.previewElement.nativeElement.srcObject.getVideoTracks().forEach(function(track: any) {
-      track.stop();
-    });
-      this.previewElement.nativeElement.srcObject = null; // Clear the stream reference
-    }
-  }
 
   stop(stream: any) {
     stream.getTracks().forEach(function(track: any) {

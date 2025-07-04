@@ -1,15 +1,37 @@
-<div class="record-video-container w-full h-full flex justify-center">
-  
-  <!-- <video [hidden]="isCapturingVideo || isVideoTaken" id="camera" autoplay class="video"></video> -->
-  <video [hidden]="!isCapturingVideo" id="preview" autoplay #preview class="video"></video>
-  <video [hidden]="isCapturingVideo" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
-  <!-- <div class="controls w-full h-full flex justify-center pb-[12px]">
-    <div class="camera-button">
-      <mat-icon svgIcon="videocam" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]" (click)="stopCamera()"></mat-icon>
-    </div>
-    <div class="w-[16px]"></div>
-    <div class="mic-button">
-      <mat-icon svgIcon="mic" class="!w-[20px] !h-[20px] mt-[19.5px] ml-[19px]"></mat-icon>
-    </div>
-  </div> -->
+<div class="numbers flex justify-center items-stretch lg:mb-[48px] lg:mt-[64px]">
+  <div class="numberCircle" style="background-color: var(--link-default); color: white;">1</div>
+  <div class="line"></div>
+  <div class="numberCircle">2</div>
+  <div class="line"></div>
+  <div class="numberCircle">3</div>
+  <div class="line"></div>
+  <div class="numberCircle">4</div>
+  <div class="line"></div>
+  <div class="numberCircle">5</div>
+  </div>
+<h1 class="text-[32px] text-center leading-[40px]">Какой у вас опыт холодных B2B-продаж? Или огромный текст который займет место более трех строчек</h1>
+
+<div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
+  <div class="record-video-container w-full h-full flex justify-center">
+    <video [hidden]="!isCapturingVideo" id="preview" autoplay #preview class="video"></video>
+    <video [hidden]="isCapturingVideo" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
+  </div>
 </div>
+
+<div class="flex justify-center lg:mb-[40px]">
+  <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
+    @if (!isCapturingVideo) {
+      <button mat-flat-button class="btn-primary" (click)="recordHandlre()">Записать ответ</button>
+    } @else {
+      <button mat-flat-button class="btn-secondary flex justify-center" (click)="recordHandlre()">
+        <mat-icon class="stop">stop</mat-icon>Остановить запись
+      </button>
+    }
+    @if (repeatAllowed) {
+      <button mat-flat-button class="btn-secondary flex justify-center">
+        Перезаписать ответ
+      </button>
+    }
+  </div>
+</div>
+

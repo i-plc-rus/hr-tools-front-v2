@@ -1,19 +1,19 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-camera',
   templateUrl: './camera.component.html',
   styleUrl: './camera.component.scss',
 })
-export class CameraComponent implements OnInit {
+export class CameraComponent implements OnInit, OnDestroy  {
   @ViewChild('preview', {static: false}) public previewElement!: ElementRef;
-  @Output() cameraStatus: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() micStatus: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() isCameraCheck: EventEmitter<boolean> = new EventEmitter<boolean>(true);
   cameraAvailable: boolean | undefined;
   micAvailable: boolean | undefined;
   permissionGranted: boolean | undefined;
   errorMessage: string | undefined;
   videoRef: any;
+  // videoStream: any;
 
   constructor(private renderer: Renderer2) { }
 
@@ -27,11 +27,19 @@ export class CameraComponent implements OnInit {
     this.checkMediaDevices();
   }
 
+  ngOnDestroy(): void {
+    this.stopCamera();
+  }
+
+  startInterview() {
+    this.isCameraCheck.emit(false);
+  }
 
   setupCamera() {
     navigator.mediaDevices.getUserMedia(this.videoContraints).then((stream) => {
         console.log(stream);
         this.videoRef.srcObject = stream;
+        // this.videoStream = stream;
     });
   }
 
@@ -44,9 +52,7 @@ export class CameraComponent implements OnInit {
       // If successful, permission is granted and devices are available
       this.permissionGranted = true;
       this.cameraAvailable = true;
-      this.micAvailable = true;
-      this.cameraStatus.emit(true);
-      this.micStatus.emit(true);
+      this.micAvailable = true;     
 
       // Stop the stream immediately if you only want to check availability
       // stream.getTracks().forEach((track) => track.stop());
@@ -54,9 +60,6 @@ export class CameraComponent implements OnInit {
       this.permissionGranted = false;
       this.cameraAvailable = false;
       this.micAvailable = false;
-      this.cameraStatus.emit(false);
-      this.micStatus.emit(false);
-
       if (
         err.name === 'NotAllowedError' ||
         err.name === 'PermissionDeniedError'
@@ -75,34 +78,34 @@ export class CameraComponent implements OnInit {
 
   switchVideo(permission: boolean) {
     const camera = document.getElementById('camera-switch');
+    const videoTrack = this.videoRef.srcObject.getTracks().find((track: { kind: string; }) => track.kind === 'video');
     if (permission) {
       this.renderer.setStyle(camera, 'background-color', '#FF3700');
       this.renderer.setStyle(camera, 'border-color', '#FF3700');
       this.cameraAvailable = false; 
-      this.cameraStatus.emit(false);
-      this.stopCamera();    
+      videoTrack.enabled = false;    
     } else {
       this.renderer.setStyle(camera, 'background-color', '#11182630');
       this.renderer.setStyle(camera, 'border-color', '#FFFFFF60');
       this.cameraAvailable = true;
-      this.cameraStatus.emit(true);
-      this.setupCamera();
+      videoTrack.enabled = true;
     }  
     console.log(this.cameraAvailable);
   }
 
   switchAudio(permission: boolean) {
     const mic = document.getElementById('mic-switch');
+    const audioTrack = this.videoRef.srcObject.getTracks().find((track: { kind: string; }) => track.kind === 'audio');
     if (permission) {
       this.renderer.setStyle(mic, 'background-color', '#FF3700');
       this.renderer.setStyle(mic, 'border-color', '#FF3700');
       this.micAvailable = false;
-      this.micStatus.emit(false);
+      audioTrack.enabled = false;
     } else {
       this.renderer.setStyle(mic, 'background-color', '#11182630');
       this.renderer.setStyle(mic, 'border-color', '#FFFFFF60');
       this.micAvailable = true;
-      this.micStatus.emit(true);
+      audioTrack.enabled = true;
     }  
     console.log(this.micAvailable);
   }

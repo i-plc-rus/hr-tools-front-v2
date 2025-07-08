@@ -8,7 +8,7 @@ import { embedDashboard } from '@superset-ui/embedded-sdk';
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent implements OnInit, AfterViewInit {
+export class AnalyticsComponent implements AfterViewInit {
   private dashboardId = '001e72b3-a184-4748-bac9-165162a0921d';
 
   @ViewChild('supersetContainer', { static: false })
@@ -16,9 +16,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
 
 
   constructor(private api: ApiService) {}
-
-  ngOnInit(): void {
-  }
 
   ngAfterViewInit(): void {
     this.api.v1SpaceSupersetGuestTokenList({ dashboard_code: 'recruiter_dash' }).subscribe({
@@ -38,7 +35,12 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
             hideTitle: true,
             filters: { expanded: true }
           }
-        });
+        });   
+        
+        if (mountPoint && mountPoint.children[0]) {
+          (mountPoint.children[0] as HTMLElement).style.width = "100%";
+          (mountPoint.children[0] as HTMLElement).style.height = "100%";
+        }
       },
       error: (err) => {
         console.error('Ошибка при запросе токена:', err);

@@ -13,24 +13,24 @@
 
 <div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
   <div class="record-video-container w-full h-full flex justify-center">
-    <video [hidden]="!isCapturingVideo" id="preview" autoplay #preview class="video"></video>
-    <video [hidden]="isCapturingVideo" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
+    <video [hidden]="videoFile" id="recorder" autoplay #preview class="video"></video>
+    <video [hidden]="!videoFile" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
   </div>
 </div>
 
 <div class="flex justify-center lg:mb-[40px]">
   <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
-    @if (!isCapturingVideo) {
-      <button mat-flat-button class="btn-primary" (click)="recordHandlre()">Записать ответ</button>
+    
+    @if (videoFile) {
+      <button mat-flat-button class="btn-primary" (click)="recordHandlre()">К следующему вопросу</button>
     } @else {
-      <button mat-flat-button class="btn-secondary flex justify-center" (click)="recordHandlre()">
-        <mat-icon class="stop">stop</mat-icon>Остановить запись
-      </button>
-    }
-    @if (repeatAllowed) {
-      <button mat-flat-button class="btn-secondary flex justify-center">
-        Перезаписать ответ
-      </button>
+      @if (!isCapturingVideo) {
+        <button mat-flat-button class="btn-primary" (click)="recordHandlre()">Записать ответ</button>
+      } @else {
+        <button mat-flat-button class="btn-secondary flex justify-center" (click)="recordHandlre()">
+          <mat-icon class="stop">stop</mat-icon>Остановить запись
+        </button>
+      }
     }
   </div>
 </div>

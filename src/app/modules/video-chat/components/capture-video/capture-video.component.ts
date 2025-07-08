@@ -9,15 +9,13 @@ declare var MediaRecorder: any;
 export class CaptureVideoComponent implements OnInit {
   @ViewChild('preview', {static: false}) public previewElement!: ElementRef;
   @ViewChild('recording', {static: false}) public recordingElement!: ElementRef;
-  public videoButtonTitle: string = "Start Recording";
+  public videoButtonTitle = 'Start';
   public isCapturingVideo: boolean = false;
   public videoContraints = {
     audio: true,
     video: { width: 720, height: 406, }
   }
-  public repeatAllowed: boolean = true;
   public videoFile!: File;
-  public recordButtonColor: string = "coral";
   public questionNumber: number = 1;
 
   constructor(private renderer: Renderer2) {}
@@ -25,7 +23,7 @@ export class CaptureVideoComponent implements OnInit {
   videoRef: any;
 
   ngOnInit(): void {
-    this.videoRef = document.getElementById('preview');
+    this.videoRef = document.getElementById('recorder');
     this.setupCamera();
   }
 
@@ -40,21 +38,15 @@ export class CaptureVideoComponent implements OnInit {
   }
 
   recordHandlre(): void {
-    if (this.videoButtonTitle === "Start Recording" || this.videoButtonTitle === "Record Again") {
+    if (this.videoButtonTitle === "Start") {
       this.isCapturingVideo = true;
-      this.recordButtonColor = "red";
       this.startRecording();
 
-    } else if (this.videoButtonTitle === "Stop Recording") {
-      this.recordButtonColor = "coral";
+    } else if (this.videoButtonTitle === "Stop") {
       this.stop(this.previewElement.nativeElement.srcObject);
     }
   }
 
-
-  repeatAgain(): void {
-    this.repeatAllowed = false;
-  }
 
   goToNextQuestion(state: number) {
     if (this.questionNumber < 6) {
@@ -71,7 +63,6 @@ export class CaptureVideoComponent implements OnInit {
           }
         });
     }
-    this.repeatAllowed = true;
   }
 
   startRecording(): void {
@@ -98,7 +89,7 @@ export class CaptureVideoComponent implements OnInit {
 
   startRecordingVideo(stream: any) {
 
-    this.videoButtonTitle = "Stop Recording";
+    this.videoButtonTitle = "Stop";
     let recorder = new MediaRecorder(stream);
     let data: any = [];
 
@@ -137,7 +128,7 @@ export class CaptureVideoComponent implements OnInit {
     stream.getTracks().forEach(function(track: any) {
       track.stop();
     });
-    this.videoButtonTitle = "Record Again";
+    this.videoButtonTitle = "Start";
     this.isCapturingVideo = false;
   }
 }

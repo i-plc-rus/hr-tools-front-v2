@@ -102,6 +102,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('no-videocam', this.setPath(`${this.svgPath}/ic-no-videocam.svg`))
       .addSvgIcon('no-mic', this.setPath(`${this.svgPath}/ic-no-mic.svg`))
       .addSvgIcon('big-account-box', this.setPath(`${this.svgPath}/ic-big-account-box.svg`))
+      .addSvgIcon('check-circle-filled', this.setPath(`${this.svgPath}/ic-check-circle-filled.svg`))
   }
 
   ngOnInit() {

@@ -24,6 +24,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'video',
+    redirectTo: 'auth',
   }
 ];

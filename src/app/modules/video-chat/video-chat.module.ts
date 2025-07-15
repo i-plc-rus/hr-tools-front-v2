@@ -7,6 +7,7 @@ import { VideoChatComponent } from './video-chat.component';
 import { MatButton } from '@angular/material/button';
 import { CameraComponent } from './components/camera/camera.component';
 import { CaptureVideoComponent } from "./components/capture-video/capture-video.component";
+import { FinishComponent } from './components/finish/finish.component';
 
 
 
@@ -15,6 +16,7 @@ import { CaptureVideoComponent } from "./components/capture-video/capture-video.
     VideoChatComponent,
     CameraComponent,
     CaptureVideoComponent,
+    FinishComponent,
   ],
   imports: [
     CommonModule,

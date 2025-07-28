@@ -23,7 +23,11 @@ export const routes: Routes = [
     loadChildren: () => import('../app/modules/video-chat/video-chat.module').then(r => r.VideoChatModule),
   },
   {
+    path: 'question',
+    loadChildren: () => import('../app/modules/question-generator/question-generator.module').then(r => r.QuestionGeneratorModule),
+  },
+  {
     path: '**',
-    redirectTo: 'auth',
+    redirectTo: 'question',
   }
 ];

@@ -1,10 +1,10 @@
 import { Routes } from "@angular/router";
-import { VideoChatComponent } from "./video-chat.component";
+import { QuestionGeneratorComponent } from "./question-generator.component";
 
 export const routes: Routes = [
   {
     path: '',
-    component: VideoChatComponent, 
+    component: QuestionGeneratorComponent, 
   },
   {
     path: '**',

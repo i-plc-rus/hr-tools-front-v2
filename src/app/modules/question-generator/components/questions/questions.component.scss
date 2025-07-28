@@ -1,0 +1,17 @@
+.question-number {
+  background-color: var(--background-primary);
+  color: var(--link-default);
+  width: 159px;
+  height: 40px;
+  line-height: 24px;
+  font-weight: 500;
+  text-align: center;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 24px;
+  font-size: 16px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}

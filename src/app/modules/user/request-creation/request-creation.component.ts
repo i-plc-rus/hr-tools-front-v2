@@ -119,7 +119,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     }),
 
     [StepForm.Step3]: new FormGroup({
-      [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required]),
+      [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
       [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
       [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
       [Step3Fields.Requirements]: new FormControl(''),
@@ -318,6 +318,9 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   removeInterviewer(index: number): void {
     if (this.interviewers.length > 1) {
       this.interviewers.removeAt(index);
+      for (let i = index; i < this.interviewers.length; i++) {
+        this.interviewers.at(i)?.get('stage')?.setValue(i + 1);
+      }
     }
   }
 

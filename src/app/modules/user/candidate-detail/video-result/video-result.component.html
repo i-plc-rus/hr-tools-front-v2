@@ -1,0 +1,64 @@
+<div class="m-6 flex">
+  <div class="cont flex-col w-full h-full">
+
+    <div class="h-[126px] w-full">
+      <div class="flex">
+        <div class="flex-col">
+          <div class="flex">
+            <h1 class="text-[57px] leading-[64px]">60</h1>
+            <h2 class="text-[16px] leading-[24px] m-[8px]">Набранные<br />баллы кандидатом</h2>
+          </div>
+          <div class="posistion-relative mt-[10px]">
+            <div class="line w-[27.986vw] h-[4px] rounded-[100px] bg-[--background-main]"></div>
+            <div class="child-line line w-[17.361vw] h-[12px] rounded-[100px] bg-[--link-default] posistion-absolute" style="z-index: 10; top: 94px;"></div>
+          </div>
+          <div class="flex mt-[24px]">
+            <div class="circle w-[24px] h-[24px] bg-[--link-default] mr-[8px] rounded-[100px] text-center text-[11px] leading-[16px] pt-[4px] font-weight-bold text-white">80</div>
+            <h2 class="text-[14px] my-[2px] leading-[20px]">Минимальный проходной балл для данной вакансии</h2>
+          </div>
+        </div>
+        <div class="icon-container ml-[51px]">
+          <mat-icon svgIcon="green-polygon" class="base-icon !w-[126px] !h-[126px]"> </mat-icon>
+          <mat-icon svgIcon="green-y" class="overlay-icon !w-[24px] !h-[24px]"></mat-icon>
+          <p class="overlay-text text-[12px] leading-[16px] text-center text-[var(--status-color-success)]">Кандидат соответсвует вакансии</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-[22px] leading-[28px] mt-[42px] mb-[16px] ">Вопросы-ответы</h2>
+    
+    <div class="h-[370px] w-full overflow-y-auto">
+      @for (item of answerList; track $index) {
+        <div class="min-h-[56px] border-2 rounded-[12px] mb-[12px]">
+          <p class="text-[16px] p-[16px] leading-[24px] text-[var(--link-default)]" style="font-weight: 500;">Какой у вас опыт холодных B2B-продаж?</p>
+        </div>
+      }
+    </div>
+
+  </div>
+  <div class="w-[24px]"></div>
+  <div class="cont flex-col w-full h-full">
+
+    <h2 class="text-[22px] leading-[28px] mb-[12px] ">Краткий отчёт AI-ассистента</h2>
+
+    <div class="h-[148px] w-full bg-[--background-main] mb-[24px] rounded-[16px]">
+      <p class="p-[12px] text-[16px] leading-[24px]">Кандидат не соответствует вакансии, у него есть опыт холодных B2B-продаж, он правильно рассуждает о навыках, но нет опыта в IT-сфере и достаточного уровня стрессоустойчивости. По бальной шкале он не прошел минимальный порог 80 баллов.</p>
+    </div>
+
+    <div class="h-[370px] w-full bg-[--link-default] rounded-[16px]">
+      <video src=""></video>
+    </div>
+
+  </div>
+</div>
+
+<div class="mx-6 mb-8 flex">
+  <div class="cont flex-col w-full h-full rounded-[16px]">
+    <div class="flex justify-between items-center p-6 pb-4">
+      <div class="flex gap-6">
+        <h2 class="text-[22px]">Подробный результат</h2>
+      </div>
+    </div>
+    <ag-grid-angular [gridOptions]="gridOptions" domLayout="autoHeight" class="ag-theme-material flex-1 w-full" />
+  </div>
+</div>

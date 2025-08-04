@@ -1,0 +1,31 @@
+.parent-line {
+  position: relative;
+}
+
+.child-line {
+  margin-bottom: 8px;
+  position: absolute;
+}
+
+.icon-container {
+  position: relative;
+  width: 24px; 
+  height: 24px;
+}
+
+.overlay-icon {
+  position: absolute;
+  top: 21px;
+  left: 51px;
+  font-size: 16px;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 49px;
+  left: 25px;
+}
+
+::-webkit-scrollbar {
+  width: 24px;
+}

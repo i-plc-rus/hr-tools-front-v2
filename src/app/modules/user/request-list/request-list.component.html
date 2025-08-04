@@ -56,15 +56,6 @@
       </mat-expansion-panel>
 
       <mat-expansion-panel class="mat-elevation-z">
-        <mat-expansion-panel-header>Вид подбора</mat-expansion-panel-header>
-        <mat-chip-listbox hideSingleSelectionIndicator formControlName="selection_type">
-          @for (selectionType of selectionTypes; track $index) {
-            <mat-chip-option [value]="selectionType">{{ selectionType }}</mat-chip-option>
-          }
-        </mat-chip-listbox>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel class="mat-elevation-z">
         <mat-expansion-panel-header>Дата создания</mat-expansion-panel-header>
         <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="search_period">
           <mat-chip-option

@@ -114,6 +114,9 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
 
   private destroy$ = new Subject<void>();
 
+  minDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() - 100));
+  maxDate: Date = new Date()
+
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,

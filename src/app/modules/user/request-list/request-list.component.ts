@@ -80,7 +80,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestAuthors: SpaceUser[] = [];
 
   // вакансии
-  isLoading = false;
+  isLoading = true;
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
@@ -189,7 +189,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
               this.currentPage++;
             }
           }
-
+          this.isLoading = false;
           this.loading = false;
         },
         error: (error) => {

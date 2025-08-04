@@ -62,7 +62,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   userId = localStorage.getItem('userId') || '';
 
   // вакансии
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
@@ -152,6 +152,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
         this.loading = false;
+        this.isLoading = false;
       },
       error: (error) => {
         console.log(error);

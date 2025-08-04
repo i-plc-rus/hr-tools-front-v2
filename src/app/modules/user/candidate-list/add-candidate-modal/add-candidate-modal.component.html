@@ -82,7 +82,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Дата рождения</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="birth_date"  autocomplete="new-birth-date" />
+            <input matInput [matDatepicker]="picker" formControlName="birth_date"  autocomplete="new-birth-date" [min]="minDate" [max]="maxDate" />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -143,7 +143,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
-            <mat-label>Опыт работ в месяцах</mat-label>
+            <mat-label>Опыт работы</mat-label>
             <input type="number" matInput formControlName="total_experience" autocomplete="new-total-experience"/>
           </mat-form-field>
         </div>

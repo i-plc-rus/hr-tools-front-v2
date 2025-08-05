@@ -8,7 +8,7 @@
   (onSearch)="onSearch()">
 </app-search-input>
   </div>
-<div class="w-full p-6 bg-white rounded-3xl" style="height: calc(100vh - 150px)">
+<div class="w-full p-6 bg-white rounded-3xl overflow-y-hidden" style="height: calc(100vh - 150px)">
   <div class="flex items-center justify-between">
     <h1 class="text-[22px]">Сотрудники организации</h1>
     <button mat-flat-button class="btn-secondary" (click)="openAddUserModal()">
@@ -16,6 +16,6 @@
       <span>Добавить сотрудника</span>
     </button>
   </div>
-  <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material  h-[98%] w-full" />
+  <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material  h-[98%] w-full pb-6" />
 </div>
 </div>

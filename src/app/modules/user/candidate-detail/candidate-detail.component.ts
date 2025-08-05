@@ -1,13 +1,11 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnChanges, OnDestroy,
   OnInit,
   Output,
-  Renderer2,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -25,7 +23,7 @@ import {
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 import {MatTabGroup} from '@angular/material/tabs';
 import {SnackBarService} from '../../../services/snackbar.service';
-import { PDFDocumentProxy, PdfViewerComponent } from 'ng2-pdf-viewer';
+import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -60,7 +58,6 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private snackBarService: SnackBarService,
-    private renderer: Renderer2,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {

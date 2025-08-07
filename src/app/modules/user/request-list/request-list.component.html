@@ -122,6 +122,15 @@
           <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
             Не согласовано
           </mat-chip-option>
+          <mat-chip-option [value]="'Создана'" [selectable]="category.value !== 'Создана'">
+            Создана
+          </mat-chip-option>
+          <mat-chip-option [value]="'На доработке'" [selectable]="category.value !== 'На доработке'">
+            На доработке
+          </mat-chip-option>
+          <mat-chip-option [value]="'Отменена'" [selectable]="category.value !== 'Отменена'">
+            Отменена
+          </mat-chip-option>
         </mat-chip-listbox>
       </div>
       <div class="flex gap-4">

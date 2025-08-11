@@ -495,7 +495,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       employment: step3?.employment as ModelsEmployment,
       experience: step3?.experience as ModelsExperience,
       schedule: step3?.schedule as ModelsSchedule,
-      selection_type: selection_type as ModelsVRSelectionType,
+      selection_type: ModelsVRSelectionType.VRSelectionTypePersonal,
       description: description || undefined,
       approval_stages: step4?.interviewers?.map(
         (interviewer: { space_user_id: string | null; stage: number | null }) => ({

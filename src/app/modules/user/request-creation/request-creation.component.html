@@ -300,7 +300,7 @@
 
     <div class="absolute bottom-10 left-30 bg-white  py-3 px-4 flex justify-left items-center">
     <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
-    @if (showForm) {
+    <!-- @if (showForm) { -->
       <button mat-flat-button class="btn-primary mr-[130px]"
               [disabled]="getCurrentStepGroup()?.invalid"
               (click)="openSaveDraftDialog()">Сохранить черновик
@@ -315,7 +315,7 @@
       @if (isLastStep) {
         <button mat-flat-button class="btn-primary" (click)="onSubmit()">Отправить на согласование</button>
       }
-    }
+    <!-- } -->
   </div>
   <ng-template #saveDraftDialog>
     <div class="modal-overlay">

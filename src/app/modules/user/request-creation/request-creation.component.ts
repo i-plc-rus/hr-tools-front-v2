@@ -241,6 +241,10 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   }
 
+  ngAfterViewInit() {
+    this.startForm();
+  }
+
   ngAfterViewChecked(): void {
     if (!this._selectInitialized && this.userSelect) {
       this._selectInitialized = true;
@@ -373,9 +377,8 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     return company && company.name ? company.name : '';
   }
 
-  startForm(value: ModelsVRSelectionType) {
-    this.form.get('selection_type')?.setValue(value);
-    const dialogRef = this.dialog.open(this.draftDialog, {
+  startForm() {
+    this.dialog.open(this.draftDialog, {
       hasBackdrop: true,
       disableClose: false
     });
@@ -471,7 +474,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     const step3 = this.form.get(StepForm.Step3)?.value;
     const step4 = this.form.get(StepForm.Step4)?.value;
 
-    const selection_type = this.form.get('selection_type')?.value;
+    const selection_type = ModelsVRSelectionType.VRSelectionTypePersonal;
     const description = this.form.get('description')?.value;
 
     const company = step1?.company_name;

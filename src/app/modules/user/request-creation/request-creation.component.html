@@ -6,18 +6,18 @@
     <p class="text-base mb-6">Выберите направление подбора к которому относится эта вакансия</p>
     <div class="flex gap-3">
       <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm(ModelsVRSelectionType.VRSelectionTypeMass)">
+              (click)="startForm()">
         <mat-icon class="!w-10 !h-10" svgIcon="profile-in-circle"></mat-icon>
         <span>Массовый</span>
       </button>
       <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm(ModelsVRSelectionType.VRSelectionTypePersonal)">
+              (click)="startForm()">
         <mat-icon class="!w-10 !h-10" svgIcon="business-bag"></mat-icon>
         <span>Профессиональный</span>
       </button>
     </div>
-  }
-  @if (showForm) { -->
+  } -->
+  <!-- @if (showForm) { -->
     <form [formGroup]="form" class="max-w-[580px] mb-[70px]">
       <mat-stepper #stepper [linear]="true" class="!bg-transparent" (selectionChange)="onStepChange($event)">
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step1)">

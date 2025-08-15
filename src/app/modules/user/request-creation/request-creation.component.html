@@ -272,9 +272,9 @@
                   </div>
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Выберите сотрудника</mat-label>
-                    <mat-select #userSelect formControlName="space_user_id">
+                    <mat-select #userSelect formControlName="space_user_id" (selectionChange)="onOptionChange($event, $index)">
                       @for (item of users; track item) {
-                        <mat-option [value]="item.id">
+                        <mat-option [value]="item.id" >
                           {{ item.first_name }} {{ item.last_name }}
                         </mat-option>
                       }

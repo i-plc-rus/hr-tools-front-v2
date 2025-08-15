@@ -138,7 +138,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     }),
 
     description: new FormControl(''),
-    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(ModelsVRSelectionType.VRSelectionTypePersonal),
   });
 
 
@@ -432,6 +432,18 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.dialog.closeAll();
   }
 
+  onOptionChange(event: any, index: number) {
+    const selectedValue = event.value;
+    const controlToUpdate = this.interviewers.at(index);
+      
+    controlToUpdate.patchValue({
+      space_user_id: selectedValue,
+    })
+      
+    console.log(`Item at index ${index} selected: ${controlToUpdate.value.space_user_id}`);
+    console.log(controlToUpdate.value.space_user_id);
+  }
+
   hasDraft(): boolean {
     const draft = localStorage.getItem('draftFormData');
     return !!draft;
@@ -460,6 +472,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   saveDraftAndExit(): void {
     localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
+    console.log(this.form);
     this.closeDialog();
     this.router.navigate(['/user/request/list'])
   }
@@ -474,7 +487,6 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     const step3 = this.form.get(StepForm.Step3)?.value;
     const step4 = this.form.get(StepForm.Step4)?.value;
 
-    const selection_type = ModelsVRSelectionType.VRSelectionTypePersonal;
     const description = this.form.get('description')?.value;
 
     const company = step1?.company_name;

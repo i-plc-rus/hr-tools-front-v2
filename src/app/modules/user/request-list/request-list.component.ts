@@ -129,7 +129,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getRequests(loadMore = false): void {
-    if (this.loading || this.allDataLoaded) return;
 
     this.loading = true;
 

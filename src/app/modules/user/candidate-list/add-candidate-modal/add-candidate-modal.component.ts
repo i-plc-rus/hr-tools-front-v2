@@ -84,11 +84,12 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
     phone: new FormControl('', Validators.required),
     relocation: new FormControl<ModelsRelocationType | ''>(''),
     salary: new FormControl<number | undefined>(undefined),
-    source: new FormControl<ModelsApplicantSource>(ModelsApplicantSource.ApplicantSourceManual, Validators.required),
+    source: new FormControl<ModelsApplicantSource | undefined>(undefined, Validators.required),
     total_experience: new FormControl<number | undefined>(undefined),
     vacancy_id: new FormControl('', Validators.required),
   });
   driverLicenseTypes = Object.values(ModelsDriverLicenseType);
+  sourceTypes = Object.values(ModelsApplicantSource);
   genderTypes = genderTypes;
   educationTypes = educationTypes;
   employmentTypes = employmentTypes;

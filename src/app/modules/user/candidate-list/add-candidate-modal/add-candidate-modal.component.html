@@ -193,6 +193,14 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <mat-form-field class="w-1/2" appearance="outline">
+          <mat-label>Источник кандидата</mat-label>
+          <mat-select formControlName="source">
+            @for (source of sourceTypes; track $index) {
+              <mat-option [value]="source">{{ source }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
         <span class="text-[16px] leading-5 font-medium mb-3">Знание языков</span>
         <div [formGroup]="params">
           <ul class="flex flex-col" formArrayName="languages">

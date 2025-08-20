@@ -120,7 +120,16 @@ export class СandidateListComponent implements OnDestroy{
       headerClass: 'font-medium',
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.negotiation_date) {
-          return new Date(params.data?.negotiation_date).toLocaleDateString('ru-RU');
+          // Парсим дату в формате DD.MM.YYYY
+          const dateParts = params.data.negotiation_date.split('.');
+          if (dateParts.length === 3) {
+            const day = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1;
+            const year = parseInt(dateParts[2]);
+            const date = new Date(year, month, day);
+            return date.toLocaleDateString('ru-RU');
+          }
+          return params.data.negotiation_date; 
         } else
           return '';
       }
@@ -136,7 +145,16 @@ export class СandidateListComponent implements OnDestroy{
       headerClass: 'font-medium',
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.start_date) {
-          return new Date(params.data?.start_date).toLocaleDateString('ru-RU');
+          // Парсим дату в формате DD.MM.YYYY
+          const dateParts = params.data.start_date.split('.');
+          if (dateParts.length === 3) {
+            const day = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1; 
+            const year = parseInt(dateParts[2]);
+            const date = new Date(year, month, day);
+            return date.toLocaleDateString('ru-RU');
+          }
+          return params.data.start_date; 
         } else
           return '';
       }

@@ -182,7 +182,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
           this.category.setValue('all');
         }
-        this.getVacancyList();
+        const index = this.vacancyList.findIndex(item => item.id === id);
+        this.vacancyList[index].favorite = set; 
+        // this.getVacancyList();
       },
       error: (error) => {
         console.log(error);
@@ -196,7 +198,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: () => {
-        this.getVacancyList();
+        const index = this.vacancyList.findIndex(item => item.id === id);
+        this.vacancyList[index].pinned = set; 
+        // this.getVacancyList();
       },
       error: (error) => {
         console.log(error);

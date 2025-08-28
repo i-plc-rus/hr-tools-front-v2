@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -9,11 +10,11 @@
  * ---------------------------------------------------------------
  */
 
-import { HttpClient, HttpResponse } from "@angular/common/http";
-import { Inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { RequestOptions } from "./http-client";
+import { RequestOptions } from './http-client';
 
 import {
   AdminpanelapimodelsUser,
@@ -91,6 +92,7 @@ import {
   SurveyapimodelsHRSurvey,
   SurveyapimodelsHRSurveyView,
   VacancyapimodelsApprovalStages,
+  VacancyapimodelsComment,
   VacancyapimodelsExtVacancyInfo,
   VacancyapimodelsPersonFilter,
   VacancyapimodelsSelectionStageAdd,
@@ -105,15 +107,15 @@ import {
   VacancyapimodelsVacancyRequestView,
   VacancyapimodelsVacancyView,
   VacancyapimodelsVrFilter,
-} from "./data-contracts";
+} from './data-contracts';
 
-import { API_BASE_URL } from "../tokens/api.token";
+import { API_BASE_URL } from '../tokens/api.token';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   constructor(
     private readonly http: HttpClient,
-    @Inject(API_BASE_URL) private readonly baseUrl: string = "",
+    @Inject(API_BASE_URL) private readonly baseUrl: string = ''
   ) {}
   /**
    * @description Аутентификация пользователя
@@ -125,7 +127,7 @@ export class ApiService {
    */
   public v1AdminPanelLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: AuthapimodelsJWTResponse;
@@ -133,7 +135,7 @@ export class ApiService {
   >;
   public v1AdminPanelLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -143,7 +145,7 @@ export class ApiService {
   >;
   public v1AdminPanelLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -158,9 +160,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AuthapimodelsJWTResponse;
       }
-    >("POST", this.baseUrl + `/api/v1/admin_panel/login`, {
+    >('POST', this.baseUrl + `/api/v1/admin_panel/login`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -173,20 +175,24 @@ export class ApiService {
    */
   public v1AdminPanelUserCreateCreate(
     body: AdminpanelapimodelsUser,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1AdminPanelUserCreateCreate(
     body: AdminpanelapimodelsUser,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1AdminPanelUserCreateCreate(
     body: AdminpanelapimodelsUser,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/admin_panel/user/create`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/admin_panel/user/create`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление пользователя
@@ -196,18 +202,25 @@ export class ApiService {
    * @summary Удаление пользователя
    * @request DELETE:/api/v1/admin_panel/user/delete/{userID}
    */
-  public v1AdminPanelUserDeleteDelete(userId: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1AdminPanelUserDeleteDelete(
     userId: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1AdminPanelUserDeleteDelete(
+    userId: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1AdminPanelUserDeleteDelete(
     userId: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/admin_panel/user/delete/${userId}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/admin_panel/user/delete/${userId}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение пользователя
@@ -219,7 +232,7 @@ export class ApiService {
    */
   public v1AdminPanelUserGetDetail(
     userId: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: AdminpanelapimodelsUserView;
@@ -227,7 +240,7 @@ export class ApiService {
   >;
   public v1AdminPanelUserGetDetail(
     userId: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -237,7 +250,7 @@ export class ApiService {
   >;
   public v1AdminPanelUserGetDetail(
     userId: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -252,8 +265,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AdminpanelapimodelsUserView;
       }
-    >("GET", this.baseUrl + `/api/v1/admin_panel/user/get/${userId}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/admin_panel/user/get/${userId}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -269,7 +282,9 @@ export class ApiService {
       data?: AdminpanelapimodelsUserView[];
     }
   >;
-  public v1AdminPanelUserListCreate(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1AdminPanelUserListCreate(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: AdminpanelapimodelsUserView[];
@@ -277,7 +292,7 @@ export class ApiService {
     >
   >;
   public v1AdminPanelUserListCreate(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -292,8 +307,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AdminpanelapimodelsUserView[];
       }
-    >("POST", this.baseUrl + `/api/v1/admin_panel/user/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('POST', this.baseUrl + `/api/v1/admin_panel/user/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -307,22 +322,26 @@ export class ApiService {
   public v1AdminPanelUserUpdateUpdate(
     userId: string,
     body: AdminpanelapimodelsUserUpdate,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1AdminPanelUserUpdateUpdate(
     userId: string,
     body: AdminpanelapimodelsUserUpdate,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1AdminPanelUserUpdateUpdate(
     userId: string,
     body: AdminpanelapimodelsUserUpdate,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/admin_panel/user/update/${userId}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/admin_panel/user/update/${userId}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Проверить почту
@@ -332,19 +351,26 @@ export class ApiService {
    * @summary Проверить почту
    * @request POST:/api/v1/auth/check-email
    */
-  public v1AuthCheckEmailCreate(body: AuthapimodelsSendEmail, options?: RequestOptions): Observable<void>;
   public v1AuthCheckEmailCreate(
     body: AuthapimodelsSendEmail,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1AuthCheckEmailCreate(
+    body: AuthapimodelsSendEmail,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1AuthCheckEmailCreate(
     body: AuthapimodelsSendEmail,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/auth/check-email`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/auth/check-email`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Аутентификация пользователя
@@ -356,7 +382,7 @@ export class ApiService {
    */
   public v1AuthLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: AuthapimodelsJWTResponse;
@@ -364,7 +390,7 @@ export class ApiService {
   >;
   public v1AuthLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -374,7 +400,7 @@ export class ApiService {
   >;
   public v1AuthLoginCreate(
     body: AuthapimodelsLoginRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -389,9 +415,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AuthapimodelsJWTResponse;
       }
-    >("POST", this.baseUrl + `/api/v1/auth/login`, {
+    >('POST', this.baseUrl + `/api/v1/auth/login`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -402,16 +428,24 @@ export class ApiService {
    * @summary Получить информацию о текущем пользователе
    * @request GET:/api/v1/auth/me
    */
-  public v1AuthMeList(options?: RequestOptions): Observable<SpaceapimodelsSpaceUser>;
   public v1AuthMeList(
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<SpaceapimodelsSpaceUser>;
+  public v1AuthMeList(
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<SpaceapimodelsSpaceUser>>;
   public v1AuthMeList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
-  ): Observable<HttpResponse<SpaceapimodelsSpaceUser> | SpaceapimodelsSpaceUser> {
-    return this.http.request<SpaceapimodelsSpaceUser>("GET", this.baseUrl + `/api/v1/auth/me`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
+  ): Observable<
+    HttpResponse<SpaceapimodelsSpaceUser> | SpaceapimodelsSpaceUser
+  > {
+    return this.http.request<SpaceapimodelsSpaceUser>(
+      'GET',
+      this.baseUrl + `/api/v1/auth/me`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Восстановить пароль, запрос на отправку письма
@@ -423,7 +457,7 @@ export class ApiService {
    */
   public v1AuthRecoveryCreate(
     body: AuthapimodelsPasswordRecovery,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: AuthapimodelsPasswordRecovery;
@@ -431,7 +465,7 @@ export class ApiService {
   >;
   public v1AuthRecoveryCreate(
     body: AuthapimodelsPasswordRecovery,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -441,7 +475,7 @@ export class ApiService {
   >;
   public v1AuthRecoveryCreate(
     body: AuthapimodelsPasswordRecovery,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -456,9 +490,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AuthapimodelsPasswordRecovery;
       }
-    >("POST", this.baseUrl + `/api/v1/auth/recovery`, {
+    >('POST', this.baseUrl + `/api/v1/auth/recovery`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -471,7 +505,7 @@ export class ApiService {
    */
   public v1AuthRefreshTokenCreate(
     body: AuthapimodelsJWTRefreshRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: AuthapimodelsJWTResponse;
@@ -479,7 +513,7 @@ export class ApiService {
   >;
   public v1AuthRefreshTokenCreate(
     body: AuthapimodelsJWTRefreshRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -489,7 +523,7 @@ export class ApiService {
   >;
   public v1AuthRefreshTokenCreate(
     body: AuthapimodelsJWTRefreshRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -504,9 +538,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: AuthapimodelsJWTResponse;
       }
-    >("POST", this.baseUrl + `/api/v1/auth/refresh-token`, {
+    >('POST', this.baseUrl + `/api/v1/auth/refresh-token`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -517,19 +551,26 @@ export class ApiService {
    * @summary Отправить письмо с подтверждением на почту
    * @request POST:/api/v1/auth/register
    */
-  public v1AuthRegisterCreate(body: AuthapimodelsSendEmail, options?: RequestOptions): Observable<void>;
   public v1AuthRegisterCreate(
     body: AuthapimodelsSendEmail,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1AuthRegisterCreate(
+    body: AuthapimodelsSendEmail,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1AuthRegisterCreate(
     body: AuthapimodelsSendEmail,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/auth/register`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/auth/register`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Восстановить пароль, запрос на сброс пароля по коду
@@ -539,19 +580,26 @@ export class ApiService {
    * @summary Восстановить пароль, запрос на сброс пароля по коду
    * @request POST:/api/v1/auth/reset
    */
-  public v1AuthResetCreate(body: AuthapimodelsPasswordResetRequest, options?: RequestOptions): Observable<void>;
   public v1AuthResetCreate(
     body: AuthapimodelsPasswordResetRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1AuthResetCreate(
+    body: AuthapimodelsPasswordResetRequest,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1AuthResetCreate(
     body: AuthapimodelsPasswordResetRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/auth/reset`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/auth/reset`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Подтверждение почты кодом
@@ -566,26 +614,30 @@ export class ApiService {
       /** код подтверждения */
       code?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1AuthVerifyEmailList(
     query?: {
       /** код подтверждения */
       code?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1AuthVerifyEmailList(
     query?: {
       /** код подтверждения */
       code?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/auth/verify-email`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/auth/verify-email`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Поиск по названию
@@ -597,7 +649,7 @@ export class ApiService {
    */
   public v1DictCityFindCreate(
     body: DictapimodelsCityData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCityView[];
@@ -605,7 +657,7 @@ export class ApiService {
   >;
   public v1DictCityFindCreate(
     body: DictapimodelsCityData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -615,7 +667,7 @@ export class ApiService {
   >;
   public v1DictCityFindCreate(
     body: DictapimodelsCityData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -630,9 +682,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCityView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/city/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/city/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -645,7 +697,7 @@ export class ApiService {
    */
   public v1DictCityDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCityView;
@@ -653,7 +705,7 @@ export class ApiService {
   >;
   public v1DictCityDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -663,7 +715,7 @@ export class ApiService {
   >;
   public v1DictCityDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -678,8 +730,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCityView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/city/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/city/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -692,7 +744,7 @@ export class ApiService {
    */
   public v1DictCompanyCreate(
     body: DictapimodelsCompanyData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -700,7 +752,7 @@ export class ApiService {
   >;
   public v1DictCompanyCreate(
     body: DictapimodelsCompanyData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -710,7 +762,7 @@ export class ApiService {
   >;
   public v1DictCompanyCreate(
     body: DictapimodelsCompanyData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -725,9 +777,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/dict/company`, {
+    >('POST', this.baseUrl + `/api/v1/dict/company`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -740,7 +792,7 @@ export class ApiService {
    */
   public v1DictCompanyFindCreate(
     body: DictapimodelsCompanyData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyView[];
@@ -748,7 +800,7 @@ export class ApiService {
   >;
   public v1DictCompanyFindCreate(
     body: DictapimodelsCompanyData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -758,7 +810,7 @@ export class ApiService {
   >;
   public v1DictCompanyFindCreate(
     body: DictapimodelsCompanyData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -773,9 +825,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/company/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/company/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -788,7 +840,7 @@ export class ApiService {
    */
   public v1DictCompanyDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyView;
@@ -796,7 +848,7 @@ export class ApiService {
   >;
   public v1DictCompanyDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -806,7 +858,7 @@ export class ApiService {
   >;
   public v1DictCompanyDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -821,8 +873,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/company/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/company/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -836,22 +888,26 @@ export class ApiService {
   public v1DictCompanyUpdate(
     id: string,
     body: DictapimodelsCompanyData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1DictCompanyUpdate(
     id: string,
     body: DictapimodelsCompanyData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictCompanyUpdate(
     id: string,
     body: DictapimodelsCompanyData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/dict/company/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/dict/company/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -861,18 +917,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/dict/company/{id}
    */
-  public v1DictCompanyDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1DictCompanyDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1DictCompanyDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictCompanyDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/dict/company/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/dict/company/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -884,7 +947,7 @@ export class ApiService {
    */
   public v1DictCompanyStructCreate(
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -892,7 +955,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructCreate(
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -902,7 +965,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructCreate(
     body: DictapimodelsCompanyStructData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -917,9 +980,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/dict/company_struct`, {
+    >('POST', this.baseUrl + `/api/v1/dict/company_struct`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -932,7 +995,7 @@ export class ApiService {
    */
   public v1DictCompanyStructFindCreate(
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyStructView[];
@@ -940,7 +1003,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructFindCreate(
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -950,7 +1013,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructFindCreate(
     body: DictapimodelsCompanyStructData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -965,9 +1028,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyStructView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/company_struct/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/company_struct/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -980,7 +1043,7 @@ export class ApiService {
    */
   public v1DictCompanyStructDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyStructView;
@@ -988,7 +1051,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -998,7 +1061,7 @@ export class ApiService {
   >;
   public v1DictCompanyStructDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1013,8 +1076,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyStructView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/company_struct/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/company_struct/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1028,22 +1091,26 @@ export class ApiService {
   public v1DictCompanyStructUpdate(
     id: string,
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1DictCompanyStructUpdate(
     id: string,
     body: DictapimodelsCompanyStructData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictCompanyStructUpdate(
     id: string,
     body: DictapimodelsCompanyStructData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/dict/company_struct/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/dict/company_struct/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -1053,18 +1120,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/dict/company_struct/{id}
    */
-  public v1DictCompanyStructDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1DictCompanyStructDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1DictCompanyStructDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictCompanyStructDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/dict/company_struct/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/dict/company_struct/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -1076,7 +1150,7 @@ export class ApiService {
    */
   public v1DictDepartmentCreate(
     body: DictapimodelsDepartmentData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -1084,7 +1158,7 @@ export class ApiService {
   >;
   public v1DictDepartmentCreate(
     body: DictapimodelsDepartmentData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1094,7 +1168,7 @@ export class ApiService {
   >;
   public v1DictDepartmentCreate(
     body: DictapimodelsDepartmentData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1109,9 +1183,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/dict/department`, {
+    >('POST', this.baseUrl + `/api/v1/dict/department`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1124,7 +1198,7 @@ export class ApiService {
    */
   public v1DictDepartmentFindCreate(
     body: DictapimodelsDepartmentFind,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsDepartmentView[];
@@ -1132,7 +1206,7 @@ export class ApiService {
   >;
   public v1DictDepartmentFindCreate(
     body: DictapimodelsDepartmentFind,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1142,7 +1216,7 @@ export class ApiService {
   >;
   public v1DictDepartmentFindCreate(
     body: DictapimodelsDepartmentFind,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1157,9 +1231,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsDepartmentView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/department/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/department/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1172,7 +1246,7 @@ export class ApiService {
    */
   public v1DictDepartmentDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsDepartmentView;
@@ -1180,7 +1254,7 @@ export class ApiService {
   >;
   public v1DictDepartmentDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1190,7 +1264,7 @@ export class ApiService {
   >;
   public v1DictDepartmentDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1205,8 +1279,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsDepartmentView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/department/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/department/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1220,22 +1294,26 @@ export class ApiService {
   public v1DictDepartmentUpdate(
     id: string,
     body: DictapimodelsDepartmentData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1DictDepartmentUpdate(
     id: string,
     body: DictapimodelsDepartmentData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictDepartmentUpdate(
     id: string,
     body: DictapimodelsDepartmentData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/dict/department/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/dict/department/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -1245,18 +1323,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/dict/department/{id}
    */
-  public v1DictDepartmentDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1DictDepartmentDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1DictDepartmentDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictDepartmentDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/dict/department/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/dict/department/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -1268,7 +1353,7 @@ export class ApiService {
    */
   public v1DictJobTitleCreate(
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -1276,7 +1361,7 @@ export class ApiService {
   >;
   public v1DictJobTitleCreate(
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1286,7 +1371,7 @@ export class ApiService {
   >;
   public v1DictJobTitleCreate(
     body: DictapimodelsJobTitleData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1301,9 +1386,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/dict/job_title`, {
+    >('POST', this.baseUrl + `/api/v1/dict/job_title`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1316,7 +1401,7 @@ export class ApiService {
    */
   public v1DictJobTitleFindCreate(
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyView[];
@@ -1324,7 +1409,7 @@ export class ApiService {
   >;
   public v1DictJobTitleFindCreate(
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1334,7 +1419,7 @@ export class ApiService {
   >;
   public v1DictJobTitleFindCreate(
     body: DictapimodelsJobTitleData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1349,9 +1434,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/job_title/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/job_title/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1364,7 +1449,7 @@ export class ApiService {
    */
   public v1DictJobTitleDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyView;
@@ -1372,7 +1457,7 @@ export class ApiService {
   >;
   public v1DictJobTitleDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1382,7 +1467,7 @@ export class ApiService {
   >;
   public v1DictJobTitleDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1397,8 +1482,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/job_title/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/job_title/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1412,22 +1497,26 @@ export class ApiService {
   public v1DictJobTitleUpdate(
     id: string,
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1DictJobTitleUpdate(
     id: string,
     body: DictapimodelsJobTitleData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictJobTitleUpdate(
     id: string,
     body: DictapimodelsJobTitleData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/dict/job_title/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/dict/job_title/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -1437,18 +1526,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/dict/job_title/{id}
    */
-  public v1DictJobTitleDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1DictJobTitleDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1DictJobTitleDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictJobTitleDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/dict/job_title/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/dict/job_title/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -1460,7 +1556,7 @@ export class ApiService {
    */
   public v1DictRejectReasonCreate(
     body: DictapimodelsRejectReasonData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -1468,7 +1564,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonCreate(
     body: DictapimodelsRejectReasonData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1478,7 +1574,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonCreate(
     body: DictapimodelsRejectReasonData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1493,9 +1589,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/dict/reject_reason`, {
+    >('POST', this.baseUrl + `/api/v1/dict/reject_reason`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1508,7 +1604,7 @@ export class ApiService {
    */
   public v1DictRejectReasonFindCreate(
     body: DictapimodelsRejectReasonFind,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsRejectReasonView[];
@@ -1516,7 +1612,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonFindCreate(
     body: DictapimodelsRejectReasonFind,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1526,7 +1622,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonFindCreate(
     body: DictapimodelsRejectReasonFind,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1541,9 +1637,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsRejectReasonView[];
       }
-    >("POST", this.baseUrl + `/api/v1/dict/reject_reason/find`, {
+    >('POST', this.baseUrl + `/api/v1/dict/reject_reason/find`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1556,7 +1652,7 @@ export class ApiService {
    */
   public v1DictRejectReasonDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsRejectReasonView;
@@ -1564,7 +1660,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1574,7 +1670,7 @@ export class ApiService {
   >;
   public v1DictRejectReasonDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1589,8 +1685,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsRejectReasonView;
       }
-    >("GET", this.baseUrl + `/api/v1/dict/reject_reason/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/dict/reject_reason/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1604,22 +1700,26 @@ export class ApiService {
   public v1DictRejectReasonUpdate(
     id: string,
     body: DictapimodelsRejectReasonData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1DictRejectReasonUpdate(
     id: string,
     body: DictapimodelsRejectReasonData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictRejectReasonUpdate(
     id: string,
     body: DictapimodelsRejectReasonData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/dict/reject_reason/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/dict/reject_reason/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -1629,18 +1729,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/dict/reject_reason/{id}
    */
-  public v1DictRejectReasonDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1DictRejectReasonDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1DictRejectReasonDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1DictRejectReasonDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/dict/reject_reason/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/dict/reject_reason/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Сгенерировать описание вакансии
@@ -1652,7 +1759,7 @@ export class ApiService {
    */
   public v1GptGenerateVacancyDescriptionCreate(
     body: GptmodelsGenVacancyDescRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: GptmodelsGenVacancyDescResponse;
@@ -1660,7 +1767,7 @@ export class ApiService {
   >;
   public v1GptGenerateVacancyDescriptionCreate(
     body: GptmodelsGenVacancyDescRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1670,7 +1777,7 @@ export class ApiService {
   >;
   public v1GptGenerateVacancyDescriptionCreate(
     body: GptmodelsGenVacancyDescRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1685,9 +1792,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: GptmodelsGenVacancyDescResponse;
       }
-    >("POST", this.baseUrl + `/api/v1/gpt/generate_vacancy_description`, {
+    >('POST', this.baseUrl + `/api/v1/gpt/generate_vacancy_description`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1705,7 +1812,7 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1OauthCallbackAvitoList(
     query: {
@@ -1714,7 +1821,7 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1OauthCallbackAvitoList(
     query: {
@@ -1723,12 +1830,16 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/oauth/callback/avito`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/oauth/callback/avito`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Аутентификация HH
@@ -1745,7 +1856,7 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1OauthCallbackHhList(
     query: {
@@ -1754,7 +1865,7 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1OauthCallbackHhList(
     query: {
@@ -1763,12 +1874,16 @@ export class ApiService {
       /** authorization_code */
       code?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/oauth/callback/hh`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/oauth/callback/hh`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание организации
@@ -1778,19 +1893,26 @@ export class ApiService {
    * @summary Создание организации
    * @request POST:/api/v1/organizations
    */
-  public v1OrganizationsCreate(body: SpaceapimodelsCreateOrganization, options?: RequestOptions): Observable<void>;
   public v1OrganizationsCreate(
     body: SpaceapimodelsCreateOrganization,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1OrganizationsCreate(
+    body: SpaceapimodelsCreateOrganization,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1OrganizationsCreate(
     body: SpaceapimodelsCreateOrganization,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/organizations`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/organizations`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Запрос детальной информации через Дадата
@@ -1805,26 +1927,30 @@ export class ApiService {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1OrganizationsRetrieveCreate(
     query?: {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1OrganizationsRetrieveCreate(
     query?: {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/organizations/retrieve`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/organizations/retrieve`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Поиск по ИНН через Дадата
@@ -1839,26 +1965,30 @@ export class ApiService {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1OrganizationsSuggestList(
     query?: {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1OrganizationsSuggestList(
     query?: {
       /** параметры запроса в дадату */
       query?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/organizations/suggest`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/organizations/suggest`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение анкеты
@@ -1870,7 +2000,7 @@ export class ApiService {
    */
   public v1PublicSurveyDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: SurveyapimodelsApplicantSurveyView;
@@ -1878,7 +2008,7 @@ export class ApiService {
   >;
   public v1PublicSurveyDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1888,7 +2018,7 @@ export class ApiService {
   >;
   public v1PublicSurveyDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1903,8 +2033,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SurveyapimodelsApplicantSurveyView;
       }
-    >("GET", this.baseUrl + `/api/v1/public/survey/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/public/survey/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1918,22 +2048,26 @@ export class ApiService {
   public v1PublicSurveyUpdate(
     id: string,
     body: SurveyapimodelsApplicantSurveyResponses,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1PublicSurveyUpdate(
     id: string,
     body: SurveyapimodelsApplicantSurveyResponses,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1PublicSurveyUpdate(
     id: string,
     body: SurveyapimodelsApplicantSurveyResponses,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/public/survey/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/public/survey/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Источники кандидатов
@@ -1945,7 +2079,7 @@ export class ApiService {
    */
   public v1SpaceAnalyticsSourceUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: ApplicantapimodelsApplicantSourceData;
@@ -1953,7 +2087,7 @@ export class ApiService {
   >;
   public v1SpaceAnalyticsSourceUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -1963,7 +2097,7 @@ export class ApiService {
   >;
   public v1SpaceAnalyticsSourceUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -1978,9 +2112,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: ApplicantapimodelsApplicantSourceData;
       }
-    >("PUT", this.baseUrl + `/api/v1/space/analytics/source`, {
+    >('PUT', this.baseUrl + `/api/v1/space/analytics/source`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -1993,20 +2127,24 @@ export class ApiService {
    */
   public v1SpaceAnalyticsSourceExportUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceAnalyticsSourceExportUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceAnalyticsSourceExportUpdate(
     body: ApplicantapimodelsApplicantFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/space/analytics/source_export`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/analytics/source_export`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -2018,7 +2156,7 @@ export class ApiService {
    */
   public v1SpaceApplicantCreate(
     body: ApplicantapimodelsApplicantData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -2026,7 +2164,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantCreate(
     body: ApplicantapimodelsApplicantData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -2036,7 +2174,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantCreate(
     body: ApplicantapimodelsApplicantData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -2051,9 +2189,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/space/applicant`, {
+    >('POST', this.baseUrl + `/api/v1/space/applicant`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -2064,18 +2202,25 @@ export class ApiService {
    * @summary Скачать документ кандидата
    * @request GET:/api/v1/space/applicant/doc/{id}
    */
-  public v1SpaceApplicantDocDetail(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceApplicantDocDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantDocDetail(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantDocDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/applicant/doc/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/applicant/doc/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить документ кандидата
@@ -2085,18 +2230,25 @@ export class ApiService {
    * @summary Удалить документ кандидата
    * @request DELETE:/api/v1/space/applicant/doc/{id}
    */
-  public v1SpaceApplicantDocDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceApplicantDocDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantDocDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantDocDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/applicant/doc/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/applicant/doc/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Список
@@ -2108,7 +2260,7 @@ export class ApiService {
    */
   public v1SpaceApplicantListCreate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: ApplicantapimodelsApplicantView[];
@@ -2116,7 +2268,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantListCreate(
     body: ApplicantapimodelsApplicantFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -2126,7 +2278,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantListCreate(
     body: ApplicantapimodelsApplicantFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -2141,9 +2293,9 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: ApplicantapimodelsApplicantView[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/applicant/list`, {
+    >('POST', this.baseUrl + `/api/v1/space/applicant/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -2156,23 +2308,23 @@ export class ApiService {
    */
   public v1SpaceApplicantMultiActionsChangeStageUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantMultiActionsChangeStageUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantMultiActionsChangeStageUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/applicant/multi-actions/change_stage`,
       {
         body: body,
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -2185,20 +2337,24 @@ export class ApiService {
    */
   public v1SpaceApplicantMultiActionsExportXlsUpdate(
     body: ApplicantapimodelsXlsExportRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceApplicantMultiActionsExportXlsUpdate(
     body: ApplicantapimodelsXlsExportRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantMultiActionsExportXlsUpdate(
     body: ApplicantapimodelsXlsExportRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/space/applicant/multi-actions/export_xls`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/multi-actions/export_xls`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отклонить кандидатов
@@ -2210,20 +2366,24 @@ export class ApiService {
    */
   public v1SpaceApplicantMultiActionsRejectUpdate(
     body: ApplicantapimodelsMultiRejectRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantMultiActionsRejectUpdate(
     body: ApplicantapimodelsMultiRejectRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantMultiActionsRejectUpdate(
     body: ApplicantapimodelsMultiRejectRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/multi-actions/reject`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/multi-actions/reject`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отправить письма кандидатам
@@ -2235,7 +2395,7 @@ export class ApiService {
    */
   public v1SpaceApplicantMultiActionsSendEmailUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: ApplicantapimodelsMultiEmailResponse;
@@ -2243,7 +2403,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantMultiActionsSendEmailUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -2253,7 +2413,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantMultiActionsSendEmailUpdate(
     body: ApplicantapimodelsMultiChangeStageRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -2268,10 +2428,14 @@ export class ApiService {
       ApimodelsResponse & {
         data?: ApplicantapimodelsMultiEmailResponse;
       }
-    >("PUT", this.baseUrl + `/api/v1/space/applicant/multi-actions/send_email`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    >(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/multi-actions/send_email`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение по ИД
@@ -2283,7 +2447,7 @@ export class ApiService {
    */
   public v1SpaceApplicantDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: ApplicantapimodelsApplicantViewExt;
@@ -2291,7 +2455,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -2301,7 +2465,7 @@ export class ApiService {
   >;
   public v1SpaceApplicantDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -2316,8 +2480,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: ApplicantapimodelsApplicantViewExt;
       }
-    >("GET", this.baseUrl + `/api/v1/space/applicant/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/applicant/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -2331,22 +2495,26 @@ export class ApiService {
   public v1SpaceApplicantUpdate(
     id: string,
     body: ApplicantapimodelsApplicantData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantUpdate(
     id: string,
     body: ApplicantapimodelsApplicantData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantUpdate(
     id: string,
     body: ApplicantapimodelsApplicantData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Перевести на другой этап подбора
@@ -2362,7 +2530,7 @@ export class ApiService {
       /** Идентификатор этапа на который необходимо перевести кандидата */
       stage_id: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantChangeStageUpdate(
     id: string,
@@ -2370,7 +2538,7 @@ export class ApiService {
       /** Идентификатор этапа на который необходимо перевести кандидата */
       stage_id: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantChangeStageUpdate(
     id: string,
@@ -2378,12 +2546,16 @@ export class ApiService {
       /** Идентификатор этапа на который необходимо перевести кандидата */
       stage_id: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/change_stage`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}/change_stage`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Лог действий
@@ -2396,7 +2568,7 @@ export class ApiService {
   public v1SpaceApplicantChangesUpdate(
     id: string,
     body: ApplicantapimodelsApplicantHistoryFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: ApplicantapimodelsApplicantHistoryView[];
@@ -2405,7 +2577,7 @@ export class ApiService {
   public v1SpaceApplicantChangesUpdate(
     id: string,
     body: ApplicantapimodelsApplicantHistoryFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -2416,7 +2588,7 @@ export class ApiService {
   public v1SpaceApplicantChangesUpdate(
     id: string,
     body: ApplicantapimodelsApplicantHistoryFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -2431,30 +2603,30 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: ApplicantapimodelsApplicantHistoryView[];
       }
-    >("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/changes`, {
+    >('PUT', this.baseUrl + `/api/v1/space/applicant/${id}/changes`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
    * @description Получить список документов кандидата
    *
    * @tags Кандидат
-   * @name V1SpaceApplicantDocListDetail
+   * @name V1SpaceApplicantDocListList
    * @summary Получить список документов кандидата
    * @request GET:/api/v1/space/applicant/{id}/doc/list
    */
-  public v1SpaceApplicantDocListDetail(
+  public v1SpaceApplicantDocListList(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: FilesapimodelsFileView[];
     }
   >;
-  public v1SpaceApplicantDocListDetail(
+  public v1SpaceApplicantDocListList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -2462,9 +2634,9 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceApplicantDocListDetail(
+  public v1SpaceApplicantDocListList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -2479,8 +2651,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: FilesapimodelsFileView[];
       }
-    >("GET", this.baseUrl + `/api/v1/space/applicant/${id}/doc/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/applicant/${id}/doc/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -2497,7 +2669,7 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
       duplicate_id: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantIsolateUpdate(
     id: string,
@@ -2505,7 +2677,7 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
       duplicate_id: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantIsolateUpdate(
     id: string,
@@ -2513,12 +2685,16 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который помечается как не дубликат */
       duplicate_id: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/isolate`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}/isolate`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description (Дубли) Объединение кандидатов
@@ -2534,7 +2710,7 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
       duplicate_id: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantJoinUpdate(
     id: string,
@@ -2542,7 +2718,7 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
       duplicate_id: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantJoinUpdate(
     id: string,
@@ -2550,12 +2726,16 @@ export class ApiService {
       /** Идентификатор кандидата - дубликата, который будет перенесен в архив */
       duplicate_id: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/join`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}/join`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Добавить заметку о кандидате
@@ -2568,7 +2748,7 @@ export class ApiService {
   public v1SpaceApplicantNoteUpdate(
     id: string,
     body: ApplicantapimodelsApplicantNote,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: ApplicantapimodelsApplicantHistoryView[];
@@ -2577,7 +2757,7 @@ export class ApiService {
   public v1SpaceApplicantNoteUpdate(
     id: string,
     body: ApplicantapimodelsApplicantNote,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -2588,7 +2768,7 @@ export class ApiService {
   public v1SpaceApplicantNoteUpdate(
     id: string,
     body: ApplicantapimodelsApplicantNote,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -2603,31 +2783,38 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: ApplicantapimodelsApplicantHistoryView[];
       }
-    >("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/note`, {
+    >('PUT', this.baseUrl + `/api/v1/space/applicant/${id}/note`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
    * @description Скачать фото кандидата
    *
    * @tags Кандидат
-   * @name V1SpaceApplicantPhotoDetail
+   * @name V1SpaceApplicantPhotoList
    * @summary Скачать фото кандидата
    * @request GET:/api/v1/space/applicant/{id}/photo
    */
-  public v1SpaceApplicantPhotoDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceApplicantPhotoDetail(
+  public v1SpaceApplicantPhotoList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantPhotoList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceApplicantPhotoDetail(
+  public v1SpaceApplicantPhotoList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/applicant/${id}/photo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/applicant/${id}/photo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить фото кандидата
@@ -2637,18 +2824,25 @@ export class ApiService {
    * @summary Удалить фото кандидата
    * @request DELETE:/api/v1/space/applicant/{id}/photo
    */
-  public v1SpaceApplicantPhotoDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceApplicantPhotoDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantPhotoDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantPhotoDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/applicant/${id}/photo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/applicant/${id}/photo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отклонить кандидата
@@ -2661,43 +2855,54 @@ export class ApiService {
   public v1SpaceApplicantRejectUpdate(
     id: string,
     body: ApplicantapimodelsRejectRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantRejectUpdate(
     id: string,
     body: ApplicantapimodelsRejectRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantRejectUpdate(
     id: string,
     body: ApplicantapimodelsRejectRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/reject`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}/reject`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать резюме кандидата
    *
    * @tags Кандидат
-   * @name V1SpaceApplicantResumeDetail
+   * @name V1SpaceApplicantResumeList
    * @summary Скачать резюме кандидата
    * @request GET:/api/v1/space/applicant/{id}/resume
    */
-  public v1SpaceApplicantResumeDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceApplicantResumeDetail(
+  public v1SpaceApplicantResumeList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantResumeList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceApplicantResumeDetail(
+  public v1SpaceApplicantResumeList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/applicant/${id}/resume`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/applicant/${id}/resume`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить резюме кандидата
@@ -2707,18 +2912,25 @@ export class ApiService {
    * @summary Удалить резюме кандидата
    * @request DELETE:/api/v1/space/applicant/{id}/resume
    */
-  public v1SpaceApplicantResumeDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceApplicantResumeDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceApplicantResumeDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantResumeDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/applicant/${id}/resume`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/applicant/${id}/resume`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Добавить тэг
@@ -2734,7 +2946,7 @@ export class ApiService {
       /** добавляемый Тег */
       tag?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantTagUpdate(
     id: string,
@@ -2742,7 +2954,7 @@ export class ApiService {
       /** добавляемый Тег */
       tag?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantTagUpdate(
     id: string,
@@ -2750,12 +2962,16 @@ export class ApiService {
       /** добавляемый Тег */
       tag?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/applicant/${id}/tag`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/applicant/${id}/tag`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить тэг
@@ -2771,7 +2987,7 @@ export class ApiService {
       /** удаляемый Тег */
       tag?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceApplicantTagDelete(
     id: string,
@@ -2779,7 +2995,7 @@ export class ApiService {
       /** удаляемый Тег */
       tag?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceApplicantTagDelete(
     id: string,
@@ -2787,12 +3003,16 @@ export class ApiService {
       /** удаляемый Тег */
       tag?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/applicant/${id}/tag`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/applicant/${id}/tag`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить документ кандидата
@@ -2808,7 +3028,7 @@ export class ApiService {
       /** file to upload */
       document: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceApplicantUploadDocCreate(
     id: string,
@@ -2816,7 +3036,7 @@ export class ApiService {
       /** file to upload */
       document: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantUploadDocCreate(
     id: string,
@@ -2824,12 +3044,16 @@ export class ApiService {
       /** file to upload */
       document: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/applicant/${id}/upload-doc`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/space/applicant/${id}/upload-doc`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить фото кандидата
@@ -2845,7 +3069,7 @@ export class ApiService {
       /** Фото кандидата */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceApplicantUploadPhotoCreate(
     id: string,
@@ -2853,7 +3077,7 @@ export class ApiService {
       /** Фото кандидата */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantUploadPhotoCreate(
     id: string,
@@ -2861,12 +3085,16 @@ export class ApiService {
       /** Фото кандидата */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/applicant/${id}/upload-photo`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/space/applicant/${id}/upload-photo`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить резюме кандидата
@@ -2882,7 +3110,7 @@ export class ApiService {
       /** file to upload */
       resume: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceApplicantUploadResumeCreate(
     id: string,
@@ -2890,7 +3118,7 @@ export class ApiService {
       /** file to upload */
       resume: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceApplicantUploadResumeCreate(
     id: string,
@@ -2898,12 +3126,16 @@ export class ApiService {
       /** file to upload */
       resume: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/applicant/${id}/upload-resume`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/space/applicant/${id}/upload-resume`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Проверка подключения к Avito
@@ -2913,16 +3145,22 @@ export class ApiService {
    * @summary Проверка подключения к Avito
    * @request GET:/api/v1/space/ext/avito/check_connected
    */
-  public v1SpaceExtAvitoCheckConnectedList(options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoCheckConnectedList(
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtAvitoCheckConnectedList(
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoCheckConnectedList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/space/ext/avito/check_connected`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/space/ext/avito/check_connected`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение ссылки для авторизации
@@ -2932,16 +3170,22 @@ export class ApiService {
    * @summary Получение ссылки для авторизации
    * @request GET:/api/v1/space/ext/avito/connect_uri
    */
-  public v1SpaceExtAvitoConnectUriList(options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoConnectUriList(
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtAvitoConnectUriList(
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoConnectUriList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/space/ext/avito/connect_uri`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/space/ext/avito/connect_uri`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Привязать существующую вакансию
@@ -2954,22 +3198,26 @@ export class ApiService {
   public v1SpaceExtAvitoAttachUpdate(
     id: string,
     body: AvitoapimodelsVacancyAttach,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoAttachUpdate(
     id: string,
     body: AvitoapimodelsVacancyAttach,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoAttachUpdate(
     id: string,
     body: AvitoapimodelsVacancyAttach,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/avito/${id}/attach`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/avito/${id}/attach`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление вакансии
@@ -2979,18 +3227,25 @@ export class ApiService {
    * @summary Удаление вакансии
    * @request PUT:/api/v1/space/ext/avito/{id}/close
    */
-  public v1SpaceExtAvitoCloseUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoCloseUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtAvitoCloseUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoCloseUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/avito/${id}/close`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/avito/${id}/close`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Публикация вакансии
@@ -3000,38 +3255,45 @@ export class ApiService {
    * @summary Публикация вакансии
    * @request PUT:/api/v1/space/ext/avito/{id}/publish
    */
-  public v1SpaceExtAvitoPublishUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoPublishUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtAvitoPublishUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoPublishUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/avito/${id}/publish`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/avito/${id}/publish`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Статус размещения
    *
    * @tags Интеграция Avito
-   * @name V1SpaceExtAvitoStatusDetail
+   * @name V1SpaceExtAvitoStatusList
    * @summary Статус размещения
    * @request GET:/api/v1/space/ext/avito/{id}/status
    */
-  public v1SpaceExtAvitoStatusDetail(
+  public v1SpaceExtAvitoStatusList(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsExtVacancyInfo;
     }
   >;
-  public v1SpaceExtAvitoStatusDetail(
+  public v1SpaceExtAvitoStatusList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3039,9 +3301,9 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceExtAvitoStatusDetail(
+  public v1SpaceExtAvitoStatusList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3056,8 +3318,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsExtVacancyInfo;
       }
-    >("GET", this.baseUrl + `/api/v1/space/ext/avito/${id}/status`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/ext/avito/${id}/status`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3068,18 +3330,25 @@ export class ApiService {
    * @summary Публикация обновления по вакансии
    * @request PUT:/api/v1/space/ext/avito/{id}/update
    */
-  public v1SpaceExtAvitoUpdateUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtAvitoUpdateUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtAvitoUpdateUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtAvitoUpdateUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/avito/${id}/update`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/avito/${id}/update`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Проверка подключения к HH
@@ -3089,16 +3358,22 @@ export class ApiService {
    * @summary Проверка подключения к HH
    * @request GET:/api/v1/space/ext/hh/check_connected
    */
-  public v1SpaceExtHhCheckConnectedList(options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtHhCheckConnectedList(
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtHhCheckConnectedList(
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhCheckConnectedList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/space/ext/hh/check_connected`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/space/ext/hh/check_connected`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение ссылки для авторизации
@@ -3108,16 +3383,22 @@ export class ApiService {
    * @summary Получение ссылки для авторизации
    * @request GET:/api/v1/space/ext/hh/connect_uri
    */
-  public v1SpaceExtHhConnectUriList(options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtHhConnectUriList(
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtHhConnectUriList(
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhConnectUriList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("GET", this.baseUrl + `/api/v1/space/ext/hh/connect_uri`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'GET',
+      this.baseUrl + `/api/v1/space/ext/hh/connect_uri`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Привязать существующую вакансию
@@ -3130,22 +3411,26 @@ export class ApiService {
   public v1SpaceExtHhAttachUpdate(
     id: string,
     body: HhapimodelsVacancyAttach,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceExtHhAttachUpdate(
     id: string,
     body: HhapimodelsVacancyAttach,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhAttachUpdate(
     id: string,
     body: HhapimodelsVacancyAttach,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/attach`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/hh/${id}/attach`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление вакансии
@@ -3155,18 +3440,25 @@ export class ApiService {
    * @summary Удаление вакансии
    * @request PUT:/api/v1/space/ext/hh/{id}/close
    */
-  public v1SpaceExtHhCloseUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtHhCloseUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtHhCloseUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhCloseUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/close`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/hh/${id}/close`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Публикация вакансии
@@ -3176,38 +3468,45 @@ export class ApiService {
    * @summary Публикация вакансии
    * @request PUT:/api/v1/space/ext/hh/{id}/publish
    */
-  public v1SpaceExtHhPublishUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtHhPublishUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtHhPublishUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhPublishUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/publish`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/hh/${id}/publish`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Статус размещения
    *
    * @tags Интеграция HeadHunter
-   * @name V1SpaceExtHhStatusDetail
+   * @name V1SpaceExtHhStatusList
    * @summary Статус размещения
    * @request GET:/api/v1/space/ext/hh/{id}/status
    */
-  public v1SpaceExtHhStatusDetail(
+  public v1SpaceExtHhStatusList(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsExtVacancyInfo;
     }
   >;
-  public v1SpaceExtHhStatusDetail(
+  public v1SpaceExtHhStatusList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3215,9 +3514,9 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceExtHhStatusDetail(
+  public v1SpaceExtHhStatusList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3232,8 +3531,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsExtVacancyInfo;
       }
-    >("GET", this.baseUrl + `/api/v1/space/ext/hh/${id}/status`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/ext/hh/${id}/status`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3244,18 +3543,25 @@ export class ApiService {
    * @summary Публикация обновления по вакансии
    * @request PUT:/api/v1/space/ext/hh/{id}/update
    */
-  public v1SpaceExtHhUpdateUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceExtHhUpdateUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceExtHhUpdateUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceExtHhUpdateUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/ext/hh/${id}/update`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/ext/hh/${id}/update`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Проверка доступности чата через работный сайт
@@ -3267,7 +3573,7 @@ export class ApiService {
    */
   public v1SpaceMessengerJobIsAvailableList(
     body: NegotiationapimodelsMessengerAvailableRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: NegotiationapimodelsMessengerAvailableResponse;
@@ -3275,7 +3581,7 @@ export class ApiService {
   >;
   public v1SpaceMessengerJobIsAvailableList(
     body: NegotiationapimodelsMessengerAvailableRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3285,7 +3591,7 @@ export class ApiService {
   >;
   public v1SpaceMessengerJobIsAvailableList(
     body: NegotiationapimodelsMessengerAvailableRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3300,9 +3606,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: NegotiationapimodelsMessengerAvailableResponse;
       }
-    >("GET", this.baseUrl + `/api/v1/space/messenger/job/is_available`, {
+    >('GET', this.baseUrl + `/api/v1/space/messenger/job/is_available`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3315,7 +3621,7 @@ export class ApiService {
    */
   public v1SpaceMessengerJobListCreate(
     body: NegotiationapimodelsMessageListRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: NegotiationapimodelsMessageItem;
@@ -3323,7 +3629,7 @@ export class ApiService {
   >;
   public v1SpaceMessengerJobListCreate(
     body: NegotiationapimodelsMessageListRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3333,7 +3639,7 @@ export class ApiService {
   >;
   public v1SpaceMessengerJobListCreate(
     body: NegotiationapimodelsMessageListRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3348,9 +3654,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: NegotiationapimodelsMessageItem;
       }
-    >("POST", this.baseUrl + `/api/v1/space/messenger/job/list`, {
+    >('POST', this.baseUrl + `/api/v1/space/messenger/job/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3363,20 +3669,24 @@ export class ApiService {
    */
   public v1SpaceMessengerJobSendMessageCreate(
     body: NegotiationapimodelsNewMessageRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMessengerJobSendMessageCreate(
     body: NegotiationapimodelsNewMessageRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMessengerJobSendMessageCreate(
     body: NegotiationapimodelsNewMessageRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/messenger/job/send_message`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/messenger/job/send_message`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создание
@@ -3388,7 +3698,7 @@ export class ApiService {
    */
   public v1SpaceMsgTemplatesCreate(
     body: MsgtemplateapimodelsMsgTemplateData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -3396,7 +3706,7 @@ export class ApiService {
   >;
   public v1SpaceMsgTemplatesCreate(
     body: MsgtemplateapimodelsMsgTemplateData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3406,7 +3716,7 @@ export class ApiService {
   >;
   public v1SpaceMsgTemplatesCreate(
     body: MsgtemplateapimodelsMsgTemplateData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3421,9 +3731,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/space/msg-templates`, {
+    >('POST', this.baseUrl + `/api/v1/space/msg-templates`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3439,7 +3749,9 @@ export class ApiService {
       data?: MsgtemplateapimodelsMsgTemplateView[];
     }
   >;
-  public v1SpaceMsgTemplatesListList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1SpaceMsgTemplatesListList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: MsgtemplateapimodelsMsgTemplateView[];
@@ -3447,7 +3759,7 @@ export class ApiService {
     >
   >;
   public v1SpaceMsgTemplatesListList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3462,8 +3774,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: MsgtemplateapimodelsMsgTemplateView[];
       }
-    >("GET", this.baseUrl + `/api/v1/space/msg-templates/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/msg-templates/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3476,20 +3788,24 @@ export class ApiService {
    */
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesSendEmailMsgCreate(
     body: MsgtemplateapimodelsSendMessage,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/send-email-msg`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/msg-templates/send-email-msg`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Переменные шаблона
@@ -3504,7 +3820,9 @@ export class ApiService {
       data?: MsgtemplateapimodelsTemplateItem[];
     }
   >;
-  public v1SpaceMsgTemplatesVariablesList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1SpaceMsgTemplatesVariablesList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: MsgtemplateapimodelsTemplateItem[];
@@ -3512,7 +3830,7 @@ export class ApiService {
     >
   >;
   public v1SpaceMsgTemplatesVariablesList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3527,8 +3845,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: MsgtemplateapimodelsTemplateItem[];
       }
-    >("GET", this.baseUrl + `/api/v1/space/msg-templates/variables`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/msg-templates/variables`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3541,7 +3859,7 @@ export class ApiService {
    */
   public v1SpaceMsgTemplatesDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: DictapimodelsCompanyView;
@@ -3549,7 +3867,7 @@ export class ApiService {
   >;
   public v1SpaceMsgTemplatesDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3559,7 +3877,7 @@ export class ApiService {
   >;
   public v1SpaceMsgTemplatesDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3574,8 +3892,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: DictapimodelsCompanyView;
       }
-    >("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/msg-templates/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3589,22 +3907,26 @@ export class ApiService {
   public v1SpaceMsgTemplatesUpdate(
     id: string,
     body: MsgtemplateapimodelsMsgTemplateData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesUpdate(
     id: string,
     body: MsgtemplateapimodelsMsgTemplateData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesUpdate(
     id: string,
     body: MsgtemplateapimodelsMsgTemplateData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/msg-templates/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -3614,39 +3936,53 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/space/msg-templates/{id}
    */
-  public v1SpaceMsgTemplatesDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceMsgTemplatesDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать изображение логотипа компании для шаблона
    *
    * @tags Шаблоны сообщений
-   * @name V1SpaceMsgTemplatesLogoDetail
+   * @name V1SpaceMsgTemplatesLogoList
    * @summary Скачать изображение логотипа компании для шаблона
    * @request GET:/api/v1/space/msg-templates/{id}/logo
    */
-  public v1SpaceMsgTemplatesLogoDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceMsgTemplatesLogoDetail(
+  public v1SpaceMsgTemplatesLogoList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesLogoList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceMsgTemplatesLogoDetail(
+  public v1SpaceMsgTemplatesLogoList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить изображение логотипа компании для шаблона
@@ -3662,7 +3998,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesLogoCreate(
     id: string,
@@ -3670,7 +4006,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesLogoCreate(
     id: string,
@@ -3678,12 +4014,16 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить изображение логотипа компании для шаблона
@@ -3693,60 +4033,81 @@ export class ApiService {
    * @summary Удалить изображение логотипа компании для шаблона
    * @request DELETE:/api/v1/space/msg-templates/{id}/logo
    */
-  public v1SpaceMsgTemplatesLogoDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceMsgTemplatesLogoDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesLogoDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceMsgTemplatesLogoDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/logo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Предпросмотр pdf на основе шаблона
    *
    * @tags Шаблоны сообщений
-   * @name V1SpaceMsgTemplatesPreviewPdfDetail
+   * @name V1SpaceMsgTemplatesPreviewPdfList
    * @summary Предпросмотр pdf на основе шаблона
    * @request GET:/api/v1/space/msg-templates/{id}/preview_pdf
    */
-  public v1SpaceMsgTemplatesPreviewPdfDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceMsgTemplatesPreviewPdfDetail(
+  public v1SpaceMsgTemplatesPreviewPdfList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesPreviewPdfList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceMsgTemplatesPreviewPdfDetail(
+  public v1SpaceMsgTemplatesPreviewPdfList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/preview_pdf`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/preview_pdf`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать изображение подписи для шаблона
    *
    * @tags Шаблоны сообщений
-   * @name V1SpaceMsgTemplatesSignDetail
+   * @name V1SpaceMsgTemplatesSignList
    * @summary Скачать изображение подписи для шаблона
    * @request GET:/api/v1/space/msg-templates/{id}/sign
    */
-  public v1SpaceMsgTemplatesSignDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceMsgTemplatesSignDetail(
+  public v1SpaceMsgTemplatesSignList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesSignList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceMsgTemplatesSignDetail(
+  public v1SpaceMsgTemplatesSignList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить изображение подписи для шаблона
@@ -3762,7 +4123,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesSignCreate(
     id: string,
@@ -3770,7 +4131,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesSignCreate(
     id: string,
@@ -3778,12 +4139,16 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить изображение подписи для шаблона
@@ -3793,39 +4158,53 @@ export class ApiService {
    * @summary Удалить изображение подписи для шаблона
    * @request DELETE:/api/v1/space/msg-templates/{id}/sign
    */
-  public v1SpaceMsgTemplatesSignDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceMsgTemplatesSignDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesSignDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceMsgTemplatesSignDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/sign`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать изображение печати компании для шаблона
    *
    * @tags Шаблоны сообщений
-   * @name V1SpaceMsgTemplatesStampDetail
+   * @name V1SpaceMsgTemplatesStampList
    * @summary Скачать изображение печати компании для шаблона
    * @request GET:/api/v1/space/msg-templates/{id}/stamp
    */
-  public v1SpaceMsgTemplatesStampDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1SpaceMsgTemplatesStampDetail(
+  public v1SpaceMsgTemplatesStampList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesStampList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1SpaceMsgTemplatesStampDetail(
+  public v1SpaceMsgTemplatesStampList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить изображение печати компании для шаблона
@@ -3841,7 +4220,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceMsgTemplatesStampCreate(
     id: string,
@@ -3849,7 +4228,7 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceMsgTemplatesStampCreate(
     id: string,
@@ -3857,12 +4236,16 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить изображение печати компании для шаблона
@@ -3872,18 +4255,25 @@ export class ApiService {
    * @summary Удалить изображение печати компании для шаблона
    * @request DELETE:/api/v1/space/msg-templates/{id}/stamp
    */
-  public v1SpaceMsgTemplatesStampDelete(id: string, options?: RequestOptions): Observable<void>;
   public v1SpaceMsgTemplatesStampDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1SpaceMsgTemplatesStampDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceMsgTemplatesStampDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("DELETE", this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/msg-templates/${id}/stamp`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Список
@@ -3895,7 +4285,7 @@ export class ApiService {
    */
   public v1SpaceNegotiationListCreate(
     body: DbmodelsNegotiationFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: NegotiationapimodelsNegotiationView[];
@@ -3903,7 +4293,7 @@ export class ApiService {
   >;
   public v1SpaceNegotiationListCreate(
     body: DbmodelsNegotiationFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3913,7 +4303,7 @@ export class ApiService {
   >;
   public v1SpaceNegotiationListCreate(
     body: DbmodelsNegotiationFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3928,9 +4318,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: NegotiationapimodelsNegotiationView[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/negotiation/list`, {
+    >('POST', this.baseUrl + `/api/v1/space/negotiation/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3943,7 +4333,7 @@ export class ApiService {
    */
   public v1SpaceNegotiationDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: NegotiationapimodelsNegotiationView;
@@ -3951,7 +4341,7 @@ export class ApiService {
   >;
   public v1SpaceNegotiationDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -3961,7 +4351,7 @@ export class ApiService {
   >;
   public v1SpaceNegotiationDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -3976,8 +4366,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: NegotiationapimodelsNegotiationView;
       }
-    >("GET", this.baseUrl + `/api/v1/space/negotiation/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/negotiation/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -3991,22 +4381,26 @@ export class ApiService {
   public v1SpaceNegotiationCommentUpdate(
     id: string,
     body: NegotiationapimodelsCommentData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceNegotiationCommentUpdate(
     id: string,
     body: NegotiationapimodelsCommentData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceNegotiationCommentUpdate(
     id: string,
     body: NegotiationapimodelsCommentData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/negotiation/${id}/comment`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/negotiation/${id}/comment`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Смена статуса
@@ -4019,22 +4413,26 @@ export class ApiService {
   public v1SpaceNegotiationStatusChangeUpdate(
     id: string,
     body: NegotiationapimodelsStatusData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceNegotiationStatusChangeUpdate(
     id: string,
     body: NegotiationapimodelsStatusData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceNegotiationStatusChangeUpdate(
     id: string,
     body: NegotiationapimodelsStatusData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/negotiation/${id}/status_change`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/negotiation/${id}/status_change`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение профиля
@@ -4049,14 +4447,18 @@ export class ApiService {
       data?: SpaceapimodelsProfileData;
     }
   >;
-  public v1SpaceProfileList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1SpaceProfileList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: SpaceapimodelsProfileData;
       }
     >
   >;
-  public v1SpaceProfileList(options: RequestOptions & { observe: "response" } = { observe: "response" }): Observable<
+  public v1SpaceProfileList(
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
+  ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
           data?: SpaceapimodelsProfileData;
@@ -4070,8 +4472,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SpaceapimodelsProfileData;
       }
-    >("GET", this.baseUrl + `/api/v1/space/profile`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/profile`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4082,19 +4484,26 @@ export class ApiService {
    * @summary Обновление профиля
    * @request PUT:/api/v1/space/profile
    */
-  public v1SpaceProfileUpdate(body: SpaceapimodelsProfileData, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceProfileUpdate(
     body: SpaceapimodelsProfileData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceProfileUpdate(
+    body: SpaceapimodelsProfileData,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceProfileUpdate(
     body: SpaceapimodelsProfileData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/profile`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/profile`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать фото
@@ -4105,13 +4514,19 @@ export class ApiService {
    * @request GET:/api/v1/space/profile/photo
    */
   public v1SpaceProfilePhotoList(options?: RequestOptions): Observable<void>;
-  public v1SpaceProfilePhotoList(options?: RequestOptions & { observe: "response" }): Observable<HttpResponse<void>>;
   public v1SpaceProfilePhotoList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<HttpResponse<void>>;
+  public v1SpaceProfilePhotoList(
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/space/profile/photo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/space/profile/photo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить фото
@@ -4126,26 +4541,30 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1SpaceProfilePhotoCreate(
     data: {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1SpaceProfilePhotoCreate(
     data: {
       /** Фото */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/space/profile/photo`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/space/profile/photo`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отправка заявки на связь с отделом продаж
@@ -4157,20 +4576,24 @@ export class ApiService {
    */
   public v1SpaceProfileSendLicenseRequestUpdate(
     body: SpaceapimodelsSalesRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceProfileSendLicenseRequestUpdate(
     body: SpaceapimodelsSalesRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceProfileSendLicenseRequestUpdate(
     body: SpaceapimodelsSalesRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/profile/send_license_request`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/profile/send_license_request`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Список настроек
@@ -4185,7 +4608,9 @@ export class ApiService {
       data?: SpaceapimodelsSpaceSettingView[];
     }
   >;
-  public v1SpaceSettingsListList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1SpaceSettingsListList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: SpaceapimodelsSpaceSettingView[];
@@ -4193,7 +4618,7 @@ export class ApiService {
     >
   >;
   public v1SpaceSettingsListList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4208,8 +4633,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SpaceapimodelsSpaceSettingView[];
       }
-    >("GET", this.baseUrl + `/api/v1/space/settings/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/settings/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4223,22 +4648,26 @@ export class ApiService {
   public v1SpaceSettingsUpdate(
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceSettingsUpdate(
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceSettingsUpdate(
     code: string,
     body: SpaceapimodelsUpdateSpaceSettingValue,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/settings/${code}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/settings/${code}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Получение гостевого токена
@@ -4253,7 +4682,7 @@ export class ApiService {
       /** Код дашборда */
       dashboard_code?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: SupersetapimodelsGuestTokenResponse;
@@ -4264,7 +4693,7 @@ export class ApiService {
       /** Код дашборда */
       dashboard_code?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4277,7 +4706,7 @@ export class ApiService {
       /** Код дашборда */
       dashboard_code?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4292,9 +4721,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SupersetapimodelsGuestTokenResponse;
       }
-    >("GET", this.baseUrl + `/api/v1/space/superset/guest_token`, {
+    >('GET', this.baseUrl + `/api/v1/space/superset/guest_token`, {
       params: query,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4307,7 +4736,7 @@ export class ApiService {
    */
   public v1SpaceVacancyCreate(
     body: VacancyapimodelsVacancyData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -4315,7 +4744,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyCreate(
     body: VacancyapimodelsVacancyData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4325,7 +4754,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyCreate(
     body: VacancyapimodelsVacancyData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4340,9 +4769,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4355,7 +4784,7 @@ export class ApiService {
    */
   public v1SpaceVacancyListCreate(
     body: VacancyapimodelsVacancyFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: VacancyapimodelsVacancyView[];
@@ -4363,7 +4792,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyListCreate(
     body: VacancyapimodelsVacancyFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -4373,7 +4802,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyListCreate(
     body: VacancyapimodelsVacancyFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -4388,9 +4817,9 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: VacancyapimodelsVacancyView[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy/list`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4403,7 +4832,7 @@ export class ApiService {
    */
   public v1SpaceVacancyDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsVacancyView;
@@ -4411,7 +4840,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4421,7 +4850,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4436,8 +4865,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsVacancyView;
       }
-    >("GET", this.baseUrl + `/api/v1/space/vacancy/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/vacancy/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4451,22 +4880,26 @@ export class ApiService {
   public v1SpaceVacancyUpdate(
     id: string,
     body: VacancyapimodelsVacancyData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyUpdate(
     id: string,
     body: VacancyapimodelsVacancyData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyUpdate(
     id: string,
     body: VacancyapimodelsVacancyData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -4476,18 +4909,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/space/vacancy/{id}
    */
-  public v1SpaceVacancyDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/vacancy/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/vacancy/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Изменение статуса вакансии
@@ -4500,22 +4940,58 @@ export class ApiService {
   public v1SpaceVacancyChangeStatusUpdate(
     id: string,
     body: VacancyapimodelsStatusChangeRequest,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyChangeStatusUpdate(
     id: string,
     body: VacancyapimodelsStatusChangeRequest,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyChangeStatusUpdate(
     id: string,
     body: VacancyapimodelsStatusChangeRequest,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/change_status`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/change_status`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
+  }
+  /**
+   * @description Добавить комментарий к вакансии
+   *
+   * @tags Вакансия
+   * @name V1SpaceVacancyCommentCreate
+   * @summary Добавить комментарий к вакансии
+   * @request POST:/api/v1/space/vacancy/{id}/comment
+   */
+  public v1SpaceVacancyCommentCreate(
+    id: string,
+    body: VacancyapimodelsComment,
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyCommentCreate(
+    id: string,
+    body: VacancyapimodelsComment,
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<HttpResponse<ApimodelsResponse>>;
+  public v1SpaceVacancyCommentCreate(
+    id: string,
+    body: VacancyapimodelsComment,
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
+  ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/comment`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description В избранное
@@ -4531,7 +5007,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyFavoriteUpdate(
     id: string,
@@ -4539,7 +5015,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyFavoriteUpdate(
     id: string,
@@ -4547,12 +5023,16 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/favorite`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/favorite`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Закрепить
@@ -4568,7 +5048,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyPinUpdate(
     id: string,
@@ -4576,7 +5056,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyPinUpdate(
     id: string,
@@ -4584,12 +5064,16 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/pin`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/pin`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Добавить этап подбора
@@ -4602,22 +5086,26 @@ export class ApiService {
   public v1SpaceVacancyStageCreate(
     id: string,
     body: VacancyapimodelsSelectionStageAdd,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyStageCreate(
     id: string,
     body: VacancyapimodelsSelectionStageAdd,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyStageCreate(
     id: string,
     body: VacancyapimodelsSelectionStageAdd,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/stage`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'POST',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/stage`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление этап подбора
@@ -4633,7 +5121,7 @@ export class ApiService {
       /** идентификатор этапа */
       stage_id?: string;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyStageDelete(
     id: string,
@@ -4641,7 +5129,7 @@ export class ApiService {
       /** идентификатор этапа */
       stage_id?: string;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyStageDelete(
     id: string,
@@ -4649,12 +5137,16 @@ export class ApiService {
       /** идентификатор этапа */
       stage_id?: string;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/vacancy/${id}/stage`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/stage`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Изменение порядка этапов подбора
@@ -4672,7 +5164,7 @@ export class ApiService {
       /** новый порядковый номер */
       stage_order?: number;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyStageChangeOrderUpdate(
     id: string,
@@ -4682,7 +5174,7 @@ export class ApiService {
       /** новый порядковый номер */
       stage_order?: number;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyStageChangeOrderUpdate(
     id: string,
@@ -4692,15 +5184,15 @@ export class ApiService {
       /** новый порядковый номер */
       stage_order?: number;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/vacancy/${id}/stage/change_order`,
       {
         params: query,
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -4713,7 +5205,7 @@ export class ApiService {
    */
   public v1SpaceVacancyStageListCreate(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: VacancyapimodelsSelectionStageView[];
@@ -4721,7 +5213,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyStageListCreate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -4731,7 +5223,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyStageListCreate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -4746,29 +5238,29 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: VacancyapimodelsSelectionStageView[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/stage/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('POST', this.baseUrl + `/api/v1/space/vacancy/${id}/stage/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
    * @description Получение анкеты HR (генерация, в случае отсутствия)
    *
    * @tags Анкета HR по вакансии
-   * @name V1SpaceVacancySurveyDetail
+   * @name V1SpaceVacancySurveyList
    * @summary Получение анкеты HR (генерация, в случае отсутствия)
    * @request GET:/api/v1/space/vacancy/{id}/survey
    */
-  public v1SpaceVacancySurveyDetail(
+  public v1SpaceVacancySurveyList(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: SurveyapimodelsHRSurveyView;
     }
   >;
-  public v1SpaceVacancySurveyDetail(
+  public v1SpaceVacancySurveyList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4776,9 +5268,9 @@ export class ApiService {
       }
     >
   >;
-  public v1SpaceVacancySurveyDetail(
+  public v1SpaceVacancySurveyList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4793,8 +5285,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SurveyapimodelsHRSurveyView;
       }
-    >("GET", this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4808,7 +5300,7 @@ export class ApiService {
   public v1SpaceVacancySurveyCreate(
     id: string,
     body: SurveyapimodelsHRSurvey,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: SurveyapimodelsHRSurveyView;
@@ -4817,7 +5309,7 @@ export class ApiService {
   public v1SpaceVacancySurveyCreate(
     id: string,
     body: SurveyapimodelsHRSurvey,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4828,7 +5320,7 @@ export class ApiService {
   public v1SpaceVacancySurveyCreate(
     id: string,
     body: SurveyapimodelsHRSurvey,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4843,9 +5335,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SurveyapimodelsHRSurveyView;
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy/${id}/survey`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4858,7 +5350,7 @@ export class ApiService {
    */
   public v1SpaceVacancyTeamListCreate(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsTeamPerson[];
@@ -4866,7 +5358,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyTeamListCreate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4876,7 +5368,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyTeamListCreate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4891,8 +5383,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsTeamPerson[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/team/list`, {
-      ...(options as unknown as { observe: "response" }),
+    >('POST', this.baseUrl + `/api/v1/space/vacancy/${id}/team/list`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4906,7 +5398,7 @@ export class ApiService {
   public v1SpaceVacancyTeamUsersListCreate(
     id: string,
     body: VacancyapimodelsPersonFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsTeamPerson[];
@@ -4915,7 +5407,7 @@ export class ApiService {
   public v1SpaceVacancyTeamUsersListCreate(
     id: string,
     body: VacancyapimodelsPersonFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -4926,7 +5418,7 @@ export class ApiService {
   public v1SpaceVacancyTeamUsersListCreate(
     id: string,
     body: VacancyapimodelsPersonFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -4941,9 +5433,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsTeamPerson[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy/${id}/team/users_list`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy/${id}/team/users_list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -4957,24 +5449,24 @@ export class ApiService {
   public v1SpaceVacancyTeamExcludeUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyTeamExcludeUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyTeamExcludeUpdate(
     id: string,
     userId: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/exclude`,
       {
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -4988,7 +5480,7 @@ export class ApiService {
   public v1SpaceVacancyTeamInviteUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsTeamPerson[];
@@ -4997,7 +5489,7 @@ export class ApiService {
   public v1SpaceVacancyTeamInviteUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -5008,7 +5500,7 @@ export class ApiService {
   public v1SpaceVacancyTeamInviteUpdate(
     id: string,
     userId: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -5023,9 +5515,13 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsTeamPerson[];
       }
-    >("PUT", this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/invite`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    >(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/invite`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Команда. Сделать ответственным
@@ -5038,24 +5534,25 @@ export class ApiService {
   public v1SpaceVacancyTeamSetAsResponsibleUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyTeamSetAsResponsibleUpdate(
     id: string,
     userId: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyTeamSetAsResponsibleUpdate(
     id: string,
     userId: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
-      this.baseUrl + `/api/v1/space/vacancy/${id}/team/${userId}/set_as_responsible`,
+      'PUT',
+      this.baseUrl +
+        `/api/v1/space/vacancy/${id}/team/${userId}/set_as_responsible`,
       {
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -5068,7 +5565,7 @@ export class ApiService {
    */
   public v1SpaceVacancyRequestCreate(
     body: VacancyapimodelsVacancyRequestCreateData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: string;
@@ -5076,7 +5573,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestCreate(
     body: VacancyapimodelsVacancyRequestCreateData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -5086,7 +5583,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestCreate(
     body: VacancyapimodelsVacancyRequestCreateData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -5101,9 +5598,9 @@ export class ApiService {
       ApimodelsResponse & {
         data?: string;
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy_request`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy_request`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5116,7 +5613,7 @@ export class ApiService {
    */
   public v1SpaceVacancyRequestListCreate(
     body: VacancyapimodelsVrFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: VacancyapimodelsVacancyRequestView[];
@@ -5124,7 +5621,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestListCreate(
     body: VacancyapimodelsVrFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -5134,7 +5631,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestListCreate(
     body: VacancyapimodelsVrFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -5149,9 +5646,9 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: VacancyapimodelsVacancyRequestView[];
       }
-    >("POST", this.baseUrl + `/api/v1/space/vacancy_request/list`, {
+    >('POST', this.baseUrl + `/api/v1/space/vacancy_request/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5164,7 +5661,7 @@ export class ApiService {
    */
   public v1SpaceVacancyRequestDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: VacancyapimodelsVacancyRequestView;
@@ -5172,7 +5669,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -5182,7 +5679,7 @@ export class ApiService {
   >;
   public v1SpaceVacancyRequestDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -5197,8 +5694,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: VacancyapimodelsVacancyRequestView;
       }
-    >("GET", this.baseUrl + `/api/v1/space/vacancy_request/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/space/vacancy_request/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5212,22 +5709,26 @@ export class ApiService {
   public v1SpaceVacancyRequestUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestEditData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestEditData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestEditData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удаление
@@ -5237,18 +5738,25 @@ export class ApiService {
    * @summary Удаление
    * @request DELETE:/api/v1/space/vacancy_request/{id}
    */
-  public v1SpaceVacancyRequestDelete(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestDelete(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestDelete(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestDelete(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/space/vacancy_request/${id}`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Обновление цепочки согласования
@@ -5261,25 +5769,25 @@ export class ApiService {
   public v1SpaceVacancyRequestApprovalStagesUpdate(
     id: string,
     body: VacancyapimodelsApprovalStages[],
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestApprovalStagesUpdate(
     id: string,
     body: VacancyapimodelsApprovalStages[],
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestApprovalStagesUpdate(
     id: string,
     body: VacancyapimodelsApprovalStages[],
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/vacancy_request/${id}/approval_stages`,
       {
         body: body,
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -5293,22 +5801,26 @@ export class ApiService {
   public v1SpaceVacancyRequestApproveUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestApproveUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestApproveUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/approve`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/approve`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отменить заявку
@@ -5318,18 +5830,25 @@ export class ApiService {
    * @summary Отменить заявку
    * @request PUT:/api/v1/space/vacancy_request/{id}/cancel
    */
-  public v1SpaceVacancyRequestCancelUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestCancelUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestCancelUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestCancelUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/cancel`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/cancel`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description В избранное
@@ -5345,7 +5864,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestFavoriteUpdate(
     id: string,
@@ -5353,7 +5872,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestFavoriteUpdate(
     id: string,
@@ -5361,12 +5880,16 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/favorite`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/favorite`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отправить на согласование
@@ -5376,21 +5899,24 @@ export class ApiService {
    * @summary Отправить на согласование
    * @request PUT:/api/v1/space/vacancy_request/{id}/on_approval
    */
-  public v1SpaceVacancyRequestOnApprovalUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestOnApprovalUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestOnApprovalUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestOnApprovalUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/vacancy_request/${id}/on_approval`,
       {
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -5401,18 +5927,25 @@ export class ApiService {
    * @summary Перевести шаблон на статус заявка создана
    * @request PUT:/api/v1/space/vacancy_request/{id}/on_create
    */
-  public v1SpaceVacancyRequestOnCreateUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestOnCreateUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestOnCreateUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestOnCreateUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/on_create`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/on_create`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Закрепить
@@ -5428,7 +5961,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestPinUpdate(
     id: string,
@@ -5436,7 +5969,7 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestPinUpdate(
     id: string,
@@ -5444,12 +5977,16 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/pin`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/pin`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создать вакансию
@@ -5459,18 +5996,25 @@ export class ApiService {
    * @summary Создать вакансию
    * @request PUT:/api/v1/space/vacancy_request/{id}/publish
    */
-  public v1SpaceVacancyRequestPublishUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestPublishUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestPublishUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestPublishUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/publish`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/publish`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Отклонить
@@ -5483,22 +6027,26 @@ export class ApiService {
   public v1SpaceVacancyRequestRejectUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestRejectUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestRejectUpdate(
     id: string,
     body: VacancyapimodelsVacancyRequestData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/space/vacancy_request/${id}/reject`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/space/vacancy_request/${id}/reject`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description На доработку
@@ -5508,21 +6056,24 @@ export class ApiService {
    * @summary На доработку
    * @request PUT:/api/v1/space/vacancy_request/{id}/to_revision
    */
-  public v1SpaceVacancyRequestToRevisionUpdate(id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
   public v1SpaceVacancyRequestToRevisionUpdate(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<ApimodelsResponse>;
+  public v1SpaceVacancyRequestToRevisionUpdate(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1SpaceVacancyRequestToRevisionUpdate(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-      "PUT",
+      'PUT',
       this.baseUrl + `/api/v1/space/vacancy_request/${id}/to_revision`,
       {
-        ...(options as unknown as { observe: "response" }),
-      },
+        ...(options as unknown as { observe: 'response' }),
+      }
     );
   }
   /**
@@ -5538,14 +6089,18 @@ export class ApiService {
       data?: SpaceapimodelsSpaceUserProfileView;
     }
   >;
-  public v1UserProfileList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1UserProfileList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: SpaceapimodelsSpaceUserProfileView;
       }
     >
   >;
-  public v1UserProfileList(options: RequestOptions & { observe: "response" } = { observe: "response" }): Observable<
+  public v1UserProfileList(
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
+  ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
           data?: SpaceapimodelsSpaceUserProfileView;
@@ -5559,8 +6114,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SpaceapimodelsSpaceUserProfileView;
       }
-    >("GET", this.baseUrl + `/api/v1/user_profile`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/user_profile`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5574,22 +6129,26 @@ export class ApiService {
   public v1UserProfileUpdate(
     id: string,
     body: SpaceapimodelsSpaceUserProfileData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1UserProfileUpdate(
     id: string,
     body: SpaceapimodelsSpaceUserProfileData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UserProfileUpdate(
     id: string,
     body: SpaceapimodelsSpaceUserProfileData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/user_profile`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Изменить пароль
@@ -5601,20 +6160,24 @@ export class ApiService {
    */
   public v1UserProfileChangePasswordUpdate(
     body: SpaceapimodelsPasswordChange,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1UserProfileChangePasswordUpdate(
     body: SpaceapimodelsPasswordChange,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1UserProfileChangePasswordUpdate(
     body: SpaceapimodelsPasswordChange,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("PUT", this.baseUrl + `/api/v1/user_profile/change_password`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'PUT',
+      this.baseUrl + `/api/v1/user_profile/change_password`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать фото
@@ -5625,13 +6188,19 @@ export class ApiService {
    * @request GET:/api/v1/user_profile/photo
    */
   public v1UserProfilePhotoList(options?: RequestOptions): Observable<void>;
-  public v1UserProfilePhotoList(options?: RequestOptions & { observe: "response" }): Observable<HttpResponse<void>>;
   public v1UserProfilePhotoList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<HttpResponse<void>>;
+  public v1UserProfilePhotoList(
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/user_profile/photo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/user_profile/photo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Загрузить фото
@@ -5646,26 +6215,30 @@ export class ApiService {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<void>;
   public v1UserProfilePhotoCreate(
     data: {
       /** Фото */
       photo: File;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1UserProfilePhotoCreate(
     data: {
       /** Фото */
       photo: File;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/user_profile/photo`, {
-      body: data,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'POST',
+      this.baseUrl + `/api/v1/user_profile/photo`,
+      {
+        body: data,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Push уведомления - список событий
@@ -5680,7 +6253,9 @@ export class ApiService {
       data?: SpaceapimodelsPushSettings;
     }
   >;
-  public v1UserProfilePushSettingsList(options?: RequestOptions & { observe: "response" }): Observable<
+  public v1UserProfilePushSettingsList(
+    options?: RequestOptions & { observe: 'response' }
+  ): Observable<
     HttpResponse<
       ApimodelsResponse & {
         data?: SpaceapimodelsPushSettings;
@@ -5688,7 +6263,7 @@ export class ApiService {
     >
   >;
   public v1UserProfilePushSettingsList(
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -5703,8 +6278,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SpaceapimodelsPushSettings;
       }
-    >("GET", this.baseUrl + `/api/v1/user_profile/push_settings`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/user_profile/push_settings`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5717,20 +6292,24 @@ export class ApiService {
    */
   public v1UserProfilePushSettingsUpdate(
     body: SpaceapimodelsPushSettingData,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1UserProfilePushSettingsUpdate(
     body: SpaceapimodelsPushSettingData,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UserProfilePushSettingsUpdate(
     body: SpaceapimodelsPushSettingData,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile/push_settings`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/user_profile/push_settings`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Push уведомления - настройка отправки
@@ -5745,26 +6324,30 @@ export class ApiService {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1UserProfilePushSettingsEnableUpdate(
     query?: {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UserProfilePushSettingsEnableUpdate(
     query?: {
       /** выбрано/не выбрано */
       set?: boolean;
     },
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/user_profile/push_settings/enable`, {
-      params: query,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/user_profile/push_settings/enable`,
+      {
+        params: query,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Создать нового пользователя
@@ -5774,18 +6357,21 @@ export class ApiService {
    * @summary Создать нового пользователя
    * @request POST:/api/v1/users
    */
-  public v1UsersCreate(body: SpaceapimodelsCreateUser, options?: RequestOptions): Observable<void>;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1UsersCreate(
+    body: SpaceapimodelsCreateUser,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
   public v1UsersCreate(
     body: SpaceapimodelsCreateUser,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("POST", this.baseUrl + `/api/v1/users`, {
+    return this.http.request<void>('POST', this.baseUrl + `/api/v1/users`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5798,7 +6384,7 @@ export class ApiService {
    */
   public v1UsersListCreate(
     body: SpaceapimodelsSpaceUserFilter,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsScrollerResponse & {
       data?: SpaceapimodelsSpaceUser[];
@@ -5806,7 +6392,7 @@ export class ApiService {
   >;
   public v1UsersListCreate(
     body: SpaceapimodelsSpaceUserFilter,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsScrollerResponse & {
@@ -5816,7 +6402,7 @@ export class ApiService {
   >;
   public v1UsersListCreate(
     body: SpaceapimodelsSpaceUserFilter,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsScrollerResponse & {
@@ -5831,9 +6417,9 @@ export class ApiService {
       ApimodelsScrollerResponse & {
         data?: SpaceapimodelsSpaceUser[];
       }
-    >("POST", this.baseUrl + `/api/v1/users/list`, {
+    >('POST', this.baseUrl + `/api/v1/users/list`, {
       body: body,
-      ...(options as unknown as { observe: "response" }),
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5846,7 +6432,7 @@ export class ApiService {
    */
   public v1UsersDetail(
     id: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<
     ApimodelsResponse & {
       data?: SpaceapimodelsSpaceUser;
@@ -5854,7 +6440,7 @@ export class ApiService {
   >;
   public v1UsersDetail(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<
     HttpResponse<
       ApimodelsResponse & {
@@ -5864,7 +6450,7 @@ export class ApiService {
   >;
   public v1UsersDetail(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<
     | HttpResponse<
         ApimodelsResponse & {
@@ -5879,8 +6465,8 @@ export class ApiService {
       ApimodelsResponse & {
         data?: SpaceapimodelsSpaceUser;
       }
-    >("GET", this.baseUrl + `/api/v1/users/${id}`, {
-      ...(options as unknown as { observe: "response" }),
+    >('GET', this.baseUrl + `/api/v1/users/${id}`, {
+      ...(options as unknown as { observe: 'response' }),
     });
   }
   /**
@@ -5894,22 +6480,26 @@ export class ApiService {
   public v1UsersUpdate(
     id: string,
     body: SpaceapimodelsUpdateUser,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1UsersUpdate(
     id: string,
     body: SpaceapimodelsUpdateUser,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UsersUpdate(
     id: string,
     body: SpaceapimodelsUpdateUser,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("PUT", this.baseUrl + `/api/v1/users/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'PUT',
+      this.baseUrl + `/api/v1/users/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Удалить пользователя
@@ -5922,42 +6512,53 @@ export class ApiService {
   public v1UsersDelete(
     id: string,
     body: SpaceapimodelsCreateUser,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Observable<ApimodelsResponse>;
   public v1UsersDelete(
     id: string,
     body: SpaceapimodelsCreateUser,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse>>;
   public v1UsersDelete(
     id: string,
     body: SpaceapimodelsCreateUser,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>("DELETE", this.baseUrl + `/api/v1/users/${id}`, {
-      body: body,
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<ApimodelsResponse>(
+      'DELETE',
+      this.baseUrl + `/api/v1/users/${id}`,
+      {
+        body: body,
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
   /**
    * @description Скачать фото
    *
    * @tags Пользователи space
-   * @name V1UsersPhotoDetail
+   * @name V1UsersPhotoList
    * @summary Скачать фото
    * @request GET:/api/v1/users/{id}/photo
    */
-  public v1UsersPhotoDetail(id: string, options?: RequestOptions): Observable<void>;
-  public v1UsersPhotoDetail(
+  public v1UsersPhotoList(
     id: string,
-    options?: RequestOptions & { observe: "response" },
+    options?: RequestOptions
+  ): Observable<void>;
+  public v1UsersPhotoList(
+    id: string,
+    options?: RequestOptions & { observe: 'response' }
   ): Observable<HttpResponse<void>>;
-  public v1UsersPhotoDetail(
+  public v1UsersPhotoList(
     id: string,
-    options: RequestOptions & { observe: "response" } = { observe: "response" },
+    options: RequestOptions & { observe: 'response' } = { observe: 'response' }
   ): Observable<HttpResponse<void> | void> {
-    return this.http.request<void>("GET", this.baseUrl + `/api/v1/users/${id}/photo`, {
-      ...(options as unknown as { observe: "response" }),
-    });
+    return this.http.request<void>(
+      'GET',
+      this.baseUrl + `/api/v1/users/${id}/photo`,
+      {
+        ...(options as unknown as { observe: 'response' }),
+      }
+    );
   }
 }

@@ -40,7 +40,7 @@ export class CellMemberAvatarComponent {
   getPhoto() {
     if (!this.userId) return;
 
-    this.api.v1UsersPhotoDetail(this.userId, {responseType: 'blob'} as RequestOptions).subscribe({
+    this.api.v1UsersPhotoList(this.userId, {responseType: 'blob'} as RequestOptions).subscribe({
       next: (resp: any) => {
         const blob: Blob = resp as unknown as Blob;
         if (blob && blob.size > 0) {

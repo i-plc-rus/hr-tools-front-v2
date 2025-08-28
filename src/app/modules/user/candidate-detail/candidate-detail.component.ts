@@ -139,7 +139,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     this.resumeUint = undefined;
 
     this.isLoading = true;
-    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {
+    this.api.v1SpaceApplicantResumeList(this.applicant.id, {
       observe: 'response',
       responseType: "arraybuffer"
     }).subscribe({
@@ -178,7 +178,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
   getDocList() {
     if (!this.applicant) return;
     this.isLoading = true;
-    this.api.v1SpaceApplicantDocListDetail(this.applicant.id, {observe: 'response'}).subscribe({
+    this.api.v1SpaceApplicantDocListList(this.applicant.id, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.docList = data.body.data;
@@ -196,7 +196,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
 
   getPhoto() {
     if (!this.applicant) return;
-    this.api.v1SpaceApplicantPhotoDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+    this.api.v1SpaceApplicantPhotoList(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
       next: (data: any) => {
         if (data.body && data.body.size > 0) {
           const reader = new FileReader();

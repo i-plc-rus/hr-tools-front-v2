@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -15,7 +16,15 @@ export type RequestOptions = {
   headers?: HttpHeaders | { [header: string]: string | string[] };
   context?: HttpContext;
   reportProgress?: boolean;
-  params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> };
+  params?:
+    | HttpParams
+    | {
+        [param: string]:
+          | string
+          | number
+          | boolean
+          | ReadonlyArray<string | number | boolean>;
+      };
   withCredentials?: boolean;
   transferCache?: { includeHeaders?: string[] } | boolean;
   responseType?: "blob" | "text" | "arraybuffer" | "json";

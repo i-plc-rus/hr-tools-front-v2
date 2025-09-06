@@ -11,14 +11,14 @@ import {
   ModelsVRType,
   ModelsVRUrgency,
   SpaceapimodelsSpaceUser,
-  VacancyapimodelsVacancyView
+  VacancyapimodelsVacancyView,
 } from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
-import {Subscription, switchMap} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
@@ -300,8 +300,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
   }
 
-  openComment(comment: string) {
-    this.modalService.openCommentModal(comment);
+  openComment(vacancyId: string) {
+    this.modalService.openCommentModal(vacancyId, false);
   }
 
   getCities(address: string) {

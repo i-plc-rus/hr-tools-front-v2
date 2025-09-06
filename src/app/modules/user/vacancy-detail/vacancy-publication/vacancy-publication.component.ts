@@ -88,7 +88,7 @@ export class VacancyPublicationComponent implements OnInit {
   }
 
   getStatusHH(id: string) {
-    return this.api.v1SpaceExtHhStatusDetail(id, { observe: 'response' }).pipe(
+    return this.api.v1SpaceExtHhStatusList(id, { observe: 'response' }).pipe(
       tap({
         next: (res) => {
           if (res.body?.data) {
@@ -106,7 +106,7 @@ export class VacancyPublicationComponent implements OnInit {
 
   getStatusAvito(id: string) {
     return this.api
-      .v1SpaceExtAvitoStatusDetail(id, { observe: 'response' })
+      .v1SpaceExtAvitoStatusList(id, { observe: 'response' })
       .pipe(
         tap({
           next: (res) => {

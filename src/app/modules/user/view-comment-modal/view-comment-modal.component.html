@@ -1,14 +1,42 @@
-<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:max-w-[748px] lg:max-h-[800px]">
+<div class="bg-[white] w-full h-full rounded-[28px] lg:max-w-[748px]">
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Комментарий по вакансии</h2>
     <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6">
-      <mat-form-field class="w-full" appearance="outline" floatLabel="always">
-        <mat-label>Комментарий</mat-label>
-        <textarea matInput [value]="comment" rows="4" readonly></textarea>
-      </mat-form-field>
-      <div
-        class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
-        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Вернуться назад</button>
+      <div class="overflow-y-auto lg:max-h-[450px] ">
+        <mat-expansion-panel class="mat-elevation-z w-[620px]" hideToggle="true" (opened)="openCommentByIndex(-1)" [expanded]="newCommentOpened">
+          <mat-expansion-panel-header>
+            <p class="text-[var(--link-default)] text-[14px] leading-[20px]">Написать новый комментарий</p>
+          </mat-expansion-panel-header>
+          <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+            <mat-label>Комментарий</mat-label>
+            <!-- <textarea matInput [value]="comment" rows="4" readonly style="resize: none;"></textarea> -->
+            <textarea matInput [formControl]="commentForm.controls.comment" rows="4" style="resize: none;"></textarea>
+          </mat-form-field>
+          </mat-expansion-panel>
+
+        @for (item of commentsById; track $index) {
+          <div class="h-[8px]"></div>
+          <mat-expansion-panel class="mat-elevation-z w-[620px]" [expanded]="count[$index]" (opened)="openCommentByIndex($index)">
+            <mat-expansion-panel-header>
+              <div class="flex flex-row justify-between w-full pr-[8px]">
+                <div class="flex flex-row">
+                  <p class="text-[14px] leading-[20px]">{{item.date | date:'dd.MM.yyyy в HH:mm'}}</p>
+                  <p class="text-[var(--text-alter)] text-[12px] leading-[16px] mt-[3px] ml-[8px]">{{item.author_fio}}</p>
+                </div>
+                <p class="w-[238px] text-[14px] leading-[20px] text-right" rows="1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{item.comment}}</p>   
+              </div>
+            </mat-expansion-panel-header>
+            <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+              <mat-label>Комментарий</mat-label>
+              <textarea matInput [value]="item.comment" rows="4" readonly style="resize: none;" readonly></textarea>
+              <!-- <textarea matInput rows="4" readonly style="resize: none;"></textarea> -->
+            </mat-form-field>
+          </mat-expansion-panel>
+        }
+      </div>
+      <div class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 gap-4 mt-6 lg:flex-row lg:max-w-max">
+        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отменить</button>
+        <button mat-flat-button class="btn-primary" [disabled]="confirmDisabled" (click)="createComment()">Сохранить</button>
       </div>
     </div>
   </div>

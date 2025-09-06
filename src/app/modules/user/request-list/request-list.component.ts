@@ -314,8 +314,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  openComment(comment: string) {
-    this.modalService.openCommentModal(comment);
+  openComment(requestId: string) {
+    this.modalService.openCommentModal(requestId, true);
   }
 
   changeStatus(id: string, status: ModelsVRStatus) {

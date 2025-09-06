@@ -72,8 +72,11 @@ export enum ModelsUserRole {
 }
 
 export enum ModelsTripReadinessType {
+  /** готов к командировкам */
   TripReadinessReady = "ready",
+  /** "готов к редким командировкам */
   TripReadinessSometimes = "sometimes",
+  /** "готов к редким командировкам */
   TripReadinessNever = "never",
 }
 
@@ -88,11 +91,13 @@ export enum ModelsTemplateType {
 }
 
 export enum ModelsSpaceSettingCode {
+  /** Инструкции для Yandex GPT при генерации описания вакансии */
   YandexGPTPromtSetting = "ya_gpt_promt",
   HhClientIDSetting = "HHClientID",
   HhClientSecretSetting = "HHClientSecret",
   AvitoClientIDSetting = "AvitoClientID",
   AvitoClientSecretSetting = "AvitoClientSecret",
+  /** почта, с которой отправляются письма кандидатам */
   SpaceSenderEmail = "SpaceSenderEmail",
 }
 
@@ -106,30 +111,45 @@ export enum ModelsSpacePushSettingCode {
   PushVacancyPublished = "PushVacancyPublished",
   PushApplicantNegotiation = "PushApplicantNegotiation",
   PushApplicantNote = "PushApplicantNote",
+  /** !! */
   PushApplicantMsg = "PushApplicantMsg",
   PushApplicantNewStage = "PushApplicantNewStage",
 }
 
 export enum ModelsSearchStatusType {
+  /** Активно ищет работу */
   SearchStatusActive = "active_search",
+  /** Рассматривает предложения */
   SearchStatusLookingForOffers = "looking_for_offers",
+  /** Не ищет работу */
   SearchStatusNotLookingForJob = "not_looking_for_job",
+  /** Предложили работу, решает */
   SearchStatusHasJobOffer = "has_job_offer",
+  /** Вышел на новое место */
   SearchStatusAcceptedJobOffer = "accepted_job_offer",
 }
 
 export enum ModelsSearchLabelType {
+  /** Только с фотографией */
   SearchLabelPhoto = "only_with_photo",
+  /** Не показывать резюме без зарплаты */
   SearchLabelSalary = "only_with_salary",
+  /** Не показывать резюме без указания возраста */
   SearchLabelAge = "only_with_age",
+  /** Не показывать резюме без указания пола */
   SearchLabelGender = "only_with_gender",
 }
 
 export enum ModelsSchedule {
+  /** Вахта */
   ScheduleFlyInFlyOut = "flyInFlyOut",
+  /** Неполный день */
   SchedulePartTime = "partTime",
+  /** Полный день */
   ScheduleFullDay = "fullDay",
+  /** Гибкий */
   ScheduleFlexible = "flexible",
+  /** Сменный */
   ScheduleShift = "shift",
 }
 
@@ -141,8 +161,11 @@ export enum ModelsResponsePeriodType {
 }
 
 export enum ModelsRelocationType {
+  /** "не могу переехать" */
   RelocationTypeNo = "no",
+  /** "могу переехать" */
   RelocationTypeYes = "possible",
+  /** "хочу переехать" */
   RelocationTypeWant = "want",
 }
 
@@ -176,42 +199,67 @@ export enum ModelsLanguageLevelType {
 }
 
 export enum ModelsGenderType {
+  /** мужской */
   GenderTypeM = "male",
+  /** женский */
   GenderTypeF = "female",
 }
 
 export enum ModelsExperienceType {
+  /** "Нет опыта" */
   ExperienceTypeNo = "No",
+  /** "От 1 года до 3 лет" */
   ExperienceTypeBetween1And3 = "Between1And3",
+  /** "От 3 года до 6 лет" */
   ExperienceTypeBetween3And6 = "Between3And6",
+  /** "Более 6 лет" */
   ExperienceTypeMoreThan6 = "MoreThan6",
 }
 
 export enum ModelsExperience {
+  /** Без опыта */
   ExperienceNoMatter = "noMatter",
+  /** Более 1 года */
   ExperienceMoreThan1 = "moreThan1",
+  /** Более 3 лет */
   ExperienceMoreThan3 = "moreThan3",
+  /** Более 5 лет */
   ExperienceMoreThan5 = "moreThan5",
+  /** Более 10 лет */
   ExperienceMoreThan10 = "moreThan10",
 }
 
 export enum ModelsEmployment {
+  /** Временная */
   EmploymentTemporary = "temporary",
+  /** Полная */
   EmploymentFull = "full",
+  /** Стажировка */
   EmploymentInternship = "internship",
+  /** Частичная */
   EmploymentPartial = "partial",
+  /** Волонтерство */
   EmploymentVolunteer = "volunteer",
+  /** Стажировка */
   EmploymentProbation = "probation",
 }
 
 export enum ModelsEducationType {
+  /** "Среднее" */
   EducationTypeSecondary = "secondary",
+  /** "Среднее специальное" */
   EducationTypeSpecialSecondary = "special_secondary",
+  /** "Неоконченное высшее" */
   EducationTypeUnfinishedHigher = "unfinished_higher",
+  /** "Высшее" */
   EducationTypeHigher = "higher",
+  /** "Бакалавр" */
   EducationTypeBachelor = "bachelor",
+  /** "Магистр" */
   EducationTypeMaster = "master",
+  /** "Кандидат наук" */
   EducationTypeCandidate = "candidate",
+  /** "Доктор наук" */
   EducationTypeDoctor = "doctor",
 }
 
@@ -269,15 +317,25 @@ export enum ModelsAddedType {
 }
 
 export enum DbmodelsActionType {
+  /** Добавлен комментраий к кандидату */
   HistoryTypeComment = "comment",
+  /** Кандидат добавлен */
   HistoryTypeAdded = "added",
+  /** Кандидат обновлен */
   HistoryTypeUpdate = "update",
+  /** Получен отклик от кандидата */
   HistoryTypeNegotiation = "negotiation",
+  /** Кандидат переведеден на другой этап */
   HistoryTypeStageChange = "stage_change",
+  /** Дубликат по кандидату */
   HistoryTypeDuplicate = "duplicate",
+  /** Перемещен в архив */
   HistoryTypeArchive = "archive",
+  /** Кандидат отклонен */
   HistoryTypeReject = "reject",
+  /** email */
   HistoryTypeEmail = "reject",
+  /** Оценка ИИ */
   HistoryAIScore = "ai_score",
 }
 
@@ -1177,6 +1235,8 @@ export interface SpaceapimodelsSpaceUserProfileData {
   first_name?: string;
   /** Внутренний номер */
   internal_phone_number?: string;
+  /** Идентификатор должности */
+  job_title_id?: string;
   /** Фамилия */
   last_name?: string;
   /** Телефон */
@@ -1198,6 +1258,8 @@ export interface SpaceapimodelsSpaceUserProfileView {
   internal_phone_number?: string;
   /** Email подтвержден */
   is_email_verified?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
   /** Должность */
   job_title_name?: string;
   /** Фамилия */
@@ -1296,6 +1358,13 @@ export interface VacancyapimodelsApprovalStages {
 }
 
 export interface VacancyapimodelsComment {
+  author_id?: string;
+  comment?: string;
+  date?: string;
+}
+
+export interface VacancyapimodelsCommentView {
+  author_fio?: string;
   author_id?: string;
   comment?: string;
   date?: string;
@@ -1613,6 +1682,7 @@ export interface VacancyapimodelsVacancyRequestView {
   city?: string;
   /** ид города */
   city_id?: string;
+  comments?: VacancyapimodelsCommentView[];
   /** ид компании */
   company_id?: string;
   /** название компании */
@@ -1682,7 +1752,7 @@ export interface VacancyapimodelsVacancyView {
   city?: string;
   /** ид города */
   city_id?: string;
-  comments?: VacancyapimodelsComment[];
+  comments?: VacancyapimodelsCommentView[];
   /** ид компании */
   company_id?: string;
   /** название компании */

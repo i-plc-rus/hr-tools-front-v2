@@ -249,13 +249,14 @@
                 <div class="relative">
                   <button
                     mat-icon-button
-                    [disabled]="request.description"
                     #commentBtn
-                    (click)="openComment(request.description)"
+                    (click)="openComment(request.id)"
                     class="btn-primary">
                     <mat-icon svgIcon="chat-outline" />
-                    <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
-                  </button>
+                    @if (request.comments) {
+                      <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="request.comments!.length" />
+                    }
+                  </button>        
                 </div>
               </div>
               <div class="text-[16px] leading-6 text-[var(--text-alter)] text-right">

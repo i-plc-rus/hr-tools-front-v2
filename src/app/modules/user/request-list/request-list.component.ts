@@ -302,6 +302,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
+    const current = this.filterForm.get('search_period')!.value;
     const currentFrom = this.filterForm.get('search_from')!.value;
     const currentTo = this.filterForm.get('search_to')!.value;
     let isValidDate = false;
@@ -318,12 +319,14 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.filterForm.get('search_period')!.setValue(undefined);
       } 
     } else {
-      console.log('Is valid date:', this.filterForm.get('search_period')!.value);
+      // console.log('Is valid date:', this.filterForm.get('search_period')!.value);
       this.filterForm.patchValue({ 
         search_from: '',
         search_to: ''
       });
-      this.filterForm.get('search_period')!.setValue(value);
+      if (current === value) {
+        this.filterForm.get('search_period')!.setValue(value);
+      }
     }
   }
 

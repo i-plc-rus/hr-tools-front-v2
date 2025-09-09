@@ -267,17 +267,17 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.getRequests();
       });
 
-    this.filterForm.get('search_period')!.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
-          this.filterForm.patchValue({
-            search_from: '',
-            search_to: ''
-          }, { emitEvent: false });
-        }
+    // this.filterForm.get('search_period')!.valueChanges
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(value => {
+    //     if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+    //       this.filterForm.patchValue({
+    //         search_from: '',
+    //         search_to: ''
+    //       }, { emitEvent: false });
+    //     }
 
-      });
+    //   });
 
     this.filterForm.get('search_from')!.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -302,15 +302,29 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
-    const current = this.filterForm.get('search_period')!.value;
+    const currentFrom = this.filterForm.get('search_from')!.value;
+    const currentTo = this.filterForm.get('search_to')!.value;
+    let isValidDate = false;
 
-    if (current) {
-      this.filterForm.patchValue({
-        search_period: value,
+    if (value === VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      const dateObjectFrom = new Date(currentFrom!);
+      const dateObjectTo = new Date(currentTo!);
+      isValidDate = (dateObjectFrom instanceof Date && !isNaN(dateObjectFrom.getTime())) || (dateObjectTo instanceof Date && !isNaN(dateObjectTo.getTime()));
+      if (isValidDate) {
+        this.filterForm.patchValue({
+          search_from: '',
+          search_to: ''
+        });
+        this.filterForm.get('search_period')!.setValue(undefined);
+      } 
+    } else {
+      console.log('Is valid date:', this.filterForm.get('search_period')!.value);
+      this.filterForm.patchValue({ 
         search_from: '',
         search_to: ''
       });
-    } 
+      this.filterForm.get('search_period')!.setValue(value);
+    }
   }
 
 

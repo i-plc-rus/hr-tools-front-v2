@@ -397,9 +397,13 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        // this.getRequests();
         const index = this.requestList.findIndex(item => item.id === id);
         this.requestList[index].favorite = set; 
+        if (set) {
+          this.favoritesCount++;
+        } else {
+          this.favoritesCount--;
+        }
       },
       error: (error) => {
         console.log(error);

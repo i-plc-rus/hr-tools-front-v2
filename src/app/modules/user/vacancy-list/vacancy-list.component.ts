@@ -184,7 +184,11 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         const index = this.vacancyList.findIndex(item => item.id === id);
         this.vacancyList[index].favorite = set; 
-        // this.getVacancyList();
+        if (set) {
+          this.favoritesCount++;
+        } else {
+          this.favoritesCount--;
+        }
       },
       error: (error) => {
         console.log(error);

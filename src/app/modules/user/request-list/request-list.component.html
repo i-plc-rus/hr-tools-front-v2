@@ -252,9 +252,11 @@
                     #commentBtn
                     (click)="openComment(request.id)"
                     class="btn-primary">
-                    <mat-icon svgIcon="chat-outline" />
                     @if (request.comments) {
                       <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="request.comments!.length" />
+                      <mat-icon svgIcon="chat-filled" />
+                    } @else {
+                      <mat-icon svgIcon="chat-outline" />
                     }
                   </button>        
                 </div>

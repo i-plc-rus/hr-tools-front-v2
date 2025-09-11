@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -27,6 +27,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
   styleUrl: './vacancy-list.component.scss'
 })
 export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Output() onSubmit = new EventEmitter();
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -60,12 +61,14 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestAuthors: SpaceUser[] = [];
   authors: SpaceUser[] = [];
   userId = localStorage.getItem('userId') || '';
+  addVacancyLenght = 0;
 
   // вакансии
   isLoading: boolean = true;
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
+  
 
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 
@@ -305,7 +308,14 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openComment(vacancyId: string) {
-    this.modalService.openCommentModal(vacancyId, false);
+    this.modalService.openCommentModal(vacancyId, false).subscribe(data => {
+        const foundVacancy = this.vacancyList.findIndex(vacancy => vacancyId === vacancy.id);
+        if (!this.vacancyList[foundVacancy].comments) {
+          this.vacancyList[foundVacancy].comments = [];
+        }
+        this.vacancyList[foundVacancy].comments.push(data);
+      }
+    );
   }
 
   getCities(address: string) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VacancyModalService } from '../../../services/vacancy-modal.service';
 import { VacancyapimodelsCommentView } from '../../../api/data-contracts';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -15,6 +15,7 @@ import { SnackBarService } from '../../../services/snackbar.service';
 export class ViewCommentModalComponent implements OnInit {
   @Input() vacancyId?: string;
   @Input() isRequest?: boolean;
+  @Output() onSubmit = new EventEmitter<VacancyapimodelsCommentView>();
   commentsById?: VacancyapimodelsCommentView[];
   newCommentOpened = true;
   count: boolean[] = [];
@@ -100,6 +101,7 @@ export class ViewCommentModalComponent implements OnInit {
         .subscribe({
           next: () => {
             this.snackBar.snackBarMessageSuccess('Комментарий отправлен');
+            this.onSubmit.emit(newComment);
             this.modalService.closeModal();
           },
           error: (error) => {
@@ -116,6 +118,7 @@ export class ViewCommentModalComponent implements OnInit {
         .subscribe({
           next: () => {
             this.snackBar.snackBarMessageSuccess('Комментарий отправлен');
+            this.onSubmit.emit(newComment);
             this.modalService.closeModal();
           },
           error: (error) => {

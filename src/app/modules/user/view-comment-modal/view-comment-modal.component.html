@@ -1,6 +1,11 @@
 <div class="bg-[white] w-full h-full rounded-[28px] lg:max-w-[748px]">
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
-    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">Комментарий по вакансии</h2>
+    <h2 class="text-[32px] text-center leading-[40px] m-0 p-0">
+      @if (isRequest) {
+        Комментарии по заявке
+      } @else {
+        Комментарии по вакансии
+      }</h2>
     <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-6">
       <div class="overflow-y-auto lg:max-h-[450px] ">
         <mat-expansion-panel class="mat-elevation-z w-[620px]" hideToggle="true" (opened)="openCommentByIndex(-1)" [expanded]="newCommentOpened">

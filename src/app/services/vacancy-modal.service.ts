@@ -4,7 +4,7 @@ import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {ViewCommentModalComponent} from '../modules/user/view-comment-modal/view-comment-modal.component';
 import {GenerateDescriptionModalComponent} from '../modules/user/generate-description-modal/generate-description-modal.component';
 import {FormControl} from '@angular/forms';
-import { VacancyapimodelsComment } from '../api/data-contracts';
+import { VacancyapimodelsComment, VacancyapimodelsCommentView } from '../api/data-contracts';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,7 @@ export class VacancyModalService {
     });
   }
 
-  openCommentModal(vacancyId: string, isRequest: boolean) {
+  openCommentModal(vacancyId: string, isRequest: boolean): EventEmitter<VacancyapimodelsCommentView> {
     this.portal = new ComponentPortal(ViewCommentModalComponent);
     this.overlayRef = this.createOverlay(this.overlay);
     const componentRef = this.overlayRef.attach(this.portal);
@@ -38,7 +38,8 @@ export class VacancyModalService {
     }      
     this.overlayRef.backdropClick().subscribe(() => {
       this.closeModal();
-    })    
+    });
+    return componentRef.instance.onSubmit;
   }
 
   openGenerateModal(control: FormControl) {

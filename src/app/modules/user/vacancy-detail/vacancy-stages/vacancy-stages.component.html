@@ -1,10 +1,3 @@
-<div class="absolute top-6 right-6">
-  <button mat-flat-button class="btn-secondary" (click)="openNewStageForm()">
-    <mat-icon>add</mat-icon>
-    Добавить этап
-  </button>
-</div>
-
 <ul cdkDropList [cdkDropListData]="stages" class="flex flex-col gap-2 mt-4" (cdkDropListDropped)="drop($event)">
   @for (stage of stages; track $index) {
     <li

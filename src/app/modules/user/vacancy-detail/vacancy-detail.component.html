@@ -63,6 +63,14 @@
           </button>
         }
       </div>
+      @if (category.value === 'stages') {
+      <div class="px-4 py-2 ml-4">
+          <button mat-flat-button class="btn-secondary" (click)="openNewStageForm()">
+          <mat-icon>add</mat-icon>
+          Добавить этап
+        </button>
+      </div>
+      }
     </div>
     <app-vacancy-description
       [class.hidden]="category.value !== 'description'"

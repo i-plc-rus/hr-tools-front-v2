@@ -281,7 +281,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.allDataLoaded = false;
         this.currentPage = 1;
         this.vacancyList = [];
-        this.getVacancyList();
       });
   }
 

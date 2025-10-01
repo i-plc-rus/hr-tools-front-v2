@@ -532,19 +532,6 @@ export interface ApplicantapimodelsApplicantSourceData {
   total_source?: ApplicantapimodelsSourceData;
 }
 
-export interface ApplicantapimodelsApplicantSurvey {
-  /** Порог адаптивного фильтра */
-  hrThreshold?: number;
-  /** Анкета заполнена кандидатом и может использоваться для оценки */
-  isFilledOut?: boolean;
-  /** Анкета получила оценку от нейросети */
-  isScored?: boolean;
-  /** Итоговая оцена кандидата */
-  score?: number;
-  /** Ссылка на анкету для кандидата */
-  url?: string;
-}
-
 export interface ApplicantapimodelsApplicantView {
   /** Дата добавления */
   accept_date?: string;
@@ -600,8 +587,8 @@ export interface ApplicantapimodelsApplicantView {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
-  /** анкета для кандидата */
-  survey?: ApplicantapimodelsApplicantSurvey;
+  /** Анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantVkSurvey;
   /** Опыт работ в месяцах */
   total_experience?: number;
   /** Идентификатор вакансии */
@@ -669,8 +656,8 @@ export interface ApplicantapimodelsApplicantViewExt {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
-  /** анкета для кандидата */
-  survey?: ApplicantapimodelsApplicantSurvey;
+  /** Анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantVkSurvey;
   tags?: string[];
   /** Опыт работ в месяцах */
   total_experience?: number;
@@ -678,6 +665,15 @@ export interface ApplicantapimodelsApplicantViewExt {
   vacancy_id?: string;
   /** Название вакансии */
   vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsApplicantVkSurvey {
+  status?: number;
+  statusDescription?: string;
+  /** ВК. Шаг 0. анкета и ответы кандидата на типовые вопросы */
+  step0?: SurveyapimodelsVkStep0;
+  /** ВК. Шаг 1. Генерация черновика скрипта (15 вопросов и текст сценария для интервью) */
+  step1?: SurveyapimodelsVkStep1;
 }
 
 export interface ApplicantapimodelsMultiChangeStageRequest {
@@ -1338,6 +1334,54 @@ export interface SurveyapimodelsHRSurveyView {
   /** "анкета полностью заполнена" */
   is_filled_out?: boolean;
   questions?: DbmodelsHRSurveyQuestion[];
+}
+
+export interface SurveyapimodelsVkStep0 {
+  answers?: SurveyapimodelsVkStep0Answer[];
+  questions?: SurveyapimodelsVkStep0Question[];
+  /** Ссылка на анкету c типовыми вопросами для кандидата */
+  url?: string;
+}
+
+export interface SurveyapimodelsVkStep0Answer {
+  /** Варианты ответов */
+  answer?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+}
+
+export interface SurveyapimodelsVkStep0Question {
+  /** Варианты ответов */
+  answers?: string[];
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Тип вопроса */
+  question_type?: string;
+}
+
+export interface SurveyapimodelsVkStep0SurveyAnswers {
+  answers?: SurveyapimodelsVkStep0Answer[];
+}
+
+export interface SurveyapimodelsVkStep0SurveyView {
+  questions?: SurveyapimodelsVkStep0Question[];
+}
+
+export interface SurveyapimodelsVkStep1 {
+  comments?: Record<string, string>;
+  questions?: SurveyapimodelsVkStep1Question[];
+  script_intro?: string;
+  script_outro?: string;
+}
+
+export interface SurveyapimodelsVkStep1Question {
+  /** Идентификатор вопроса */
+  id?: string;
+  order?: number;
+  /** Текст вопроса */
+  text?: string;
 }
 
 export interface VacancyapimodelsApprovalStageData {

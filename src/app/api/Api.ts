@@ -17,7 +17,7 @@ import { Observable } from "rxjs";
 
 import { RequestOptions } from "./http-client";
 
-    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyResponses,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,VacancyapimodelsApprovalStages,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
+    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,SurveyapimodelsVkStep0SurveyAnswers,SurveyapimodelsVkStep0SurveyView,SurveyapimodelsVkStep1,VacancyapimodelsApprovalStages,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
         
 import { API_BASE_URL } from "../tokens/api.token";
 
@@ -1303,6 +1303,39 @@ public v1OrganizationsSuggestList (query?: {
     })
 }
             /**
+ * @description ВК. Шаг 0. Получение анкеты c типовыми вопросами
+ *
+ * @tags ВК
+ * @name V1PublicSurveyStep0Detail
+ * @summary ВК. Шаг 0. Получение анкеты c типовыми вопросами
+ * @request GET:/api/v1/public/survey/step0/{id}
+ */
+public v1PublicSurveyStep0Detail (id: string, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep0SurveyView,
+
+})>;
+public v1PublicSurveyStep0Detail (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep0SurveyView,
+
+})>>;
+public v1PublicSurveyStep0Detail (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep0SurveyView,
+
+})> | (ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep0SurveyView,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep0SurveyView,
+
+})>(
+        'GET',
+        this.baseUrl + `/api/v1/public/survey/step0/${id}`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Получение анкеты
  *
  * @tags Анкета кандидата
@@ -1336,16 +1369,16 @@ public v1PublicSurveyDetail (id: string, options: RequestOptions & { observe: 'r
     })
 }
             /**
- * @description Сохранение ответов
+ * @description ВК. Шаг 0. cохранение ответов по анкете
  *
- * @tags Анкета кандидата
+ * @tags ВК
  * @name V1PublicSurveyUpdate
- * @summary Сохранение ответов
+ * @summary ВК. Шаг 0. cохранение ответов по анкете
  * @request PUT:/api/v1/public/survey/{id}
  */
-public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsApplicantSurveyResponses, options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsApplicantSurveyResponses, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsApplicantSurveyResponses, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsVkStep0SurveyAnswers, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsVkStep0SurveyAnswers, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsVkStep0SurveyAnswers, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
         'PUT',
         this.baseUrl + `/api/v1/public/survey/${id}`,
@@ -1921,6 +1954,72 @@ public v1SpaceApplicantResumeDelete (id: string, options: RequestOptions & { obs
         this.baseUrl + `/api/v1/space/applicant/${id}/resume`,
         {
                                 ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Обновить/утвердить вопросы для интервью
+ *
+ * @tags Кандидат
+ * @name V1SpaceApplicantSurveyUpdate
+ * @summary Обновить/утвердить вопросы для интервью
+ * @request PUT:/api/v1/space/applicant/{id}/survey
+ */
+public v1SpaceApplicantSurveyUpdate (id: string, body: ApplicantapimodelsRejectRequest, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>;
+public v1SpaceApplicantSurveyUpdate (id: string, body: ApplicantapimodelsRejectRequest, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>>;
+public v1SpaceApplicantSurveyUpdate (id: string, body: ApplicantapimodelsRejectRequest, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})> | (ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>(
+        'PUT',
+        this.baseUrl + `/api/v1/space/applicant/${id}/survey`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Обновить вопросы для интервью на перерегенерацию
+ *
+ * @tags Кандидат
+ * @name V1SpaceApplicantSurveyRegenUpdate
+ * @summary Отправить вопросы для интервью на перерегенерацию
+ * @request PUT:/api/v1/space/applicant/{id}/survey_regen
+ */
+public v1SpaceApplicantSurveyRegenUpdate (id: string, body: ApplicantapimodelsRejectRequest, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>;
+public v1SpaceApplicantSurveyRegenUpdate (id: string, body: ApplicantapimodelsRejectRequest, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>>;
+public v1SpaceApplicantSurveyRegenUpdate (id: string, body: ApplicantapimodelsRejectRequest, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})> | (ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: SurveyapimodelsVkStep1,
+
+})>(
+        'PUT',
+        this.baseUrl + `/api/v1/space/applicant/${id}/survey_regen`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
     })
 }
             /**

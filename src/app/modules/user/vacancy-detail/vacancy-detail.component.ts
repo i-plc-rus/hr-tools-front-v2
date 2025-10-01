@@ -1,20 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '../../../api/Api';
-import { VacancyView } from '../../../models/Vacancy';
-import {
-  GptmodelsGenVacancyDescRequest,
-  ModelsEmployment,
-  ModelsExperience,
-  ModelsSchedule,
-  ModelsVacancyStatus,
-  ModelsVRSelectionType,
-  ModelsVRType,
-  ModelsVRUrgency,
-} from '../../../api/data-contracts';
-import { vacancyStatuses } from '../user-consts';
-import { UsersModalService } from '../../../services/users-modal.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiService} from '../../../api/Api';
+import {VacancyView} from '../../../models/Vacancy';
+import {GptmodelsGenVacancyDescRequest, ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
+import {vacancyStatuses} from '../user-consts';
+import {UsersModalService} from '../../../services/users-modal.service';
+import {VacancyStagesComponent} from './vacancy-stages/vacancy-stages.component';
 
 type VacancyDetailCategory =
   | 'description'
@@ -29,6 +21,8 @@ type VacancyDetailCategory =
   styleUrl: './vacancy-detail.component.scss',
 })
 export class VacancyDetailComponent implements OnInit {
+  @ViewChild(VacancyStagesComponent) vacancyStagesComponent!: VacancyStagesComponent;
+  
   category = new FormControl<VacancyDetailCategory>('description');
   isNewVacancy = false;
   vacancy?: VacancyView;
@@ -47,10 +41,7 @@ export class VacancyDetailComponent implements OnInit {
     job_title_name: new FormControl('', Validators.required),
     opened_positions: new FormControl(1, Validators.required),
     place_of_work: new FormControl('', Validators.required),
-    requirements: new FormControl(
-      '<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>',
-      Validators.required
-    ),
+    requirements: new FormControl('<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>'),
     vacancy_name: new FormControl('', Validators.required),
     request_type: new FormControl<ModelsVRType | undefined>(
       undefined,
@@ -155,4 +146,11 @@ export class VacancyDetailComponent implements OnInit {
       }
     });
   }
+
+  openNewStageForm() {
+    if (this.vacancyStagesComponent) {
+      this.vacancyStagesComponent.openNewStageForm();
+    }
+  }
+
 }

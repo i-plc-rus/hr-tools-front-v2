@@ -119,7 +119,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     }),
 
     [StepForm.Step3]: new FormGroup({
-      [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required]),
+      [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
       [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
       [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
       [Step3Fields.Requirements]: new FormControl(''),
@@ -138,7 +138,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     }),
 
     description: new FormControl(''),
-    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(ModelsVRSelectionType.VRSelectionTypePersonal),
   });
 
 
@@ -241,6 +241,10 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   }
 
+  ngAfterViewInit() {
+    this.startForm();
+  }
+
   ngAfterViewChecked(): void {
     if (!this._selectInitialized && this.userSelect) {
       this._selectInitialized = true;
@@ -318,6 +322,9 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   removeInterviewer(index: number): void {
     if (this.interviewers.length > 1) {
       this.interviewers.removeAt(index);
+      for (let i = index; i < this.interviewers.length; i++) {
+        this.interviewers.at(i)?.get('stage')?.setValue(i + 1);
+      }
     }
   }
 
@@ -370,9 +377,8 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     return company && company.name ? company.name : '';
   }
 
-  startForm(value: ModelsVRSelectionType) {
-    this.form.get('selection_type')?.setValue(value);
-    const dialogRef = this.dialog.open(this.draftDialog, {
+  startForm() {
+    this.dialog.open(this.draftDialog, {
       hasBackdrop: true,
       disableClose: false
     });
@@ -426,6 +432,18 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.dialog.closeAll();
   }
 
+  onOptionChange(event: any, index: number) {
+    const selectedValue = event.value;
+    const controlToUpdate = this.interviewers.at(index);
+      
+    controlToUpdate.patchValue({
+      space_user_id: selectedValue,
+    })
+      
+    console.log(`Item at index ${index} selected: ${controlToUpdate.value.space_user_id}`);
+    console.log(controlToUpdate.value.space_user_id);
+  }
+
   hasDraft(): boolean {
     const draft = localStorage.getItem('draftFormData');
     return !!draft;
@@ -454,6 +472,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   saveDraftAndExit(): void {
     localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
+    console.log(this.form);
     this.closeDialog();
     this.router.navigate(['/user/request/list'])
   }
@@ -468,7 +487,6 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     const step3 = this.form.get(StepForm.Step3)?.value;
     const step4 = this.form.get(StepForm.Step4)?.value;
 
-    const selection_type = this.form.get('selection_type')?.value;
     const description = this.form.get('description')?.value;
 
     const company = step1?.company_name;
@@ -492,7 +510,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       employment: step3?.employment as ModelsEmployment,
       experience: step3?.experience as ModelsExperience,
       schedule: step3?.schedule as ModelsSchedule,
-      selection_type: selection_type as ModelsVRSelectionType,
+      selection_type: ModelsVRSelectionType.VRSelectionTypePersonal,
       description: description || undefined,
       approval_stages: step4?.interviewers?.map(
         (interviewer: { space_user_id: string | null; stage: number | null }) => ({

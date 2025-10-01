@@ -33,9 +33,9 @@
           }
         </app-text-input>
         <button
-          class="mt-4"
+          class="login-button mt-4"
           mat-flat-button
-          [disabled]="form.get('email')?.invalid"
+          [disabled]="form.get('email')?.invalid || form.get('password')!.invalid"
           (click)="login()"
         >Войти
         </button>

@@ -13,7 +13,9 @@ import { GptmodelsGenVacancyDescRequest } from '../../../../api/data-contracts';
 export class GenerateSurveyModalComponent implements OnInit{
   onSubmit = new EventEmitter<any>();
   @Input() user?: any;
-
+  
+  constructor(private modalService: UsersModalService,) {}
+  
   surveyForm = new FormGroup({
     b2bExperience: new FormControl('', Validators.required),
     itExperience: new FormControl('', Validators.required),
@@ -23,10 +25,6 @@ export class GenerateSurveyModalComponent implements OnInit{
     softSkills: new FormControl('', Validators.required),
     softSkillsToggle: new FormControl(false),
   });
-
-  constructor(
-      private modalService: UsersModalService,
-    ) { }
 
   loading = false;
 
@@ -97,7 +95,6 @@ export class GenerateSurveyModalComponent implements OnInit{
   }
 
   cancel(): void {
-    console.log('Survey canceled');
     this.modalService.closeModal();
   }
 

@@ -41,10 +41,10 @@ export class CandidateDuplicateComponent implements OnInit {
     forkJoin([
       this.api.v1SpaceApplicantDetail(id, {observe: 'response'}),
       this.api.v1SpaceApplicantDetail(duplicateId, {observe: 'response'}),
-      this.api.v1SpaceApplicantPhotoDetail(id, {observe: 'response', responseType: 'blob'}),
-      this.api.v1SpaceApplicantPhotoDetail(duplicateId, {observe: 'response', responseType: 'blob'}),
-      this.api.v1SpaceApplicantResumeDetail(id, {observe: 'response', responseType: 'blob'}),
-      this.api.v1SpaceApplicantResumeDetail(duplicateId, {observe: 'response', responseType: 'blob'})
+      this.api.v1SpaceApplicantPhotoList(id, {observe: 'response', responseType: 'blob'}),
+      this.api.v1SpaceApplicantPhotoList(duplicateId, {observe: 'response', responseType: 'blob'}),
+      this.api.v1SpaceApplicantResumeList(id, {observe: 'response', responseType: 'blob'}),
+      this.api.v1SpaceApplicantResumeList(duplicateId, {observe: 'response', responseType: 'blob'})
     ]).subscribe({
       next: (data) => {
         if (data[0].body?.data) {

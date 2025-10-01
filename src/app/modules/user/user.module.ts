@@ -114,6 +114,7 @@ import {
 import {DevelopmentComponent} from "../../components/development/development.component";
 import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey-success/generate-survey-success.component';
 import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-error/genetate-servey-error.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
   declarations: [
@@ -170,7 +171,8 @@ import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-e
     AddMemberModalComponent,
     LicenseExtensionModalComponent,
     GenerateSurveySuccessComponent,
-    GenetateServeyErrorComponent
+    GenetateServeyErrorComponent,
+    AnalyticsComponent
   ],
     imports: [
         CommonModule,

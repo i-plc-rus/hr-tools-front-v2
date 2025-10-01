@@ -1,17 +1,17 @@
 <app-filter [opened]="toggleFilter.checked" class="block">
-  <form [formGroup]="filterForm">
-    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
-      <h3 class="text-[22px] leading-7">Фильтр</h3>
-      <div class="flex gap-2">
-        <button mat-icon-button (click)="reset()" class="btn-secondary">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button (click)="reset()" class="btn-secondary">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-    <div class="w-full overflow-y-auto pr-1 pb-6" style="max-height: calc(100vh - 70px);">
+  </div>
+  <form [formGroup]="filterForm" class="flex flex-col h-full overflow-y-auto">
+    <div class="w-full pr-1 pb-6" style="max-height: calc(100vh - 70px);">
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
         <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
@@ -28,7 +28,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll custom-scrollbar">
+        <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (city of cities; track $index) {
@@ -40,7 +40,7 @@
 
       <mat-expansion-panel class="mat-elevation-z">
         <mat-expansion-panel-header>Подразделение</mat-expansion-panel-header>
-        <div class="max-h-[200px] overflow-y-scroll overflow-x-hidden custom-scrollbar">
+        <div class="max-h-[200px] overflow-y-auto overflow-x-hidden custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="department_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (department of departments; track $index) {
@@ -57,7 +57,7 @@
           <input matInput [formControl]="searchRequestAuthor" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="request_author_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (requestAuthor of requestAuthors; track $index) {
@@ -74,7 +74,7 @@
           <input matInput [formControl]="searchAuthor" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="author_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (author of authors; track $index) {
@@ -152,7 +152,7 @@
       </div>
     </div>
 
-    <div #vacancyContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[80vh] overflow-y-auto">
+    <div #vacancyContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[100vh] overflow-y-auto">
       @if (vacancyList.length && !isLoading) {
         @for (vacancy of vacancyList; track $index) {
           <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
@@ -236,9 +236,13 @@
                     }
                   </button>
                   <div class="relative">
-                    <button mat-icon-button disabled #commentBtn (click)="openComment('')" class="btn-primary">
-                      <mat-icon svgIcon="chat-outline" />
-                      <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
+                    <button mat-icon-button #commentBtn (click)="openComment(vacancy.id)" class="btn-primary">
+                      @if (vacancy.comments) {
+                        <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="vacancy.comments!.length" />
+                        <mat-icon svgIcon="chat-filled" />
+                      } @else {
+                        <mat-icon svgIcon="chat-outline" />
+                      }
                     </button>
                   </div>
                 </div>

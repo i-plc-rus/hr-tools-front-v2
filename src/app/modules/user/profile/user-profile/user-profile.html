@@ -7,7 +7,7 @@
       <mat-tab label="Настройка интерфейса"></mat-tab>
     </mat-tab-group>
 
- <app-loading-wrapper [isLoading]="loadingService.getLoading()">
+ <app-loading-wrapper [isLoading]="loadingService.getLoading()" [ngClass]="loadingService.getLoading() ? 'absolute top-[50%] left-[50%] translate-x-[-50%] w-full h-full' : ''">
 
  <div class="flex-1 overflow-auto">
       <router-outlet></router-outlet>

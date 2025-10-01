@@ -112,7 +112,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
 
   getUsers(loadMore = false) {
-    if (this.loading || this.allDataLoaded) return;
+    if (this.loading) return;
 
     this.loading = true;
 

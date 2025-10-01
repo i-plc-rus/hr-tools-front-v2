@@ -18,8 +18,46 @@
 }
 
 app-filter {
-  height: auto !important;
   min-height: auto !important;
   max-height: none !important;
 }
+
+mat-expansion-panel .overflow-y-scroll,
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #D9D9D9 #F5F5F5;
+}
+
+mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F5F5F5;
+  border-radius: 2px;
+}
+
+mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #D9D9D9;
+  border-radius: 2px;
+}
+
+mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #BDBDBD;
+}
+
+::ng-deep .no-border .ag-cell {
+  border-bottom: none;
+  border-top: none;
+}
+
+::ng-deep .no-border .ag-row {
+  border-bottom: none;
+}
+
+
 

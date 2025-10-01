@@ -1,17 +1,17 @@
 <app-filter [opened]="toggleFilter.checked" class="block">
-  <form [formGroup]="filterForm">
-    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
-      <h3 class="text-[22px] leading-7">Фильтр</h3>
-      <div class="flex gap-2">
-        <button mat-icon-button (click)="reset()" class="btn-secondary">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button (click)="reset()" class="btn-secondary">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-    <div class="w-full overflow-y-auto pr-1 pb-6" style="max-height: calc(100vh - 70px);">
+  </div>
+  <form [formGroup]="filterForm" class="flex flex-col h-full overflow-y-auto">
+    <div class="w-full pr-1 pb-6" style="max-height: calc(100vh - 70px);">
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
         <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
@@ -28,7 +28,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (city of cities; track $index) {
@@ -45,7 +45,7 @@
           <input matInput [formControl]="searchRequestAuthor" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="author_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (requestAuthor of requestAuthors; track $index) {
@@ -53,15 +53,6 @@
             }
           </mat-chip-listbox>
         </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel class="mat-elevation-z">
-        <mat-expansion-panel-header>Вид подбора</mat-expansion-panel-header>
-        <mat-chip-listbox hideSingleSelectionIndicator formControlName="selection_type">
-          @for (selectionType of selectionTypes; track $index) {
-            <mat-chip-option [value]="selectionType">{{ selectionType }}</mat-chip-option>
-          }
-        </mat-chip-listbox>
       </mat-expansion-panel>
 
       <mat-expansion-panel class="mat-elevation-z">
@@ -77,7 +68,7 @@
         <mat-form-field class="w-full mt-2" appearance="outline" floatLabel="always">
           <mat-label>Введите диапазон дат</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="Начало" formControlName="search_from" />
+            <input matStartDate placeholder="Начало" formControlName="search_from"/>
             <input matEndDate placeholder="Конец" formControlName="search_to" />
           </mat-date-range-input>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -107,7 +98,7 @@
     <app-filter-toggle #toggleFilter />
   </div>
 
-  <div class="w-full mt-4 bg-white rounded-3xl overflow-hidden">
+  <div class="w-full mt-4 bg-white rounded-3xl overflow-hidden pb-6">
     <div class="p-6 pb-4 flex gap-4 justify-between items-center">
       <div class="flex gap-12 items-center">
         <h1 class="text-[22px]">Заявки</h1>
@@ -121,15 +112,23 @@
               <span class="chip-number">{{ favoritesCount }}</span>
             }
             Избранные
-          </mat-chip-option>
-          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
-            Согласовано
+          </mat-chip-option><mat-chip-option [value]="'Создана'" [selectable]="category.value !== 'Создана'">
+            Создана
+          </mat-chip-option> 
+          <mat-chip-option [value]="'На доработке'" [selectable]="category.value !== 'На доработке'">
+            На доработке
           </mat-chip-option>
           <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'">
             На согласовании
           </mat-chip-option>
+          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
+            Согласовано
+          </mat-chip-option>
           <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
             Не согласовано
+          </mat-chip-option>
+          <mat-chip-option [value]="'Отменена'" [selectable]="category.value !== 'Отменена'">
+            Отменена
           </mat-chip-option>
         </mat-chip-listbox>
       </div>
@@ -144,7 +143,7 @@
       </div>
     </div>
 
-    <div #requestContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[80vh] overflow-y-auto">
+    <div #requestContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[100vh] overflow-y-auto">
       @for (request of requestList; track $index) {
         <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
           <div class="flex flex-col gap-1 w-full">
@@ -250,13 +249,16 @@
                 <div class="relative">
                   <button
                     mat-icon-button
-                    [disabled]="request.description"
                     #commentBtn
-                    (click)="openComment(request.description)"
+                    (click)="openComment(request.id)"
                     class="btn-primary">
-                    <mat-icon svgIcon="chat-outline" />
-                    <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
-                  </button>
+                    @if (request.comments) {
+                      <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="request.comments!.length" />
+                      <mat-icon svgIcon="chat-filled" />
+                    } @else {
+                      <mat-icon svgIcon="chat-outline" />
+                    }
+                  </button>        
                 </div>
               </div>
               <div class="text-[16px] leading-6 text-[var(--text-alter)] text-right">

@@ -22,11 +22,21 @@ import { Router } from '@angular/router';
 import {Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DateAdapterRus, RUS_DATE_FORMATS } from '../../../adapters/ru-date.adapter';
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
-  styleUrl: './request-list.component.scss'
+  styleUrl: './request-list.component.scss',
+  providers: [
+    {
+        provide: DateAdapter, useClass: DateAdapterRus
+    },
+    {
+        provide: MAT_DATE_FORMATS, useValue: RUS_DATE_FORMATS
+    },
+ ]
 })
 export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   // фильтр
@@ -70,7 +80,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestAuthors: SpaceUser[] = [];
 
   // вакансии
-  isLoading = false;
+  isLoading = true;
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
@@ -119,7 +129,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getRequests(loadMore = false): void {
-    if (this.loading || this.allDataLoaded) return;
 
     this.loading = true;
 
@@ -179,7 +188,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
               this.currentPage++;
             }
           }
-
+          this.isLoading = false;
           this.loading = false;
         },
         error: (error) => {
@@ -258,17 +267,17 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.getRequests();
       });
 
-    this.filterForm.get('search_period')!.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
-          this.filterForm.patchValue({
-            search_from: '',
-            search_to: ''
-          }, { emitEvent: false });
-        }
+    // this.filterForm.get('search_period')!.valueChanges
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(value => {
+    //     if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+    //       this.filterForm.patchValue({
+    //         search_from: '',
+    //         search_to: ''
+    //       }, { emitEvent: false });
+    //     }
 
-      });
+    //   });
 
     this.filterForm.get('search_from')!.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -294,26 +303,43 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
     const current = this.filterForm.get('search_period')!.value;
+    const currentFrom = this.filterForm.get('search_from')!.value;
+    const currentTo = this.filterForm.get('search_to')!.value;
+    let isValidDate = false;
 
-    if (current !== value) {
-      this.filterForm.patchValue({
-        search_period: value,
-        search_from: '',
-        search_to: ''
-      });
-    } else {
-      if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+    if (value === VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      const dateObjectFrom = new Date(currentFrom!);
+      const dateObjectTo = new Date(currentTo!);
+      isValidDate = (dateObjectFrom instanceof Date && !isNaN(dateObjectFrom.getTime())) || (dateObjectTo instanceof Date && !isNaN(dateObjectTo.getTime()));
+      if (isValidDate) {
         this.filterForm.patchValue({
           search_from: '',
           search_to: ''
         });
+        this.filterForm.get('search_period')!.setValue(undefined);
+      } 
+    } else {
+      // console.log('Is valid date:', this.filterForm.get('search_period')!.value);
+      this.filterForm.patchValue({ 
+        search_from: '',
+        search_to: ''
+      });
+      if (current === value) {
+        this.filterForm.get('search_period')!.setValue(value);
       }
     }
   }
 
 
-  openComment(comment: string) {
-    this.modalService.openCommentModal(comment);
+  openComment(requestId: string) {
+    this.modalService.openCommentModal(requestId, true).subscribe(data => {
+        const foundRequest = this.requestList.findIndex(request => requestId === request.id);
+        if (!this.requestList[foundRequest].comments) {
+          this.requestList[foundRequest].comments = [];
+        }
+        this.requestList[foundRequest].comments.push(data);
+      }
+    );
   }
 
   changeStatus(id: string, status: ModelsVRStatus) {
@@ -381,9 +407,13 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        const tempRequest = this.requestList.find(item => item.id === id);
-        tempRequest!.favorite = set;
-        this.getRequests();
+        const index = this.requestList.findIndex(item => item.id === id);
+        this.requestList[index].favorite = set; 
+        if (set) {
+          this.favoritesCount++;
+        } else {
+          this.favoritesCount--;
+        }
       },
       error: (error) => {
         console.log(error);
@@ -394,9 +424,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   togglePin(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        const tempRequest = this.requestList.find(item => item.id === id);
-        tempRequest!.pinned = set;
-        this.getRequests();
+        // this.getRequests();
+        const index = this.requestList.findIndex(item => item.id === id);
+        this.requestList[index].pinned = set; 
       },
       error: (error) => {
         console.log(error);

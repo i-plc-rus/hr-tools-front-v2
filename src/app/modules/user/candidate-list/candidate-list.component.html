@@ -1,17 +1,17 @@
 <app-filter [opened]="toggleFilter.checked" class="block">
-  <form [formGroup]="filterForm" class="flex flex-col h-full">
-    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
-      <h3 class="text-[22px] leading-7">Фильтр</h3>
-      <div class="flex gap-2">
-        <button mat-icon-button class="btn-secondary" (click)="onReset()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button class="btn-secondary" (click)="onReset()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-    <div class="w-full overflow-y-auto pr-1 pb-6" style="max-height: calc(100vh - 70px);">
+  </div>
+  <form [formGroup]="filterForm" class="flex flex-col h-full overflow-y-auto">
+    <div class="w-full pr-1 pb-6" style="max-height: calc(100vh - 70px);">
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Вакансия</mat-expansion-panel-header>
         <mat-form-field class="w-full" appearance="outline" floatLabel="always">
@@ -28,7 +28,7 @@
 
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Готовность к переезду</mat-expansion-panel-header>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="relocation">
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-auto" formControlName="relocation">
           @for (relocation of relocationTypes; track $index) {
             <mat-chip-option [value]="relocation.value">{{ relocation.label }}</mat-chip-option>
           }
@@ -68,7 +68,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-scroll">
+        <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city">
             @for (city of cities; track $index) {
               <mat-chip-option [value]="city.address">{{ city.address }}</mat-chip-option>
@@ -163,6 +163,6 @@
         </button>
       </div>
     </div>
-    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material flex-1 w-full" />
+    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material flex-1 w-full no-border" />
   </div>
 </div>

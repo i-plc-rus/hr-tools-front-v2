@@ -16,6 +16,7 @@ import {registerLocaleData} from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import localeRuExtra from '@angular/common/locales/extra/ru';
 import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 registerLocaleData(localeRu, 'ru-RU', localeRuExtra);
 
 export const appConfig: ApplicationConfig = {
@@ -36,6 +37,12 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         hasBackdrop: true,
         backdropClass: 'bg-[var(--overlay)]',
+      }
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        subscriptSizing: 'dynamic'
       }
     },
     {

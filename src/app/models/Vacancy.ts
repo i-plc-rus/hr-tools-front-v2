@@ -6,6 +6,7 @@ import {
   ModelsVRSelectionType,
   ModelsVRType,
   ModelsVRUrgency,
+  VacancyapimodelsCommentView,
   VacancyapimodelsExternalData,
   VacancyapimodelsExternalLink,
   VacancyapimodelsSalary,
@@ -65,6 +66,7 @@ export class VacancyView implements VacancyapimodelsVacancyView {
   status?: ModelsVacancyStatus;
   /** срочность */
   urgency?: ModelsVRUrgency;
+  comments?: VacancyapimodelsCommentView[] | undefined;
 
   get statusClass(): StatusTag {
     switch (this.status) {

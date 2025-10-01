@@ -20,6 +20,8 @@ import {SpaceapimodelsSpaceUser} from '../api/data-contracts';
 import {
   LicenseExtensionModalComponent
 } from '../modules/user/profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
+import { GenerateSurveySuccessComponent } from '../modules/user/vacancy-detail/generate-survey-success/generate-survey-success.component';
+import { GenetateServeyErrorComponent } from '../modules/user/vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 
 
 @Injectable({
@@ -27,7 +29,7 @@ import {
 })
 export class UsersModalService {
   overlayRef?: OverlayRef;
-  portal?: ComponentPortal< AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent | GenerateSurveyModalComponent>;
+  portal?: ComponentPortal< AddUserModalComponent | DeleteUserModalComponent | ChangePasswordModalComponent | EditMemberModalComponent >;
 
   constructor(private overlay: Overlay) { }
 
@@ -127,15 +129,61 @@ export class UsersModalService {
     });
   }
 
-  openGenerateSurveyModal(): EventEmitter<boolean> {
-    this.portal = new ComponentPortal(GenerateSurveyModalComponent);
+  openGenerateSurveyModal(): EventEmitter<any> {
+    const portal = new ComponentPortal(GenerateSurveyModalComponent);
     this.overlayRef = this.createSurveyOverlay(this.overlay);
 
     if (!this.overlayRef) {
       throw new Error('');
     }
 
-    const componentRef = this.overlayRef.attach(this.portal);
+    const componentRef: ComponentRef<GenerateSurveyModalComponent> = this.overlayRef.attach(portal);
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        this.overlayRef.updatePosition();
+      }
+    }, 0);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  openGenerateSurveySuccessModal(): EventEmitter<boolean> {
+    const portal = new ComponentPortal(GenerateSurveySuccessComponent);
+    this.overlayRef = this.createSurveyOverlay(this.overlay);
+
+    if (!this.overlayRef) {
+      throw new Error('');
+    }
+
+    const componentRef: ComponentRef<GenerateSurveySuccessComponent> = this.overlayRef.attach(portal);
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        this.overlayRef.updatePosition();
+      }
+    }, 0);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeModal();
+    });
+
+    return componentRef.instance.onSubmit;
+  }
+
+  openGenerateSurveyErrorModal(): EventEmitter<boolean> {
+    const portal = new ComponentPortal(GenetateServeyErrorComponent);
+    this.overlayRef = this.createSurveyOverlay(this.overlay);
+
+    if (!this.overlayRef) {
+      throw new Error('');
+    }
+
+    const componentRef: ComponentRef<GenetateServeyErrorComponent> = this.overlayRef.attach(portal);
 
     setTimeout(() => {
       if (this.overlayRef) {

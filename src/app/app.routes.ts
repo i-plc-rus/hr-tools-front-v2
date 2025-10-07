@@ -23,11 +23,11 @@ export const routes: Routes = [
     loadChildren: () => import('../app/modules/video-chat/video-chat.module').then(r => r.VideoChatModule),
   },
   {
-    path: 'question',
-    loadChildren: () => import('../app/modules/question-generator/question-generator.module').then(r => r.QuestionGeneratorModule),
+    path: 'public',
+    loadChildren: () => import('../app/modules/servey/servey.module').then(r => r.ServeyModule),
   },
   {
     path: '**',
-    redirectTo: 'question',
+    redirectTo: 'public',
   }
 ];

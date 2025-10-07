@@ -7,7 +7,7 @@ import { VideoChatComponent } from './video-chat.component';
 import { MatButton } from '@angular/material/button';
 import { CameraComponent } from './components/camera/camera.component';
 import { CaptureVideoComponent } from "./components/capture-video/capture-video.component";
-import { FinishComponent } from './components/finish/finish.component';
+// import { FinishComponent } from './components/finish/finish.component';
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatSlideToggle } from "@angular/material/slide-toggle";
@@ -20,7 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     VideoChatComponent,
     CameraComponent,
     CaptureVideoComponent,
-    FinishComponent,
+    // FinishComponent,
   ],
   imports: [
     CommonModule,

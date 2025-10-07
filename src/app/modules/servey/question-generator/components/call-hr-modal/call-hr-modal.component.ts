@@ -1,5 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
-import { CallHrModalService } from '../../../../services/call-hr-modal.service';
+import { CallHrModalService } from '../../../../../services/call-hr-modal.service';
 
 @Component({
   selector: 'app-call-hr-modal',
@@ -17,5 +17,6 @@ export class CallHrModalComponent {
 
   submit() {
     this.modalService.closeModal();
+    this.modalService.openSuccessModal();
   }
 }

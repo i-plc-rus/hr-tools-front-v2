@@ -99,6 +99,8 @@ export enum ModelsSpaceSettingCode {
   AvitoClientSecretSetting = "AvitoClientSecret",
   /** почта, с которой отправляются письма кандидатам */
   SpaceSenderEmail = "SpaceSenderEmail",
+  /** почта, тех поддержки */
+  SpaceSupportEmail = "SpaceSupportEmail",
 }
 
 export enum ModelsSpacePushSettingCode {
@@ -673,7 +675,7 @@ export interface ApplicantapimodelsApplicantVkSurvey {
   /** ВК. Шаг 0. анкета и ответы кандидата на типовые вопросы */
   step0?: SurveyapimodelsVkStep0;
   /** ВК. Шаг 1. Генерация черновика скрипта (15 вопросов и текст сценария для интервью) */
-  step1?: SurveyapimodelsVkStep1;
+  step1?: SurveyapimodelsVkStep1View;
 }
 
 export interface ApplicantapimodelsMultiChangeStageRequest {
@@ -1382,6 +1384,17 @@ export interface SurveyapimodelsVkStep1Question {
   order?: number;
   /** Текст вопроса */
   text?: string;
+}
+
+export interface SurveyapimodelsVkStep1View {
+  comments?: Record<string, string>;
+  /** Дата отправки приглашения */
+  date_of_invitation?: string;
+  questions?: SurveyapimodelsVkStep1Question[];
+  script_intro?: string;
+  script_outro?: string;
+  /** Ссылка на анкету для видео интервью */
+  url?: string;
 }
 
 export interface VacancyapimodelsApprovalStageData {

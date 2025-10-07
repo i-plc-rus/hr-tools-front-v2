@@ -42,9 +42,9 @@ export class CallHrModalService {
     this.portal = new ComponentPortal(FinishComponent);
     this.overlayRef = this.createOverlay(this.overlay);
     const componentRef = this.overlayRef.attach(this.portal);
-    this.overlayRef.backdropClick().subscribe(() => {
-      this.closeModal();
-    })
+    // this.overlayRef.backdropClick().subscribe(() => {
+    //   this.closeModal();
+    // })
     return componentRef.instance.onSubmit;
   }
 

@@ -8,10 +8,4 @@ import { CallHrModalService } from '../../../../../services/call-hr-modal.servic
 })
 export class FinishComponent {
   onSubmit = new EventEmitter<boolean>();
-
-  constructor(private modalService: CallHrModalService) {}
-
-  closeModal() {
-    this.modalService.closeModal();
-  }
 }

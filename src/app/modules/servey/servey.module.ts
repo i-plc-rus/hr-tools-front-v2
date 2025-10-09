@@ -16,6 +16,7 @@ import { FinishComponent } from './question-generator/components/finish/finish.c
 import { CallHrModalComponent } from './question-generator/components/call-hr-modal/call-hr-modal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SuccessSendModalComponent } from './question-generator/components/call-hr-modal/success-send-modal/success-send-modal.component';
+import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { SuccessSendModalComponent } from './question-generator/components/call-
     FinishComponent,
     CallHrModalComponent,
     SuccessSendModalComponent,
+    IntegerOnlyDirective,
   ],
   imports: [
     FormsModule,

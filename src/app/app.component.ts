@@ -96,6 +96,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('bag-filled', this.setPath(`${this.svgPath}/ic-bag-filled.svg`))
       .addSvgIcon('request-filled', this.setPath(`${this.svgPath}/ic-request-filled.svg`))
       .addSvgIcon('chat-info', this.setPath(`${this.svgPath}/ic-chat-info.svg`))
+      .addSvgIcon('chat-filled', this.setPath(`${this.svgPath}/ic-chat-filled.svg`))
       .addSvgIcon('logo-hr', this.setPath(`${this.svgPath}/ic-logo-hr.svg`))
       .addSvgIcon('videocam', this.setPath(`${this.svgPath}/ic-videocam.svg`))
       .addSvgIcon('mic', this.setPath(`${this.svgPath}/ic-mic.svg`))
@@ -103,6 +104,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('no-mic', this.setPath(`${this.svgPath}/ic-no-mic.svg`))
       .addSvgIcon('big-account-box', this.setPath(`${this.svgPath}/ic-big-account-box.svg`))
       .addSvgIcon('check-circle-filled', this.setPath(`${this.svgPath}/ic-check-circle-filled.svg`))
+      .addSvgIcon('message', this.setPath(`${this.svgPath}/ic-message.svg`))
   }
 
   ngOnInit() {

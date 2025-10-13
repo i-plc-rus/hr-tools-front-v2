@@ -1,23 +1,23 @@
 <div class="py-8 px-4 w-full min-h-screen flex flex-col" style="overflow: hidden;">
-  <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
+  <div class="relative w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
   <p class="mb-10 text-[22px]">Создание заявки</p>
-  @if (!showForm) {
+  <!-- @if (!showForm) {
     <h1 class="text-[32px] mb-2">Направление подбора</h1>
     <p class="text-base mb-6">Выберите направление подбора к которому относится эта вакансия</p>
     <div class="flex gap-3">
       <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm(ModelsVRSelectionType.VRSelectionTypeMass)">
+              (click)="startForm()">
         <mat-icon class="!w-10 !h-10" svgIcon="profile-in-circle"></mat-icon>
         <span>Массовый</span>
       </button>
       <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm(ModelsVRSelectionType.VRSelectionTypePersonal)">
+              (click)="startForm()">
         <mat-icon class="!w-10 !h-10" svgIcon="business-bag"></mat-icon>
         <span>Профессиональный</span>
       </button>
     </div>
-  }
-  @if (showForm) {
+  } -->
+  <!-- @if (showForm) { -->
     <form [formGroup]="form" class="max-w-[580px] mb-[70px]">
       <mat-stepper #stepper [linear]="true" class="!bg-transparent" (selectionChange)="onStepChange($event)">
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step1)">
@@ -272,9 +272,9 @@
                   </div>
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Выберите сотрудника</mat-label>
-                    <mat-select #userSelect formControlName="space_user_id">
+                    <mat-select #userSelect formControlName="space_user_id" (selectionChange)="onOptionChange($event, $index)">
                       @for (item of users; track item) {
-                        <mat-option [value]="item.id">
+                        <mat-option [value]="item.id" >
                           {{ item.first_name }} {{ item.last_name }}
                         </mat-option>
                       }
@@ -296,11 +296,11 @@
       </mat-stepper>
 
     </form>
-  }
+  <!-- } -->
 
-    <div class="fixed bottom-10 left-30 bg-white  py-3 px-4 flex justify-left items-center">
+    <div class="absolute bottom-10 left-30 bg-white  py-3 px-4 flex justify-left items-center">
     <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
-    @if (showForm) {
+    <!-- @if (showForm) { -->
       <button mat-flat-button class="btn-primary mr-[130px]"
               [disabled]="getCurrentStepGroup()?.invalid"
               (click)="openSaveDraftDialog()">Сохранить черновик
@@ -315,7 +315,7 @@
       @if (isLastStep) {
         <button mat-flat-button class="btn-primary" (click)="onSubmit()">Отправить на согласование</button>
       }
-    }
+    <!-- } -->
   </div>
   <ng-template #saveDraftDialog>
     <div class="modal-overlay">

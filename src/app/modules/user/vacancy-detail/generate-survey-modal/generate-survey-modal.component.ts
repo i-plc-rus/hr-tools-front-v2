@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
+import { UsersModalService } from '../../../../services/users-modal.service';
 
 @Component({
   selector: 'app-generate-survey-modal',
@@ -10,7 +11,9 @@ import {HttpResponse} from '@angular/common/http';
 export class GenerateSurveyModalComponent implements OnInit{
   @Output() onSubmit: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() user?: any;
-
+  
+  constructor(private modalService: UsersModalService,) {}
+  
   surveyForm = new FormGroup({
     b2bExperience: new FormControl('', Validators.required),
     itExperience: new FormControl('', Validators.required),
@@ -91,7 +94,7 @@ export class GenerateSurveyModalComponent implements OnInit{
   }
 
   cancel(): void {
-    console.log('Survey canceled');
+    this.modalService.closeModal();
   }
 
   private setLoading(isLoading: boolean): void {

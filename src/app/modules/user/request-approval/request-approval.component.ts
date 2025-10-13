@@ -80,7 +80,7 @@ export class RequestApprovalComponent implements OnInit {
     city_id: new FormControl<DictapimodelsCityView | null>(null, [
       Validators.required,
     ]),
-    opened_positions: new FormControl(null, [Validators.required]),
+    opened_positions: new FormControl(null, [Validators.required, Validators.min(1)]),
     urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
     request_type: new FormControl<ModelsVRType | undefined>(undefined),
     requirements: new FormControl(''),

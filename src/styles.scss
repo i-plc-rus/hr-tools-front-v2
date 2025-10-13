@@ -270,6 +270,7 @@ mat-option:hover {
   border: 9px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
   border-radius: 50px;
+  min-height: 70px;
   background-color: var(--scrollbar-thumb);
   cursor: pointer;
 }

@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ModelsLimitType, VacancyapimodelsSelectionStageView} from '../../../../api/data-contracts';
 import {VacancyView} from '../../../../models/Vacancy';
 import {
@@ -24,11 +24,11 @@ export class VacancyStagesComponent implements OnChanges {
   newStageOpened = false;
   newStageForm: FormGroup = new FormGroup({
     can_delete: new FormControl<boolean>(true, {nonNullable: true}),
-    name: new FormControl<string>(''),
+    name: new FormControl<string>('', Validators.required),
     limit_type: new FormControl<ModelsLimitType | undefined>(undefined),
     limit_value: new FormControl<number | undefined>(undefined),
     stage_order: new FormControl<number>(1, {nonNullable: true}),
-    stage_type: new FormControl<string>('')
+    stage_type: new FormControl<string>('', Validators.required)
   });
   limitTypes = Object.values(ModelsLimitType);
 

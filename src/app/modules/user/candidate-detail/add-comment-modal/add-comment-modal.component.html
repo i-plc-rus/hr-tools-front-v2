@@ -6,9 +6,9 @@
         <mat-label>Комментарий</mat-label>
         <textarea matInput placeholder="Комментарий" formControlName="note" rows="4"></textarea>
       </mat-form-field>
-      <div class="flex w-full">
+      <!-- <div class="flex w-full">
         <mat-checkbox formControlName="is_private">Приватный комментарий</mat-checkbox>
-      </div>
+      </div> -->
       <div
         class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
         <button mat-flat-button class="btn-primary" [disabled]="isLoading || commentForm.invalid" (click)="submit()">Добавить</button>

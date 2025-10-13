@@ -260,12 +260,12 @@
           <h2 class="text-3xl mb-4">Цепочка согласования</h2>
           <div [formGroupName]="StepForm.Step4">
             <div [formArrayName]="Step4Fields.Interviewers">
-              @for (interviewer of interviewers.controls; track $index) {
+              @for (interviewer of interviewers.controls; track interviewer) {
                 <div class="mb-2" [formGroupName]="$index">
                   <div class="flex justify-between items-center">
                     <h3 class="h-[40px]">{{ interviewer.get('stage')?.value }}-й этап согласования</h3>
                     @if ($index > 0) {
-                      <span class="text-red-600 cursor-pointer" (click)="removeInterviewer($index)">
+                      <span class="text-red-600 cursor-pointer" (click)="removeInterviewer(interviewers.controls.indexOf(interviewer))">
                       Удалить
                       </span>
                     }
@@ -273,7 +273,7 @@
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Выберите сотрудника</mat-label>
                     <mat-select #userSelect formControlName="space_user_id" (selectionChange)="onOptionChange($event, $index)">
-                      @for (item of users; track item) {
+                      @for (item of getAvailableUsers($index); track item) {
                         <mat-option [value]="item.id" >
                           {{ item.first_name }} {{ item.last_name }}
                         </mat-option>

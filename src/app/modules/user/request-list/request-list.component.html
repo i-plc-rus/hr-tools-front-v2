@@ -107,7 +107,7 @@
           <mat-chip-option
             value="favorites"
             [selectable]="category.value !== 'favorites'"
-            [disabled]="favoritesCount === 0">
+            >
             @if (favoritesCount > 0) {
               <span class="chip-number">{{ favoritesCount }}</span>
             }
@@ -174,9 +174,10 @@
                   </div>
                 }
               </div>
-              <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn btn-primary">
+              <!--Убрана кнопка меню у заявок, так как не прикручены действия. Позже вернуть и докрутить-->
+              <!-- <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn btn-primary">
                 <mat-icon>more_horiz</mat-icon>
-              </button>
+              </button> -->
               <mat-menu #optionsContent="matMenu">
                 <button mat-menu-item>Настройки</button>
                 <button mat-menu-item>Дублировать заявку</button>

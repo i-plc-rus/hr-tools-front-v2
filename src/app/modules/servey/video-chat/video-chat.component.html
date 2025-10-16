@@ -1,6 +1,6 @@
 
 @if (isInterviewOver) {
-  <app-finish></app-finish>
+  <app-interview-finish></app-interview-finish>
 } @else {
   <mat-icon svgIcon="logo-hr" class="!w-[54px] !h-[64px]"> </mat-icon>
   <div class="h-[40px]"></div>
@@ -9,7 +9,7 @@
       @if (isCameraCheck) {
         <app-camera (isCameraCheck)="listenForInterviewStart($event)" ></app-camera>
       } @else {
-        <app-capture-video (isInterviewOver)="listenForInterviewOver($event)"></app-capture-video>
+        <app-capture-video [childInputId]="parentId" (isInterviewOver)="listenForInterviewOver($event)"></app-capture-video>
       }
     </div>
   </div>

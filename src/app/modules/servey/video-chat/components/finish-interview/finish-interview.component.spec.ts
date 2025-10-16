@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FinishComponent } from './finish.component';
+import { FinishInterviewComponent } from './finish-interview.component';
 
 describe('FinishComponent', () => {
-  let component: FinishComponent;
-  let fixture: ComponentFixture<FinishComponent>;
+  let component: FinishInterviewComponent;
+  let fixture: ComponentFixture<FinishInterviewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FinishComponent]
+      declarations: [FinishInterviewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FinishComponent);
+    fixture = TestBed.createComponent(FinishInterviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

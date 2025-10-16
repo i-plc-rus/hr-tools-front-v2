@@ -3,6 +3,7 @@ import { QuestionGeneratorComponent } from './question-generator/question-genera
 import { WelcomeComponent } from './question-generator/components/welcome/welcome.component';
 import { QuestionsComponent } from './question-generator/components/questions/questions.component';
 import { ServeyComponent } from './servey.component';
+import { VideoChatComponent } from './video-chat/video-chat.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,15 @@ export const routes: Routes = [
             ],
           },
         ],
+      },
+      {
+        path: 'video-interview',
+        children: [
+          {
+            path: ':id',
+            component: VideoChatComponent,
+          }
+        ]
       },
       {
         path: '**',

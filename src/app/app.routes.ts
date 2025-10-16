@@ -18,17 +18,9 @@ export const routes: Routes = [
     canActivate: [() => roleGuard(['ADMIN', 'SUPER_ADMIN'])],
     canActivateChild: [() => roleGuard(['ADMIN', 'SUPER_ADMIN'])]
   },
-  // {
-  //   path: 'video',
-  //   loadChildren: () => import('../app/modules/video-chat/video-chat.module').then(r => r.VideoChatModule),
-  // },
   {
     path: 'public',
     loadChildren: () => import('../app/modules/servey/servey.module').then(r => r.ServeyModule),
-  },
-  {
-    path: 'video',
-    loadChildren: () => import('../app/modules/video-chat/video-chat.module').then(r => r.VideoChatModule),
   },
   {
     path: '**',

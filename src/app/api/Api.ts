@@ -17,7 +17,7 @@ import { Observable } from "rxjs";
 
 import { RequestOptions } from "./http-client";
 
-    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyResponses,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,SurveyapimodelsVkStep0SurveyAnswers,SurveyapimodelsVkStep0SurveyView,SurveyapimodelsVkStep1,VacancyapimodelsApprovalStages,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
+    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyResponses,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,SurveyapimodelsVkStep0SurveyAnswers,SurveyapimodelsVkStep0SurveyView,SurveyapimodelsVkStep1,SurveyapimodelsVkStep1SurveyView,VacancyapimodelsApprovalStages,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
         
 import { API_BASE_URL } from "../tokens/api.token";
 
@@ -1354,6 +1354,36 @@ public v1PublicSurveyStep0Update (id: string, body: SurveyapimodelsVkStep0Survey
     })
 }
             /**
+ * @description ВК. Шаг 8. Прохождение видео-интервью (загрузка видео ответа на сервер)
+ *
+ * @tags ВК
+ * @name V1PublicSurveyUploadAnswerCreate
+ * @summary ВК. Шаг 8. Прохождение видео-интервью (загрузка видео ответа на сервер)
+ * @request POST:/api/v1/public/survey/upload-answer/{id}/{question_id}
+ */
+public v1PublicSurveyUploadAnswerCreate (id: string, questionId: string, data: {
+  /** Видео */
+    file: File,
+
+}, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1PublicSurveyUploadAnswerCreate (id: string, questionId: string, data: {
+  /** Видео */
+    file: File,
+
+}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1PublicSurveyUploadAnswerCreate (id: string, questionId: string, data: {
+  /** Видео */
+    file: File,
+
+}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'POST',
+        this.baseUrl + `/api/v1/public/survey/upload-answer/${id}/${questionId}`,
+        {
+                body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description ВК. Шаг 8. Прохождение видео-интервью (Данные для интервью)
  *
  * @tags ВК
@@ -1362,22 +1392,22 @@ public v1PublicSurveyStep0Update (id: string, body: SurveyapimodelsVkStep0Survey
  * @request GET:/api/v1/public/survey/video-interview/{id}
  */
 public v1PublicSurveyVideoInterviewDetail (id: string, options?: RequestOptions): Observable<(ApimodelsResponse & {
-    data?: SurveyapimodelsVkStep0SurveyView,
+    data?: SurveyapimodelsVkStep1SurveyView,
 
 })>;
 public v1PublicSurveyVideoInterviewDetail (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
-    data?: SurveyapimodelsVkStep0SurveyView,
+    data?: SurveyapimodelsVkStep1SurveyView,
 
 })>>;
 public v1PublicSurveyVideoInterviewDetail (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
-    data?: SurveyapimodelsVkStep0SurveyView,
+    data?: SurveyapimodelsVkStep1SurveyView,
 
 })> | (ApimodelsResponse & {
-    data?: SurveyapimodelsVkStep0SurveyView,
+    data?: SurveyapimodelsVkStep1SurveyView,
 
 })> {
     return this.http.request<(ApimodelsResponse & {
-    data?: SurveyapimodelsVkStep0SurveyView,
+    data?: SurveyapimodelsVkStep1SurveyView,
 
 })>(
         'GET',
@@ -1435,36 +1465,6 @@ public v1PublicSurveyUpdate (id: string, body: SurveyapimodelsApplicantSurveyRes
         this.baseUrl + `/api/v1/public/survey/${id}`,
         {
                 body: body,                ...options as unknown as {observe: "response"},
-    })
-}
-            /**
- * @description ВК. Шаг 8. Прохождение видео-интервью (загрузка видео ответа на сервер)
- *
- * @tags ВК
- * @name V1PublicUploadAnswerCreate
- * @summary ВК. Шаг 8. Прохождение видео-интервью (загрузка видео ответа на сервер)
- * @request POST:/api/v1/public/upload-answer/{id}/{question_id}
- */
-public v1PublicUploadAnswerCreate (id: string, questionId: string, data: {
-  /** Видео */
-    file: File,
-
-}, options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1PublicUploadAnswerCreate (id: string, questionId: string, data: {
-  /** Видео */
-    file: File,
-
-}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1PublicUploadAnswerCreate (id: string, questionId: string, data: {
-  /** Видео */
-    file: File,
-
-}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>(
-        'POST',
-        this.baseUrl + `/api/v1/public/upload-answer/${id}/${questionId}`,
-        {
-                body: data,                ...options as unknown as {observe: "response"},
     })
 }
             /**

@@ -131,7 +131,7 @@
           <mat-chip-option
             value="favorites"
             [selectable]="category.value !== 'favorites'"
-            [disabled]="favoritesCount === 0">
+            >
             @if (favoritesCount > 0) {
               <span class="chip-number">{{ favoritesCount }}</span>
             }

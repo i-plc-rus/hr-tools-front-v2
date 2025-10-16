@@ -8,7 +8,7 @@ export class SpaceUser implements SpaceapimodelsSpaceUser {
   last_name: string = '';
   phone_number: string = '';
   is_admin: boolean = false;
-
+  job_title_name?: string = '';
   password: string = '';
   //is_active: boolean = true;  //todo работает или уволен
   role: string = '';

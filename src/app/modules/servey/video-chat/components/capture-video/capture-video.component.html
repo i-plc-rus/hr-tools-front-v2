@@ -1,0 +1,50 @@
+<div class="question-number">Вопрос №{{questionNumber}} из {{questionsList.length}}</div>
+<h1 class="text-[22px] text-center leading-[28px]">
+  @if (isCapturingVideo || videoFile) {
+    {{questionsList[questionNumber-1].text}}
+  } @else {
+    Для начала интервью нажмите "Записать ответ"
+  }
+</h1>
+
+<div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
+  <div class="record-video-container w-full h-full flex justify-center">
+    <video [hidden]="videoFile" id="recorder" autoplay #preview class="video"></video>
+    <video [hidden]="!videoFile" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
+    <div [hidden]="!isCapturingVideo" class="recorder-controls">
+      <div class="time">
+        <div class="record-circle"></div>
+        <div class="w-[8px]"></div>
+        <span class="current">-{{display}}</span>
+      </div>
+
+      <div class="record-progress">
+        <div class="record-progress-filled"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-center lg:mb-[40px]">
+  <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
+    
+    @if (videoFile) {
+      <button mat-flat-button id="nextQuestion" class="btn-primary" (click)="goToNextQuestions()">
+        @if(questionNumber === 15) {
+          Отправить ответы
+        } @else {
+          К следующему вопросу
+        }
+      </button>
+    } @else {
+      @if (!isCapturingVideo) {
+        <button mat-flat-button class="btn-primary" (click)="recordHandlre()">Записать ответ</button>
+      } @else {
+        <button mat-flat-button class="btn-secondary flex justify-center" (click)="recordHandlre()">
+          <mat-icon class="stop">stop</mat-icon>Остановить запись
+        </button>
+      }
+    }
+  </div>
+</div>
+

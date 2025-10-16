@@ -77,11 +77,11 @@
           <textarea matInput formControlName="softSkills" rows="3"></textarea>
         </mat-form-field>
       </div>
+      <div class="button-group mt-4 flex flex-row justify-end space-x-4">
+        <button mat-flat-button class="btn-secondary" (click)="cancel()">Отменить</button>
+        <button mat-flat-button class="btn-primary" [disabled]="surveyForm.invalid" (click)="submit()">Сохранить</button>
+      </div>
     </div>
 
-    <div class="button-group mt-4 flex flex-row justify-end space-x-4">
-      <button mat-flat-button class="btn-secondary" (click)="cancel()">Отменить</button>
-      <button mat-flat-button class="btn-primary" [disabled]="surveyForm.invalid" (click)="submit()">Сохранить</button>
-    </div>
   </div>
 </div>

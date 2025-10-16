@@ -91,6 +91,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getDepartments();
     this.getUsers();
     this.setFormListeners();
+    this.loadFavoritesCount();
   }
 
   ngAfterViewInit(): void {
@@ -125,7 +126,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = 1;
       this.vacancyList = [];
       this.allDataLoaded = false;
-      this.favoritesCount = 0;
     }
 
     const filter: VacancyapimodelsVacancyFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
@@ -140,8 +140,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           const newVacancies = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
             if (vacancy.selection_stages)
               vacancy.selection_stages = vacancy.selection_stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
-            if (vacancy.favorite)
-              this.favoritesCount++;
             return new VacancyView(vacancy);
           });
 
@@ -360,6 +358,28 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(error);
       }
     });
+  }
+
+  private loadFavoritesCount() {
+    const filter: VacancyapimodelsVacancyFilter = {
+      favorite: true,
+      page: 1,
+      limit: 1,
+      author_id: '',
+      city_id: '',
+      search: '',
+      statuses: [],
+      sort: { created_at_desc: this.sortByDesc }
+    };
+    this.api.v1SpaceVacancyListCreate(filter, { observe: 'response' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const total = (res.body as any)?.row_count;
+          this.favoritesCount = typeof total === 'number' ? total : 0;
+        },
+        error: () => {}
+      });
   }
 
   ngOnDestroy(): void {

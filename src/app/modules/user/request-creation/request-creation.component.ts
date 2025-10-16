@@ -114,7 +114,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
     [StepForm.Step2]: new FormGroup({
       [Step2Fields.CityId]: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
-      [Step2Fields.PlaceOfWork]: new FormControl(''),
+      [Step2Fields.PlaceOfWork]: new FormControl('', [Validators.required]),
       [Step2Fields.ChiefFio]: new FormControl('', [Validators.required]),
     }),
 

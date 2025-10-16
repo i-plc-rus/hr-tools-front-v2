@@ -104,6 +104,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.getRequests();
+    this.loadFavoritesCount();
     this.getUsers();
     this.setFormListeners();
   }
@@ -136,7 +137,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = 1;
       this.requestList = [];
       this.allDataLoaded = false;
-      this.favoritesCount = 0;
     }
 
     const formValues = this.filterForm.getRawValue();
@@ -173,12 +173,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: (data) => {
           if (data.body?.data) {
-            const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
-              if (request.favorite) {
-                this.favoritesCount++;
-              }
-              return new VacancyRequestView(request);
-            });
+            const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => new VacancyRequestView(request));
 
             this.requestList = [...this.requestList, ...newRequests];
 
@@ -448,6 +443,28 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   sort() {
     this.sortByDesc = !this.sortByDesc;
     this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
+  }
+
+  private loadFavoritesCount() {
+    const filter: VacancyapimodelsVrFilter = {
+      favorite: true,
+      page: 1,
+      limit: 1,
+      author_id: '',
+      city_id: '',
+      search: '',
+      statuses: [],
+      sort: { created_at_desc: this.sortByDesc }
+    };
+    this.api.v1SpaceVacancyRequestListCreate(filter, { observe: 'response' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const total = (res.body as any)?.row_count;
+          this.favoritesCount = typeof total === 'number' ? total : 0;
+        },
+        error: () => {}
+      });
   }
 
   getCities(address: string) {

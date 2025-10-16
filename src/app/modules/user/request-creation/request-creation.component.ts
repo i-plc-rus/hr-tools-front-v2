@@ -114,7 +114,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
     [StepForm.Step2]: new FormGroup({
       [Step2Fields.CityId]: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
-      [Step2Fields.PlaceOfWork]: new FormControl(''),
+      [Step2Fields.PlaceOfWork]: new FormControl('', [Validators.required]),
       [Step2Fields.ChiefFio]: new FormControl('', [Validators.required]),
     }),
 
@@ -442,6 +442,16 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       
     console.log(`Item at index ${index} selected: ${controlToUpdate.value.space_user_id}`);
     console.log(controlToUpdate.value.space_user_id);
+  }
+
+  getAvailableUsers(currentIndex: number): SpaceapimodelsSpaceUser[] {
+    const selectedIds = new Set<string>();
+    for (let i = 0; i < this.interviewers.length; i++) {
+      if (i === currentIndex) continue;
+      const id = this.interviewers.at(i)?.get('space_user_id')?.value;
+      if (id) selectedIds.add(String(id));
+    }
+    return (this.users as SpaceapimodelsSpaceUser[]).filter(u => !selectedIds.has(String(u.id)));
   }
 
   hasDraft(): boolean {

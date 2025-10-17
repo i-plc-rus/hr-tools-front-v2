@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpResponse} from '@angular/common/http';
 import { UsersModalService } from '../../../../services/users-modal.service';
+import { ApiService } from '../../../../api/Api';
+import { GptmodelsGenVacancyDescRequest } from '../../../../api/data-contracts';
 
 @Component({
   selector: 'app-generate-survey-modal',
@@ -9,7 +11,7 @@ import { UsersModalService } from '../../../../services/users-modal.service';
   styleUrl: './generate-survey-modal.component.scss'
 })
 export class GenerateSurveyModalComponent implements OnInit{
-  @Output() onSubmit: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onSubmit = new EventEmitter<any>();
   @Input() user?: any;
   
   constructor(private modalService: UsersModalService,) {}
@@ -86,8 +88,7 @@ export class GenerateSurveyModalComponent implements OnInit{
 
   submit(): void {
     if (this.surveyForm.valid) {
-      console.log('Form values:', this.surveyForm.value);
-      this.onSubmit.emit(true);
+      this.onSubmit.emit(this.surveyForm.value);
     } else {
       console.log('Form is invalid!', this.surveyForm);
     }

@@ -112,6 +112,8 @@ import {
   LicenseExtensionModalComponent
 } from './profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 import {DevelopmentComponent} from "../../components/development/development.component";
+import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey-success/generate-survey-success.component';
+import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
@@ -168,6 +170,8 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     GenerateSurveyModalComponent,
     AddMemberModalComponent,
     LicenseExtensionModalComponent,
+    GenerateSurveySuccessComponent,
+    GenetateServeyErrorComponent,
     AnalyticsComponent
   ],
     imports: [

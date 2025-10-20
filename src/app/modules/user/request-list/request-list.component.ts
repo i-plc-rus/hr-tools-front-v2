@@ -53,7 +53,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | 'favorites' | ''>('');
+  category = new FormControl<ModelsVRStatus | '' | 'favorites'>('');
   searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
@@ -402,6 +402,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
+        if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
+          this.category.setValue('');
+        }
         const index = this.requestList.findIndex(item => item.id === id);
         this.requestList[index].favorite = set; 
         if (set) {

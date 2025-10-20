@@ -46,9 +46,9 @@ export class VacancyDetailComponent implements OnInit {
       to: new FormControl<Number | undefined>(undefined),
       in_hand: new FormControl<Number | undefined>(undefined),
     }, Validators.required),
-    employment: new FormControl<ModelsEmployment | undefined>(undefined),
-    experience: new FormControl<ModelsExperience | undefined>(undefined),
-    schedule: new FormControl<ModelsSchedule | undefined>(undefined),
+    employment: new FormControl<ModelsEmployment | undefined>(undefined, Validators.required),
+    experience: new FormControl<ModelsExperience | undefined>(undefined, Validators.required),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined, Validators.required),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
   });
   statuses = vacancyStatuses;

@@ -17,6 +17,10 @@ import { CallHrModalComponent } from './question-generator/components/call-hr-mo
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SuccessSendModalComponent } from './question-generator/components/call-hr-modal/success-send-modal/success-send-modal.component';
 import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
+import { VideoChatComponent } from './video-chat/video-chat.component';
+import { CameraComponent } from './video-chat/components/camera/camera.component';
+import { CaptureVideoComponent } from './video-chat/components/capture-video/capture-video.component';
+import { FinishInterviewComponent } from './video-chat/components/finish-interview/finish-interview.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,10 @@ import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
     CallHrModalComponent,
     SuccessSendModalComponent,
     IntegerOnlyDirective,
+    VideoChatComponent,
+    CameraComponent,
+    CaptureVideoComponent,
+    FinishInterviewComponent,
   ],
   imports: [
     FormsModule,

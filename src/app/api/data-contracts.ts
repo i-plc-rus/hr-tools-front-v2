@@ -517,12 +517,24 @@ export interface ApplicantapimodelsApplicantNote {
 }
 
 export interface ApplicantapimodelsApplicantSort {
-  /** Дата добавления, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** Дата добавления, порядок сортировки false = ASC / true = DESC / nil = нет */
   accept_date_desc?: boolean;
-  /** ФИО, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** ФИО, порядок сортировки false = ASC / true = DESC / nil = нет */
   fio_desc?: boolean;
-  /** ЗП, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** Дата отклика, порядок сортировки false = ASC / true = DESC / nil = нет */
+  negotiation_date_desc?: boolean;
+  /** Должность, порядок сортировки false = ASC / true = DESC / nil = нет */
+  resume_title_desc?: boolean;
+  /** ЗП, порядок сортировки false = ASC / true = DESC / nil = нет */
   salary_desc?: boolean;
+  /** Источник, порядок сортировки false = ASC / true = DESC / nil = нет */
+  source_desc?: boolean;
+  /** Дата выхода, порядок сортировки false = ASC / true = DESC / nil = нет */
+  start_date_desc?: boolean;
+  /** Статус, порядок сортировки false = ASC / true = DESC / nil = нет */
+  status_desc?: boolean;
+  /** Вакансия, порядок сортировки false = ASC / true = DESC / nil = нет */
+  vacancy_name_desc?: boolean;
 }
 
 export interface ApplicantapimodelsApplicantSourceData {
@@ -1384,6 +1396,21 @@ export interface SurveyapimodelsVkStep1Question {
   order?: number;
   /** Текст вопроса */
   text?: string;
+}
+
+export interface SurveyapimodelsVkStep1SurveyQuestion {
+  /** Идентификатор вопроса */
+  id?: string;
+  /** Порядковый номер */
+  order?: number;
+  /** Текст вопроса */
+  text?: string;
+}
+
+export interface SurveyapimodelsVkStep1SurveyView {
+  questions?: SurveyapimodelsVkStep1SurveyQuestion[];
+  script_intro?: string;
+  script_outro?: string;
 }
 
 export interface SurveyapimodelsVkStep1View {

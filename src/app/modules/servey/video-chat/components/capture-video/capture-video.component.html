@@ -1,5 +1,12 @@
-<div class="question-number">Вопрос №{{questionNumber}} из 15</div>
-<h1 class="text-[32px] text-center leading-[40px]">Какой у вас опыт холодных B2B-продаж?</h1>
+<div class="question-number">Вопрос №{{questionNumber}} из {{questionsList.length}}</div>
+<h1 class="text-[22px] text-center leading-[28px]">
+  @if (isCapturingVideo || videoFile) {
+    {{questionsList[questionNumber-1].text}}
+  } @else {
+    Для начала интервью нажмите "Записать ответ"
+  }
+</h1>
+
 <div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
   <div class="record-video-container w-full h-full flex justify-center">
     <video [hidden]="videoFile" id="recorder" autoplay #preview class="video"></video>

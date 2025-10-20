@@ -43,29 +43,18 @@ export class VacancyDetailComponent implements OnInit {
     place_of_work: new FormControl('', Validators.required),
     requirements: new FormControl('<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>'),
     vacancy_name: new FormControl('', Validators.required),
-    request_type: new FormControl<ModelsVRType | undefined>(
-      undefined,
-      Validators.required
-    ),
-    urgency: new FormControl<ModelsVRUrgency | undefined>(
-      undefined,
-      Validators.required
-    ),
-    salary: new FormGroup(
-      {
-        by_result: new FormControl<Number | undefined>(undefined),
-        from: new FormControl<Number | undefined>(undefined),
-        to: new FormControl<Number | undefined>(undefined),
-        in_hand: new FormControl<Number | undefined>(undefined),
-      },
-      Validators.required
-    ),
-    employment: new FormControl<ModelsEmployment | undefined>(undefined),
-    experience: new FormControl<ModelsExperience | undefined>(undefined),
-    schedule: new FormControl<ModelsSchedule | undefined>(undefined),
-    selection_type: new FormControl<ModelsVRSelectionType | undefined>(
-      undefined
-    ),
+    request_type: new FormControl<ModelsVRType | undefined>(undefined, Validators.required),
+    urgency: new FormControl<ModelsVRUrgency | undefined>(undefined, Validators.required),
+    salary: new FormGroup({
+      by_result: new FormControl<Number | undefined>(undefined),
+      from: new FormControl<Number | undefined>(undefined),
+      to: new FormControl<Number | undefined>(undefined),
+      in_hand: new FormControl<Number | undefined>(undefined),
+    }, Validators.required),
+    employment: new FormControl<ModelsEmployment | undefined>(undefined, Validators.required),
+    experience: new FormControl<ModelsExperience | undefined>(undefined, Validators.required),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined, Validators.required),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
   });
   statuses = vacancyStatuses;
 

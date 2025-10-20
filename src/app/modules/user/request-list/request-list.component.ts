@@ -463,7 +463,10 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           const total = (res.body as any)?.row_count;
           this.favoritesCount = typeof total === 'number' ? total : 0;
         },
-        error: () => {}
+        error: (err) => {
+          console.error('Не удалось загрузить избранное', err);
+          this.favoritesCount = 0;
+        }
       });
   }
 

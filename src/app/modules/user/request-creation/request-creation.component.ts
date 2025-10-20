@@ -439,15 +439,12 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     controlToUpdate.patchValue({
       space_user_id: selectedValue,
     })
-      
-    console.log(`Item at index ${index} selected: ${controlToUpdate.value.space_user_id}`);
-    console.log(controlToUpdate.value.space_user_id);
   }
 
-  getAvailableUsers(currentIndex: number): SpaceapimodelsSpaceUser[] {
+  getAvailableUsers(excludedInterviewerIndex: number): SpaceapimodelsSpaceUser[] {
     const selectedIds = new Set<string>();
     for (let i = 0; i < this.interviewers.length; i++) {
-      if (i === currentIndex) continue;
+      if (i === excludedInterviewerIndex) continue;
       const id = this.interviewers.at(i)?.get('space_user_id')?.value;
       if (id) selectedIds.add(String(id));
     }
@@ -542,7 +539,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
         },
       });
     } else {
-      console.warn('Не все обязательные поля заполнены');
+      this.snackBarService.snackBarMessageError('Не все обязательные поля заполнены');
     }
   }
 

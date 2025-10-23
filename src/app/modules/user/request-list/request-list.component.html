@@ -103,7 +103,12 @@
       <div class="flex gap-12 items-center">
         <h1 class="text-[22px]">Заявки</h1>
         <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
-          <mat-chip-option [value]="''" [selectable]="category.value !== ''">Все</mat-chip-option>
+          <mat-chip-option [value]="''" [selectable]="category.value !== ''">
+            @if (totalRequestsCount > 0) {
+              <span class="chip-number">{{ totalRequestsCount }}</span>
+            }
+            Все
+          </mat-chip-option>
           <mat-chip-option
             value="favorites"
             [selectable]="category.value !== 'favorites'"
@@ -112,22 +117,41 @@
               <span class="chip-number">{{ favoritesCount }}</span>
             }
             Избранные
-          </mat-chip-option><mat-chip-option [value]="'Создана'" [selectable]="category.value !== 'Создана'">
+          </mat-chip-option>        
+          <mat-chip-option [value]="'Создана'" [selectable]="category.value !== 'Создана'">
+            @if (getStatusCount('Создана') > 0) {
+              <span class="chip-number">{{ getStatusCount('Создана') }}</span>
+            }
             Создана
           </mat-chip-option> 
           <mat-chip-option [value]="'На доработке'" [selectable]="category.value !== 'На доработке'">
+            @if (getStatusCount('На доработке') > 0) {
+              <span class="chip-number">{{ getStatusCount('На доработке') }}</span>
+            }
             На доработке
           </mat-chip-option>
           <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'">
+            @if (getStatusCount('На согласовании') > 0) {
+              <span class="chip-number">{{ getStatusCount('На согласовании') }}</span>
+            }
             На согласовании
           </mat-chip-option>
           <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
+            @if (getStatusCount('Согласована') > 0) {
+              <span class="chip-number">{{ getStatusCount('Согласована') }}</span>
+            }
             Согласовано
           </mat-chip-option>
           <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
+            @if (getStatusCount('Не согласована') > 0) {
+              <span class="chip-number">{{ getStatusCount('Не согласована') }}</span>
+            }
             Не согласовано
           </mat-chip-option>
           <mat-chip-option [value]="'Отменена'" [selectable]="category.value !== 'Отменена'">
+            @if (getStatusCount('Отменена') > 0) {
+              <span class="chip-number">{{ getStatusCount('Отменена') }}</span>
+            }
             Отменена
           </mat-chip-option>
         </mat-chip-listbox>

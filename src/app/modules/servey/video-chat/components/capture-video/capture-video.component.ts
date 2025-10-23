@@ -167,18 +167,6 @@ export class CaptureVideoComponent implements OnInit {
             this.snackBar.snackBarMessageError(errorMessage);
           }
           this.sending = false;
-          this.videoFile = undefined;
-          this.setupCamera();
-          this.isCapturingVideo = false;
-          this.progressValue = 0;
-          clearInterval(this.timerInterval);
-          clearInterval(this.timerProgress);
-          clearTimeout(this.durationTimeout);
-          if (this.questionNumber < this.questionsList.length) {
-            this.questionNumber++;
-          } else {
-            this.isInterviewOver.emit(true);
-          }
         },
       });
   }

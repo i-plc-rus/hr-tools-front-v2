@@ -104,4 +104,13 @@ h1 {
     background: red;
 }
 
+app-loader {
+    position: absolute;
+    align-items: center;
+    margin-bottom: 17.5vh;
+    color: var(--link-default);
+    width: 4vh;
+    height: 4vh;
+}
+
 

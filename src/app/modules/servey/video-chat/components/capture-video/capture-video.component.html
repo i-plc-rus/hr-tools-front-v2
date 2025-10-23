@@ -1,5 +1,5 @@
 <div class="question-number">Вопрос №{{questionNumber}} из {{questionsList.length}}</div>
-<h1 class="text-[22px] text-center leading-[28px]">
+<h1 class="text-[22px] text-center leading-[28px] max-w-[710px]">
   @if (isCapturingVideo || videoFile) {
     {{questionsList[questionNumber-1].text}}
   } @else {
@@ -7,10 +7,13 @@
   }
 </h1>
 
-<div class="w-full h-full rounded-[28px] lg:w-[720px] lg:h-[406px] mb-[16px] overflow-hidden">
+<div class="w-full h-full rounded-[28px] lg:w-[50vw] lg:h-[39.648vh] max-w-[720px] max-h-[406px] mb-[16px] overflow-hidden">
   <div class="record-video-container w-full h-full flex justify-center">
     <video [hidden]="videoFile" id="recorder" autoplay #preview class="video"></video>
-    <video [hidden]="!videoFile" controls disablePictureInPicture controlslist="nodownload" #recording class="video"></video>
+    <video [hidden]="!videoFile" disablePictureInPicture #recording class="video"></video>
+    @if (sending) {
+      <app-loader></app-loader>
+    }
     <div [hidden]="!isCapturingVideo" class="recorder-controls">
       <div class="time">
         <div class="record-circle"></div>
@@ -29,8 +32,8 @@
   <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row-reverse lg:max-w-max">
     
     @if (videoFile) {
-      <button mat-flat-button id="nextQuestion" class="btn-primary" (click)="goToNextQuestions()">
-        @if(questionNumber === 15) {
+      <button mat-flat-button [disabled]="sending" id="nextQuestion" class="btn-primary" (click)="goToNextQuestions()">
+        @if(questionNumber === questionsList.length) {
           Отправить ответы
         } @else {
           К следующему вопросу

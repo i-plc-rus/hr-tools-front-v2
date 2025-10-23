@@ -19,7 +19,7 @@ import {SpaceUser} from '../../../models/SpaceUser';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import {Subject, Subscription, switchMap} from 'rxjs';
+import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -84,6 +84,18 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
+  
+  statusCounts: { [key: string]: number } = {
+    'Создана': 0,
+    'На доработке': 0,
+    'На согласовании': 0,
+    'Согласована': 0,
+    'Не согласована': 0,
+    'Отменена': 0
+  };
+  
+  // Общее количество всех заявок
+  totalRequestsCount: number = 0;
 
   private destroy$ = new Subject<void>();
 
@@ -104,7 +116,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.getRequests();
-    this.loadFavoritesCount();
+    this.loadAllCounts();
     this.getUsers();
     this.setFormListeners();
   }
@@ -391,6 +403,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.allDataLoaded = false;
           this.requestList = [];
           this.getRequests();
+          this.loadAllCounts();
         },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
@@ -445,30 +458,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
   }
 
-  private loadFavoritesCount() {
-    const filter: VacancyapimodelsVrFilter = {
-      favorite: true,
-      page: 1,
-      limit: 1,
-      author_id: '',
-      city_id: '',
-      search: '',
-      statuses: [],
-      sort: { created_at_desc: this.sortByDesc }
-    };
-    this.api.v1SpaceVacancyRequestListCreate(filter, { observe: 'response' })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          const total = (res.body as any)?.row_count;
-          this.favoritesCount = typeof total === 'number' ? total : 0;
-        },
-        error: (err) => {
-          console.error('Не удалось загрузить избранное', err);
-          this.favoritesCount = 0;
-        }
-      });
-  }
 
   getCities(address: string) {
     this.api.v1DictCityFindCreate({address}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
@@ -510,6 +499,86 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   show(id: string): void {
     this.router.navigate(['/user/request', id, 'approval'])
    }
+
+  private loadAllCounts() {
+    const statuses = [
+      { key: 'Создана', value: ModelsVRStatus.VRStatusCreated },
+      { key: 'На доработке', value: ModelsVRStatus.VRStatusUnderRevision },
+      { key: 'На согласовании', value: ModelsVRStatus.VRStatusUnderAccepted },
+      { key: 'Согласована', value: ModelsVRStatus.VRStatusAccepted },
+      { key: 'Не согласована', value: ModelsVRStatus.VRStatusNotAccepted },
+      { key: 'Отменена', value: ModelsVRStatus.VRStatusCanceled }
+    ];
+
+    // Создаем массив запросов для всех счетчиков
+    const requests = [
+      // Общее количество всех заявок
+      this.api.v1SpaceVacancyRequestListCreate({
+        page: 1,
+        limit: 1,
+        author_id: '',
+        city_id: '',
+        search: '',
+        sort: { created_at_desc: this.sortByDesc }
+      }, { observe: 'response' }),
+      
+      // Количество избранных заявок
+      this.api.v1SpaceVacancyRequestListCreate({
+        favorite: true,
+        page: 1,
+        limit: 1,
+        author_id: '',
+        city_id: '',
+        search: '',
+        statuses: [],
+        sort: { created_at_desc: this.sortByDesc }
+      }, { observe: 'response' }),
+      
+      // Количество по каждому статусу
+      ...statuses.map(({ value }) => 
+        this.api.v1SpaceVacancyRequestListCreate({
+          statuses: [value],
+          page: 1,
+          limit: 1,
+          author_id: '',
+          city_id: '',
+          search: '',
+          sort: { created_at_desc: this.sortByDesc }
+        }, { observe: 'response' })
+      )
+    ];
+
+    forkJoin(requests)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (responses) => {
+          // Общее количество заявок
+          const totalCount = (responses[0].body as any)?.row_count;
+          this.totalRequestsCount = typeof totalCount === 'number' ? totalCount : 0;
+
+          // Количество избранных заявок
+          const favoritesCount = (responses[1].body as any)?.row_count;
+          this.favoritesCount = typeof favoritesCount === 'number' ? favoritesCount : 0;
+
+          // Количество по статусам
+          statuses.forEach(({ key }, index) => {
+            const statusCount = (responses[index + 2].body as any)?.row_count;
+            this.statusCounts[key] = typeof statusCount === 'number' ? statusCount : 0;
+          });
+        },
+        error: () => {
+          this.totalRequestsCount = 0;
+          this.favoritesCount = 0;
+          Object.keys(this.statusCounts).forEach(key => {
+            this.statusCounts[key] = 0;
+          });
+        }
+      });
+  }
+
+  getStatusCount(status: string): number {
+    return this.statusCounts[status] || 0;
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {
   ModelsApplicantSource,
@@ -35,7 +35,8 @@ import {CellCandidateContactsComponent} from '../../../components/cell-candidate
 import {ActivatedRoute, Router} from '@angular/router';
 import {NegotiationStatusComponent} from './negotiation-status/negotiation-status.component';
 import {educationTypes, employmentTypes, experienceBetweenTypes, genderTypes, languageLevelTypes, scheduleTypes, searchStatusTypes, tripReadinessTypes} from '../user-consts';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 import {ApplicantView} from '../../../models/Applicant';
 
 
@@ -44,7 +45,7 @@ import {ApplicantView} from '../../../models/Applicant';
   templateUrl: './vacancy-negotiations.component.html',
   styleUrl: './vacancy-negotiations.component.scss',
 })
-export class VacancyNegotiationsComponent implements OnInit {
+export class VacancyNegotiationsComponent implements OnInit, OnDestroy {
   // фильтр
   filterForm = new FormGroup({
     /** Водительсике права */
@@ -104,6 +105,7 @@ export class VacancyNegotiationsComponent implements OnInit {
   searchValue = new FormControl('');
   vacancyName: string = '';
   vacancyId: string = '';
+  private destroy$ = new Subject<void>();
 
   //отклики
   private gridApi!: GridApi<NegotiationView>;
@@ -205,6 +207,7 @@ export class VacancyNegotiationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFilterFormListeners();
+    this.setSearchListener();
   }
 
   onGridReady(params: GridReadyEvent) {
@@ -295,5 +298,26 @@ export class VacancyNegotiationsComponent implements OnInit {
     this.filterForm.reset();
     this.filterForm.controls.vacancy_id.setValue(this.vacancyId);
     this.searchValue.reset();
+  }
+
+  private setSearchListener() {
+    this.searchValue.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.negotiationsList = [];
+        this.gridApi.setGridOption('loading', true);
+        this.gridApi.setGridOption('rowData', []);
+        this.getNegotiations();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

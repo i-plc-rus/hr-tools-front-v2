@@ -2,9 +2,9 @@
 @if (isInterviewOver) {
   <app-interview-finish></app-interview-finish>
 } @else {
-  <mat-icon svgIcon="logo-hr" class="!w-[54px] !h-[64px]"> </mat-icon>
-  <div class="h-[40px]"></div>
-  <div class="bg-[white] w-full rounded-[28px] lg:w-[848px]">
+  <mat-icon svgIcon="logo-hr" class="!w-[5.288vh] !h-[6.25vh]"> </mat-icon>
+  <div class="h-[3.906vh]"></div>
+  <div class="bg-[white] rounded-[28px]">
     <div class="flex flex-col justify-center items-stretch lg:px-[64px]">
       @if (isCameraCheck) {
         <app-camera (isCameraCheck)="listenForInterviewStart($event)" ></app-camera>
@@ -13,4 +13,5 @@
       }
     </div>
   </div>
+  <div class="h-[10vh]"></div>
 }

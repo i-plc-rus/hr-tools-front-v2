@@ -47,6 +47,7 @@ export class CaptureVideoComponent implements OnInit {
   public videoFile: File | undefined;
   public questionNumber: number = 1;
   public duration = 300000;
+  public durationTimeout: any;
   questionsList: VideoQuestionView[] = [];
 
   public videoRef: any;
@@ -60,6 +61,7 @@ export class CaptureVideoComponent implements OnInit {
   progressValue: number = 0;
   private destroyRef = inject(DestroyRef);
   private destroy$ = new Subject<void>();
+  public sending: boolean = false;
 
   constructor(
     private renderer: Renderer2,
@@ -133,7 +135,7 @@ export class CaptureVideoComponent implements OnInit {
   goToNextQuestions() {
     const formData = new FormData();
     formData.append('file', this.videoFile!, this.videoFile!.name);
-
+    this.sending = true;
     this.api
       .v1PublicSurveyUploadAnswerCreate(
         this.childInputId!,
@@ -148,16 +150,23 @@ export class CaptureVideoComponent implements OnInit {
           this.progressValue = 0;
           clearInterval(this.timerInterval);
           clearInterval(this.timerProgress);
+          clearTimeout(this.durationTimeout);
           if (this.questionNumber < this.questionsList.length) {
             this.questionNumber++;
           } else {
             this.isInterviewOver.emit(true);
           }
+          this.sending = false;
         },
         error: (error) => {
-          const errorMessage: string = JSON.parse(error.message).error.message;
-          console.log(errorMessage);
-          this.snackBar.snackBarMessageError(errorMessage);
+          const errorStatus: number = JSON.parse(error.message).status;
+          if (errorStatus >= 500 && errorStatus <= 599) {
+            this.snackBar.snackBarMessageError('Что-то пошло не так');
+          } else {
+            const errorMessage: string = JSON.parse(error.message).error.message;
+            this.snackBar.snackBarMessageError(errorMessage);
+          }
+          this.sending = false;
         },
       });
   }
@@ -180,14 +189,14 @@ export class CaptureVideoComponent implements OnInit {
     this.timer(5);
     this.progressBarPersenagete();
 
-    setTimeout(() => {
+    this.durationTimeout = setTimeout(() => {
       this.stop(this.previewElement.nativeElement.srcObject);
-    }, this.duration);
+    }, 300000);
   }
 
   timer(minute: number) {
     // let minute = 1;
-    let seconds: number = minute * 60;
+    let seconds: number = 5 * 60;
     let textSec: any = '0';
     let statSec: number = 60;
 
@@ -207,14 +216,16 @@ export class CaptureVideoComponent implements OnInit {
       this.display = `${prefix}${Math.floor(seconds / 60)}:${textSec}`;
 
       if (seconds == 0) {
-        console.log('finished');
-        clearInterval(this.timerInterval);
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+        }
       }
     }, 1000);
   }
 
   progressBarPersenagete() {
     // 5 seconds in milliseconds
+    console.log(this.duration);
     const interval = 50; // Update every 50ms for smoother animation
     const steps = this.duration / interval;
     const increment = 100 / steps;
@@ -227,7 +238,9 @@ export class CaptureVideoComponent implements OnInit {
 
       if (currentStep >= steps) {
         this.progressValue = 100; // Ensure it reaches 100%
-        clearInterval(this.timerProgress);
+        if (this.timerProgress) {
+          clearInterval(this.timerProgress);
+        }
       }
     }, interval);
   }

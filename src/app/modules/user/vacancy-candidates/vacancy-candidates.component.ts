@@ -10,7 +10,8 @@ import {CellCandidateContactsComponent} from '../../../components/cell-candidate
 import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes, vacancyStatuses} from '../user-consts';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-vacancy-candidates',
@@ -138,6 +139,7 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
   private pageSize = 50;
   private loading = false;
   private allDataLoaded = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -209,6 +211,23 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
           this.getCities(newValue);
         else
           this.cities = [];
+      });
+
+    this.searchValue.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.loading = false;
+        this.currentPage = 1;
+        this.applicantsList = [];
+        this.gridApi.setGridOption('loading', true);
+        this.gridApi.setGridOption('rowData', []);
+        this.getApplicants();
       });
 
     this.filterForm.valueChanges
@@ -339,6 +358,8 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.gridApi && !this.gridApi.isDestroyed()) {
       this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }

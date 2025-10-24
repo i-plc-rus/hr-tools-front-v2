@@ -682,6 +682,8 @@ export interface ApplicantapimodelsApplicantViewExt {
 }
 
 export interface ApplicantapimodelsApplicantVkSurvey {
+  /** Отчет по кандидату */
+  scoreAI?: ApplicantapimodelsScoreAI;
   status?: number;
   statusDescription?: string;
   /** ВК. Шаг 0. анкета и ответы кандидата на типовые вопросы */
@@ -713,6 +715,44 @@ export interface ApplicantapimodelsRejectRequest {
   initiator?: ModelsRejectInitiator;
   /** Причина отказа */
   reason?: string;
+}
+
+export interface ApplicantapimodelsScoreAI {
+  /** Детальная информация по каждому вопросу */
+  details?: ApplicantapimodelsScoreDetail[];
+  /** Итоговый комментарий */
+  overall_comment?: string;
+  /** Результат: прошел/не прошел */
+  pass?: boolean;
+  /** Порог для прохождения */
+  threshold?: number;
+  /** Итоговая оцена (Общий набранный бал за интервью) */
+  total_score?: number;
+}
+
+export interface ApplicantapimodelsScoreDetail {
+  /** Комментарий к оценке */
+  comment_for_similarity?: string;
+  /** Идентификатор файла с изображением графика эмоциий */
+  emotion_file_id?: string;
+  /** Ошибка анализа */
+  error?: string;
+  /** Идентификатор видео файла отправленный кандидатом */
+  file_id?: string;
+  /** Идентификатор файла с изображением видео кадров */
+  frames_file_id?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Идентификатор файла с изображением графика настроения */
+  sentiment_file_id?: string;
+  /** Оценка ответа */
+  similarity?: number;
+  /** Ответ данный кандидатом (транскрипция) */
+  transcript_text?: string;
+  /** Идентификатор файла с изображением амплитуды голоса */
+  voice_amplitude_file_id?: string;
 }
 
 export interface ApplicantapimodelsSourceData {
@@ -936,6 +976,15 @@ export interface DictapimodelsDepartmentView {
 
 export interface DictapimodelsJobTitleData {
   department_id?: string;
+  name?: string;
+}
+
+export interface DictapimodelsLangData {
+  name?: string;
+}
+
+export interface DictapimodelsLangView {
+  id?: string;
   name?: string;
 }
 

@@ -4,10 +4,6 @@
     justify-content: center;  
 }
 
-.video {
-    min-height: 406px;
-}
-
 video::-webkit-media-controls-fullscreen-button {
     display: none;
 }

@@ -23,7 +23,8 @@ import {
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { MediaDevicesService } from '../../../../../services/camera.service';
 import { Subject, combineLatest } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 declare var MediaRecorder: any;
 
 @Component({
@@ -142,6 +143,7 @@ export class CaptureVideoComponent implements OnInit {
         this.questionsList[this.questionNumber - 1].id!,
         formData as any
       )
+
       .subscribe({
         next: () => {
           this.videoFile = undefined;
@@ -159,14 +161,22 @@ export class CaptureVideoComponent implements OnInit {
           this.sending = false;
         },
         error: (error) => {
-          const errorStatus: number = JSON.parse(error.message).status;
-          if (errorStatus >= 500 && errorStatus <= 599) {
-            this.snackBar.snackBarMessageError('Что-то пошло не так');
+          let errorMessage = '';
+          let errorStatus = JSON.parse(error.message).status;
+          if (errorStatus === 0) {
+            errorMessage = 'Отсутсвует подключение к интернету';
+          } else if (errorStatus >= 500 && errorStatus <= 599) {
+            if (JSON.parse(error.message).error.message) {
+              errorMessage = JSON.parse(error.message).error.message;
+            } else {
+              errorMessage = 'Что-то пошло не так';
+            }
           } else {
-            const errorMessage: string = JSON.parse(error.message).error.message;
-            this.snackBar.snackBarMessageError(errorMessage);
+            errorMessage = `Что-то пошло не так`;
           }
+          this.snackBar.snackBarMessageError(errorMessage);
           this.sending = false;
+          return throwError(() => new Error(errorMessage));
         },
       });
   }
@@ -308,4 +318,7 @@ export class CaptureVideoComponent implements OnInit {
     this.videoButtonTitle = 'Start';
     this.isCapturingVideo = false;
   }
+}
+function throwError(arg0: () => Error): any {
+  throw new Error('Function not implemented.');
 }

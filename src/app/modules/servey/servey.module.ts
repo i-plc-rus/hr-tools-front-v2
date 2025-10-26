@@ -22,6 +22,7 @@ import { CameraComponent } from './video-chat/components/camera/camera.component
 import { CaptureVideoComponent } from './video-chat/components/capture-video/capture-video.component';
 import { FinishInterviewComponent } from './video-chat/components/finish-interview/finish-interview.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { LayoutComponent } from '../../components/layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
     MatSlideToggle,
     MatCheckboxModule,
     LoaderComponent,
+    LayoutComponent,
   ],
 })
 export class ServeyModule {}

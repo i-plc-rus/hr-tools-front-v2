@@ -164,7 +164,7 @@ export class CaptureVideoComponent implements OnInit {
           let errorMessage = '';
           let errorStatus = JSON.parse(error.message).status;
           if (errorStatus === 0) {
-            errorMessage = 'Отсутсвует подключение к интернету';
+            errorMessage = 'Отсутствует подключение к интернету';
           } else if (errorStatus >= 500 && errorStatus <= 599) {
             if (JSON.parse(error.message).error.message) {
               errorMessage = JSON.parse(error.message).error.message;

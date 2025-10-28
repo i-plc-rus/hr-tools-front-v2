@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {FormControl} from '@angular/forms';
 import {ApiService} from '../../../api/Api';
+import { VacancyapimodelsCommentView } from '../../../api/data-contracts';
 
 @Component({
   selector: 'app-generate-description-modal',
@@ -10,6 +11,7 @@ import {ApiService} from '../../../api/Api';
 })
 export class GenerateDescriptionModalComponent implements OnInit {
   @Input() control!: FormControl;
+  onSubmit = new EventEmitter<VacancyapimodelsCommentView>();
   isGenerated = false;
   isLoading = false;
   defaultPromt = '<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>';

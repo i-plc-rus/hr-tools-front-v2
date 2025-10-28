@@ -7,6 +7,7 @@ import {
   ModelsVRType, 
   ModelsVRUrgency, 
   VacancyapimodelsApprovalStageView, 
+  VacancyapimodelsCommentView, 
   VacancyapimodelsVacancyRequestView
 } from '../api/data-contracts';
 import {StatusTag} from './StatusTag';
@@ -70,6 +71,7 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   status?: ModelsVRStatus;
   /** срочность */
   urgency?: ModelsVRUrgency;
+  comments?: VacancyapimodelsCommentView[] | undefined;
 
   get statusClass(): StatusTag {
     switch (this.status) {

@@ -1,0 +1,35 @@
+@if (!isLoading && questionsList.length) {
+  <div class="bg-[white] w-full rounded-[28px] lg:w-[708px]">
+    <div class="flex flex-col justify-center items-stretch lg:px-[64px]">
+      <div class="question-number">Вопрос №{{questionIndex + 1}} из {{questionsList.length}}</div>
+      <h1 class="text-[22px] text-center leading-[28px]">{{ questionsList[questionIndex].question_text }}</h1>
+      <div class="w-full h-full lg:w-[720px] mt-[16px] mb-[24px]">
+        @if (questionsList[questionIndex].question_type === 'single_choice') {
+          <mat-radio-group (change)="onValueChange($event)" [(ngModel)]="selectedOption" class="flex flex-col">
+            @for (answer of questionsList[questionIndex].answers; track $index) {
+              <mat-radio-button class="mb-2" [value]="answer">{{ answer }}</mat-radio-button>
+            }
+          </mat-radio-group>
+        } @else {
+          <textarea matInput integerOnly #answerText (input)="onValueChange(answerText.value)" placeholder="Сообщение" rows="2" class="w-[580px] border border-black rounded-[2px] lg:min-h-[80px] p-2"></textarea>
+        }
+      </div>
+      <div class="flex justify-center lg:mb-[24px]">
+        <div class="flex flex-col items-stretch justify-center max-w-44 gap-4 lg:flex-row lg:max-w-max">
+          <!-- @if (questionIndex === 0) {
+            <button mat-flat-button class="btn-secondary flex justify-center" (click)="previousQuestion()">Вернуться назад</button>
+          } -->
+          
+          <button mat-flat-button class="btn-primary" [disabled]="!resultChecked" (click)="nextQuestion(tempAnswer, questionsList[questionIndex].question_id!)">Продолжить</button>
+        </div>
+      </div>
+      <div class="flex justify-center lg:mb-[40px] h-[40px]">
+        <mat-icon svgIcon="message" class="mt-[8px] mr-[8px]"></mat-icon>
+        <button class="call-hr" (click)="openCallHrModal()">Написать HR</button>
+      </div> 
+    </div>
+  </div>
+}
+
+
+

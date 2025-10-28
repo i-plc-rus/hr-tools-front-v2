@@ -76,7 +76,8 @@ export class VacancyDescriptionComponent implements OnInit, OnChanges {
       if (formControl) {
         formControl.setValidators([
           Validators.min(1),
-          Validators.pattern(/^[1-9]\d*$/)
+          Validators.pattern(/^[1-9]\d*$/),
+          Validators.required
         ]);
         formControl.updateValueAndValidity();
       }

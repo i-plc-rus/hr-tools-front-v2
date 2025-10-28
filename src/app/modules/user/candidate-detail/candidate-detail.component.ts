@@ -23,6 +23,7 @@ import {
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 import {MatTabGroup} from '@angular/material/tabs';
 import {SnackBarService} from '../../../services/snackbar.service';
+import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -56,7 +57,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -83,6 +84,19 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
         this.tabGroup.selectedIndex = this.selectedTabIndex;
       }
     });
+  }
+
+  afterLoadComplete(pdf: PDFDocumentProxy): void {
+    let totalHeight = 0;
+    for (let i = 1; i <= pdf.numPages; i++) {
+      pdf.getPage(i).then(page => {
+        const viewport = page.getViewport({ scale: 1.3333333333333333 });
+        totalHeight += viewport.height + 10
+        if (i === pdf.numPages) {
+          document.getElementById('pdfViewer')!.style.height = `${(totalHeight)}px`;
+        }
+      });
+    }
   }
 
   onTabChange(index: number) {
@@ -125,7 +139,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
     this.resumeUint = undefined;
 
     this.isLoading = true;
-    this.api.v1SpaceApplicantResumeDetail(this.applicant.id, {
+    this.api.v1SpaceApplicantResumeList(this.applicant.id, {
       observe: 'response',
       responseType: "arraybuffer"
     }).subscribe({
@@ -164,7 +178,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
   getDocList() {
     if (!this.applicant) return;
     this.isLoading = true;
-    this.api.v1SpaceApplicantDocListDetail(this.applicant.id, {observe: 'response'}).subscribe({
+    this.api.v1SpaceApplicantDocListList(this.applicant.id, {observe: 'response'}).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.docList = data.body.data;
@@ -182,7 +196,7 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
 
   getPhoto() {
     if (!this.applicant) return;
-    this.api.v1SpaceApplicantPhotoDetail(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
+    this.api.v1SpaceApplicantPhotoList(this.applicant.id, {observe: 'response', responseType: 'blob'}).subscribe({
       next: (data: any) => {
         if (data.body && data.body.size > 0) {
           const reader = new FileReader();

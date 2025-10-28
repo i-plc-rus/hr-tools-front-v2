@@ -71,7 +71,7 @@ export class LicenseExtensionModalComponent implements OnInit{
         })
       )
       .subscribe(response => {
-        if (response && response.status === 'success') {
+        if (response && Number(response.status) === 200) {
           this.snackBarService.snackBarMessageSuccess('Заявка успешно отправлена!');
           this.onSubmit.emit(formData);
           this.modalService.closeModal();

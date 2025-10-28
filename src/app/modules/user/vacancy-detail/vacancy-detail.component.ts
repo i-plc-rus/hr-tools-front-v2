@@ -1,20 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
-import {ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
+import {GptmodelsGenVacancyDescRequest, ModelsEmployment, ModelsExperience, ModelsSchedule, ModelsVacancyStatus, ModelsVRSelectionType, ModelsVRType, ModelsVRUrgency} from '../../../api/data-contracts';
 import {vacancyStatuses} from '../user-consts';
 import {UsersModalService} from '../../../services/users-modal.service';
+import {VacancyStagesComponent} from './vacancy-stages/vacancy-stages.component';
 
-type VacancyDetailCategory = 'description' | 'publication' | 'stages' | 'integrations' | 'team';
+type VacancyDetailCategory =
+  | 'description'
+  | 'publication'
+  | 'stages'
+  | 'integrations'
+  | 'team';
 
 @Component({
   selector: 'app-vacancy-detail',
   templateUrl: './vacancy-detail.component.html',
-  styleUrl: './vacancy-detail.component.scss'
+  styleUrl: './vacancy-detail.component.scss',
 })
 export class VacancyDetailComponent implements OnInit {
+  @ViewChild(VacancyStagesComponent) vacancyStagesComponent!: VacancyStagesComponent;
+  
   category = new FormControl<VacancyDetailCategory>('description');
   isNewVacancy = false;
   vacancy?: VacancyView;
@@ -33,7 +41,7 @@ export class VacancyDetailComponent implements OnInit {
     job_title_name: new FormControl('', Validators.required),
     opened_positions: new FormControl(1, Validators.required),
     place_of_work: new FormControl('', Validators.required),
-    requirements: new FormControl('<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>', Validators.required),
+    requirements: new FormControl('<strong>Требования:</strong><br/><br/><strong>Обязанности:</strong><br/><br/><strong>Условия работы:</strong><br/><br/>'),
     vacancy_name: new FormControl('', Validators.required),
     request_type: new FormControl<ModelsVRType | undefined>(undefined, Validators.required),
     urgency: new FormControl<ModelsVRUrgency | undefined>(undefined, Validators.required),
@@ -43,9 +51,9 @@ export class VacancyDetailComponent implements OnInit {
       to: new FormControl<Number | undefined>(undefined),
       in_hand: new FormControl<Number | undefined>(undefined),
     }, Validators.required),
-    employment: new FormControl<ModelsEmployment | undefined>(undefined),
-    experience: new FormControl<ModelsExperience | undefined>(undefined),
-    schedule: new FormControl<ModelsSchedule | undefined>(undefined),
+    employment: new FormControl<ModelsEmployment | undefined>(undefined, Validators.required),
+    experience: new FormControl<ModelsExperience | undefined>(undefined, Validators.required),
+    schedule: new FormControl<ModelsSchedule | undefined>(undefined, Validators.required),
     selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
   });
   statuses = vacancyStatuses;
@@ -55,43 +63,45 @@ export class VacancyDetailComponent implements OnInit {
     private api: ApiService,
     private router: Router,
     private modalService: UsersModalService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe((params) => {
       if (params['id']) {
         this.getVacancyById(params['id']);
-      }
-      else
-        this.isNewVacancy = true;
-    })
+      } else this.isNewVacancy = true;
+    });
   }
 
   getVacancyById(id: string) {
-    this.api.v1SpaceVacancyDetail(id, {observe: 'response'}).subscribe({
+    this.api.v1SpaceVacancyDetail(id, { observe: 'response' }).subscribe({
       next: (data) => {
         if (data.body?.data) {
           this.vacancy = new VacancyView(data.body.data);
           const stages = this.vacancy.selection_stages || [];
-          this.vacancy.selection_stages = stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
+          this.vacancy.selection_stages = stages.sort(
+            (a, b) => (a.stage_order || 0) - (b.stage_order || 0)
+          );
           this.vacancyForm.patchValue(this.vacancy);
         }
       },
       error: (error) => {
         console.log(error);
-      }
-    })
+      },
+    });
   }
 
   changeStatus(id: string, status: ModelsVacancyStatus) {
-    this.api.v1SpaceVacancyChangeStatusUpdate(id, {status}, {observe: 'response'}).subscribe({
-      next: () => {
-        this.getVacancyById(id);
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    })
+    this.api
+      .v1SpaceVacancyChangeStatusUpdate(id, { status }, { observe: 'response' })
+      .subscribe({
+        next: () => {
+          this.getVacancyById(id);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   onBack() {
@@ -102,10 +112,34 @@ export class VacancyDetailComponent implements OnInit {
   }
 
   generateSurvey() {
-    this.modalService.openGenerateSurveyModal().subscribe((confirmed) => {
-      if (confirmed) {
+    this.modalService.openGenerateSurveyModal().subscribe((confirmedData: any | undefined) => {
+      if (confirmedData) {
+        const newBlank: GptmodelsGenVacancyDescRequest = {
+            text: JSON.stringify(confirmedData),
+          };
+        this.api.v1GptGenerateVacancyDescriptionCreate(newBlank).subscribe({
+          next: () => {
+            this.modalService.closeModal();
+            this.modalService.openGenerateSurveySuccessModal();
+          },
+          error: (error) => {
+            console.log(error);
+            this.modalService.closeModal();
+            this.modalService.openGenerateSurveyErrorModal();
+          }
+        });
+      } else {
+        console.log("error");
+        this.modalService.closeModal();
+        this.modalService.openGenerateSurveyErrorModal();
       }
     });
+  }
+
+  openNewStageForm() {
+    if (this.vacancyStagesComponent) {
+      this.vacancyStagesComponent.openNewStageForm();
+    }
   }
 
 }

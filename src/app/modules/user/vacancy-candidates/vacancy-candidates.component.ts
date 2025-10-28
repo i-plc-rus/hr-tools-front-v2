@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsVacancyStatus} from '../../../api/data-contracts';
+import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantSort, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsVacancyStatus} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {ApplicantView} from '../../../models/Applicant';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
@@ -10,7 +10,8 @@ import {CellCandidateContactsComponent} from '../../../components/cell-candidate
 import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes, vacancyStatuses} from '../user-consts';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-vacancy-candidates',
@@ -133,10 +134,12 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
     suppressMovableColumns: true,
     suppressScrollOnNewData: true
   }
+  fioDesc: boolean | null = null;
   private currentPage = 1;
   private pageSize = 50;
   private loading = false;
   private allDataLoaded = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -152,6 +155,29 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
     this.gridApi = params.api;
 
     this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
+
+    // Отслеживание клика по заголовку ФИО для сортировки на беке
+    const headerTexts = document.querySelectorAll('.ag-header-cell-text');
+    headerTexts.forEach((el: Element) => {
+      if (el.textContent?.trim() === 'Кандидаты') {
+        const headerCell = el.closest('.ag-header-cell');
+        if (headerCell) {
+          headerCell.addEventListener('click', () => {
+            switch(this.fioDesc) {
+              case null: this.fioDesc = false;
+              break;
+              case false: this.fioDesc = true;
+              break;
+              case true: this.fioDesc = null;
+              break;
+              default: this.fioDesc = null;
+            }
+            this.getApplicants();
+          });
+          (headerCell as HTMLElement).style.cursor = 'pointer';
+        }
+      }
+    });
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['stage'])
@@ -185,6 +211,23 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
           this.getCities(newValue);
         else
           this.cities = [];
+      });
+
+    this.searchValue.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.filterForm.controls.search.setValue(value);
+        this.allDataLoaded = false;
+        this.loading = false;
+        this.currentPage = 1;
+        this.applicantsList = [];
+        this.gridApi.setGridOption('loading', true);
+        this.gridApi.setGridOption('rowData', []);
+        this.getApplicants();
       });
 
     this.filterForm.valueChanges
@@ -234,6 +277,7 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
     const filter = this.filterForm.value as ApplicantapimodelsApplicantFilter;
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
+    filter.sort = { fio_desc: this.fioDesc } as ApplicantapimodelsApplicantSort;
 
     this.api.v1SpaceApplicantListCreate(filter, {observe: 'response'}).subscribe({
       next: (res) => {
@@ -314,6 +358,8 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.gridApi && !this.gridApi.isDestroyed()) {
       this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }

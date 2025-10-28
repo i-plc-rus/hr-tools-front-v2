@@ -113,6 +113,8 @@ import {
   LicenseExtensionModalComponent
 } from './profile/company-profile/modals/license-extension-modal/license-extension-modal.component';
 import {DevelopmentComponent} from "../../components/development/development.component";
+import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey-success/generate-survey-success.component';
+import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { VideoResultComponent } from './candidate-detail/video-result/video-result.component';
 
@@ -171,7 +173,10 @@ import { VideoResultComponent } from './candidate-detail/video-result/video-resu
     AddMemberModalComponent,
     LicenseExtensionModalComponent,
     AnalyticsComponent,
-    VideoResultComponent
+    VideoResultComponent,
+    GenerateSurveySuccessComponent,
+    GenetateServeyErrorComponent,
+    AnalyticsComponent
   ],
     imports: [
         CommonModule,

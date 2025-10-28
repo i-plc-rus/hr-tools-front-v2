@@ -1,17 +1,17 @@
 <app-filter [opened]="toggleFilter.checked" class="block">
-  <form [formGroup]="filterForm">
-    <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
-      <h3 class="text-[22px] leading-7">Фильтр</h3>
-      <div class="flex gap-2">
-        <button mat-icon-button (click)="reset()" class="btn-secondary">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button (click)="reset()" class="btn-secondary">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFilter.checked = !toggleFilter.checked" class="btn-secondary">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-    <div class="w-full overflow-y-auto pr-1 pb-6" style="max-height: calc(100vh - 70px);">
+  </div>
+  <form [formGroup]="filterForm" class="flex flex-col h-full overflow-y-auto">
+    <div class="w-full pr-1 pb-6" style="max-height: calc(100vh - 70px);">
       <mat-expansion-panel class="mat-elevation-z" expanded>
         <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
         <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
@@ -28,7 +28,7 @@
           <input matInput [formControl]="searchCity" />
           <mat-icon matPrefix svgIcon="search"></mat-icon>
         </mat-form-field>
-        <div class="max-h-[200px] overflow-y-auto">
+        <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
           <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city_id">
             <mat-chip-option [value]="''">Все</mat-chip-option>
             @for (city of cities; track $index) {
@@ -53,15 +53,6 @@
             }
           </mat-chip-listbox>
         </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel class="mat-elevation-z">
-        <mat-expansion-panel-header>Вид подбора</mat-expansion-panel-header>
-        <mat-chip-listbox hideSingleSelectionIndicator formControlName="selection_type">
-          @for (selectionType of selectionTypes; track $index) {
-            <mat-chip-option [value]="selectionType">{{ selectionType }}</mat-chip-option>
-          }
-        </mat-chip-listbox>
       </mat-expansion-panel>
 
       <mat-expansion-panel class="mat-elevation-z">
@@ -107,29 +98,61 @@
     <app-filter-toggle #toggleFilter />
   </div>
 
-  <div class="w-full mt-4 bg-white rounded-3xl overflow-hidden">
+  <div class="w-full mt-4 bg-white rounded-3xl overflow-hidden pb-6">
     <div class="p-6 pb-4 flex gap-4 justify-between items-center">
       <div class="flex gap-12 items-center">
         <h1 class="text-[22px]">Заявки</h1>
         <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
-          <mat-chip-option [value]="''" [selectable]="category.value !== ''">Все</mat-chip-option>
+          <mat-chip-option [value]="''" [selectable]="category.value !== ''">
+            @if (totalRequestsCount > 0) {
+              <span class="chip-number">{{ totalRequestsCount }}</span>
+            }
+            Все
+          </mat-chip-option>
           <mat-chip-option
             value="favorites"
             [selectable]="category.value !== 'favorites'"
-            [disabled]="favoritesCount === 0">
+            >
             @if (favoritesCount > 0) {
               <span class="chip-number">{{ favoritesCount }}</span>
             }
             Избранные
-          </mat-chip-option>
-          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
-            Согласовано
+          </mat-chip-option>        
+          <mat-chip-option [value]="'Создана'" [selectable]="category.value !== 'Создана'">
+            @if (getStatusCount('Создана') > 0) {
+              <span class="chip-number">{{ getStatusCount('Создана') }}</span>
+            }
+            Создана
+          </mat-chip-option> 
+          <mat-chip-option [value]="'На доработке'" [selectable]="category.value !== 'На доработке'">
+            @if (getStatusCount('На доработке') > 0) {
+              <span class="chip-number">{{ getStatusCount('На доработке') }}</span>
+            }
+            На доработке
           </mat-chip-option>
           <mat-chip-option [value]="'На согласовании'" [selectable]="category.value !== 'На согласовании'">
+            @if (getStatusCount('На согласовании') > 0) {
+              <span class="chip-number">{{ getStatusCount('На согласовании') }}</span>
+            }
             На согласовании
           </mat-chip-option>
+          <mat-chip-option [value]="'Согласована'" [selectable]="category.value !== 'Согласована'">
+            @if (getStatusCount('Согласована') > 0) {
+              <span class="chip-number">{{ getStatusCount('Согласована') }}</span>
+            }
+            Согласовано
+          </mat-chip-option>
           <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
+            @if (getStatusCount('Не согласована') > 0) {
+              <span class="chip-number">{{ getStatusCount('Не согласована') }}</span>
+            }
             Не согласовано
+          </mat-chip-option>
+          <mat-chip-option [value]="'Отменена'" [selectable]="category.value !== 'Отменена'">
+            @if (getStatusCount('Отменена') > 0) {
+              <span class="chip-number">{{ getStatusCount('Отменена') }}</span>
+            }
+            Отменена
           </mat-chip-option>
         </mat-chip-listbox>
       </div>
@@ -144,7 +167,7 @@
       </div>
     </div>
 
-    <div #requestContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[78vh] overflow-y-auto">
+    <div #requestContainer class="p-6 pt-4 flex flex-col gap-4 w-full h-[100vh] overflow-y-auto">
       @for (request of requestList; track $index) {
         <div class="flex flex-col gap-2 w-full p-4 rounded-3xl bg-[var(--background-main)]">
           <div class="flex flex-col gap-1 w-full">
@@ -175,9 +198,10 @@
                   </div>
                 }
               </div>
-              <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn btn-primary">
+              <!--Убрана кнопка меню у заявок, так как не прикручены действия. Позже вернуть и докрутить-->
+              <!-- <button mat-icon-button [matMenuTriggerFor]="optionsContent" class="request-menu-btn btn-primary">
                 <mat-icon>more_horiz</mat-icon>
-              </button>
+              </button> -->
               <mat-menu #optionsContent="matMenu">
                 <button mat-menu-item>Настройки</button>
                 <button mat-menu-item>Дублировать заявку</button>
@@ -250,13 +274,16 @@
                 <div class="relative">
                   <button
                     mat-icon-button
-                    [disabled]="request.description"
                     #commentBtn
-                    (click)="openComment(request.description)"
+                    (click)="openComment(request.id)"
                     class="btn-primary">
-                    <mat-icon svgIcon="chat-outline" />
-                    <!-- <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="6" /> -->
-                  </button>
+                    @if (request.comments) {
+                      <app-notification-bubble class="absolute top-0 right-0 z-[2]" [value]="request.comments!.length" />
+                      <mat-icon svgIcon="chat-filled" />
+                    } @else {
+                      <mat-icon svgIcon="chat-outline" />
+                    }
+                  </button>        
                 </div>
               </div>
               <div class="text-[16px] leading-6 text-[var(--text-alter)] text-right">

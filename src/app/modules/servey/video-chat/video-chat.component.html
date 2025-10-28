@@ -1,0 +1,19 @@
+
+@if (isInterviewOver) {
+  <app-interview-finish></app-interview-finish>
+} @else {
+  <div class="max-h-[105.444vh] min-h-[91.222vh] flex flex-col items-center">
+    <mat-icon svgIcon="logo-hr" class="!w-[5.288vh] !h-[6.25vh] flex-shrink-0"> </mat-icon>
+    <div class="h-[3.906vh] flex-shrink-0"></div>
+    <div class="bg-[white] rounded-[28px]">
+      <div class="flex flex-col justify-center items-stretch lg:px-[64px]">
+        @if (isCameraCheck) {
+          <app-camera (isCameraCheck)="listenForInterviewStart($event)" ></app-camera>
+        } @else {
+          <app-capture-video [childInputId]="parentId" (isInterviewOver)="listenForInterviewOver($event)"></app-capture-video>
+       }
+      </div>
+    </div>
+    <div class="!h-[2vh] w-full flex-shrink-0"></div>
+  </div>
+}

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {
@@ -11,14 +11,14 @@ import {
   ModelsVRType,
   ModelsVRUrgency,
   SpaceapimodelsSpaceUser,
-  VacancyapimodelsVacancyView
+  VacancyapimodelsVacancyView,
 } from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
-import {Subscription, switchMap} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
@@ -27,6 +27,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
   styleUrl: './vacancy-list.component.scss'
 })
 export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Output() onSubmit = new EventEmitter();
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -60,12 +61,14 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestAuthors: SpaceUser[] = [];
   authors: SpaceUser[] = [];
   userId = localStorage.getItem('userId') || '';
+  addVacancyLenght = 0;
 
   // вакансии
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
+  
 
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 
@@ -88,6 +91,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getDepartments();
     this.getUsers();
     this.setFormListeners();
+    this.loadFavoritesCount();
   }
 
   ngAfterViewInit(): void {
@@ -115,7 +119,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getVacancyList(loadMore = false) {
-    if (this.loading || this.allDataLoaded) return;
 
     this.loading = true;
 
@@ -123,7 +126,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = 1;
       this.vacancyList = [];
       this.allDataLoaded = false;
-      this.favoritesCount = 0;
     }
 
     const filter: VacancyapimodelsVacancyFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
@@ -138,8 +140,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           const newVacancies = data.body.data.map((vacancy: VacancyapimodelsVacancyView) => {
             if (vacancy.selection_stages)
               vacancy.selection_stages = vacancy.selection_stages.sort((a, b) => (a.stage_order || 0) - (b.stage_order || 0));
-            if (vacancy.favorite)
-              this.favoritesCount++;
             return new VacancyView(vacancy);
           });
 
@@ -152,6 +152,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
         this.loading = false;
+        this.isLoading = false;
       },
       error: (error) => {
         console.log(error);
@@ -182,7 +183,13 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
           this.category.setValue('all');
         }
-        this.getVacancyList();
+        const index = this.vacancyList.findIndex(item => item.id === id);
+        this.vacancyList[index].favorite = set; 
+        if (set) {
+          this.favoritesCount++;
+        } else {
+          this.favoritesCount--;
+        }
       },
       error: (error) => {
         console.log(error);
@@ -196,7 +203,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: () => {
-        this.getVacancyList();
+        const index = this.vacancyList.findIndex(item => item.id === id);
+        this.vacancyList[index].pinned = set; 
+        // this.getVacancyList();
       },
       error: (error) => {
         console.log(error);
@@ -270,7 +279,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.allDataLoaded = false;
         this.currentPage = 1;
         this.vacancyList = [];
-        this.getVacancyList();
       });
   }
 
@@ -296,8 +304,15 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
   }
 
-  openComment(comment: string) {
-    this.modalService.openCommentModal(comment);
+  openComment(vacancyId: string) {
+    this.modalService.openCommentModal(vacancyId, false).subscribe(data => {
+        const foundVacancy = this.vacancyList.findIndex(vacancy => vacancyId === vacancy.id);
+        if (!this.vacancyList[foundVacancy].comments) {
+          this.vacancyList[foundVacancy].comments = [];
+        }
+        this.vacancyList[foundVacancy].comments.push(data);
+      }
+    );
   }
 
   getCities(address: string) {
@@ -343,6 +358,28 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(error);
       }
     });
+  }
+
+  private loadFavoritesCount() {
+    const filter: VacancyapimodelsVacancyFilter = {
+      favorite: true,
+      page: 1,
+      limit: 1,
+      author_id: '',
+      city_id: '',
+      search: '',
+      statuses: [],
+      sort: { created_at_desc: this.sortByDesc }
+    };
+    this.api.v1SpaceVacancyListCreate(filter, { observe: 'response' })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const total = (res.body as any)?.row_count;
+          this.favoritesCount = typeof total === 'number' ? total : 0;
+        },
+        error: () => {}
+      });
   }
 
   ngOnDestroy(): void {

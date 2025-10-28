@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -8,6 +9,337 @@
  * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
  * ---------------------------------------------------------------
  */
+
+export enum VacancyapimodelsVacancyTab {
+  VacancyTabAll = 0,
+  VacancyTabMy = 1,
+  VacancyTabOther = 2,
+  VacancyTabArch = 3,
+}
+
+export enum VacancyapimodelsSearchPeriod {
+  SearchByToday = 1,
+  SearchBy3Days = 2,
+  SearchByWeek = 3,
+  SearchByMonth = 4,
+  SearchByPeriod = 5,
+}
+
+export enum ModelsVacancyStatus {
+  VacancyStatusOpened = "Открыта",
+  VacancyStatusCanceled = "Отменена",
+  VacancyStatusSuspended = "Приостановлена",
+  VacancyStatusClosed = "Закрыта",
+}
+
+export enum ModelsVacancyPubStatus {
+  VacancyPubStatusNone = "Не размещена",
+  VacancyPubStatusModeration = "Публикуется",
+  VacancyPubStatusPublished = "Опубликована",
+  VacancyPubStatusRejected = "Отклонена",
+  VacancyPubStatusClosed = "Закрыта",
+}
+
+export enum ModelsVRUrgency {
+  VRTypeUrgent = "Срочно",
+  VRTypeNonUrgent = "В плановом порядке",
+}
+
+export enum ModelsVRType {
+  VRTypeNew = "Новая позиция",
+  VRTypeReplace = "Замена",
+}
+
+export enum ModelsVRStatus {
+  VRStatusCreated = "Создана",
+  VRStatusCanceled = "Отменена",
+  VRStatusNotAccepted = "Не согласована",
+  VRStatusAccepted = "Согласована",
+  VRStatusUnderRevision = "На доработке",
+  VRStatusUnderAccepted = "На согласовании",
+  VRStatusTemplate = "Шаблон",
+}
+
+export enum ModelsVRSelectionType {
+  VRSelectionTypeMass = "Массовый",
+  VRSelectionTypePersonal = "Индивидуальный",
+}
+
+export enum ModelsUserRole {
+  SpaceAdminRole = "SPACE_ADMIN_ROLE",
+  SpaceUserRole = "SPACE_USER_ROLE",
+  UserRoleSuperAdmin = "SUPER_ADMIN",
+}
+
+export enum ModelsTripReadinessType {
+  /** готов к командировкам */
+  TripReadinessReady = "ready",
+  /** "готов к редким командировкам */
+  TripReadinessSometimes = "sometimes",
+  /** "готов к редким командировкам */
+  TripReadinessNever = "never",
+}
+
+export enum ModelsTemplateType {
+  TplMail = "Письмо",
+  TplApplicantNote = "Комментарий к кандидату",
+  TplRejectNote = "Комментарий к отказу",
+  TplReminder = "Напоминание",
+  TplRatingNote = "Комментарий к оценке",
+  TplSms = "SMS",
+  TplOffer = "Оффер",
+}
+
+export enum ModelsSpaceSettingCode {
+  /** Инструкции для Yandex GPT при генерации описания вакансии */
+  YandexGPTPromtSetting = "ya_gpt_promt",
+  HhClientIDSetting = "HHClientID",
+  HhClientSecretSetting = "HHClientSecret",
+  AvitoClientIDSetting = "AvitoClientID",
+  AvitoClientSecretSetting = "AvitoClientSecret",
+  /** почта, с которой отправляются письма кандидатам */
+  SpaceSenderEmail = "SpaceSenderEmail",
+  /** почта, тех поддержки */
+  SpaceSupportEmail = "SpaceSupportEmail",
+}
+
+export enum ModelsSpacePushSettingCode {
+  PushLicenseExpire = "PushLicenseExpire",
+  PushVRClosed = "PushVRClosed",
+  PushVRApproved = "PushVRApproved",
+  PushVRRejected = "PushVRRejected",
+  PushVacancyResponsible = "PushVacancyResponsible",
+  PushVacancyNewStatus = "PushVacancyNewStatus",
+  PushVacancyPublished = "PushVacancyPublished",
+  PushApplicantNegotiation = "PushApplicantNegotiation",
+  PushApplicantNote = "PushApplicantNote",
+  /** !! */
+  PushApplicantMsg = "PushApplicantMsg",
+  PushApplicantNewStage = "PushApplicantNewStage",
+}
+
+export enum ModelsSearchStatusType {
+  /** Активно ищет работу */
+  SearchStatusActive = "active_search",
+  /** Рассматривает предложения */
+  SearchStatusLookingForOffers = "looking_for_offers",
+  /** Не ищет работу */
+  SearchStatusNotLookingForJob = "not_looking_for_job",
+  /** Предложили работу, решает */
+  SearchStatusHasJobOffer = "has_job_offer",
+  /** Вышел на новое место */
+  SearchStatusAcceptedJobOffer = "accepted_job_offer",
+}
+
+export enum ModelsSearchLabelType {
+  /** Только с фотографией */
+  SearchLabelPhoto = "only_with_photo",
+  /** Не показывать резюме без зарплаты */
+  SearchLabelSalary = "only_with_salary",
+  /** Не показывать резюме без указания возраста */
+  SearchLabelAge = "only_with_age",
+  /** Не показывать резюме без указания пола */
+  SearchLabelGender = "only_with_gender",
+}
+
+export enum ModelsSchedule {
+  /** Вахта */
+  ScheduleFlyInFlyOut = "flyInFlyOut",
+  /** Неполный день */
+  SchedulePartTime = "partTime",
+  /** Полный день */
+  ScheduleFullDay = "fullDay",
+  /** Гибкий */
+  ScheduleFlexible = "flexible",
+  /** Сменный */
+  ScheduleShift = "shift",
+}
+
+export enum ModelsResponsePeriodType {
+  ResponsePeriodType3Days = "до 3 дней",
+  ResponsePeriodType7Days = "до 7 дней",
+  ResponsePeriodType7ToMonth = "от 7 дней до 30 дней",
+  ResponsePeriodTypeMoreMonth = "более месяца",
+}
+
+export enum ModelsRelocationType {
+  /** "не могу переехать" */
+  RelocationTypeNo = "no",
+  /** "могу переехать" */
+  RelocationTypeYes = "possible",
+  /** "хочу переехать" */
+  RelocationTypeWant = "want",
+}
+
+export enum ModelsRejectInitiator {
+  HrReject = "Рекрутер",
+  HeadReject = "Руководитель",
+  ApplicantReject = "Кандидат",
+}
+
+export enum ModelsNegotiationStatus {
+  NegotiationStatusWait = "Рассмотреть позже",
+  NegotiationStatusRejected = "Отклонен",
+  NegotiationStatusAccepted = "Подходит",
+}
+
+export enum ModelsLimitType {
+  LimitTypeMin = "Минут",
+  LimitTypeHour = "Часов",
+  LimitTypDay = "Дней",
+  LimitTypeWeek = "Недель",
+}
+
+export enum ModelsLanguageLevelType {
+  LanguageLevelA1 = "a1",
+  LanguageLevelA2 = "a2",
+  LanguageLevelB1 = "b1",
+  LanguageLevelB2 = "b2",
+  LanguageLevelC1 = "c1",
+  LanguageLevelC2 = "c2",
+  LanguageLevelL1 = "l1",
+}
+
+export enum ModelsGenderType {
+  /** мужской */
+  GenderTypeM = "male",
+  /** женский */
+  GenderTypeF = "female",
+}
+
+export enum ModelsExperienceType {
+  /** "Нет опыта" */
+  ExperienceTypeNo = "No",
+  /** "От 1 года до 3 лет" */
+  ExperienceTypeBetween1And3 = "Between1And3",
+  /** "От 3 года до 6 лет" */
+  ExperienceTypeBetween3And6 = "Between3And6",
+  /** "Более 6 лет" */
+  ExperienceTypeMoreThan6 = "MoreThan6",
+}
+
+export enum ModelsExperience {
+  /** Без опыта */
+  ExperienceNoMatter = "noMatter",
+  /** Более 1 года */
+  ExperienceMoreThan1 = "moreThan1",
+  /** Более 3 лет */
+  ExperienceMoreThan3 = "moreThan3",
+  /** Более 5 лет */
+  ExperienceMoreThan5 = "moreThan5",
+  /** Более 10 лет */
+  ExperienceMoreThan10 = "moreThan10",
+}
+
+export enum ModelsEmployment {
+  /** Временная */
+  EmploymentTemporary = "temporary",
+  /** Полная */
+  EmploymentFull = "full",
+  /** Стажировка */
+  EmploymentInternship = "internship",
+  /** Частичная */
+  EmploymentPartial = "partial",
+  /** Волонтерство */
+  EmploymentVolunteer = "volunteer",
+  /** Стажировка */
+  EmploymentProbation = "probation",
+}
+
+export enum ModelsEducationType {
+  /** "Среднее" */
+  EducationTypeSecondary = "secondary",
+  /** "Среднее специальное" */
+  EducationTypeSpecialSecondary = "special_secondary",
+  /** "Неоконченное высшее" */
+  EducationTypeUnfinishedHigher = "unfinished_higher",
+  /** "Высшее" */
+  EducationTypeHigher = "higher",
+  /** "Бакалавр" */
+  EducationTypeBachelor = "bachelor",
+  /** "Магистр" */
+  EducationTypeMaster = "master",
+  /** "Кандидат наук" */
+  EducationTypeCandidate = "candidate",
+  /** "Доктор наук" */
+  EducationTypeDoctor = "doctor",
+}
+
+export enum ModelsDuplicateType {
+  DuplicateTypeByAuthor = "ByAuthor",
+  DuplicateTypeByContacts = "ByContacts",
+}
+
+export enum ModelsDriverLicenseType {
+  DriverLicenseA = "A",
+  DriverLicenseB = "B",
+  DriverLicenseC = "C",
+  DriverLicenseD = "D",
+  DriverLicenseE = "E",
+  DriverLicenseBE = "BE",
+  DriverLicenseCE = "CE",
+  DriverLicenseDE = "DE",
+  DriverLicenseTM = "TM",
+  DriverLicenseTB = "TB",
+}
+
+export enum ModelsApprovalStatus {
+  AStatusApproved = "Согласованно",
+  AStatusRejected = "Не согласованно",
+  AStatusAwaiting = "Ждет согласования",
+}
+
+export enum ModelsApplicantStatus {
+  ApplicantStatusInProcess = "В процессе",
+  ApplicantStatusRejected = "Отклонен",
+  ApplicantStatusNegotiation = "Отклик",
+  ApplicantStatusArchive = "Архивный",
+}
+
+export enum ModelsApplicantSource {
+  ApplicantSourceManual = "Ручной ввод",
+  ApplicantSourceAvito = "Avito",
+  ApplicantSourceHh = "HeadHunter",
+  ApplicantSourceEmail = "Электронная почта",
+  ApplicantSourceSoc = "Социальные сети",
+  ApplicantSite = "Карьерный сайт",
+}
+
+export enum ModelsApAddedPeriodType {
+  ApAddedPeriodTypeTDay = "За сегодня",
+  ApAddedPeriodTypeYDay = "За вчера",
+  ApAddedPeriodType7Days = "За последние 7 дней",
+  ApAddedPeriodTypeMonth = "За последний месяц",
+  ApAddedPeriodTypeYear = "За последний год",
+}
+
+export enum ModelsAddedType {
+  AddedTypeAdded = "Добавлен",
+  AddedTypeNegotiation = "Откликнулся",
+}
+
+export enum DbmodelsActionType {
+  /** Добавлен комментраий к кандидату */
+  HistoryTypeComment = "comment",
+  /** Кандидат добавлен */
+  HistoryTypeAdded = "added",
+  /** Кандидат обновлен */
+  HistoryTypeUpdate = "update",
+  /** Получен отклик от кандидата */
+  HistoryTypeNegotiation = "negotiation",
+  /** Кандидат переведеден на другой этап */
+  HistoryTypeStageChange = "stage_change",
+  /** Дубликат по кандидату */
+  HistoryTypeDuplicate = "duplicate",
+  /** Перемещен в архив */
+  HistoryTypeArchive = "archive",
+  /** Кандидат отклонен */
+  HistoryTypeReject = "reject",
+  /** email */
+  HistoryTypeEmail = "reject",
+  /** Оценка ИИ */
+  HistoryAIScore = "ai_score",
+}
 
 export interface AdminpanelapimodelsUser {
   email?: string;
@@ -185,12 +517,24 @@ export interface ApplicantapimodelsApplicantNote {
 }
 
 export interface ApplicantapimodelsApplicantSort {
-  /** Дата добавления, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** Дата добавления, порядок сортировки false = ASC / true = DESC / nil = нет */
   accept_date_desc?: boolean;
-  /** ФИО, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** ФИО, порядок сортировки false = ASC / true = DESC / nil = нет */
   fio_desc?: boolean;
-  /** ЗП, порядок сортировки false = ASC/ true = DESC / nil = нет */
+  /** Дата отклика, порядок сортировки false = ASC / true = DESC / nil = нет */
+  negotiation_date_desc?: boolean;
+  /** Должность, порядок сортировки false = ASC / true = DESC / nil = нет */
+  resume_title_desc?: boolean;
+  /** ЗП, порядок сортировки false = ASC / true = DESC / nil = нет */
   salary_desc?: boolean;
+  /** Источник, порядок сортировки false = ASC / true = DESC / nil = нет */
+  source_desc?: boolean;
+  /** Дата выхода, порядок сортировки false = ASC / true = DESC / nil = нет */
+  start_date_desc?: boolean;
+  /** Статус, порядок сортировки false = ASC / true = DESC / nil = нет */
+  status_desc?: boolean;
+  /** Вакансия, порядок сортировки false = ASC / true = DESC / nil = нет */
+  vacancy_name_desc?: boolean;
 }
 
 export interface ApplicantapimodelsApplicantSourceData {
@@ -200,19 +544,6 @@ export interface ApplicantapimodelsApplicantSourceData {
   negotiation_source?: ApplicantapimodelsSourceData;
   /** Общая статистика */
   total_source?: ApplicantapimodelsSourceData;
-}
-
-export interface ApplicantapimodelsApplicantSurvey {
-  /** Порог адаптивного фильтра */
-  hrThreshold?: number;
-  /** Анкета заполнена кандидатом и может использоваться для оценки */
-  isFilledOut?: boolean;
-  /** Анкета получила оценку от нейросети */
-  isScored?: boolean;
-  /** Итоговая оцена кандидата */
-  score?: number;
-  /** Ссылка на анкету для кандидата */
-  url?: string;
 }
 
 export interface ApplicantapimodelsApplicantView {
@@ -270,8 +601,8 @@ export interface ApplicantapimodelsApplicantView {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
-  /** анкета для кандидата */
-  survey?: ApplicantapimodelsApplicantSurvey;
+  /** Анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantVkSurvey;
   /** Опыт работ в месяцах */
   total_experience?: number;
   /** Идентификатор вакансии */
@@ -339,8 +670,8 @@ export interface ApplicantapimodelsApplicantViewExt {
   start_date?: string;
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
-  /** анкета для кандидата */
-  survey?: ApplicantapimodelsApplicantSurvey;
+  /** Анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantVkSurvey;
   tags?: string[];
   /** Опыт работ в месяцах */
   total_experience?: number;
@@ -348,6 +679,17 @@ export interface ApplicantapimodelsApplicantViewExt {
   vacancy_id?: string;
   /** Название вакансии */
   vacancy_name?: string;
+}
+
+export interface ApplicantapimodelsApplicantVkSurvey {
+  /** Отчет по кандидату */
+  scoreAI?: ApplicantapimodelsScoreAI;
+  status?: number;
+  statusDescription?: string;
+  /** ВК. Шаг 0. анкета и ответы кандидата на типовые вопросы */
+  step0?: SurveyapimodelsVkStep0;
+  /** ВК. Шаг 1. Генерация черновика скрипта (15 вопросов и текст сценария для интервью) */
+  step1?: SurveyapimodelsVkStep1View;
 }
 
 export interface ApplicantapimodelsMultiChangeStageRequest {
@@ -373,6 +715,44 @@ export interface ApplicantapimodelsRejectRequest {
   initiator?: ModelsRejectInitiator;
   /** Причина отказа */
   reason?: string;
+}
+
+export interface ApplicantapimodelsScoreAI {
+  /** Детальная информация по каждому вопросу */
+  details?: ApplicantapimodelsScoreDetail[];
+  /** Итоговый комментарий */
+  overall_comment?: string;
+  /** Результат: прошел/не прошел */
+  pass?: boolean;
+  /** Порог для прохождения */
+  threshold?: number;
+  /** Итоговая оцена (Общий набранный бал за интервью) */
+  total_score?: number;
+}
+
+export interface ApplicantapimodelsScoreDetail {
+  /** Комментарий к оценке */
+  comment_for_similarity?: string;
+  /** Идентификатор файла с изображением графика эмоциий */
+  emotion_file_id?: string;
+  /** Ошибка анализа */
+  error?: string;
+  /** Идентификатор видео файла отправленный кандидатом */
+  file_id?: string;
+  /** Идентификатор файла с изображением видео кадров */
+  frames_file_id?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Идентификатор файла с изображением графика настроения */
+  sentiment_file_id?: string;
+  /** Оценка ответа */
+  similarity?: number;
+  /** Ответ данный кандидатом (транскрипция) */
+  transcript_text?: string;
+  /** Идентификатор файла с изображением амплитуды голоса */
+  voice_amplitude_file_id?: string;
 }
 
 export interface ApplicantapimodelsSourceData {
@@ -425,19 +805,6 @@ export interface AuthapimodelsSendEmail {
 export interface AvitoapimodelsVacancyAttach {
   /** идентификатор вакансии в виде: 3364561973 */
   id?: number;
-}
-
-export enum DbmodelsActionType {
-  HistoryTypeComment = "comment",
-  HistoryTypeAdded = "added",
-  HistoryTypeUpdate = "update",
-  HistoryTypeNegotiation = "negotiation",
-  HistoryTypeStageChange = "stage_change",
-  HistoryTypeDuplicate = "duplicate",
-  HistoryTypeArchive = "archive",
-  HistoryTypeReject = "reject",
-  HistoryTypeEmail = "reject",
-  HistoryAIScore = "ai_score",
 }
 
 export interface DbmodelsApplicantChange {
@@ -612,6 +979,15 @@ export interface DictapimodelsJobTitleData {
   name?: string;
 }
 
+export interface DictapimodelsLangData {
+  name?: string;
+}
+
+export interface DictapimodelsLangView {
+  id?: string;
+  name?: string;
+}
+
 export interface DictapimodelsRejectReasonData {
   /** Инициатор отказа */
   initiator?: ModelsRejectInitiator;
@@ -658,249 +1034,6 @@ export interface GptmodelsGenVacancyDescResponse {
 export interface HhapimodelsVacancyAttach {
   /** ссылка на вакансию в виде: https://izhevsk.hh.ru/vacancy/108984166 */
   url?: string;
-}
-
-export enum ModelsAddedType {
-  AddedTypeAdded = "Добавлен",
-  AddedTypeNegotiation = "Откликнулся",
-}
-
-export enum ModelsApAddedPeriodType {
-  ApAddedPeriodTypeTDay = "За сегодня",
-  ApAddedPeriodTypeYDay = "За вчера",
-  ApAddedPeriodType7Days = "За последние 7 дней",
-  ApAddedPeriodTypeMonth = "За последний месяц",
-  ApAddedPeriodTypeYear = "За последний год",
-}
-
-export enum ModelsApplicantSource {
-  ApplicantSourceManual = "Ручной ввод",
-  ApplicantSourceAvito = "Avito",
-  ApplicantSourceHh = "HeadHunter",
-  ApplicantSourceEmail = "Электронная почта",
-  ApplicantSourceSoc = "Социальные сети",
-  ApplicantSite = "Карьерный сайт",
-}
-
-export enum ModelsApplicantStatus {
-  ApplicantStatusInProcess = "В процессе",
-  ApplicantStatusRejected = "Отклонен",
-  ApplicantStatusNegotiation = "Отклик",
-  ApplicantStatusArchive = "Архивный",
-}
-
-export enum ModelsApprovalStatus {
-  AStatusApproved = "Согласованно",
-  AStatusRejected = "Не согласованно",
-  AStatusAwaiting = "Ждет согласования",
-}
-
-export enum ModelsDriverLicenseType {
-  DriverLicenseA = "A",
-  DriverLicenseB = "B",
-  DriverLicenseC = "C",
-  DriverLicenseD = "D",
-  DriverLicenseE = "E",
-  DriverLicenseBE = "BE",
-  DriverLicenseCE = "CE",
-  DriverLicenseDE = "DE",
-  DriverLicenseTM = "TM",
-  DriverLicenseTB = "TB",
-}
-
-export enum ModelsDuplicateType {
-  DuplicateTypeByAuthor = "ByAuthor",
-  DuplicateTypeByContacts = "ByContacts",
-}
-
-export enum ModelsEducationType {
-  EducationTypeSecondary = "secondary",
-  EducationTypeSpecialSecondary = "special_secondary",
-  EducationTypeUnfinishedHigher = "unfinished_higher",
-  EducationTypeHigher = "higher",
-  EducationTypeBachelor = "bachelor",
-  EducationTypeMaster = "master",
-  EducationTypeCandidate = "candidate",
-  EducationTypeDoctor = "doctor",
-}
-
-export enum ModelsEmployment {
-  EmploymentTemporary = "temporary",
-  EmploymentFull = "full",
-  EmploymentInternship = "internship",
-  EmploymentPartial = "partial",
-  EmploymentVolunteer = "volunteer",
-  EmploymentProbation = "probation",
-}
-
-export enum ModelsExperience {
-  ExperienceNoMatter = "noMatter",
-  ExperienceMoreThan1 = "moreThan1",
-  ExperienceMoreThan3 = "moreThan3",
-  ExperienceMoreThan5 = "moreThan5",
-  ExperienceMoreThan10 = "moreThan10",
-}
-
-export enum ModelsExperienceType {
-  ExperienceTypeNo = "No",
-  ExperienceTypeBetween1And3 = "Between1And3",
-  ExperienceTypeBetween3And6 = "Between3And6",
-  ExperienceTypeMoreThan6 = "MoreThan6",
-}
-
-export enum ModelsGenderType {
-  GenderTypeM = "male",
-  GenderTypeF = "female",
-}
-
-export enum ModelsLanguageLevelType {
-  LanguageLevelA1 = "a1",
-  LanguageLevelA2 = "a2",
-  LanguageLevelB1 = "b1",
-  LanguageLevelB2 = "b2",
-  LanguageLevelC1 = "c1",
-  LanguageLevelC2 = "c2",
-  LanguageLevelL1 = "l1",
-}
-
-export enum ModelsLimitType {
-  LimitTypeMin = "Минут",
-  LimitTypeHour = "Часов",
-  LimitTypDay = "Дней",
-  LimitTypeWeek = "Недель",
-}
-
-export enum ModelsNegotiationStatus {
-  NegotiationStatusWait = "Рассмотреть позже",
-  NegotiationStatusRejected = "Отклонен",
-  NegotiationStatusAccepted = "Подходит",
-}
-
-export enum ModelsRejectInitiator {
-  HrReject = "Рекрутер",
-  HeadReject = "Руководитель",
-  ApplicantReject = "Кандидат",
-}
-
-export enum ModelsRelocationType {
-  RelocationTypeNo = "no",
-  RelocationTypeYes = "possible",
-  RelocationTypeWant = "want",
-}
-
-export enum ModelsResponsePeriodType {
-  ResponsePeriodType3Days = "до 3 дней",
-  ResponsePeriodType7Days = "до 7 дней",
-  ResponsePeriodType7ToMonth = "от 7 дней до 30 дней",
-  ResponsePeriodTypeMoreMonth = "более месяца",
-}
-
-export enum ModelsSchedule {
-  ScheduleFlyInFlyOut = "flyInFlyOut",
-  SchedulePartTime = "partTime",
-  ScheduleFullDay = "fullDay",
-  ScheduleFlexible = "flexible",
-  ScheduleShift = "shift",
-}
-
-export enum ModelsSearchLabelType {
-  SearchLabelPhoto = "only_with_photo",
-  SearchLabelSalary = "only_with_salary",
-  SearchLabelAge = "only_with_age",
-  SearchLabelGender = "only_with_gender",
-}
-
-export enum ModelsSearchStatusType {
-  SearchStatusActive = "active_search",
-  SearchStatusLookingForOffers = "looking_for_offers",
-  SearchStatusNotLookingForJob = "not_looking_for_job",
-  SearchStatusHasJobOffer = "has_job_offer",
-  SearchStatusAcceptedJobOffer = "accepted_job_offer",
-}
-
-export enum ModelsSpacePushSettingCode {
-  PushLicenseExpire = "PushLicenseExpire",
-  PushVRClosed = "PushVRClosed",
-  PushVRApproved = "PushVRApproved",
-  PushVRRejected = "PushVRRejected",
-  PushVacancyResponsible = "PushVacancyResponsible",
-  PushVacancyNewStatus = "PushVacancyNewStatus",
-  PushVacancyPublished = "PushVacancyPublished",
-  PushApplicantNegotiation = "PushApplicantNegotiation",
-  PushApplicantNote = "PushApplicantNote",
-  PushApplicantMsg = "PushApplicantMsg",
-  PushApplicantNewStage = "PushApplicantNewStage",
-}
-
-export enum ModelsSpaceSettingCode {
-  YandexGPTPromtSetting = "ya_gpt_promt",
-  HhClientIDSetting = "HHClientID",
-  HhClientSecretSetting = "HHClientSecret",
-  AvitoClientIDSetting = "AvitoClientID",
-  AvitoClientSecretSetting = "AvitoClientSecret",
-  SpaceSenderEmail = "SpaceSenderEmail",
-}
-
-export enum ModelsTemplateType {
-  TplMail = "Письмо",
-  TplApplicantNote = "Комментарий к кандидату",
-  TplRejectNote = "Комментарий к отказу",
-  TplReminder = "Напоминание",
-  TplRatingNote = "Комментарий к оценке",
-  TplSms = "SMS",
-  TplOffer = "Оффер",
-}
-
-export enum ModelsTripReadinessType {
-  TripReadinessReady = "ready",
-  TripReadinessSometimes = "sometimes",
-  TripReadinessNever = "never",
-}
-
-export enum ModelsUserRole {
-  SpaceAdminRole = "SPACE_ADMIN_ROLE",
-  SpaceUserRole = "SPACE_USER_ROLE",
-  UserRoleSuperAdmin = "SUPER_ADMIN",
-}
-
-export enum ModelsVRSelectionType {
-  VRSelectionTypeMass = "Массовый",
-  VRSelectionTypePersonal = "Индивидуальный",
-}
-
-export enum ModelsVRStatus {
-  VRStatusCreated = "Создана",
-  VRStatusCanceled = "Отменена",
-  VRStatusNotAccepted = "Не согласована",
-  VRStatusAccepted = "Согласована",
-  VRStatusUnderRevision = "На доработке",
-  VRStatusUnderAccepted = "На согласовании",
-  VRStatusTemplate = "Шаблон",
-}
-
-export enum ModelsVRType {
-  VRTypeNew = "Новая позиция",
-  VRTypeReplace = "Замена",
-}
-
-export enum ModelsVRUrgency {
-  VRTypeUrgent = "Срочно",
-  VRTypeNonUrgent = "В плановом порядке",
-}
-
-export enum ModelsVacancyPubStatus {
-  VacancyPubStatusNone = "Не размещена",
-  VacancyPubStatusModeration = "Публикуется",
-  VacancyPubStatusPublished = "Опубликована",
-  VacancyPubStatusRejected = "Отклонена",
-  VacancyPubStatusClosed = "Закрыта",
-}
-
-export enum ModelsVacancyStatus {
-  VacancyStatusOpened = "Открыта",
-  VacancyStatusCanceled = "Отменена",
-  VacancyStatusSuspended = "Приостановлена",
-  VacancyStatusClosed = "Закрыта",
 }
 
 export interface MsgtemplateapimodelsMsgTemplateData {
@@ -1161,6 +1294,8 @@ export interface SpaceapimodelsSpaceUserProfileData {
   first_name?: string;
   /** Внутренний номер */
   internal_phone_number?: string;
+  /** Идентификатор должности */
+  job_title_id?: string;
   /** Фамилия */
   last_name?: string;
   /** Телефон */
@@ -1182,6 +1317,8 @@ export interface SpaceapimodelsSpaceUserProfileView {
   internal_phone_number?: string;
   /** Email подтвержден */
   is_email_verified?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
   /** Должность */
   job_title_name?: string;
   /** Фамилия */
@@ -1262,6 +1399,80 @@ export interface SurveyapimodelsHRSurveyView {
   questions?: DbmodelsHRSurveyQuestion[];
 }
 
+export interface SurveyapimodelsVkStep0 {
+  answers?: SurveyapimodelsVkStep0Answer[];
+  questions?: SurveyapimodelsVkStep0Question[];
+  /** Ссылка на анкету c типовыми вопросами для кандидата */
+  url?: string;
+}
+
+export interface SurveyapimodelsVkStep0Answer {
+  /** Варианты ответов */
+  answer?: string;
+  /** Идентификатор вопроса */
+  question_id?: string;
+}
+
+export interface SurveyapimodelsVkStep0Question {
+  /** Варианты ответов */
+  answers?: string[];
+  /** Идентификатор вопроса */
+  question_id?: string;
+  /** Текст вопроса */
+  question_text?: string;
+  /** Тип вопроса */
+  question_type?: string;
+}
+
+export interface SurveyapimodelsVkStep0SurveyAnswers {
+  answers?: SurveyapimodelsVkStep0Answer[];
+}
+
+export interface SurveyapimodelsVkStep0SurveyView {
+  questions?: SurveyapimodelsVkStep0Question[];
+}
+
+export interface SurveyapimodelsVkStep1 {
+  comments?: Record<string, string>;
+  questions?: SurveyapimodelsVkStep1Question[];
+  script_intro?: string;
+  script_outro?: string;
+}
+
+export interface SurveyapimodelsVkStep1Question {
+  /** Идентификатор вопроса */
+  id?: string;
+  order?: number;
+  /** Текст вопроса */
+  text?: string;
+}
+
+export interface SurveyapimodelsVkStep1SurveyQuestion {
+  /** Идентификатор вопроса */
+  id?: string;
+  /** Порядковый номер */
+  order?: number;
+  /** Текст вопроса */
+  text?: string;
+}
+
+export interface SurveyapimodelsVkStep1SurveyView {
+  questions?: SurveyapimodelsVkStep1SurveyQuestion[];
+  script_intro?: string;
+  script_outro?: string;
+}
+
+export interface SurveyapimodelsVkStep1View {
+  comments?: Record<string, string>;
+  /** Дата отправки приглашения */
+  date_of_invitation?: string;
+  questions?: SurveyapimodelsVkStep1Question[];
+  script_intro?: string;
+  script_outro?: string;
+  /** Ссылка на анкету для видео интервью */
+  url?: string;
+}
+
 export interface VacancyapimodelsApprovalStageData {
   approval_status?: ModelsApprovalStatus;
   space_user_id?: string;
@@ -1277,6 +1488,19 @@ export interface VacancyapimodelsApprovalStageView {
 
 export interface VacancyapimodelsApprovalStages {
   approval_stages?: VacancyapimodelsApprovalStageData[];
+}
+
+export interface VacancyapimodelsComment {
+  author_id?: string;
+  comment?: string;
+  date?: string;
+}
+
+export interface VacancyapimodelsCommentView {
+  author_fio?: string;
+  author_id?: string;
+  comment?: string;
+  date?: string;
 }
 
 export interface VacancyapimodelsExtVacancyInfo {
@@ -1307,14 +1531,6 @@ export interface VacancyapimodelsSalary {
   from?: number;
   in_hand?: number;
   to?: number;
-}
-
-export enum VacancyapimodelsSearchPeriod {
-  SearchByToday = 1,
-  SearchBy3Days = 2,
-  SearchByWeek = 3,
-  SearchByMonth = 4,
-  SearchByPeriod = 5,
 }
 
 export interface VacancyapimodelsSelectionStageAdd {
@@ -1599,6 +1815,7 @@ export interface VacancyapimodelsVacancyRequestView {
   city?: string;
   /** ид города */
   city_id?: string;
+  comments?: VacancyapimodelsCommentView[];
   /** ид компании */
   company_id?: string;
   /** название компании */
@@ -1658,13 +1875,6 @@ export interface VacancyapimodelsVacancySort {
   created_at_desc?: boolean;
 }
 
-export enum VacancyapimodelsVacancyTab {
-  VacancyTabAll = 0,
-  VacancyTabMy = 1,
-  VacancyTabOther = 2,
-  VacancyTabArch = 3,
-}
-
 export interface VacancyapimodelsVacancyView {
   /** ФИО автора вакансии */
   author_full_name?: string;
@@ -1675,6 +1885,7 @@ export interface VacancyapimodelsVacancyView {
   city?: string;
   /** ид города */
   city_id?: string;
+  comments?: VacancyapimodelsCommentView[];
   /** ид компании */
   company_id?: string;
   /** название компании */

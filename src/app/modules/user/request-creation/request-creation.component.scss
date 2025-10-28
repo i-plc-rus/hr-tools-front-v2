@@ -73,6 +73,11 @@
   display: none !important;
 }
 
+::ng-deep .mat-mdc-option:focus.mdc-list-item, .mat-mdc-option.mat-mdc-option-active.mdc-list-item {
+    background-color: transparent;
+    outline: 0;
+}
+
 ::ng-deep .mat-step-header {
   background-color: transparent !important;
   transition: none !important;
@@ -82,6 +87,10 @@
   margin-right: 0 !important;
 }
 
+
+::ng-deep .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+   background-color: transparent !important;
+}
 
 
 ::ng-deep .mat-step-icon {

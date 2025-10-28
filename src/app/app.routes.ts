@@ -19,6 +19,10 @@ export const routes: Routes = [
     canActivateChild: [() => roleGuard(['ADMIN', 'SUPER_ADMIN'])]
   },
   {
+    path: 'public',
+    loadChildren: () => import('../app/modules/servey/servey.module').then(r => r.ServeyModule),
+  },
+  {
     path: '**',
     redirectTo: 'auth',
   }

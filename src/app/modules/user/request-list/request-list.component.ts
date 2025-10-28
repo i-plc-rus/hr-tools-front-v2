@@ -19,7 +19,7 @@ import {SpaceUser} from '../../../models/SpaceUser';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import {Subject, Subscription, switchMap} from 'rxjs';
+import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -53,7 +53,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | 'favorites' | ''>('');
+  category = new FormControl<ModelsVRStatus | '' | 'favorites'>('');
   searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
@@ -80,10 +80,22 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   requestAuthors: SpaceUser[] = [];
 
   // вакансии
-  isLoading = false;
+  isLoading = true;
   requestList: VacancyRequestView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
+  
+  statusCounts: { [key: string]: number } = {
+    'Создана': 0,
+    'На доработке': 0,
+    'На согласовании': 0,
+    'Согласована': 0,
+    'Не согласована': 0,
+    'Отменена': 0
+  };
+  
+  // Общее количество всех заявок
+  totalRequestsCount: number = 0;
 
   private destroy$ = new Subject<void>();
 
@@ -104,6 +116,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.getRequests();
+    this.loadAllCounts();
     this.getUsers();
     this.setFormListeners();
   }
@@ -129,7 +142,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getRequests(loadMore = false): void {
-    if (this.loading || this.allDataLoaded) return;
 
     this.loading = true;
 
@@ -137,7 +149,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = 1;
       this.requestList = [];
       this.allDataLoaded = false;
-      this.favoritesCount = 0;
     }
 
     const formValues = this.filterForm.getRawValue();
@@ -174,12 +185,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: (data) => {
           if (data.body?.data) {
-            const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => {
-              if (request.favorite) {
-                this.favoritesCount++;
-              }
-              return new VacancyRequestView(request);
-            });
+            const newRequests = data.body.data.map((request: VacancyapimodelsVacancyRequestView) => new VacancyRequestView(request));
 
             this.requestList = [...this.requestList, ...newRequests];
 
@@ -189,7 +195,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
               this.currentPage++;
             }
           }
-
+          this.isLoading = false;
           this.loading = false;
         },
         error: (error) => {
@@ -268,17 +274,17 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.getRequests();
       });
 
-    this.filterForm.get('search_period')!.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
-          this.filterForm.patchValue({
-            search_from: '',
-            search_to: ''
-          }, { emitEvent: false });
-        }
+    // this.filterForm.get('search_period')!.valueChanges
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(value => {
+    //     if (value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
+    //       this.filterForm.patchValue({
+    //         search_from: '',
+    //         search_to: ''
+    //       }, { emitEvent: false });
+    //     }
 
-      });
+    //   });
 
     this.filterForm.get('search_from')!.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -304,19 +310,43 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSearchPeriodClick(value: VacancyapimodelsSearchPeriod) {
     const current = this.filterForm.get('search_period')!.value;
+    const currentFrom = this.filterForm.get('search_from')!.value;
+    const currentTo = this.filterForm.get('search_to')!.value;
+    let isValidDate = false;
 
-    if (current) {
-      this.filterForm.patchValue({
-        search_period: value,
+    if (value === VacancyapimodelsSearchPeriod.SearchByPeriod) {
+      const dateObjectFrom = new Date(currentFrom!);
+      const dateObjectTo = new Date(currentTo!);
+      isValidDate = (dateObjectFrom instanceof Date && !isNaN(dateObjectFrom.getTime())) || (dateObjectTo instanceof Date && !isNaN(dateObjectTo.getTime()));
+      if (isValidDate) {
+        this.filterForm.patchValue({
+          search_from: '',
+          search_to: ''
+        });
+        this.filterForm.get('search_period')!.setValue(undefined);
+      } 
+    } else {
+      // console.log('Is valid date:', this.filterForm.get('search_period')!.value);
+      this.filterForm.patchValue({ 
         search_from: '',
         search_to: ''
       });
-    } 
+      if (current === value) {
+        this.filterForm.get('search_period')!.setValue(value);
+      }
+    }
   }
 
 
-  openComment(comment: string) {
-    this.modalService.openCommentModal(comment);
+  openComment(requestId: string) {
+    this.modalService.openCommentModal(requestId, true).subscribe(data => {
+        const foundRequest = this.requestList.findIndex(request => requestId === request.id);
+        if (!this.requestList[foundRequest].comments) {
+          this.requestList[foundRequest].comments = [];
+        }
+        this.requestList[foundRequest].comments.push(data);
+      }
+    );
   }
 
   changeStatus(id: string, status: ModelsVRStatus) {
@@ -373,6 +403,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.allDataLoaded = false;
           this.requestList = [];
           this.getRequests();
+          this.loadAllCounts();
         },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
@@ -384,7 +415,16 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleFavorite(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestFavoriteUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.getRequests();
+        if (!set && this.category.value === 'favorites' && this.favoritesCount === 1) {
+          this.category.setValue('');
+        }
+        const index = this.requestList.findIndex(item => item.id === id);
+        this.requestList[index].favorite = set; 
+        if (set) {
+          this.favoritesCount++;
+        } else {
+          this.favoritesCount--;
+        }
       },
       error: (error) => {
         console.log(error);
@@ -395,7 +435,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   togglePin(id: string, set: boolean) {
     this.api.v1SpaceVacancyRequestPinUpdate(id, {set}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.getRequests();
+        // this.getRequests();
+        const index = this.requestList.findIndex(item => item.id === id);
+        this.requestList[index].pinned = set; 
       },
       error: (error) => {
         console.log(error);
@@ -418,6 +460,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortByDesc = !this.sortByDesc;
     this.filterForm.controls.sort.setValue({created_at_desc: this.sortByDesc});
   }
+
 
   getCities(address: string) {
     this.api.v1DictCityFindCreate({address}, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
@@ -459,6 +502,86 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   show(id: string): void {
     this.router.navigate(['/user/request', id, 'approval'])
    }
+
+  private loadAllCounts() {
+    const statuses = [
+      { key: 'Создана', value: ModelsVRStatus.VRStatusCreated },
+      { key: 'На доработке', value: ModelsVRStatus.VRStatusUnderRevision },
+      { key: 'На согласовании', value: ModelsVRStatus.VRStatusUnderAccepted },
+      { key: 'Согласована', value: ModelsVRStatus.VRStatusAccepted },
+      { key: 'Не согласована', value: ModelsVRStatus.VRStatusNotAccepted },
+      { key: 'Отменена', value: ModelsVRStatus.VRStatusCanceled }
+    ];
+
+    // Создаем массив запросов для всех счетчиков
+    const requests = [
+      // Общее количество всех заявок
+      this.api.v1SpaceVacancyRequestListCreate({
+        page: 1,
+        limit: 1,
+        author_id: '',
+        city_id: '',
+        search: '',
+        sort: { created_at_desc: this.sortByDesc }
+      }, { observe: 'response' }),
+      
+      // Количество избранных заявок
+      this.api.v1SpaceVacancyRequestListCreate({
+        favorite: true,
+        page: 1,
+        limit: 1,
+        author_id: '',
+        city_id: '',
+        search: '',
+        statuses: [],
+        sort: { created_at_desc: this.sortByDesc }
+      }, { observe: 'response' }),
+      
+      // Количество по каждому статусу
+      ...statuses.map(({ value }) => 
+        this.api.v1SpaceVacancyRequestListCreate({
+          statuses: [value],
+          page: 1,
+          limit: 1,
+          author_id: '',
+          city_id: '',
+          search: '',
+          sort: { created_at_desc: this.sortByDesc }
+        }, { observe: 'response' })
+      )
+    ];
+
+    forkJoin(requests)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (responses) => {
+          // Общее количество заявок
+          const totalCount = (responses[0].body as any)?.row_count;
+          this.totalRequestsCount = typeof totalCount === 'number' ? totalCount : 0;
+
+          // Количество избранных заявок
+          const favoritesCount = (responses[1].body as any)?.row_count;
+          this.favoritesCount = typeof favoritesCount === 'number' ? favoritesCount : 0;
+
+          // Количество по статусам
+          statuses.forEach(({ key }, index) => {
+            const statusCount = (responses[index + 2].body as any)?.row_count;
+            this.statusCounts[key] = typeof statusCount === 'number' ? statusCount : 0;
+          });
+        },
+        error: () => {
+          this.totalRequestsCount = 0;
+          this.favoritesCount = 0;
+          Object.keys(this.statusCounts).forEach(key => {
+            this.statusCounts[key] = 0;
+          });
+        }
+      });
+  }
+
+  getStatusCount(status: string): number {
+    return this.statusCounts[status] || 0;
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

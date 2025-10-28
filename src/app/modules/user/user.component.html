@@ -63,7 +63,8 @@
         <span class="tracking-[0.5px] font-[500] text-xs">Кандидаты</span>
       </a>
 
-      <a matTooltip="Офферы" matTooltipPosition="right" [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
+      <!--Убрана кнопка меню у офферов и календаря, так как не прикручены действия. Позже вернуть и докрутить-->
+      <!-- <a matTooltip="Офферы" matTooltipPosition="right" [routerLink]="['/user', 'offers']" [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
           <mat-icon svgIcon="note"></mat-icon>
@@ -76,7 +77,8 @@
           <mat-icon svgIcon="calendar"></mat-icon>
         </span>
         <span class="tracking-[0.5px] font-[500] text-xs">Календарь</span>
-      </a>
+      </a> -->
+
       <a matTooltip="Аналитика" matTooltipPosition="right" [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
          class="flex flex-col items-center justify-center">
         <span class="icon-container px-4 py-1 rounded-2xl inline-block">
@@ -88,11 +90,12 @@
 
     <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4"
          style="width: inherit; max-width: inherit;">
-  <span
+         <!--Убрана кнопка меню у настроек, так как не прикручены действия. Позже вернуть и докрутить-->
+  <!-- <span
     matTooltip="Настройки" matTooltipPosition="right"
     class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
     <mat-icon svgIcon="settings"></mat-icon>
-  </span>
+  </span> -->
       <span
         (click)="profileMenuTrigger.openMenu()"
         matTooltip="Профиль" matTooltipPosition="right"
@@ -106,7 +109,8 @@
           <mat-icon svgIcon="account-box"></mat-icon>
           Личный кабинет
         </button>
-        <button mat-menu-item>
+        <!--Убрана кнопка меню у расширения и уведомлений, так как не прикручены действия. Позже вернуть и докрутить-->
+        <!-- <button mat-menu-item>
           <mat-icon svgIcon="extension"></mat-icon>
           Расширение
         </button>
@@ -116,19 +120,19 @@
             <span>Уведомления</span>
             <app-notification-bubble [value]="1"></app-notification-bubble>
           </div>
-        </button>
+        </button> -->
         <button mat-menu-item class="logout-button" (click)="logout()">
           <mat-icon class="!text-[var(--status-color-danger-text)]" svgIcon="logout"></mat-icon>
           <span class="text-[var(--status-color-danger-text)]">Выйти</span>
         </button>
       </mat-menu>
 
-
-      <span
+      <!--Убрана кнопка меню у помощи, так как не прикручены действия. Позже вернуть и докрутить-->
+      <!-- <span
         matTooltip="Помощь" matTooltipPosition="right"
         class="icon-container px-4 py-1 rounded-2xl inline-block cursor-pointer">
     <mat-icon svgIcon="support"></mat-icon>
-  </span>
+  </span> -->
     </div>
   </app-sidebar>
   <div class="content-area">

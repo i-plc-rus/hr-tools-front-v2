@@ -270,6 +270,7 @@ mat-option:hover {
   border: 9px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
   border-radius: 50px;
+  min-height: 70px;
   background-color: var(--scrollbar-thumb);
   cursor: pointer;
 }
@@ -315,6 +316,17 @@ mat-option:hover {
   --ag-foreground-color: var(--text-main);
   --ag-material-accent-color: var(--link-default);
   --ag-checkbox-unchecked-color: var(--on-surface);
+  --ag-borders-critical: 0px;
+  --ag-row-border-width: 0px;
+
+  // .ag-cell {
+  //   border-bottom: none;
+  //   border-top: none;
+  // }
+
+  .ag-header {
+    border-bottom: 2px solid #e2e2e2;
+  }
 }
 
 //quill-editor

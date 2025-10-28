@@ -96,10 +96,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('bag-filled', this.setPath(`${this.svgPath}/ic-bag-filled.svg`))
       .addSvgIcon('request-filled', this.setPath(`${this.svgPath}/ic-request-filled.svg`))
       .addSvgIcon('chat-info', this.setPath(`${this.svgPath}/ic-chat-info.svg`))
-      .addSvgIcon('green-polygon', this.setPath(`${this.svgPath}/ic-green-polygon.svg`))
-      .addSvgIcon('green-y', this.setPath(`${this.svgPath}/ic-green-y.svg`))
-      .addSvgIcon('red-polygon', this.setPath(`${this.svgPath}/ic-red-polygon.svg`))
-      .addSvgIcon('red-x', this.setPath(`${this.svgPath}/ic-red-x.svg`))
+
 
   }
 

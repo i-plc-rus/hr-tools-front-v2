@@ -1,5 +1,5 @@
 @if (!isLoading && applicant) {
-  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail' : 'candidate-detail' }} h-screen overflow-hidden flex flex-col">
+  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail h-[80vh]' : 'candidate-detail h-screen' }} overflow-hidden flex flex-col">
     @if (!isVacancyCard) {
       <div class="flex gap-2 items-center py-6">
         <button mat-icon-button (click)="onBack()" class="btn-secondary">
@@ -74,7 +74,7 @@
 
       <mat-tab-group fitInkBarToContent [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab label="Резюме">
-          <div class="p-6 h-[300px]">
+          <div class="p-6">
             @if (!resume || !resumeUint) {
               <input type="file" accept="application/pdf" class="hidden" (change)="uploadResume($event)" #resumeInput/>
               <button mat-flat-button class="btn-secondary" (click)="resumeInput.click()">
@@ -108,9 +108,11 @@
                 </div>
                 <div class="flex items-center justify-center drop-shadow-xl">
                   <pdf-viewer #resumeViewer
-                              [src]="resumeUint"
-                              [original-size]="false"
-                              style="width: 80%; min-width: 400px; height: 80vh;">
+                    id="pdfViewer"
+                    [src]="resumeUint"
+                    [original-size]="true"
+                    (after-load-complete)="afterLoadComplete($event)"
+                    style="width: 100%; min-width: 400px; height: 100vh;">
                   </pdf-viewer>
                 </div>
               </div>
@@ -118,7 +120,7 @@
           </div>
         </mat-tab>
         <mat-tab label="Документы">
-          <div class="p-6 h-[300px]">
+          <div class="p-6">
             <input
               type="file"
               accept="application/pdf"
@@ -149,7 +151,7 @@
           </div>
         </mat-tab>
         <mat-tab label="Действия">
-          <div class="p-6 h-[300px]">
+          <div class="p-6">
             <mat-chip-listbox hideSingleSelectionIndicator [formControl]="changesCommentsOnly">
               <mat-chip-option [value]="false" [selectable]="changesCommentsOnly.value === true"> Все</mat-chip-option>
               <mat-chip-option [value]="true" [selectable]="changesCommentsOnly.value === false">

@@ -1,0 +1,26 @@
+.question-number {
+  background-color: var(--background-primary);
+  color: var(--link-default);
+  width: 159px;
+  height: 40px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  text-align: center;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  border-radius: 24px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.call-hr {
+  background: transparent;
+  color: var(--link-default);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}

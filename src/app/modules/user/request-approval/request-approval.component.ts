@@ -34,6 +34,7 @@ export class RequestApprovalComponent implements OnInit {
   companyName: string = '';
   /*cтатус заявки */
   status: string = '';
+  isResponsible: boolean = false;
 
   experiences: { name: string; value: ModelsExperience }[] = [
     { name: 'Не имеет значения', value: ModelsExperience.ExperienceNoMatter },
@@ -80,7 +81,7 @@ export class RequestApprovalComponent implements OnInit {
     city_id: new FormControl<DictapimodelsCityView | null>(null, [
       Validators.required,
     ]),
-    opened_positions: new FormControl(null, [Validators.required]),
+    opened_positions: new FormControl(null, [Validators.required, Validators.min(1)]),
     urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
     request_type: new FormControl<ModelsVRType | undefined>(undefined),
     requirements: new FormControl(''),
@@ -124,10 +125,12 @@ export class RequestApprovalComponent implements OnInit {
         vacancyDetails: this.api.v1SpaceVacancyRequestDetail(this.id),
         companyStructure: this.api.v1DictCompanyStructFindCreate({}),
         city: this.api.v1DictCityFindCreate({}),
+        user: this.api.v1AuthMeList()
       }).subscribe({
         next: (response: any) => {
-          const { vacancyDetails, companyStructure, city } = response;
-          console.log(vacancyDetails);
+          const { vacancyDetails, companyStructure, city, user } = response;
+          const approvalIds = vacancyDetails.body.data.approval_stages.map((item: any) => item.space_user_id)
+          this.isResponsible = approvalIds.some((item: string) => item === user.body.data.id)
           const obj = {
             id: vacancyDetails.body.data.city_id,
             address: vacancyDetails.body.data.city,

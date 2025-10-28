@@ -2,6 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
+  ApplicantapimodelsApplicantSort,
   ApplicantapimodelsApplicantView,
   ApplicantapimodelsXlsExportRequest,
   DictapimodelsCityView,
@@ -120,7 +121,16 @@ export class СandidateListComponent implements OnDestroy{
       headerClass: 'font-medium',
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.negotiation_date) {
-          return new Date(params.data?.negotiation_date).toLocaleDateString('ru-RU');
+          // Парсим дату в формате DD.MM.YYYY
+          const dateParts = params.data.negotiation_date.split('.');
+          if (dateParts.length === 3) {
+            const day = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1;
+            const year = parseInt(dateParts[2]);
+            const date = new Date(year, month, day);
+            return date.toLocaleDateString('ru-RU');
+          }
+          return params.data.negotiation_date; 
         } else
           return '';
       }
@@ -136,7 +146,16 @@ export class СandidateListComponent implements OnDestroy{
       headerClass: 'font-medium',
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.start_date) {
-          return new Date(params.data?.start_date).toLocaleDateString('ru-RU');
+          // Парсим дату в формате DD.MM.YYYY
+          const dateParts = params.data.start_date.split('.');
+          if (dateParts.length === 3) {
+            const day = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1; 
+            const year = parseInt(dateParts[2]);
+            const date = new Date(year, month, day);
+            return date.toLocaleDateString('ru-RU');
+          }
+          return params.data.start_date; 
         } else
           return '';
       }
@@ -170,7 +189,7 @@ export class СandidateListComponent implements OnDestroy{
     },
     suppressScrollOnNewData: true
   }
-
+  fioDesc: boolean | null = null;
   private currentPage = 1;
   private pageSize = 50;
   private isLoading = false;
@@ -196,6 +215,30 @@ export class СandidateListComponent implements OnDestroy{
 
     this.gridApi = params.api;
     this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
+    
+      // Отслеживание клика по заголовку ФИО для сортировки на беке
+      const headerTexts = document.querySelectorAll('.ag-header-cell-text');
+      headerTexts.forEach((el: Element) => {
+        if (el.textContent?.trim() === 'ФИО') {
+          const headerCell = el.closest('.ag-header-cell');
+          if (headerCell) {
+            headerCell.addEventListener('click', () => {
+              switch(this.fioDesc) {
+                case null: this.fioDesc = false;
+                break;
+                case false: this.fioDesc = true;
+                break;
+                case true: this.fioDesc = null;
+                break;
+                default: this.fioDesc = null;
+              }
+              this.getApplicants();
+            });
+            (headerCell as HTMLElement).style.cursor = 'pointer';
+          }
+        }
+      });
+    
     this.getApplicants();
     this.setFormListeners();
   }
@@ -244,7 +287,7 @@ export class СandidateListComponent implements OnDestroy{
     filter.age_to = filter.age_to || undefined;
     filter.total_experience_from = filter.total_experience_from || undefined;
     filter.total_experience_to = filter.total_experience_to || undefined;
-
+    filter.sort = { fio_desc: this.fioDesc } as ApplicantapimodelsApplicantSort;
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
 

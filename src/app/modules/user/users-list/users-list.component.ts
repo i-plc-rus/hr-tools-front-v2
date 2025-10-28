@@ -21,9 +21,21 @@ export class UsersListComponent implements OnInit, OnDestroy {
   colDefs: ColDef<User>[] = [
     {
       field: 'fullName',
-      headerName: 'Имя',
+      headerName: 'ФИО',
       headerClass: 'font-medium',
       flex: 2
+    },
+    {
+      field: 'job_title_name',
+      headerName: 'Должность',
+      headerClass: 'font-medium',
+      flex: 1.5
+    },
+    {
+      field: 'phone_number',
+      headerName: 'Телефон',
+      headerClass: 'font-medium',
+      flex: 1
     },
     {
       field: 'email',
@@ -112,7 +124,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
 
   getUsers(loadMore = false) {
-    if (this.loading || this.allDataLoaded) return;
+    if (this.loading) return;
 
     this.loading = true;
 

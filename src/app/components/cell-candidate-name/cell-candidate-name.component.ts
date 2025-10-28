@@ -44,7 +44,7 @@ export class CellCandidateNameComponent implements ICellRendererAngularComp, OnC
   }
 
   getPhoto() {
-    this.api.v1SpaceApplicantPhotoDetail(this.applicantId, {observe: 'response', responseType: 'blob'}).subscribe({
+    this.api.v1SpaceApplicantPhotoList(this.applicantId, {observe: 'response', responseType: 'blob'}).subscribe({
       next: (data: any) => {
         if (data.body && data.body.size > 0) {
           const reader = new FileReader();

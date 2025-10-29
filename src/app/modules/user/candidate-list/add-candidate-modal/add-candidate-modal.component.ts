@@ -5,6 +5,8 @@ import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
 import {
   ApplicantapimodelsApplicantData,
+  DictapimodelsLangData,
+  DictapimodelsLangView,
   ModelsApplicantSource,
   ModelsDriverLicenseType,
   ModelsEducationType,
@@ -102,6 +104,8 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
   vacancyList: VacancyView[] = [];
   newCandidateResume?: File;
   newCandidatePhoto?: File;
+  languagesList: DictapimodelsLangView[] = [];
+  filteredLanguages: DictapimodelsLangView[] = [];
 
   @ViewChild('resumeUpload') resumeUpload?: ElementRef;
   @ViewChild('photoUpload') photoUpload?: ElementRef;
@@ -138,6 +142,7 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
       });
     }
     this.loadInitialVacancies();
+    this.loadLanguages();
   }
 
   ngAfterViewInit() {
@@ -184,6 +189,19 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
       error: (error) => {
         console.log(error);
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadLanguages() {
+    this.api.v1DictLangFindCreate({
+      name: '',
+    } as DictapimodelsLangData, {observe: 'response'}).subscribe({
+      next: (data) => {
+        if (data.body?.data) {
+          this.languagesList = data.body.data;
+          this.filteredLanguages = this.languagesList.sort((a, b) => a.name?.localeCompare(b.name || '') || 0); // Инициализируем отфильтрованный список
+        }
       }
     });
   }
@@ -494,6 +512,22 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
 
   trackByVacancyAndIndex(index: number, vacancy: VacancyView): string {
     return `${vacancy.id}_${index}`;
+  }
+
+ 
+  getLanguages(searchTerm: string) {
+    if (searchTerm === '') {
+      this.filteredLanguages = this.languagesList;
+    } else {
+      this.filteredLanguages = this.languagesList.filter(language =>
+        language.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false
+      );
+    }
+  }
+
+  onLanguageInput(event: any) {
+    const searchTerm = event.target.value;
+    this.getLanguages(searchTerm);
   }
 
 }

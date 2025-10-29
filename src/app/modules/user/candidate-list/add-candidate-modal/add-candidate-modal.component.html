@@ -208,7 +208,20 @@
               <li class="flex flex-col items-center gap-x-4 lg:flex-row" [formGroup]="languageForm">
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Язык</mat-label>
-                  <input matInput formControlName="name" autocomplete="new-name" />
+                  <input
+                    matInput
+                    (focus)="getLanguages('')"
+                    (input)="onLanguageInput($event)"
+                    (blur)="languageForm.markAsTouched()"
+                    [matAutocomplete]="languageAutocomplete"
+                    formControlName="name" />
+                  <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete">
+                    @for (language of filteredLanguages; track language.id) {
+                      <mat-option [value]="language.name">
+                        {{ language.name }}
+                      </mat-option>
+                    }
+                  </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Уровень</mat-label>
@@ -226,7 +239,7 @@
               </li>
             }
           </ul>
-          <div class="mb-4 mt-[-10px]">
+          <div class="mb-4" [ngClass]="{ 'mt-[-10px]': languages.controls.length === 0, 'mt-0': languages.controls.length > 0 }">
             <button mat-button class="btn-secondary" (click)="addLanguage()">
               <mat-icon>add</mat-icon>
               {{ languages.controls.length > 0 ? 'Указать еще один язык' : 'Указать язык' }}

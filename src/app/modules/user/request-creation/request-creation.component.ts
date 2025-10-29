@@ -156,7 +156,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   searchUser = new FormControl<string | null>('');
   isLoadingMoreUsers = false;
   private userCurrentPage = 1;
-  private userPageSize = 50;
+  private userPageSize = 9999;
   private userAllDataLoaded = false;
 
   private _selectInitialized = false;
@@ -177,7 +177,11 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       companyName: this.api.v1DictCompanyFindCreate({}),
       companyStructure: this.api.v1DictCompanyStructFindCreate({}),
       city: this.api.v1DictCityFindCreate({}),
-      user: this.api.v1UsersListCreate({}),
+      user: this.api.v1UsersListCreate({
+        page: this.userCurrentPage,
+        limit: this.userPageSize,
+        sort: {fio_desc: false},
+      }),
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -185,7 +189,14 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
         this.companyNameArray = companyName.body.data;
         this.companyStructureArray = companyStructure.body.data;
         this.city = city.body.data;
-        this.users = user.body.data;
+        this.users = user.body.data || [];
+      
+        if (this.users.length < this.userPageSize) {
+          this.userAllDataLoaded = true;
+        } else {
+          this.userCurrentPage++;
+        }
+        
         this.initializeCityAutocomplete();
         this.initializeCompanyAutocomplete();
       },

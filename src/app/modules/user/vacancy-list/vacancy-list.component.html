@@ -126,8 +126,18 @@
       <div class="flex gap-12 items-center">
         <h1 class="text-[22px]">Вакансии</h1>
         <mat-chip-listbox hideSingleSelectionIndicator [formControl]="category">
-          <mat-chip-option value="all" [selectable]="category.value !== 'all'">Все</mat-chip-option>
-          <mat-chip-option value="my" [selectable]="category.value !== 'my'">Мои вакансии</mat-chip-option>
+          <mat-chip-option value="all" [selectable]="category.value !== 'all'">
+            @if (allCount > 0) {
+              <span class="chip-number">{{ allCount }}</span>
+            }
+            Все
+          </mat-chip-option>
+          <mat-chip-option value="my" [selectable]="category.value !== 'my'">
+            @if (myCount > 0) {
+              <span class="chip-number">{{ myCount }}</span>
+            }
+            Мои вакансии
+          </mat-chip-option>
           <mat-chip-option
             value="favorites"
             [selectable]="category.value !== 'favorites'"

@@ -18,7 +18,7 @@ import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
-import {Subscription} from 'rxjs';
+import {Subscription, forkJoin} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
@@ -62,6 +62,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   authors: SpaceUser[] = [];
   userId = localStorage.getItem('userId') || '';
   addVacancyLenght = 0;
+  allCount: number = 0;
+  myCount: number = 0;
 
   // вакансии
   isLoading: boolean = true;
@@ -91,7 +93,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getDepartments();
     this.getUsers();
     this.setFormListeners();
-    this.loadFavoritesCount();
+    this.loadTabCounts();
   }
 
   ngAfterViewInit(): void {
@@ -266,6 +268,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.currentPage = 1;
         this.vacancyList = [];
         this.getVacancyList();
+        this.loadTabCounts();
       });
 
     this.searchSubscription = this.searchValue.valueChanges
@@ -360,23 +363,33 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private loadFavoritesCount() {
-    const filter: VacancyapimodelsVacancyFilter = {
-      favorite: true,
+  private buildBaseFilter(): VacancyapimodelsVacancyFilter {
+    const formFilter = this.filterForm.value as VacancyapimodelsVacancyFilter;
+    return {
+      ...formFilter,
       page: 1,
       limit: 1,
-      author_id: '',
-      city_id: '',
-      search: '',
-      statuses: [],
-      sort: { created_at_desc: this.sortByDesc }
     };
-    this.api.v1SpaceVacancyListCreate(filter, { observe: 'response' })
+  }
+
+  private loadTabCounts() {
+    const base = this.buildBaseFilter();
+    const allFilter: VacancyapimodelsVacancyFilter = { ...base, favorite: false, author_id: '' };
+    const myFilter: VacancyapimodelsVacancyFilter = { ...base, favorite: false, author_id: this.userId };
+    const favFilter: VacancyapimodelsVacancyFilter = { ...base, favorite: true, author_id: '' };
+
+    forkJoin({
+      all: this.api.v1SpaceVacancyListCreate(allFilter, { observe: 'response' }),
+      my: this.api.v1SpaceVacancyListCreate(myFilter, { observe: 'response' }),
+      favs: this.api.v1SpaceVacancyListCreate(favFilter, { observe: 'response' }),
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (res) => {
-          const total = (res.body as any)?.row_count;
-          this.favoritesCount = typeof total === 'number' ? total : 0;
+        next: ({ all, my, favs }) => {
+          const getTotal = (res: any) => (res.body as any)?.row_count;
+          this.allCount = typeof getTotal(all) === 'number' ? getTotal(all) : 0;
+          this.myCount = typeof getTotal(my) === 'number' ? getTotal(my) : 0;
+          this.favoritesCount = typeof getTotal(favs) === 'number' ? getTotal(favs) : 0;
         },
         error: () => {}
       });

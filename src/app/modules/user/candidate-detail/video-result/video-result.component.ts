@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import {
   ColDef,
   GridApi,
@@ -7,6 +13,13 @@ import {
 } from 'ag-grid-community';
 import { Subject } from 'rxjs/internal/Subject';
 import { QuestionsView } from '../../../../models/QuestionsResult';
+import {
+  ApplicantapimodelsApplicantVkSurvey,
+  ApplicantapimodelsScoreDetail,
+  SurveyapimodelsVkStep1Question,
+} from '../../../../api/data-contracts';
+import { ApiService } from '../../../../api/Api';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video-result',
@@ -14,36 +27,81 @@ import { QuestionsView } from '../../../../models/QuestionsResult';
   styleUrl: './video-result.component.scss',
 })
 export class VideoResultComponent {
-  private gridApi!: GridApi<QuestionsView>;
-  questionsList: QuestionsView[] = [
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-    { question: 'John', persentage: 90, commentGPT: 'bad', points: 99 },
-  ];
+  @Input() survey?: ApplicantapimodelsApplicantVkSurvey;
+  @ViewChild('total_score', { static: true }) myElementRef!: ElementRef;
+  @ViewChild('persentage', { static: true }) persentageRef!: ElementRef;
+  questionsList: QuestionsView[] = [];
+  selectedQuestion?: ApplicantapimodelsScoreDetail;
+  videoSrc: SafeUrl | undefined;
+  videoLoading: boolean = true;
 
-  answerList: String[] = [
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-    'Какой у вас опыт холодных B2B-продаж?',
-  ]
+  constructor(private renderer: Renderer2, private api: ApiService, private sanitizer: DomSanitizer) {}
+
+  ngOnInit(): void {
+    if (this.survey && this.survey.score_ai!.details) {
+      this.selectedQuestion = this.survey!.score_ai!.details![0];
+      for (const result of this.survey.score_ai!.details) {
+        const answerData: QuestionsView = {
+          question: result.question_text!,
+          persentage: result.similarity!,
+          commentGPT: result.comment_for_similarity!,
+          points: 0,
+        };
+        this.questionsList.push(answerData);
+      }
+      this.openVideo(this.selectedQuestion.file_id!);
+    }
+    console.log(this.selectedQuestion);
+  }
+
+  ngAfterViewInit() {
+    this.changeElementStyle();
+  }
+
+  picVideo(question: ApplicantapimodelsScoreDetail): void {
+    if (question !== this.selectedQuestion) {
+      this.selectedQuestion = question;
+      console.log(this.selectedQuestion.question_id);
+    }
+    this.openVideo(this.selectedQuestion.file_id!);
+  }
+
+  openVideo(fileID: string) {
+    this.videoLoading = true;
+    this.api.v1SpaceApplicantFileDetail(fileID, { responseType: 'blob' }).subscribe({
+      next: (data: any) => {
+        const objectURL = URL.createObjectURL(data as Blob);
+        this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        this.videoLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.videoLoading = false;
+      }
+    })
+  }
+
+  changeElementStyle() {
+    const nativeElement = this.myElementRef.nativeElement;
+    const percentageElement = this.persentageRef.nativeElement;
+
+    if (this.survey?.score_ai?.pass) {
+      this.renderer.setStyle(nativeElement, 'color', '#00C437');
+    } else {
+      this.renderer.setStyle(nativeElement, 'color', '#FF3700');
+    }
+
+    this.renderer.setStyle(
+      percentageElement,
+      'clip-path',
+      `inset(0 ${100 - this.survey?.score_ai?.total_score!}% 0 0 round 100px)`
+    );
+  }
+
+  private gridApi!: GridApi<QuestionsView>;
+
+  answerList: SurveyapimodelsVkStep1Question[] | undefined =
+    this.survey?.step1?.questions;
   colDefs: ColDef[] = [
     {
       field: 'question',
@@ -63,12 +121,12 @@ export class VideoResultComponent {
       headerName: 'Комментарий от GPT API',
       headerClass: 'font-medium',
     },
-    {
-      field: 'points',
-      minWidth: 70,
-      headerName: 'Балл',
-      headerClass: 'font-medium',
-    },
+    // {
+    //   field: 'points',
+    //   minWidth: 70,
+    //   headerName: 'Балл',
+    //   headerClass: 'font-medium',
+    // },
   ];
 
   gridOptions: GridOptions = {

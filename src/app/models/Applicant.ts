@@ -1,4 +1,4 @@
-import {ApplicantapimodelsApplicantDuplicate, ApplicantapimodelsApplicantView, ApplicantapimodelsApplicantViewExt, DbmodelsApplicantParams, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType} from '../api/data-contracts';
+import {ApplicantapimodelsApplicantDuplicate, ApplicantapimodelsApplicantView, ApplicantapimodelsApplicantViewExt, ApplicantapimodelsApplicantVkSurvey, DbmodelsApplicantParams, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType} from '../api/data-contracts';
 import {StatusTag} from './StatusTag';
 
 
@@ -57,6 +57,8 @@ export class ApplicantView implements ApplicantapimodelsApplicantView {
   start_date: string = '';
   /** Статус кандидата */
   status?: ModelsApplicantStatus;
+  /** Анкета для кандидата */
+  survey?: ApplicantapimodelsApplicantVkSurvey;
   /** Опыт работ в месяцах */
   total_experience: number = 0;
   /** Идентификатор вакансии */
@@ -143,6 +145,8 @@ export class ApplicantViewExt implements ApplicantapimodelsApplicantViewExt {
     start_date: string = '';
     /** Статус кандидата */
     status?: ModelsApplicantStatus;
+    /** Анкета для кандидата */
+    survey?: ApplicantapimodelsApplicantVkSurvey;
     tags: string[] = [];
     /** Опыт работ в месяцах */
     total_experience: number = 0;

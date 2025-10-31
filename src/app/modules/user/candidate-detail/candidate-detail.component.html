@@ -247,7 +247,9 @@
           </div>
         </mat-tab>
         <mat-tab label="Видео-интервью">
-          <app-video-result></app-video-result>
+          <app-video-result
+            [survey]="applicant.survey!">
+          </app-video-result>
         </mat-tab>
       </mat-tab-group>
     </div>

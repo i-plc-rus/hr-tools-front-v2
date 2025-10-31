@@ -5,11 +5,13 @@
 .child-line {
   margin-bottom: 8px;
   position: absolute;
+  background: linear-gradient(to right, #ff3333 0%, #ffe945 60%, #00c437 100%);
+  clip-path: inset(0 0 0 0 round 100px);
 }
 
 .icon-container {
   position: relative;
-  width: 24px; 
+  width: 24px;
   height: 24px;
 }
 
@@ -26,6 +28,41 @@
   left: 25px;
 }
 
+.question_pic_container.selected {
+  background: var(--background-main);
+  border: none;
+
+  p {
+    color: black;
+  }
+}
+
+.question_pic_container.selected:hover {
+  background: var(--background-main);
+}
+
+.question_pic_container:hover {
+  background: var(--background-alter);
+}
+
 ::-webkit-scrollbar {
   width: 24px;
+}
+
+.comment-container::-webkit-scrollbar-thumb {
+  background-color: white; 
+}
+
+.ag-theme-material {
+  --ag-row-border-width: 1px;
+  --ag-header-cell-hover-background-color: transparent;
+}
+
+app-loader {
+    position: absolute;
+    align-items: center;
+    margin-top: 15.5vh;
+    color: var(--link-default);
+    width: 4vh;
+    height: 4vh;
 }

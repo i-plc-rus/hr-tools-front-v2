@@ -102,6 +102,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatBadge} from '@angular/material/badge';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatGridListModule} from '@angular/material/grid-list';
 import {LoadingWrapperComponent} from './profile/ui/loading-wrapper/loading-wrapper.component';
 import {EditMemberModalComponent} from './profile/company-profile/modals/edit-member-modal/edit-member-modal.component';
 import {GenerateSurveyModalComponent} from './vacancy-detail/generate-survey-modal/generate-survey-modal.component';
@@ -115,6 +116,7 @@ import {DevelopmentComponent} from "../../components/development/development.com
 import { GenerateSurveySuccessComponent } from './vacancy-detail/generate-survey-success/generate-survey-success.component';
 import { GenetateServeyErrorComponent } from './vacancy-detail/genetate-servey-error/genetate-servey-error.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { VideoResultComponent } from './candidate-detail/video-result/video-result.component';
 
 @NgModule({
   declarations: [
@@ -170,6 +172,8 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     GenerateSurveyModalComponent,
     AddMemberModalComponent,
     LicenseExtensionModalComponent,
+    AnalyticsComponent,
+    VideoResultComponent,
     GenerateSurveySuccessComponent,
     GenetateServeyErrorComponent,
     AnalyticsComponent
@@ -196,7 +200,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
         NgxMaskDirective,
         NgxMaskPipe,
         PdfViewerModule,
-
+        MatGridListModule,
         MatIcon,
         MatIconModule,
         MatButtonModule,

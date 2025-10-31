@@ -107,6 +107,10 @@ export class AppComponent implements OnInit {
       .addSvgIcon('big-account-box', this.setPath(`${this.svgPath}/ic-big-account-box.svg`))
       .addSvgIcon('check-circle-filled', this.setPath(`${this.svgPath}/ic-check-circle-filled.svg`))
       .addSvgIcon('message', this.setPath(`${this.svgPath}/ic-message.svg`))
+      .addSvgIcon('green-y', this.setPath(`${this.svgPath}/ic-green-y.svg`))
+      .addSvgIcon('green-polygon', this.setPath(`${this.svgPath}/ic-green-polygon.svg`))
+      .addSvgIcon('red-x', this.setPath(`${this.svgPath}/ic-red-x.svg`))
+      .addSvgIcon('red-polygon', this.setPath(`${this.svgPath}/ic-red-polygon.svg`))
   }
 
   ngOnInit() {

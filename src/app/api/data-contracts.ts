@@ -318,6 +318,37 @@ export enum ModelsAddedType {
   AddedTypeNegotiation = "Откликнулся",
 }
 
+export enum DbmodelsStepStatus {
+  /** "Шаг0. Вопросы не отправлены" */
+  VkStep0NotSent = 0,
+  /** "Шаг0. Вопросы отправлены" */
+  VkStep0Sent = 10,
+  /** "Шаг0. Получены ответы" */
+  VkStep0Answered = 20,
+  /** "Шаг0. Кандидат не прошел" */
+  VkStep0Refuse = 30,
+  /** "Шаг0. Кандидат прошел" */
+  VkStep0Done = 40,
+  /** "Шаг1. Получен черновика скрипта" */
+  VkStep1Draft = 50,
+  /** "Шаг1. Ошибка получения черновика скрипта" */
+  VkStep1DraftFail = 60,
+  /** "Шаг1. Перегенерация" */
+  VkStep1Regen = 70,
+  /** "Шаг1. Список вопросов подтвержден" */
+  VkStep1Approved = 80,
+  /** "Шаг7. Приглашение на видео интервью отправлено кандидату" */
+  VkStepVideoSuggestSent = 90,
+  /** "Шаг9. Транскрибация выполнена" */
+  VkStepVideoTranscripted = 100,
+  /** "Шаг9. Семантическая оценка расчитана" */
+  VkStepVideoSemanticEvaluated = 110,
+  /** "Шаг10. Подсчёт баллов и адаптивный фильтр" */
+  VkStep10Filtered = 120,
+  /** "Шаг 11. Генерация отчёта и рекомендаций" */
+  VkStep11Report = 130,
+}
+
 export enum DbmodelsActionType {
   /** Добавлен комментраий к кандидату */
   HistoryTypeComment = "comment",
@@ -683,9 +714,9 @@ export interface ApplicantapimodelsApplicantViewExt {
 
 export interface ApplicantapimodelsApplicantVkSurvey {
   /** Отчет по кандидату */
-  scoreAI?: ApplicantapimodelsScoreAI;
-  status?: number;
-  statusDescription?: string;
+  score_ai?: ApplicantapimodelsScoreAI;
+  status?: DbmodelsStepStatus;
+  status_description?: string;
   /** ВК. Шаг 0. анкета и ответы кандидата на типовые вопросы */
   step0?: SurveyapimodelsVkStep0;
   /** ВК. Шаг 1. Генерация черновика скрипта (15 вопросов и текст сценария для интервью) */

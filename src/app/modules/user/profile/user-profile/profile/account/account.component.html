@@ -39,7 +39,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Должность</mat-label>
-      <mat-select formControlName="job_title_id" (focus)="loadAllJobTitles()" (selectionChange)="jobTitleSelectionChange($event.value)">
+      <mat-select formControlName="job_title_id" (focus)="loadAllJobTitles()" (selectionChange)="jobTitleSelectionChange($event.value)" hideSingleSelectionIndicator>
         @if (jobTitles.length === 0 && isJobTitlesLoading) {
           <mat-option disabled>Загрузка должностей...</mat-option>
         } @else if (jobTitles.length === 0 && !isJobTitlesLoading) {

@@ -49,3 +49,16 @@
 .circle-icon:hover + .tooltip {
   display: block;
 }
+
+mat-option {
+  --mat-option-focus-state-layer-color: transparent;
+  --mat-option-hover-state-layer-color: transparent;
+}
+
+mat-option:hover {
+  color: black !important; /* Use !important if necessary to override specificity */
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) {
+  background-color: transparent;
+}

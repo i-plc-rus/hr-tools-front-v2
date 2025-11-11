@@ -25,7 +25,7 @@
 .overlay-text {
   position: absolute;
   top: 49px;
-  left: 25px;
+  right: 5px;
 }
 
 .question_pic_container.selected {
@@ -45,6 +45,10 @@
   background: var(--background-alter);
 }
 
+.question_list_container {
+  aspect-ratio: 16 / 9;
+}
+
 ::-webkit-scrollbar {
   width: 24px;
 }
@@ -56,12 +60,19 @@
 .ag-theme-material {
   --ag-row-border-width: 1px;
   --ag-header-cell-hover-background-color: transparent;
+  --ag-background-color: var(--background-alter);
+  --ag-header-background-color: var(--background-alter);
+  --ag-border-radius: 16px;
+}
+
+.record-video-container {
+  position: relative;
 }
 
 app-loader {
     position: absolute;
     align-items: center;
-    margin-top: 15.5vh;
+    top: 45%;
     color: var(--link-default);
     width: 4vh;
     height: 4vh;

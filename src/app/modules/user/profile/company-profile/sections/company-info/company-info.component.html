@@ -31,7 +31,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Часовой пояс</mat-label>
-      <mat-select formControlName="timezone">
+      <mat-select formControlName="timezone" hideSingleSelectionIndicator>
         <mat-option *ngFor="let timezone of timezones" [value]="timezone">
           {{ timezone }}
         </mat-option>

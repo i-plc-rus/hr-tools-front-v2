@@ -95,7 +95,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Выберите роль</mat-label>
-          <mat-select [formControl]="userForm.controls['is_admin']">
+          <mat-select [formControl]="userForm.controls['is_admin']" hideSingleSelectionIndicator>
             @for (role of roles; track $index) {
               <mat-option [value]="role.value">{{ role.name }}</mat-option>
             }

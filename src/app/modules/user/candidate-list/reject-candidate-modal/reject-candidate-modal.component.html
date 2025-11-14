@@ -23,7 +23,7 @@
           class="flex justify-center items-stretch flex-col w-full box-border grow-0 shrink-0 basis-auto gap-4">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Инициатор</mat-label>
-            <mat-select formControlName="initiator">
+            <mat-select formControlName="initiator" hideSingleSelectionIndicator>
               @for (initiator of rejectInitiatorTypes; track $index) {
                 <mat-option [value]="initiator">{{ initiator }}</mat-option>
               }

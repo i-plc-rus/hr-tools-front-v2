@@ -129,7 +129,7 @@
   <div class="flex gap-3 mb-4">
     <app-search-input
       class="w-[380px]"
-      placeholder="ФИО, почта и тег"
+      placeholder="ФИО, почта или телефон"
       [formControl]="searchValue"
       (onSearch)="onSearch()">
     </app-search-input>
@@ -139,8 +139,9 @@
   <!-- Основной контент  -->
   <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     <div class="flex justify-between items-center p-6 pb-4">
-      <div class="flex gap-6">
+      <div class="flex gap-1">
         <h2 class="text-[22px]">Кандидаты</h2>
+        <div class="badge mt-2">{{ rowCount }}</div>
         @if (selectedApplicants.length > 0) {
           <div class="dropdown-chip" [matMenuTriggerFor]="filterCandidateContent">
             <span>Действия</span>
@@ -163,6 +164,6 @@
         </button>
       </div>
     </div>
-    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material flex-1 w-full" />
+    <ag-grid-angular [gridOptions]="gridOptions" class="ag-theme-material flex-1 w-full"/>
   </div>
 </div>

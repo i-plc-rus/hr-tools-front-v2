@@ -4,6 +4,7 @@ import {ApiService} from '../../../api/Api';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApplicantViewExt} from '../../../models/Applicant';
 import {forkJoin} from 'rxjs';
+import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 
 type ApplicantFiles = {
   photo?: string;
@@ -20,7 +21,8 @@ export class CandidateDuplicateComponent implements OnInit {
   applicant?: ApplicantViewExt;
   comment = new FormControl('');
   applicantFiles: ApplicantFiles = {};
-
+  resumeUint?: Uint8Array;
+  dublicateResumeUint?: Uint8Array;
   duplicateApplicant?: ApplicantViewExt;
   duplicateComment = new FormControl('');
   duplicateApplicantFiles: ApplicantFiles = {};
@@ -36,7 +38,22 @@ export class CandidateDuplicateComponent implements OnInit {
     })
   }
 
+  afterLoadComplete(pdf: PDFDocumentProxy): void {
+      let totalHeight = 0;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        pdf.getPage(i).then(page => {
+          const viewport = page.getViewport({ scale: 1.3333333333333333 });
+          totalHeight += viewport.height + 10
+          if (i === pdf.numPages) {
+            document.getElementById('pdfViewer')!.style.height = `${(totalHeight)}px`;
+          }
+        });
+      }
+    }
+
   getApplicantById(id: string, duplicateId: string) {
+    this.resumeUint = undefined;
+    this.dublicateResumeUint = undefined;
     this.isLoading = true;
     forkJoin([
       this.api.v1SpaceApplicantDetail(id, {observe: 'response'}),
@@ -46,7 +63,7 @@ export class CandidateDuplicateComponent implements OnInit {
       this.api.v1SpaceApplicantResumeList(id, {observe: 'response', responseType: 'blob'}),
       this.api.v1SpaceApplicantResumeList(duplicateId, {observe: 'response', responseType: 'blob'})
     ]).subscribe({
-      next: (data) => {
+      next: async (data) => {
         if (data[0].body?.data) {
           this.applicant = new ApplicantViewExt(data[0].body.data);
           this.comment.setValue(this.applicant.comment);
@@ -63,9 +80,11 @@ export class CandidateDuplicateComponent implements OnInit {
         }
         if (data[4].body) {
           this.setResume(data[4].body, this.applicantFiles);
+          this.resumeUint = new Uint8Array(await this.applicantFiles.resume!.arrayBuffer());
         }
         if (data[5].body) {
           this.setResume(data[5].body, this.duplicateApplicantFiles);
+          this.dublicateResumeUint = new Uint8Array(await this.duplicateApplicantFiles.resume!.arrayBuffer());
         }
         this.isLoading = false;
       },

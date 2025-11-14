@@ -79,6 +79,17 @@ export class СandidateListComponent implements OnDestroy{
   searchCity = new FormControl('');
   searchValue = new FormControl('');
 
+  public customIcons = {
+    sortUnSort: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <mask id="mask0_57293_68199" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                  <rect width="24" height="24" fill="#D9D9D9"/>
+                  </mask>
+                  <g mask="url(#mask0_57293_68199)">
+                  <path d="M8 13V5.825L5.425 8.4L4 7L9 2L14 7L12.575 8.4L10 5.825V13H8ZM15 22L10 17L11.425 15.6L14 18.175V11H16V18.175L18.575 15.6L20 17L15 22Z" fill="#625B71"/>
+                  </g>
+                  </svg>`, // Unsorted icon
+    };
+
   //кандидаты
   private gridApi!: GridApi<ApplicantView>;
   applicantsList: ApplicantView[] = [];
@@ -93,6 +104,7 @@ export class СandidateListComponent implements OnDestroy{
       cellRenderer: CellCandidateNameComponent,
       valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.fio,
       pinned: 'left',
+      unSortIcon: true,
     },
     {
       headerName: 'Контакты',
@@ -104,21 +116,25 @@ export class СandidateListComponent implements OnDestroy{
       field: 'vacancy_name',
       headerName: 'Вакансия',
       headerClass: 'font-medium',
+      unSortIcon: true,
     },
     {
       field: 'resume_title',
       headerName: 'Должность',
       headerClass: 'font-medium',
+      unSortIcon: true,
     },
     {
       field: 'source',
       headerName: 'Источник кандидата',
       headerClass: 'font-medium',
+      unSortIcon: true,
     },
     {
       field: 'negotiation_date',
       headerName: 'Дата отбора',
       headerClass: 'font-medium',
+      unSortIcon: true,
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.negotiation_date) {
           // Парсим дату в формате DD.MM.YYYY
@@ -138,12 +154,14 @@ export class СandidateListComponent implements OnDestroy{
     {
       field: 'salary',
       headerName: 'Ожидаемая ЗП',
-      headerClass: 'font-medium'
+      headerClass: 'font-medium',
+      unSortIcon: true,
     },
     {
       field: 'start_date',
       headerName: 'Дата выхода',
       headerClass: 'font-medium',
+      unSortIcon: true,
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.start_date) {
           // Парсим дату в формате DD.MM.YYYY
@@ -164,6 +182,7 @@ export class СandidateListComponent implements OnDestroy{
       field: 'status',
       headerName: 'Статус',
       headerClass: 'font-medium',
+      unSortIcon: true,
       cellRenderer: CandidateStatusComponent,
       cellRendererParams: {
         onChange: this.openRejectCandidateModal.bind(this),
@@ -181,6 +200,7 @@ export class СandidateListComponent implements OnDestroy{
     loadingOverlayComponent: LoaderComponent,
     loading: true,
     suppressMovableColumns: true,
+    icons: this.customIcons,
     rowSelection: {
       mode: 'multiRow'
     },
@@ -195,6 +215,9 @@ export class СandidateListComponent implements OnDestroy{
   private isLoading = false;
   private allDataLoaded = false;
   private destroy$ = new Subject<void>();
+  rowCount = 0;
+
+  
 
   constructor(
     private modalService: CandidateModalService,
@@ -302,6 +325,8 @@ export class СandidateListComponent implements OnDestroy{
 
             this.applicantsList = [...this.applicantsList, ...newApplicants];
             this.gridApi.setGridOption('rowData', this.applicantsList);
+
+            this.rowCount = res.body?.row_count ?? this.rowCount;
 
             if (newApplicants.length < this.pageSize) {
               this.allDataLoaded = true;

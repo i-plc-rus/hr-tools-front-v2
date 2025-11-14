@@ -89,7 +89,7 @@
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Пол</mat-label>
-            <mat-select formControlName="gender">
+            <mat-select formControlName="gender" hideSingleSelectionIndicator>
               <!-- <mat-option [value]="undefined">Не указан</mat-option> -->
               @for (gender of genderTypes; track $index) {
                 <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
@@ -135,7 +135,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Образование</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['education']">
+            <mat-select [formControl]="applicantForm.controls.params.controls['education']" hideSingleSelectionIndicator>
               <mat-option [value]="''">Не указано</mat-option>
               @for (education of educationTypes; track $index) {
                 <mat-option [value]="education.value">{{ education.label }}</mat-option>
@@ -150,7 +150,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Занятость</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['employments']">
+            <mat-select multiple [formControl]="applicantForm.controls.params.controls['employments']" hideSingleSelectionIndicator>
               @for (employment of employmentTypes; track $index) {
                 <mat-option [value]="employment.value">{{ employment.label }}</mat-option>
               }
@@ -158,7 +158,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>График работы</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['schedules']">
+            <mat-select multiple [formControl]="applicantForm.controls.params.controls['schedules']" hideSingleSelectionIndicator>
               @for (schedule of scheduleTypes; track $index) {
                 <mat-option [value]="schedule.value">{{ schedule.label }}</mat-option>
               }
@@ -168,7 +168,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Командировки</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['trip_readiness']">
+            <mat-select [formControl]="applicantForm.controls.params.controls['trip_readiness']" hideSingleSelectionIndicator>
               <mat-option [value]="''">Не указано</mat-option>
               @for (tripReadiness of tripReadinessTypes; track $index) {
                 <mat-option [value]="tripReadiness.value">{{ tripReadiness.label }}</mat-option>
@@ -177,7 +177,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Готовность к переезду</mat-label>
-            <mat-select formControlName="relocation">
+            <mat-select formControlName="relocation" hideSingleSelectionIndicator>
               <mat-option [value]="''">Не указано</mat-option>
               @for (relocation of relocationTypes; track $index) {
                 <mat-option [value]="relocation.value">{{ relocation.label }}</mat-option>
@@ -186,7 +186,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Водительские права</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['driver_license_types']">
+            <mat-select multiple [formControl]="applicantForm.controls.params.controls['driver_license_types']" hideSingleSelectionIndicator>
               @for (driverLicense of driverLicenseTypes; track $index) {
                 <mat-option [value]="driverLicense">{{ driverLicense }}</mat-option>
               }
@@ -195,7 +195,7 @@
         </div>
         <mat-form-field class="w-1/2" appearance="outline">
           <mat-label>Источник кандидата</mat-label>
-          <mat-select formControlName="source">
+          <mat-select formControlName="source" hideSingleSelectionIndicator>
             @for (source of sourceTypes; track $index) {
               <mat-option [value]="source">{{ source }}</mat-option>
             }
@@ -225,7 +225,7 @@
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Уровень</mat-label>
-                  <mat-select formControlName="language_level">
+                  <mat-select formControlName="language_level" hideSingleSelectionIndicator>
                     @for (languageLevel of languageLevelTypes; track $index) {
                       <mat-option [value]="languageLevel.value">{{ languageLevel.label }}</mat-option>
                     }
@@ -250,7 +250,7 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Выбор вакансии</mat-label>
-            <mat-select formControlName="vacancy_id" panelClass="fit-content" #vacancySelect>
+            <mat-select formControlName="vacancy_id" panelClass="fit-content" #vacancySelect hideSingleSelectionIndicator>
               <mat-option *ngFor="let vacancy of vacancyList; let i = index; trackBy: trackByVacancyAndIndex" [value]="vacancy.id">
                 {{ vacancy.vacancy_name }}
               </mat-option>
@@ -268,7 +268,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Статус поиска работы</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['search_status']">
+            <mat-select [formControl]="applicantForm.controls.params.controls['search_status']" hideSingleSelectionIndicator>
               <mat-option [value]="''">Не указано</mat-option>
               @for (searchStatus of searchStatusTypes; track $index) {
                 <mat-option [value]="searchStatus.value">{{ searchStatus.label }}</mat-option>

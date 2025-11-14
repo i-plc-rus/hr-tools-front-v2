@@ -50,5 +50,24 @@ mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar-thumb:hover,
   background-color: #BDBDBD;
 }
 
+::ng-deep .ag-header-cell-label {
+  display: flex;
+  justify-content: space-between; /* Pushes the first child (text) to the start and the last child (sort icons) to the end */
+  width: 100%; /* Ensure it takes up the full width of the cell */
+}
+
+.badge {
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 1px;
+  height: 20px;
+  border-radius: 100px;
+  background-color: #f57c00;
+  display: flex;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
+
 
 

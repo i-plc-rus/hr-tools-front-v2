@@ -40,12 +40,13 @@ export class CandidateDuplicateComponent implements OnInit {
 
   afterLoadComplete(pdf: PDFDocumentProxy): void {
       let totalHeight = 0;
+      const pdfViewer = document.getElementById('pdfViewer');
       for (let i = 1; i <= pdf.numPages; i++) {
         pdf.getPage(i).then(page => {
           const viewport = page.getViewport({ scale: 1.3333333333333333 });
           totalHeight += viewport.height + 10
-          if (i === pdf.numPages) {
-            document.getElementById('pdfViewer')!.style.height = `${(totalHeight)}px`;
+          if (pdfViewer && i === pdf.numPages) {
+            pdfViewer.style.height = `${(totalHeight)}px`;
           }
         });
       }
@@ -80,11 +81,15 @@ export class CandidateDuplicateComponent implements OnInit {
         }
         if (data[4].body) {
           this.setResume(data[4].body, this.applicantFiles);
-          this.resumeUint = new Uint8Array(await this.applicantFiles.resume!.arrayBuffer());
+          if (this.applicantFiles.resume) {
+            this.resumeUint = new Uint8Array(await this.applicantFiles.resume.arrayBuffer());
+          }
         }
         if (data[5].body) {
           this.setResume(data[5].body, this.duplicateApplicantFiles);
-          this.dublicateResumeUint = new Uint8Array(await this.duplicateApplicantFiles.resume!.arrayBuffer());
+          if (this.duplicateApplicantFiles.resume) {
+            this.dublicateResumeUint = new Uint8Array(await this.duplicateApplicantFiles.resume.arrayBuffer());
+          }
         }
         this.isLoading = false;
       },

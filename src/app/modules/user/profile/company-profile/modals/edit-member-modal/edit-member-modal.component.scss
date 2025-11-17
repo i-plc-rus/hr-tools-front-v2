@@ -1,0 +1,7 @@
+mat-option {
+  --mat-option-focus-state-layer-color: transparent;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) {
+  background-color: transparent;
+}

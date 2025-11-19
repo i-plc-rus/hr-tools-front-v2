@@ -26,7 +26,7 @@ export class EditMemberModalComponent implements OnInit{
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
       role: ['', Validators.required],
-      job_title_id: [''],
+      job_title_name: [''],
       text_sign: ['']
     });
   }

@@ -22,8 +22,6 @@
           </mat-error>
         </mat-form-field>
 
-
-
         <mat-form-field appearance="outline">
           <mat-label>Телефон</mat-label>
           <input matInput formControlName="phone_number"
@@ -31,6 +29,11 @@
           <mat-error *ngIf="memberForm.get('phone_number')?.hasError('pattern') && !memberForm.get('phone_number')?.pristine">
             Неверный формат телефона.
           </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Должность</mat-label>
+          <textarea matInput formControlName="job_title_name"></textarea>
         </mat-form-field>
 
 

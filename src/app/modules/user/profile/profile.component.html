@@ -1,3 +1,114 @@
+<app-filter [opened]="filterStateService.getFilterOpened()" class="block">
+  <div class="flex items-center justify-between w-full pl-5 pr-4 pb-4 sticky top-0 z-10">
+    <h3 class="text-[22px] leading-7">Фильтр</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button class="btn-secondary" >
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button (click)="closeFilter()" class="btn-secondary">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="filterForm" class="flex flex-col h-full overflow-y-auto">
+    <div class="w-full pr-1 pb-6" style="max-height: calc(100vh - 70px);">
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Вакансия</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Поиск</mat-label>
+          <input matInput  />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-scroll" formControlName="vacancy_id">
+          
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Готовность к переезду</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked max-h-[200px] overflow-y-auto" formControlName="relocation">
+         
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Возраст</mat-expansion-panel-header>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="age_from" />
+          </mat-form-field>
+          <div class="mb-5">-</div>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="age_to" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Опыт работы</mat-expansion-panel-header>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="total_experience_from" />
+          </mat-form-field>
+          <div class="mb-5">-</div>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="total_experience_to" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z" expanded>
+        <mat-expansion-panel-header>Город</mat-expansion-panel-header>
+        <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+          <mat-label>Город</mat-label>
+          <input matInput  />
+          <mat-icon matPrefix svgIcon="search"></mat-icon>
+        </mat-form-field>
+        <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
+          <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="city">
+           
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Тип этапа</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="stage_name">
+          <mat-chip-option value="Добавлен">Добавлен</mat-chip-option>
+          <mat-chip-option value="Откликнулся">Откликнулся</mat-chip-option>
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Статус кандидата</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="status">
+         
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Источник</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="source">
+         
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>По дате добавления</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="added_period">
+         
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z">
+        <mat-expansion-panel-header>Тип добавления</mat-expansion-panel-header>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" formControlName="added_type">
+         
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+    </div>
+  </form>
+</app-filter>
 <div class="py-8 px-4 w-full min-h-screen flex flex-col">
   <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
     <!-- Кнопки для переключения между профилями -->

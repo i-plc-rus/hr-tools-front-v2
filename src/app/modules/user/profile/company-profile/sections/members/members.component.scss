@@ -167,6 +167,11 @@
   }
 }
 
+::ng-deep .filter-button, 
+::ng-deep .search-rounded-input {
+  @apply border border-[var(--background-main)];
+}
+
 
 
 

@@ -1,4 +1,14 @@
 <div class="members-container">
+  <div class="flex gap-3 mb-4">
+    <app-search-input
+      [formControl]="searchControl"
+      class="w-[380px]"
+      placeholder="ФИО, почта и тег"
+      (onSearch)="onSearch()"
+      >
+    </app-search-input>
+    <app-filter-toggle [checked]="isFilterOpened()" (checkedChange)="onFilterToggle($event)" />
+  </div>
   <mat-toolbar class="toolbar">
     <div class="title-container">
       <span>Участники</span>
@@ -18,7 +28,6 @@
 
           [gridOptions]="gridOptions">
         </ag-grid-angular>
-
 
     <mat-card class="license-card mat-elevation-z0">
       <mat-card-content class="license-container">

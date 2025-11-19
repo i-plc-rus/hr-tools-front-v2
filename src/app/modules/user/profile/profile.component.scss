@@ -1,3 +1,7 @@
+:host {
+  @apply flex;
+}
+
 .active-button {
   background-color: var(--link-default) !important;
   color: white !important;

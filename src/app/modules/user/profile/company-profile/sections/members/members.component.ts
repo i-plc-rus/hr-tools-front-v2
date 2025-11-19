@@ -1,4 +1,5 @@
-import {Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
+import {computed, Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {ColDef, GridApi, GridOptions, GridReadyEvent} from 'ag-grid-community';
 import {ApiService} from '../../../../../../api/Api';
 import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
@@ -9,6 +10,8 @@ import {CellMemberContactsComponent} from './ag-grid-cells/cell-member-contacts/
 import {TableButtonComponent} from '../../../../users-list/table-button/table-button.component';
 import {SpaceUser as User} from '../../../../../../models/SpaceUser';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {FilterStateService} from '../../../services/filter-state.service';
 
 @Component({
   selector: 'app-members',
@@ -19,6 +22,10 @@ export class MembersComponent implements OnInit, OnDestroy {
   private gridApi!: GridApi<SpaceapimodelsSpaceUser>;
 
   participants: SpaceapimodelsSpaceUser[] = [];
+  searchControl = new FormControl<string>('');
+  private searchValue = '';
+  filterStateService = inject(FilterStateService);
+  isFilterOpened = computed(() => this.filterStateService.getFilterOpenedSignal()());
 
   colDefs: ColDef<SpaceapimodelsSpaceUser>[] = [
 
@@ -49,15 +56,19 @@ export class MembersComponent implements OnInit, OnDestroy {
     {
       headerName: 'Контакты',
       headerClass: 'font-medium',
-      flex: 2,
       cellRenderer: CellMemberContactsComponent,
       sortable: false,
     },
     {
       headerName: 'Роль',
       headerClass: 'font-medium',
-      flex: 1,
       field: 'role',
+      sortable: false,
+    },
+    {
+      headerName: 'Должность',
+      headerClass: 'font-medium',
+      field: 'job_title_name',
       sortable: false,
     },
     {
@@ -103,7 +114,28 @@ export class MembersComponent implements OnInit, OnDestroy {
     private modalService: UsersModalService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((value) => {
+        this.searchValue = (value ?? '').trim();
+        this.getParticipants(false, true);
+      });
+  }
+
+  onFilterToggle(checked: boolean): void {
+    this.filterStateService.setFilterOpened(checked);
+  }
+
+  onSearch(): void {
+    const currentValue = this.searchControl.value;
+    this.searchValue = (currentValue ?? '').trim();
+    this.getParticipants(false, true);
+  }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -123,8 +155,9 @@ export class MembersComponent implements OnInit, OnDestroy {
     }
   }
 
-  getParticipants(loadMore = false): void {
-    if (this.loading || this.allDataLoaded) return;
+  getParticipants(loadMore = false, force = false): void {
+    if (this.loading && !force) return;
+    if (loadMore && this.allDataLoaded) return;
 
     this.loading = true;
 
@@ -132,19 +165,35 @@ export class MembersComponent implements OnInit, OnDestroy {
       this.currentPage = 1;
       this.participants = [];
       this.allDataLoaded = false;
-      this.gridApi.setGridOption('loading', true);
+      if (this.gridApi) {
+        this.gridApi.setGridOption('rowData', []);
+        this.gridApi.setGridOption('loading', true);
+      }
     }
+
+    const currentSearch = this.searchValue;
 
     this.api.v1UsersListCreate({
       page: this.currentPage,
-      limit: this.pageSize
+      limit: this.pageSize,
+      search: currentSearch || undefined
     }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: (res: any) => {
+        if (this.searchValue !== currentSearch) {
+          this.loading = false;
+          if (this.gridApi) {
+            this.gridApi.setGridOption('loading', false);
+          }
+          return;
+        }
+
         if (res.body?.data) {
           const newParticipants = res.body.data;
           this.participants = [...this.participants, ...newParticipants];
-          this.gridApi.setGridOption('rowData', this.participants);
+          if (this.gridApi) {
+            this.gridApi.setGridOption('rowData', this.participants);
+          }
 
           this.rowCount = res.body?.row_count ?? this.rowCount;
 
@@ -155,12 +204,16 @@ export class MembersComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.gridApi.setGridOption('loading', false);
+        if (this.gridApi) {
+          this.gridApi.setGridOption('loading', false);
+        }
         this.loading = false;
       },
       error: (error) => {
         console.log(error);
-        this.gridApi.setGridOption('loading', false);
+        if (this.gridApi) {
+          this.gridApi.setGridOption('loading', false);
+        }
         this.loading = false;
       }
     });
@@ -193,9 +246,6 @@ export class MembersComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-
-
 
   openDeleteMemberModal(user: SpaceapimodelsSpaceUser): void {
     const wrappedUser = new User(user);

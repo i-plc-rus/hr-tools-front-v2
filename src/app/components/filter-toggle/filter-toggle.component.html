@@ -1,7 +1,7 @@
 <div class="filter-button">
   <input type="checkbox" class="hidden" [(ngModel)]="checked" />
 
-  <button mat-icon-button (click)="checked = !checked">
+  <button mat-icon-button (click)="onToggle()">
     @if (!checked) {
       <mat-icon class="text-[var(--text-main)]">tune</mat-icon>
     } @else {

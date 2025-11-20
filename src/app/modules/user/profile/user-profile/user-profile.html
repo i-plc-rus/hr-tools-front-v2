@@ -1,10 +1,11 @@
  <!-- Табы -->
     <mat-tab-group class="mt-4 mb-2" mat-stretch-tabs="false" mat-align-tabs="start" [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
       <mat-tab label="Мой аккаунт"></mat-tab>
-      <mat-tab label="Аккаунты на других сайтах"></mat-tab>
+      <!--Табы скрыты по задаче HRTOOLS-251-->
+      <!-- <mat-tab label="Аккаунты на других сайтах"></mat-tab>
       <mat-tab label="Настройка уведомлений"></mat-tab>
       <mat-tab label="Мои шаблоны"></mat-tab>
-      <mat-tab label="Настройка интерфейса"></mat-tab>
+      <mat-tab label="Настройка интерфейса"></mat-tab> -->
     </mat-tab-group>
 
  <app-loading-wrapper [isLoading]="loadingService.getLoading()" [ngClass]="loadingService.getLoading() ? 'absolute top-[50%] left-[50%] translate-x-[-50%] w-full h-full' : ''">

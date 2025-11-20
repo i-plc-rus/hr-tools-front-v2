@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -16,8 +16,10 @@ import {MatIcon} from '@angular/material/icon';
 })
 export class FilterToggleComponent {
   @Input() checked = false;
+  @Output() checkedChange = new EventEmitter<boolean>();
 
-  constructor() {
+  onToggle(): void {
+    this.checked = !this.checked;
+    this.checkedChange.emit(this.checked);
   }
-
 }

@@ -9,7 +9,7 @@ import { embedDashboard } from '@superset-ui/embedded-sdk';
   styleUrls: ['./analytics.component.scss']
 })
 export class AnalyticsComponent implements AfterViewInit {
-  private dashboardId = 'b2126416-5047-483a-b174-a32bcac3426c';
+  private dashboardId = '99713cac-98b4-4784-884f-9f73613462c4';
 
   @ViewChild('supersetContainer', { static: false })
   supersetContainer!: ElementRef<HTMLDivElement>;

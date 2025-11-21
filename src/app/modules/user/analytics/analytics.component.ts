@@ -18,7 +18,7 @@ export class AnalyticsComponent implements AfterViewInit {
   constructor(private api: ApiService) {}
 
   ngAfterViewInit(): void {
-    this.api.v1SpaceSupersetGuestTokenList({ dashboard_code: 'recruiter_dash' }).subscribe({
+    this.api.v1SpaceSupersetGuestTokenList({ dashboard_code: 'pen_dash' }).subscribe({
       next: (res: any) => {
         const token = res.body?.data?.token;
         if (!token) return;

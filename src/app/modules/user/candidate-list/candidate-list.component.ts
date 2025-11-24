@@ -207,7 +207,8 @@ export class СandidateListComponent implements OnDestroy{
     selectionColumnDef: {
       pinned: 'left',
     },
-    suppressScrollOnNewData: true
+    suppressScrollOnNewData: true,
+    getRowId: (params) => params.data?.id || ''
   }
   fioDesc: boolean | null = null;
   private currentPage = 1;
@@ -218,6 +219,8 @@ export class СandidateListComponent implements OnDestroy{
   rowCount = 0;
 
   
+  private selectedIds: string[] = [];
+  private findedSelectedRows: number = 0;
 
   constructor(
     private modalService: CandidateModalService,
@@ -296,6 +299,14 @@ export class СandidateListComponent implements OnDestroy{
 
     this.isLoading = true;
 
+    if (!loadMore && this.gridApi) {
+      const selectedNodes = this.gridApi.getSelectedNodes();
+      this.selectedIds = selectedNodes
+        .map(node => node.data?.id)
+        .filter((id): id is string => !!id);
+      this.findedSelectedRows = this.selectedIds.length  
+    }
+
     if (!loadMore) {
       this.currentPage = 1;
       this.applicantsList = [];
@@ -327,6 +338,40 @@ export class СandidateListComponent implements OnDestroy{
             this.gridApi.setGridOption('rowData', this.applicantsList);
 
             this.rowCount = res.body?.row_count ?? this.rowCount;
+
+            // Восстанавливаем выбранные строки по айди
+            if (this.selectedIds.length > 0 && this.findedSelectedRows >= 0) {
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                 
+                  this.api.v1SpaceApplicantDetail(this.selectedIds[0], {observe: 'response'}).subscribe({
+                    next: (res) => {
+
+                      if (res.body?.data) {
+                        const newApplicant = new ApplicantView(res.body.data);
+                        
+                        const exists = this.applicantsList.some(app => app.id === newApplicant.id);
+                        if (!exists) {
+                          this.applicantsList.push(newApplicant);
+                          console.log(this.applicantsList);
+                          this.gridApi.setGridOption('rowData', this.applicantsList);
+                        }
+                      }
+                      this.selectedIds.forEach(id => {
+                        const rowNode = this.gridApi.getRowNode(id);
+                        if (rowNode) {
+                          rowNode.setSelected(true);
+                          -- this.findedSelectedRows;
+                        }
+                      });
+                    },
+                    error: (error) => {
+                      console.error('Ошибка при загрузке деталей кандидата:', error);
+                    }
+                  })
+                });
+              });
+            }
 
             if (newApplicants.length < this.pageSize) {
               this.allDataLoaded = true;

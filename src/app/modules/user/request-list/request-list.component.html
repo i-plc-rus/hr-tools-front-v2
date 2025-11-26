@@ -92,10 +92,13 @@
 </app-filter>
 
 <div class="py-8 px-4 w-full h-full overflow-hidden">
-  <div class="w-full flex items-center gap-3">
+  <div class="w-full flex items-center gap-3 relative">
     <app-search-input class="w-[380px]" placeholder="Поиск заявки" [formControl]="searchValue" (onSearch)="search()">
     </app-search-input>
     <app-filter-toggle #toggleFilter />
+    @if (filterCount > 0) {
+      <div class="badge mt-2">{{ filterCount }}</div>
+    }
   </div>
 
   <div class="w-full mt-4 bg-white rounded-3xl overflow-hidden pb-6">

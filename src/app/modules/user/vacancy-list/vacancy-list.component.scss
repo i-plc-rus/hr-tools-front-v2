@@ -44,3 +44,19 @@ mat-expansion-panel .overflow-y-scroll::-webkit-scrollbar-thumb:hover,
 .overflow-x-hidden {
   overflow-x: hidden;
 }
+
+.badge {
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 1px;
+  height: 20px;
+  position: absolute;
+  bottom: 35px;
+  left: 435px;
+  border-radius: 100px;
+  background-color: #f57c00;
+  display: flex;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}

@@ -14,9 +14,9 @@ import {
 } from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {StatusTag} from '../../../models/StatusTag';
-import {FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {SpaceUser} from '../../../models/SpaceUser';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import dayjs from 'dayjs';
 import { Router } from '@angular/router';
 import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
@@ -104,6 +104,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   private loading = false;
   private allDataLoaded = false;
 
+  filterCount = 0;
+  private subscriptions: Subscription[] = [];
+
   @ViewChild('requestContainer') requestContainer!: ElementRef;
 
   constructor(
@@ -119,7 +122,54 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadAllCounts();
     this.getUsers();
     this.setFormListeners();
+
+    this.subscriptions.push(
+          this.filterForm.valueChanges.pipe(
+            debounceTime(100),
+            map(() => this.countActiveFilters())
+          ).subscribe(count => {
+            this.filterCount = count;
+          })
+        );
   }
+
+  private isControlActive(control: AbstractControl): boolean {
+      const value = control.value;
+      if (value === 'Все') {
+          return true;
+      }
+      if (value === null || typeof value === 'undefined' || value === '' ) {
+        return false;
+      }
+      if (Array.isArray(value) && value.length === 0) {
+        return false;
+      }
+      if (typeof value === 'boolean') {
+        return value === true;
+      }
+      return true;
+    }
+  
+    public countActiveFilters(): number {
+      let count = 0;
+      const controlsToExclude = ['sort', 'search_from', 'search_to'];
+  
+      Object.keys(this.filterForm.controls).forEach(key => {
+        if (controlsToExclude.includes(key)) {
+          return;
+        }
+  
+        const control = this.filterForm.get(key);
+        if (control && this.isControlActive(control) ) {
+          if (Array.isArray(control.value)) {
+            count += control.value.length;
+          } else {
+            count++;
+          }
+        }
+      });
+      return count;
+    }
 
   ngAfterViewInit(): void {
     if (this.requestContainer && this.requestContainer.nativeElement) {
@@ -591,6 +641,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.requestContainer && this.requestContainer.nativeElement) {
       this.requestContainer.nativeElement.removeEventListener('scroll', this.onScroll);
     }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   trackByValue(index: number, item: { value: VacancyapimodelsSearchPeriod }) {

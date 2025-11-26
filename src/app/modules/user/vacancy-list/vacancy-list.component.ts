@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, DestroyRef, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {
   VacancyapimodelsVacancyFilter,
   VacancyapimodelsVacancySort,
@@ -70,7 +70,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancyList: VacancyView[] = [];
   favoritesCount: number = 0;
   private searchSubscription: Subscription = new Subscription();
-  
+
+  filterCount = 0;
+  private subscriptions: Subscription[] = [];
 
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 
@@ -85,8 +87,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private modalService: VacancyModalService,
     private api: ApiService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getVacancyList();
@@ -94,6 +95,53 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getUsers();
     this.setFormListeners();
     this.loadTabCounts();
+    
+    this.subscriptions.push(
+      this.filterForm.valueChanges.pipe(
+        debounceTime(100),
+        map(() => this.countActiveFilters())
+      ).subscribe(count => {
+        this.filterCount = count;
+      })
+    );
+  }
+
+  private isControlActive(control: AbstractControl): boolean {
+    const value = control.value;
+    if (value === 'Все') {
+        return true;
+    }
+    if (value === null || typeof value === 'undefined' || value === '' ) {
+      return false;
+    }
+    if (Array.isArray(value) && value.length === 0) {
+      return false;
+    }
+    if (typeof value === 'boolean') {
+      return value === true;
+    }
+    return true;
+  }
+
+  public countActiveFilters(): number {
+    let count = 0;
+    const controlsToExclude = ['sort'];
+
+    Object.keys(this.filterForm.controls).forEach(key => {
+      if (controlsToExclude.includes(key)) {
+        return;
+      }
+
+      const control = this.filterForm.get(key);
+      if (control && this.isControlActive(control) ) {
+        if (Array.isArray(control.value)) {
+          count += control.value.length;
+        } else {
+          count++;
+        }
+      }
+    });
+    return count;
   }
 
   ngAfterViewInit(): void {
@@ -121,7 +169,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getVacancyList(loadMore = false) {
-
     this.loading = true;
 
     if (!loadMore) {
@@ -405,6 +452,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       window.removeEventListener('scroll', this.onScroll);
     }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

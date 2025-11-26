@@ -37,9 +37,9 @@ import {CandidateModalService} from '../../../services/candidate-modal.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes} from '../user-consts';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-candidate-list',
@@ -217,7 +217,8 @@ export class СandidateListComponent implements OnDestroy{
   private destroy$ = new Subject<void>();
   rowCount = 0;
 
-  
+  filterCount = 0;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private modalService: CandidateModalService,
@@ -225,6 +226,55 @@ export class СandidateListComponent implements OnDestroy{
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
+
+  ngOnInit(): void { 
+    this.subscriptions.push(
+      this.filterForm.valueChanges.pipe(
+        debounceTime(100),
+        map(() => this.countActiveFilters())
+      ).subscribe(count => {
+        this.filterCount = count;
+      })
+    );
+  }
+
+  private isControlActive(control: AbstractControl): boolean {
+    const value = control.value;
+    if (value === 'Все') {
+        return true;
+    }
+    if (value === null || typeof value === 'undefined' || value === '' ) {
+      return false;
+    }
+    if (Array.isArray(value) && value.length === 0) {
+      return false;
+    }
+    if (typeof value === 'boolean') {
+      return value === true;
+    }
+    return true;
+  }
+
+  public countActiveFilters(): number {
+    let count = 0;
+    const controlsToExclude = ['sort', 'age_to', 'total_experience_to'];
+
+    Object.keys(this.filterForm.controls).forEach(key => {
+      if (controlsToExclude.includes(key)) {
+        return;
+      }
+
+      const control = this.filterForm.get(key);
+      if (control && this.isControlActive(control) ) {
+        if (Array.isArray(control.value)) {
+          count += control.value.length;
+        } else {
+          count++;
+        }
+      }
+    });
+    return count;
+  }
 
   onGridReady(params: GridReadyEvent) {
     this.activatedRoute.queryParams
@@ -532,5 +582,6 @@ export class СandidateListComponent implements OnDestroy{
     if (this.gridApi && !this.gridApi.isDestroyed()) {
       this.gridApi.removeEventListener('bodyScroll', this.onGridScroll);
     }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

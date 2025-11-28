@@ -5,6 +5,7 @@ import {ApplicantView, ApplicantViewExt} from '../../../../models/Applicant';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
 import {
   ApplicantapimodelsApplicantData,
+  DictapimodelsCityView,
   DictapimodelsLangData,
   DictapimodelsLangView,
   ModelsApplicantSource,
@@ -106,6 +107,8 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
   newCandidatePhoto?: File;
   languagesList: DictapimodelsLangView[] = [];
   filteredLanguages: DictapimodelsLangView[] = [];
+  citiesList: DictapimodelsCityView[] = [];
+  filteredCitiesList: DictapimodelsCityView[] = []
 
   @ViewChild('resumeUpload') resumeUpload?: ElementRef;
   @ViewChild('photoUpload') photoUpload?: ElementRef;
@@ -143,6 +146,7 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
     }
     this.loadInitialVacancies();
     this.loadLanguages();
+    this.loadCities();
   }
 
   ngAfterViewInit() {
@@ -206,6 +210,18 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+   loadCities() {
+    this.api.v1DictCityFindCreate({address: ''}, {observe: 'response'})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          if (data.body?.data) {
+            this.citiesList = data.body.data;
+            this.filteredCitiesList = this.citiesList.sort((a, b) => a.address?.localeCompare(b.address || '') || 0); // Инициализируем отфильтрованный список
+          }
+        },
+      });
+  }
 
   onVacancyScroll(event: any) {
     if (this.isLoadingMoreVacancies || this.vacancyAllDataLoaded) return;
@@ -528,6 +544,21 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
   onLanguageInput(event: any) {
     const searchTerm = event.target.value;
     this.getLanguages(searchTerm);
+  }
+
+  getCities(searchCity: string) {
+    if (searchCity === '') {
+      this.filteredCitiesList = this.citiesList;
+    } else {
+      this.filteredCitiesList = this.citiesList.filter(city =>
+        city.address?.toLowerCase().includes(searchCity.toLowerCase()) || false
+      );
+    }
+  }
+
+  onCityInput(event: any) {
+    const searchCity = event.target.value;
+    this.getCities(searchCity);
   }
 
 }

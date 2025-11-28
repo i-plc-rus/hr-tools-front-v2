@@ -74,9 +74,25 @@
             <input matInput [formControl]="applicantForm.controls['middle_name']" autocomplete="new-middle-name" />
           </mat-form-field>
 
-          <mat-form-field class="w-full" appearance="outline">
-            <mat-label>Адрес</mat-label>
+          <!-- <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Город проживания</mat-label>
             <input matInput formControlName="address" autocomplete="new-address" />
+          </mat-form-field> -->
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Город проживания</mat-label>
+            <input
+              matInput
+              (focus)="getCities('')"
+              (input)="onCityInput($event)"
+              [matAutocomplete]="cityAutocomplete"
+              formControlName="name" />
+            <mat-autocomplete autoActiveFirstOption #cityAutocomplete="matAutocomplete" requireSelection>
+              @for (city of filteredCitiesList; track city.id) {
+                <mat-option [value]="city.address">
+                  {{ city.address }}
+                </mat-option>
+              }
+            </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
@@ -215,7 +231,7 @@
                     (blur)="languageForm.markAsTouched()"
                     [matAutocomplete]="languageAutocomplete"
                     formControlName="name" />
-                  <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete">
+                  <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" requireSelection>
                     @for (language of filteredLanguages; track language.id) {
                       <mat-option [value]="language.name">
                         {{ language.name }}

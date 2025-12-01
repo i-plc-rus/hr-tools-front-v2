@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../api/Api';
+import { VacancyModalService } from '../../../services/vacancy-modal.service';
 import { Observable, forkJoin, map, startWith, switchMap } from 'rxjs';
 import {
   DictapimodelsCityView,
@@ -115,7 +116,8 @@ export class RequestApprovalComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private vacancyModalService: VacancyModalService
   ) { }
 
   ngOnInit(): void {
@@ -311,9 +313,34 @@ export class RequestApprovalComponent implements OnInit {
   }
 
   createVacancy() {
-    this.api.v1SpaceVacancyRequestPublishUpdate(this.id).subscribe(res => {
-      console.log(res)
-      this.router.navigate(['/user/request/list'])
-    })
+    const companyName = this.form.controls.company_name.value || this.companyName;
+    const vacancyName = this.form.controls.vacancy_name.value || '';
+    
+    const companyStructId = this.form.controls.company_struct_id.value;
+    const departmentId = this.form.controls.department_id.value;
+    const jobTitleId = this.form.controls.job_title_id.value;
+    
+    const companyStructName = companyStructId 
+      ? this.companyStructureArray.find(s => s.id === companyStructId)?.name || ''
+      : '';
+    const departmentName = departmentId
+      ? this.companyDepartmentArray.find(d => d.id === departmentId)?.name || ''
+      : '';
+    const jobTitleName = jobTitleId
+      ? this.companyJobsNamesArray.find(j => j.id === jobTitleId)?.name || ''
+      : '';
+    
+    this.vacancyModalService.openCreateVacancyModal(
+      this.id, 
+      companyName, 
+      vacancyName,
+      companyStructName,
+      departmentName,
+      jobTitleName
+    ).subscribe((result) => {
+      if (result) {
+        this.router.navigate(['/user/vacancy/list']);
+      }
+    });
   }
 }

@@ -47,6 +47,7 @@ import {VacancyPublicationComponent} from './vacancy-detail/vacancy-publication/
 import {VacancyStagesComponent} from './vacancy-detail/vacancy-stages/vacancy-stages.component';
 import {VacancyIntegrationsComponent} from './vacancy-detail/vacancy-integrations/vacancy-integrations.component';
 import {GenerateDescriptionModalComponent} from './generate-description-modal/generate-description-modal.component';
+import {RequestCreateVacancyModalComponent} from './request-create-vacancy-modal/request-create-vacancy-modal.component';
 import {TextInputComponent} from "../../components/text-input/text-input.component";
 import {DropdownDirective} from "../../directives/dropdown.directive";
 import {DropdownContentDirective} from "../../directives/dropdown-content.directive";
@@ -153,6 +154,7 @@ import { VideoResultComponent } from './candidate-detail/video-result/video-resu
     VacancyIntegrationsComponent,
     VacancyTeamComponent,
     GenerateDescriptionModalComponent,
+    RequestCreateVacancyModalComponent,
     UserProfileComponent,
     AccountComponent,
     ProfileComponent,

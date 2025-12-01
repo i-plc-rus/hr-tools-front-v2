@@ -527,12 +527,25 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   publishVacancy(id: string) {
-    this.api.v1SpaceVacancyRequestPublishUpdate(id, {observe: 'response'}).pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
+    const request = this.requestList.find(r => r.id === id);
+    const showNumber = true;
+    
+    if (!request) {
+      console.error('Заявка не найдена');
+      return;
+    }
+
+    this.modalService.openCreateVacancyModal(
+      request.id,
+      request.company_name || '',
+      request.vacancy_name || '',
+      request.company_struct_name || '',
+      request.department_name || '',
+      request.job_title_name || '',
+      showNumber,
+    ).subscribe((result: boolean) => {
+      if (result) {
         this.getRequests();
-      },
-      error: (error) => {
-        console.log(error);
       }
     });
   }

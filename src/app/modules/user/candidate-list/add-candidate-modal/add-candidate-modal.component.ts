@@ -37,6 +37,7 @@ import {
 import {forkJoin, of, Subject, switchMap} from 'rxjs';
 import {MatSelect} from '@angular/material/select';
 import {takeUntil} from 'rxjs/operators';
+import { forbiddenPhoneNumberValidator } from '../../../../validators/phone';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -59,6 +60,8 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
   onSubmit = new EventEmitter<boolean>();
   isEdit = false;
   isLoading = false;
+  private readonly allowedPattern = '^[a-zA-Zа-яА-Я\\s\\-]+$';
+  errorMessage = 'Поле может содержать только буквы, пробелы и дефис';
 
   applicantForm = new FormGroup({
     address: new FormControl(''),
@@ -69,9 +72,9 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
       Validators.required,
       Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
     ]),
-    first_name: new FormControl('', Validators.required),
-    last_name: new FormControl('', Validators.required),
-    middle_name: new FormControl(''),
+    first_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
+    last_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
+    middle_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
     gender: new FormControl<ModelsGenderType | null>(null, Validators.required),
 
     params: new FormGroup({
@@ -84,7 +87,11 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
       search_status: new FormControl<ModelsSearchStatusType | ''>(''),
       trip_readiness: new FormControl<ModelsTripReadinessType | ''>(''),
     }),
-    phone: new FormControl('', Validators.required),
+    phone: new FormControl('', [
+        Validators.required,
+        // Поскольку ngx-mask применяет формат, можно добавить только пользовательский валидатор
+        forbiddenPhoneNumberValidator()
+      ]),
     relocation: new FormControl<ModelsRelocationType | ''>(''),
     salary: new FormControl<number | undefined>(undefined),
     source: new FormControl<ModelsApplicantSource | undefined>(undefined, Validators.required),

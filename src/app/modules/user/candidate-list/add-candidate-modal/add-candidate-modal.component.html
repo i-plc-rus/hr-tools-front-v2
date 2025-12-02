@@ -98,7 +98,7 @@
               (focus)="getCities('')"
               (input)="onCityInput($event)"
               [matAutocomplete]="cityAutocomplete"
-              formControlName="name" />
+              formControlName="address" />
             <mat-autocomplete autoActiveFirstOption #cityAutocomplete="matAutocomplete" requireSelection>
               @for (city of filteredCitiesList; track city.id) {
                 <mat-option [value]="city.address">

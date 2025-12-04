@@ -47,7 +47,7 @@
             <input matInput formControlName="last_name" autocomplete="new-last-name" />
 
             @let isLastNameErrorValue =
-              applicantForm.controls['last_name'].hasError('pattern');
+              applicantForm.controls['last_name'].hasError('pattern') || applicantForm.controls['last_name'].hasError('invalidFIO');
 
             @let isLastNameErrorRequired =
               applicantForm.controls['last_name'].hasError('required') &&
@@ -63,7 +63,7 @@
             <input matInput formControlName="first_name" autocomplete="new-first-name"/>
 
             @let isFirstNameErrorValue =
-              applicantForm.controls['first_name'].hasError('pattern');
+              applicantForm.controls['first_name'].hasError('pattern') || applicantForm.controls['first_name'].hasError('invalidFIO');
 
             @let isFirstNameErrorRequired =
               applicantForm.controls['first_name'].hasError('required') &&
@@ -80,7 +80,7 @@
             <input matInput [formControl]="applicantForm.controls['middle_name']" autocomplete="new-middle-name" />
             
             @let isMiddleNameErrorValue =
-              applicantForm.controls['middle_name'].hasError('pattern');
+              applicantForm.controls['middle_name'].hasError('pattern') || applicantForm.controls['middle_name'].hasError('invalidFIO');
 
             @if (isMiddleNameErrorValue) {
               <mat-icon matSuffix [matTooltip]="errorMessage" svgIcon="error"></mat-icon>

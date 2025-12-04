@@ -38,6 +38,7 @@ import {forkJoin, of, Subject, switchMap} from 'rxjs';
 import {MatSelect} from '@angular/material/select';
 import {takeUntil} from 'rxjs/operators';
 import { forbiddenPhoneNumberValidator } from '../../../../validators/phone';
+import { fioValidator } from '../../../../validators/fio';
 
 class LanguageFormControls extends FormGroup {
   constructor() {
@@ -70,11 +71,11 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
     comment: new FormControl(''),
     email: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
     ]),
-    first_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
-    last_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
-    middle_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern)]),
+    first_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
+    last_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
+    middle_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
     gender: new FormControl<ModelsGenderType | null>(null, Validators.required),
 
     params: new FormGroup({

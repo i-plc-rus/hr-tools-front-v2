@@ -40,6 +40,7 @@ import {relocationTypes} from '../user-consts';
 import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
 import {Subject, Subscription} from 'rxjs';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 @Component({
   selector: 'app-candidate-list',
@@ -519,7 +520,15 @@ export class СandidateListComponent implements OnDestroy{
         distinctUntilChanged()
       )
       .subscribe(value => {
-        this.filterForm.controls.search.setValue(value);
+        const normalizedNumber = this.normalizePhoneNumber(value!);
+          if (normalizedNumber.type === 'phone') {
+          this.filterForm.controls.search.setValue(normalizedNumber.displayValue!);
+          console.log(normalizedNumber.displayValue);
+        } else {
+          this.filterForm.controls.search.setValue(value);
+          
+        }
+        // this.filterForm.controls.search.setValue(value);
         this.allDataLoaded = false;
         this.isLoading = false;
         this.currentPage = 1;
@@ -580,8 +589,30 @@ export class СandidateListComponent implements OnDestroy{
       });
   }
 
+  normalizePhoneNumber(input: string): { type: string, searchValue: string, displayValue?: string }  {
+    const phoneNumber = parsePhoneNumberFromString(input, 'RU');
+
+    if (phoneNumber && phoneNumber.isValid()) {
+      const searchValue = phoneNumber.format('E.164'); 
+      
+      const displayValue = searchValue.substring(2);
+
+      return { 
+        type: 'phone', 
+        searchValue: searchValue,
+        displayValue: displayValue
+      };
+    }
+
+    return { 
+      type: 'text', 
+      searchValue: input.trim(),
+      displayValue: input.trim() 
+    };
+  }
+
   onSearch() {
-    this.filterForm.controls.search.setValue(this.searchValue.value);
+    // this.filterForm.controls.search.setValue(this.searchValue.value);
     this.allDataLoaded = false;
     this.isLoading = false;
     this.currentPage = 1;

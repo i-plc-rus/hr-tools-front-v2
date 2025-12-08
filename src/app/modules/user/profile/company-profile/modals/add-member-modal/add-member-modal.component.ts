@@ -93,7 +93,7 @@ export class AddMemberModalComponent {
     this.api.v1UsersCreate(newUser).subscribe({
       next: (res:any) => {
         const mockCreatedUser: SpaceapimodelsSpaceUser = {
-          id: `temp-${Date.now()}`,
+          id: res.body.data,
           email: this.userForm.controls.email.value || '',
           first_name: this.userForm.controls.first_name.value || '',
           last_name: this.userForm.controls.last_name.value || '',
@@ -101,7 +101,6 @@ export class AddMemberModalComponent {
           is_admin: this.userForm.controls.is_admin.value || false,
           role: this.userForm.controls.is_admin.value ? 'Администратор' : 'Пользователь'
         };
-
         this.onSubmit.emit(mockCreatedUser);
         this.snackBar.snackBarMessageSuccess('Участник успешно создан');
         this.modalService.closeModal();
@@ -122,6 +121,7 @@ export class AddMemberModalComponent {
       }
     });
   }
+  
   editUser() {
     if (!this.userForm.valid || !this.user || !this.user.id) return;
 

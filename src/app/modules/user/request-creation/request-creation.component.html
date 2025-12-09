@@ -191,19 +191,31 @@
               @if (getControl(StepForm.Step3, Step3Fields.RequestType).invalid &&
               !getControl(StepForm.Step3, Step3Fields.RequestType).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
-            <div class="flex flex-col w-full">
-              <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности, условия</label>
-              <div class="flex flex-col w-full">
+            <div class="flex flex-col w-full relative">
+              <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности</label>
+              <div class="flex flex-col w-full ">
                 <app-text-editor
                   [formControl]="getControl(StepForm.Step3, Step3Fields.Requirements)"
                   (onActionBtnClick)="openGenerateCommentModal()"
                   class="w-full"
                   height="160px">
                 </app-text-editor>
+                @if (getControl(StepForm.Step3, Step3Fields.Requirements).invalid &&
+                  !getControl(StepForm.Step3, Step3Fields.Requirements).untouched) {
+                  <span class="absolute right-0 top-[80px] w-12 h-12 flex justify-center items-center">
+                    <mat-icon svgIcon="error"></mat-icon>
+                  </span>
+                }
+                @if (getControl(StepForm.Step3, Step3Fields.Requirements).hasError('valueNotChanged') && 
+                  getControl(StepForm.Step3, Step3Fields.Requirements).touched) {
+                  <span class="absolute right-0 top-[80px] w-12 h-12 flex justify-center items-center">
+                    <mat-icon matSuffix matTooltip="Пожалуйста, отредактируйте текст, чтобы он отличался от предзаполненного значения." svgIcon="error"></mat-icon>
+                  </span>
+                }
               </div>
             </div>
 

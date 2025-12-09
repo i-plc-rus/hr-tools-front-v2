@@ -521,14 +521,8 @@ export class СandidateListComponent implements OnDestroy{
       )
       .subscribe(value => {
         const normalizedNumber = this.normalizePhoneNumber(value!);
-          if (normalizedNumber.type === 'phone') {
-          this.filterForm.controls.search.setValue(normalizedNumber.displayValue!);
-          console.log(normalizedNumber.displayValue);
-        } else {
-          this.filterForm.controls.search.setValue(value);
           
-        }
-        // this.filterForm.controls.search.setValue(value);
+        this.filterForm.controls.search.setValue(normalizedNumber);
         this.allDataLoaded = false;
         this.isLoading = false;
         this.currentPage = 1;
@@ -589,26 +583,23 @@ export class СandidateListComponent implements OnDestroy{
       });
   }
 
-  normalizePhoneNumber(input: string): { type: string, searchValue: string, displayValue?: string }  {
-    const phoneNumber = parsePhoneNumberFromString(input, 'RU');
-
-    if (phoneNumber && phoneNumber.isValid()) {
-      const searchValue = phoneNumber.format('E.164'); 
-      
-      const displayValue = searchValue.substring(2);
-
-      return { 
-        type: 'phone', 
-        searchValue: searchValue,
-        displayValue: displayValue
-      };
+  normalizePhoneNumber(input: string): any {
+    if (!input) return '';
+    
+    let normalized = '';
+    
+    if (input.startsWith('+7')) {
+      normalized = input.replace(/[^\d+]/g, '');
+      normalized = normalized.substring(2);
+      return normalized;
+    } else if (input.startsWith('8') || input.startsWith('7')) {
+      normalized = input.replace(/[^\d+]/g, '');
+      normalized = normalized.substring(1);
+      return normalized;
+    } else {
+      return input;
     }
 
-    return { 
-      type: 'text', 
-      searchValue: input.trim(),
-      displayValue: input.trim() 
-    };
   }
 
   onSearch() {

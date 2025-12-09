@@ -24,6 +24,10 @@ export function fioValidator(): ValidatorFn {
          return { invalidFIO: { value: control.value } };
     }
 
+    if (/^[ ]+$/.test(value)) {
+      return { invalidFIO: { value: control.value } };
+    }
+
     return null;
   };
 }

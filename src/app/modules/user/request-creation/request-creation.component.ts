@@ -163,8 +163,9 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   private _selectInitialized = false;
 
-
   private destroy$ = new Subject<void>();
+
+  errorText:string = 'Поле не может быть пустым';
 
   constructor(
     private api: ApiService,

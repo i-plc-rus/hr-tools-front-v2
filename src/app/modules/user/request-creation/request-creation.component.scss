@@ -48,6 +48,10 @@
   color: #000 !important;
 }
 
+::ng-deep .mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--error) !important;
+}
+
 ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
   font-weight: 500 !important;
   color: var(--link-default) !important;

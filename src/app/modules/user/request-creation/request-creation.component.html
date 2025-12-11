@@ -24,6 +24,7 @@
           <h2 class="text-3xl mb-4">Общая информация</h2>
           <div class="flex flex-col gap-4">
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Название компании</mat-label>
               <input type="text"
@@ -38,11 +39,19 @@
               @if (getControl(StepForm.Step1, Step1Fields.CompanyName).invalid &&
               !getControl(StepForm.Step1, Step1Fields.CompanyName).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                 </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step1, Step1Fields.CompanyName).invalid &&
+              !getControl(StepForm.Step1, Step1Fields.CompanyName).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Название вакансии</mat-label>
               <input type="text"
@@ -51,11 +60,19 @@
               @if (getControl(StepForm.Step1, Step1Fields.VacancyName).invalid &&
               !getControl(StepForm.Step1, Step1Fields.VacancyName).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-            <mat-icon svgIcon="error"></mat-icon>
-    </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step1, Step1Fields.VacancyName).invalid &&
+              !getControl(StepForm.Step1, Step1Fields.VacancyName).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Структура</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.CompanyStructId)">
@@ -66,11 +83,19 @@
               @if (getControl(StepForm.Step1, Step1Fields.CompanyStructId).invalid &&
               !getControl(StepForm.Step1, Step1Fields.CompanyStructId).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step1, Step1Fields.CompanyStructId).invalid &&
+              !getControl(StepForm.Step1, Step1Fields.CompanyStructId).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Подразделение</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.DepartmentId)">
@@ -81,11 +106,19 @@
               @if (getControl(StepForm.Step1, Step1Fields.DepartmentId).invalid &&
               !getControl(StepForm.Step1, Step1Fields.DepartmentId).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step1, Step1Fields.DepartmentId).invalid &&
+              !getControl(StepForm.Step1, Step1Fields.DepartmentId).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Штатная должность</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.JobTitleId)">
@@ -96,17 +129,25 @@
               @if (getControl(StepForm.Step1, Step1Fields.JobTitleId).invalid &&
               !getControl(StepForm.Step1, Step1Fields.JobTitleId).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
-
+            @if (getControl(StepForm.Step1, Step1Fields.JobTitleId).invalid &&
+              !getControl(StepForm.Step1, Step1Fields.JobTitleId).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
           </div>
         </mat-step>
+
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step2)">
           <h2 class="text-3xl mb-4">Местоположение и контакты</h2>
           <div class="flex flex-col gap-4">
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Город</mat-label>
 
@@ -123,18 +164,34 @@
               @if (getControl(StepForm.Step2, Step2Fields.CityId).invalid &&
               !getControl(StepForm.Step2, Step2Fields.CityId).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+             @if (getControl(StepForm.Step2, Step2Fields.CityId).invalid &&
+              !getControl(StepForm.Step2, Step2Fields.CityId).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Адрес офиса</mat-label>
               <input type="text"
                      matInput
                      [formControl]="getControl(StepForm.Step2, Step2Fields.PlaceOfWork)">
             </mat-form-field>
+            @if (getControl(StepForm.Step2, Step2Fields.PlaceOfWork).invalid &&
+              !getControl(StepForm.Step2, Step2Fields.PlaceOfWork).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>ФИО непосредственного руководителя</mat-label>
               <input type="text"
@@ -143,16 +200,25 @@
               @if (getControl(StepForm.Step2, Step2Fields.ChiefFio).invalid &&
               !getControl(StepForm.Step2, Step2Fields.ChiefFio).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-      <mat-icon svgIcon="error"></mat-icon>
-    </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step2, Step2Fields.ChiefFio).invalid &&
+              !getControl(StepForm.Step2, Step2Fields.ChiefFio).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
           </div>
         </mat-step>
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step3)">
           <div style="max-height: 60vh; overflow-y: auto; padding: 20px; padding-right: 20px;">
           <h2 class="text-3xl mb-4">Детали вакансии</h2>
           <div class="flex flex-col gap-4">
+
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Количество вакантных позиций</mat-label>
               <input type="number"
@@ -161,11 +227,19 @@
               @if (getControl(StepForm.Step3, Step3Fields.OpenedPositions).invalid &&
               !getControl(StepForm.Step3, Step3Fields.OpenedPositions).untouched) {
                 <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
-      <mat-icon svgIcon="error"></mat-icon>
-    </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.OpenedPositions).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.OpenedPositions).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Срочность</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Urgency)">
@@ -176,11 +250,19 @@
               @if (getControl(StepForm.Step3, Step3Fields.Urgency).invalid &&
               !getControl(StepForm.Step3, Step3Fields.Urgency).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.Urgency).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.Urgency).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Тип заявки</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.RequestType)">
@@ -195,6 +277,15 @@
                 </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.RequestType).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.RequestType).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
+
+            <div class="flex flex-col">
             <div class="flex flex-col w-full relative">
               <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности</label>
               <div class="flex flex-col w-full ">
@@ -218,9 +309,17 @@
                 }
               </div>
             </div>
+            @if (getControl(StepForm.Step3, Step3Fields.Requirements).invalid &&
+                  !getControl(StepForm.Step3, Step3Fields.Requirements).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
             <label>Условия</label>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Занятость</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Employment)">
@@ -231,11 +330,19 @@
               @if (getControl(StepForm.Step3, Step3Fields.Employment).invalid &&
               !getControl(StepForm.Step3, Step3Fields.Employment).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.Employment).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.Employment).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Опыт работы</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Experience)">
@@ -246,11 +353,19 @@
               @if (getControl(StepForm.Step3, Step3Fields.Experience).invalid &&
               !getControl(StepForm.Step3, Step3Fields.Experience).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.Experience).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.Experience).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
 
+            <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label>Режим работы</mat-label>
               <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Schedule)">
@@ -261,12 +376,19 @@
               @if (getControl(StepForm.Step3, Step3Fields.Schedule).invalid &&
               !getControl(StepForm.Step3, Step3Fields.Schedule).untouched) {
                 <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-          <mat-icon svgIcon="error"></mat-icon>
-        </span>
+                  <mat-icon svgIcon="error"></mat-icon>
+                </span>
               }
             </mat-form-field>
+            @if (getControl(StepForm.Step3, Step3Fields.Schedule).invalid &&
+              !getControl(StepForm.Step3, Step3Fields.Schedule).untouched) {
+                <span class="flex">
+                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                </span>
+            }
+            </div>
           </div>
-          </div>
+        </div>
         </mat-step>
         <mat-step [stepControl]="getStepFormGroup(StepForm.Step4)">
           <h2 class="text-3xl mb-4">Цепочка согласования</h2>
@@ -282,6 +404,7 @@
                       </span>
                     }
                   </div>
+                  <div class="flex flex-col">
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Выберите сотрудника</mat-label>
                     <mat-select #userSelect formControlName="space_user_id" (selectionChange)="onOptionChange($event, $index)">
@@ -292,11 +415,17 @@
                       }
                       @if (interviewer.get('space_user_id')?.invalid && !interviewer.get('space_user_id')?.untouched) {
                         <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
+                          <mat-icon svgIcon="error"></mat-icon>
+                        </span>
                       }
                     </mat-select>
                   </mat-form-field>
+                  @if (interviewer.get('space_user_id')?.invalid && !interviewer.get('space_user_id')?.untouched) {
+                    <span class="flex">
+                      <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+                    </span>
+                  }
+                  </div>
                 </div>
               }
               <button class="w-[243px]" mat-flat-button class="btn-primary" (click)="addInterviewer()">

@@ -74,3 +74,11 @@
     <ag-grid-angular [gridOptions]="gridOptions" [suppressRowHoverHighlight]="true" domLayout="autoHeight" class="ag-theme-material flex-1 w-full" />
   </div>
 </div>
+
+<ng-template #fullTextDialog let-data>
+  <div class="modal-overlay" (click)="closeDialog()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>{{ data.text }}</h2>
+    </div>
+  </div>
+</ng-template>

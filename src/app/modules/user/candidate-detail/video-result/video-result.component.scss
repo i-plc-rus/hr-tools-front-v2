@@ -77,3 +77,11 @@ app-loader {
     width: 4vh;
     height: 4vh;
 }
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex place-items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-white p-10 rounded-lg max-w-md text-start;
+}

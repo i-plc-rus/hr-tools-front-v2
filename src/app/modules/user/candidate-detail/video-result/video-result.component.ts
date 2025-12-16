@@ -3,13 +3,16 @@ import {
   ElementRef,
   Input,
   Renderer2,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import {
+  CellClickedEvent,
   ColDef,
   GridApi,
   GridOptions,
   GridReadyEvent,
+  ITooltipParams,
 } from 'ag-grid-community';
 import { Subject } from 'rxjs/internal/Subject';
 import { QuestionsView } from '../../../../models/QuestionsResult';
@@ -20,6 +23,7 @@ import {
 } from '../../../../api/data-contracts';
 import { ApiService } from '../../../../api/Api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-video-result',
@@ -30,12 +34,13 @@ export class VideoResultComponent {
   @Input() survey?: ApplicantapimodelsApplicantVkSurvey;
   @ViewChild('total_score', { static: true }) myElementRef!: ElementRef;
   @ViewChild('persentage', { static: true }) persentageRef!: ElementRef;
+  @ViewChild('fullTextDialog') fullTextDialog!: TemplateRef<any>;
   questionsList: QuestionsView[] = [];
   selectedQuestion?: ApplicantapimodelsScoreDetail;
   videoSrc: SafeUrl | undefined;
   videoLoading: boolean = true;
 
-  constructor(private renderer: Renderer2, private api: ApiService, private sanitizer: DomSanitizer) {}
+  constructor(private renderer: Renderer2, private api: ApiService, private sanitizer: DomSanitizer, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     if (this.survey && this.survey.score_ai!.details) {
@@ -120,6 +125,11 @@ export class VideoResultComponent {
       flex: 1,
       headerName: 'Комментарий от GPT API',
       headerClass: 'font-medium',
+      tooltipValueGetter: (params: ITooltipParams) => {
+        return 'Показать полностью';
+      },
+      cellStyle: { cursor: 'pointer' },
+      onCellClicked: this.onCommentCellClicked.bind(this)
     },
     // {
     //   field: 'points',
@@ -137,5 +147,27 @@ export class VideoResultComponent {
     loading: false,
     suppressMovableColumns: true,
     suppressScrollOnNewData: true,
+    enableBrowserTooltips: false,
+    tooltipShowDelay: 0,
   };
+
+  onCommentCellClicked(params: CellClickedEvent): void {
+    if (params.colDef.field === 'commentGPT') {
+      const fullText = params.value;
+      this.openPopover(fullText);
+    }
+  }
+
+  openPopover(text: string): void {
+    this.dialog.open(this.fullTextDialog, {
+      data: { text: text },
+      hasBackdrop: false,
+    });
+  }
+
+  closeDialog(): void {
+    if (this.dialog) {
+      this.dialog.closeAll();
+    }
+  }
 }

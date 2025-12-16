@@ -237,7 +237,7 @@ import { VideoResultComponent } from './candidate-detail/video-result/video-resu
         MatProgressBar,
         MatSnackBarModule,
         MatProgressSpinner,
-        DevelopmentComponent
+        DevelopmentComponent,
     ]
 
 })

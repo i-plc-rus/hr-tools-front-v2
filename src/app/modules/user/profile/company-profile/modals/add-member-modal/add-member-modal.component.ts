@@ -80,7 +80,6 @@ export class AddMemberModalComponent {
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
       phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || undefined,
-      is_admin: this.userForm.controls.is_admin.value || undefined,
       space_id: this.spaceId,
     };
 
@@ -98,8 +97,6 @@ export class AddMemberModalComponent {
           first_name: this.userForm.controls.first_name.value || '',
           last_name: this.userForm.controls.last_name.value || '',
           phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || '',
-          is_admin: this.userForm.controls.is_admin.value || false,
-          role: this.userForm.controls.is_admin.value ? 'Администратор' : 'Пользователь'
         };
         this.onSubmit.emit(mockCreatedUser);
         this.snackBar.snackBarMessageSuccess('Участник успешно создан');
@@ -132,7 +129,6 @@ export class AddMemberModalComponent {
       first_name: this.userForm.controls.first_name.value || undefined,
       last_name: this.userForm.controls.last_name.value || undefined,
       phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || undefined,
-      is_admin: this.userForm.controls.is_admin.value || undefined
     };
 
     this.api.v1UsersUpdate(this.user.id, updatedUser).subscribe({

@@ -11,7 +11,7 @@ export class SpaceUser implements SpaceapimodelsSpaceUser {
   job_title_name?: string = '';
   password: string = '';
   //is_active: boolean = true;  //todo работает или уволен
-  role: string = '';
+  role?: ModelsUserRole;
   get fullName(): string {
     return this.first_name + ' ' + this.last_name;
   }

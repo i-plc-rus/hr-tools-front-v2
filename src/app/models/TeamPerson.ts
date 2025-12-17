@@ -13,9 +13,13 @@ export class TeamPerson implements VacancyapimodelsTeamPerson {
     switch (this.role) {
       case ModelsUserRole.UserRoleSuperAdmin:
         return 'Суперадмин';
-      case ModelsUserRole.SpaceAdminRole:
+      case ModelsUserRole.AdminRole:
         return 'Администратор';
-      case ModelsUserRole.SpaceUserRole:
+      case ModelsUserRole.HRRole:
+        return 'HR';
+      case ModelsUserRole.ManagerRole:
+        return 'Менеджер';
+      case ModelsUserRole.SpecialistRole:
         return 'Пользователь';
       default:
         return '';

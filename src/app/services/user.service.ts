@@ -22,7 +22,7 @@ export class UserService {
   setUserData(data: SpaceapimodelsSpaceUser) {
     localStorage.setItem('spaceId', data.space_id || '');
     localStorage.setItem('userId', data.id || '');
-    localStorage.setItem('isAdmin', data.is_admin ? 'true' : 'false');
+    // localStorage.setItem('isAdmin', data.is_admin ? 'true' : 'false');
   }
 
   clearUserData() {

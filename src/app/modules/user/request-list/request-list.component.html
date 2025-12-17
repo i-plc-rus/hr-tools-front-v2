@@ -185,7 +185,7 @@
                 </app-status-tag>
                 <mat-menu #statusContent="matMenu">
                   @for (status of statuses; track $index) {
-                    @if (request.status !== status.value && status.value !== 'Создана') {
+                    @if (request.status !== status.value && status.value !== 'CREATED') {
                       <button mat-menu-item (click)="changeStatus(request.id, status.value)">
                         <app-status-tag [status]="status.className">
                           {{ status.value }}
@@ -231,7 +231,7 @@
                 @for (stage of request.approval_stages; track $index) {
                   <div class="flex gap-3 items-center">
                     <div class="flex justify-center items-center rounded-full bg-white w-14 h-14">
-                      @switch (stage.approval_status) {
+                      <!-- @switch (stage.approval_status) {
                         @case ('Согласованно') {
                           <mat-icon svgIcon="check-circle"></mat-icon>
                         }
@@ -244,16 +244,16 @@
                         @default {
                           <mat-icon svgIcon="avg-pace"></mat-icon>
                         }
-                      }
+                      } -->
                     </div>
                     <div class="flex flex-col gap-0.5 text-[16px] leading-6">
-                      <span class="text-[var(--text-main)] text-nowrap">{{ stage.space_user_name }}</span>
-                      <span class="text-[var(--text-alter)] text-nowrap">{{ stage.approval_status }}</span>
+                      <!-- <span class="text-[var(--text-main)] text-nowrap">{{ stage.space_user_name }}</span>
+                      <span class="text-[var(--text-alter)] text-nowrap">{{ stage.approval_status }}</span> -->
                     </div>
                   </div>
                 }
               </div>
-              @if (request.status === 'Согласована') {
+              @if (request.status === ModelsVRStatus.VRStatusApproved && (!request.open_vacancies || request.open_vacancies < 1)) {
                 <button mat-flat-button class="btn-primary text-nowrap" (click)="publishVacancy(request.id)">Создать вакансию</button>
               }
             </div>

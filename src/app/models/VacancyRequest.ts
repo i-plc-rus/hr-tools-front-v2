@@ -6,8 +6,7 @@ import {
   ModelsVRStatus, 
   ModelsVRType, 
   ModelsVRUrgency, 
-  VacancyapimodelsApprovalStageView, 
-  VacancyapimodelsCommentView, 
+  VacancyapimodelsApprovalTaskView,   VacancyapimodelsCommentView, 
   VacancyapimodelsVacancyRequestView
 } from '../api/data-contracts';
 import {StatusTag} from './StatusTag';
@@ -47,6 +46,8 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   job_title_name: string = '';
   /** кол-во открытых позиций */
   opened_positions: number = 1;
+  /** кол-во вакансий открытых по заявке */
+  open_vacancies?: number;
   /** внешнее взаимодействие */
   out_interaction: string = '';
   pinned: boolean = false;
@@ -62,7 +63,7 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   vacancy_name: string = '';
   approval_stage_current: number = 0;
   approval_stage_is_last: boolean = false;
-  approval_stages?: VacancyapimodelsApprovalStageView[];
+  approval_stages?: VacancyapimodelsApprovalTaskView[];
   /** тип вакансии */
   request_type?: ModelsVRType;
   /** вид подбора */
@@ -77,15 +78,15 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
     switch (this.status) {
       case ModelsVRStatus.VRStatusCreated:
         return 'info';
-      case ModelsVRStatus.VRStatusCanceled:
+      case ModelsVRStatus.VRStatusCancelled:
         return 'danger';
-      case ModelsVRStatus.VRStatusNotAccepted:
+      case ModelsVRStatus.VRStatusRejected:
         return 'danger';
-      case ModelsVRStatus.VRStatusAccepted:
+      case ModelsVRStatus.VRStatusApproved:
         return 'success';
-      case ModelsVRStatus.VRStatusUnderRevision:
+      case ModelsVRStatus.VRStatusDraft:
         return 'warning';
-      case ModelsVRStatus.VRStatusUnderAccepted:
+      case ModelsVRStatus.VRStatusInApproval:
         return 'warning';
       default:
         return 'success';

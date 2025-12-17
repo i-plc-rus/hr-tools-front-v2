@@ -36,6 +36,7 @@ export class RequestApprovalComponent implements OnInit {
   /*cтатус заявки */
   status: string = '';
   isResponsible: boolean = false;
+  userId: string = '';
 
   experiences: { name: string; value: ModelsExperience }[] = [
     { name: 'Не имеет значения', value: ModelsExperience.ExperienceNoMatter },
@@ -131,8 +132,9 @@ export class RequestApprovalComponent implements OnInit {
       }).subscribe({
         next: (response: any) => {
           const { vacancyDetails, companyStructure, city, user } = response;
-          const approvalIds = vacancyDetails.body.data.approval_stages.map((item: any) => item.space_user_id)
-          this.isResponsible = approvalIds.some((item: string) => item === user.body.data.id)
+          this.userId = user.body.data.id;
+          const approvalIds = vacancyDetails.body.data.approval_stages?.map((item: any) => item.space_user_id)
+          this.isResponsible = approvalIds?.some((item: string) => item === user.body.data.id)
           const obj = {
             id: vacancyDetails.body.data.city_id,
             address: vacancyDetails.body.data.city,
@@ -299,17 +301,27 @@ export class RequestApprovalComponent implements OnInit {
 
 
   rejectClaim() { 
-    this.api.v1SpaceVacancyRequestRejectUpdate(this.id, this.objectFormation()).subscribe(res => {
+    const comment = this.form.controls['description'].value || '';
+    this.api.v1SpaceVacancyRequestApprovalsList(this.id, []).pipe(
+      switchMap((response: any) => {
+        console.log(response)
+        console.log(this.userId)
+        const approvals = response.body?.data || [];
+        const userApproval = approvals.find((approval: any) => approval.assignee_user_id === this.userId);
+        // const taskId = userApproval?.id;
+        return this.api.v1SpaceVacancyRequestApprovalsRejectCreate(this.id, userApproval.id, [{ comment }]);
+      })
+    ).subscribe(res => {
       console.log(res)
       this.router.navigate(['/user/request/list'])
     })
   }
 
   approveClaim() {
-    this.api.v1SpaceVacancyRequestApproveUpdate(this.id, this.objectFormation()).subscribe(res => {
-      console.log(res)
-      this.router.navigate(['/user/request/list'])
-    })
+    // this.api.v1SpaceVacancyRequestApprovalsUpdate(this.id, {}).subscribe(res => {
+    //   console.log(res)
+    //   this.router.navigate(['/user/request/list'])
+    // })
   }
 
   createVacancy() {

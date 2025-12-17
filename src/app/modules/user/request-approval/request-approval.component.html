@@ -292,7 +292,7 @@
         <button mat-flat-button
                 class="btn-primary" (click)="goToNextStep()">Продолжить</button>
         }
-        @if(isLastStep && status !== 'Согласована' && isResponsible) {
+        @if(isLastStep && status === 'IN_APPROVAL') {
           <div class="flex gap-4">
             <button mat-flat-button class="btn-danger" (click)="rejectClaim()">Отклонить</button>
             <button mat-flat-button class="btn-primary" (click)="approveClaim()">Согласовать</button>

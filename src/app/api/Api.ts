@@ -17,13 +17,31 @@ import { Observable } from "rxjs";
 
 import { RequestOptions } from "./http-client";
 
-    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsLangData,DictapimodelsLangView,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyResponses,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,SurveyapimodelsVkStep0SurveyAnswers,SurveyapimodelsVkStep0SurveyView,SurveyapimodelsVkStep1,SurveyapimodelsVkStep1SurveyView,VacancyapimodelsApprovalStages,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
+    import { AdminpanelapimodelsUser,AdminpanelapimodelsUserUpdate,AdminpanelapimodelsUserView,ApimodelsResponse,ApimodelsScrollerResponse,ApplicantapimodelsApplicantData,ApplicantapimodelsApplicantFilter,ApplicantapimodelsApplicantHistoryFilter,ApplicantapimodelsApplicantHistoryView,ApplicantapimodelsApplicantNote,ApplicantapimodelsApplicantSourceData,ApplicantapimodelsApplicantView,ApplicantapimodelsApplicantViewExt,ApplicantapimodelsMultiChangeStageRequest,ApplicantapimodelsMultiEmailResponse,ApplicantapimodelsMultiRejectRequest,ApplicantapimodelsRejectRequest,ApplicantapimodelsXlsExportRequest,AuthapimodelsJWTRefreshRequest,AuthapimodelsJWTResponse,AuthapimodelsLoginRequest,AuthapimodelsPasswordRecovery,AuthapimodelsPasswordResetRequest,AuthapimodelsSendEmail,AvitoapimodelsVacancyAttach,DbmodelsNegotiationFilter,DictapimodelsCityData,DictapimodelsCityView,DictapimodelsCompanyData,DictapimodelsCompanyStructData,DictapimodelsCompanyStructView,DictapimodelsCompanyView,DictapimodelsDepartmentData,DictapimodelsDepartmentFind,DictapimodelsDepartmentView,DictapimodelsJobTitleData,DictapimodelsLangData,DictapimodelsLangView,DictapimodelsRejectReasonData,DictapimodelsRejectReasonFind,DictapimodelsRejectReasonView,DictapimodelsRoleView,FilesapimodelsFileView,GptmodelsGenVacancyDescRequest,GptmodelsGenVacancyDescResponse,HhapimodelsVacancyAttach,LicenseapimodelsLicense,LicenseapimodelsLicenseRenew,LicenseapimodelsLicenseRenewConfirm,LicenseapimodelsLicenseRenewInfo,LicenseapimodelsLicenseRenewResponse,MsgtemplateapimodelsMsgTemplateData,MsgtemplateapimodelsMsgTemplateView,MsgtemplateapimodelsSendMessage,MsgtemplateapimodelsTemplateItem,NegotiationapimodelsCommentData,NegotiationapimodelsMessageItem,NegotiationapimodelsMessageListRequest,NegotiationapimodelsMessengerAvailableRequest,NegotiationapimodelsMessengerAvailableResponse,NegotiationapimodelsNegotiationView,NegotiationapimodelsNewMessageRequest,NegotiationapimodelsStatusData,SpaceapimodelsCreateOrganization,SpaceapimodelsCreateUser,SpaceapimodelsPasswordChange,SpaceapimodelsProfileData,SpaceapimodelsPushSettingData,SpaceapimodelsPushSettings,SpaceapimodelsSalesRequest,SpaceapimodelsSpaceSettingView,SpaceapimodelsSpaceUser,SpaceapimodelsSpaceUserExt,SpaceapimodelsSpaceUserFilter,SpaceapimodelsSpaceUserProfileData,SpaceapimodelsSpaceUserProfileView,SpaceapimodelsUpdateSpaceSettingValue,SpaceapimodelsUpdateUser,SpaceapimodelsUpdateUserStatus,SupersetapimodelsGuestTokenResponse,SurveyapimodelsApplicantSurveyResponses,SurveyapimodelsApplicantSurveyView,SurveyapimodelsHRSurvey,SurveyapimodelsHRSurveyView,SurveyapimodelsVkStep0SurveyAnswers,SurveyapimodelsVkStep0SurveyView,SurveyapimodelsVkStep1,SurveyapimodelsVkStep1SurveyView,VacancyapimodelsApprovalReject,VacancyapimodelsApprovalRequestChanges,VacancyapimodelsApprovalTaskView,VacancyapimodelsApprovalTasks,VacancyapimodelsComment,VacancyapimodelsExtVacancyInfo,VacancyapimodelsPersonFilter,VacancyapimodelsSelectionStageAdd,VacancyapimodelsSelectionStageView,VacancyapimodelsStatusChangeRequest,VacancyapimodelsTeamPerson,VacancyapimodelsVacancyData,VacancyapimodelsVacancyFilter,VacancyapimodelsVacancyRequestCreateData,VacancyapimodelsVacancyRequestEditData,VacancyapimodelsVacancyRequestView,VacancyapimodelsVacancyView,VacancyapimodelsVrFilter } from "./data-contracts";
         
 import { API_BASE_URL } from "../tokens/api.token";
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
 constructor(private readonly http: HttpClient, @Inject(API_BASE_URL) private readonly baseUrl: string = ''){}
+            /**
+ * @description Подтвердить платеж
+ *
+ * @tags Админ панель. Лицензия
+ * @name V1AdminPanelBillingPaymentConfirmCreate
+ * @summary Подтвердить платеж
+ * @request POST:/api/v1/admin_panel/billing/payment/confirm
+ */
+public v1AdminPanelBillingPaymentConfirmCreate (body: LicenseapimodelsLicenseRenewConfirm, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1AdminPanelBillingPaymentConfirmCreate (body: LicenseapimodelsLicenseRenewConfirm, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1AdminPanelBillingPaymentConfirmCreate (body: LicenseapimodelsLicenseRenewConfirm, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'POST',
+        this.baseUrl + `/api/v1/admin_panel/billing/payment/confirm`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
             /**
  * @description Аутентификация пользователя
  *
@@ -236,10 +254,10 @@ public v1AuthLoginCreate (body: AuthapimodelsLoginRequest, options: RequestOptio
  * @summary Получить информацию о текущем пользователе
  * @request GET:/api/v1/auth/me
  */
-public v1AuthMeList (options?: RequestOptions): Observable<SpaceapimodelsSpaceUser>;
-public v1AuthMeList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<SpaceapimodelsSpaceUser>>;
-public v1AuthMeList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<SpaceapimodelsSpaceUser> | SpaceapimodelsSpaceUser> {
-    return this.http.request<SpaceapimodelsSpaceUser>(
+public v1AuthMeList (options?: RequestOptions): Observable<SpaceapimodelsSpaceUserExt>;
+public v1AuthMeList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<SpaceapimodelsSpaceUserExt>>;
+public v1AuthMeList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<SpaceapimodelsSpaceUserExt> | SpaceapimodelsSpaceUserExt> {
+    return this.http.request<SpaceapimodelsSpaceUserExt>(
         'GET',
         this.baseUrl + `/api/v1/auth/me`,
         {
@@ -1153,6 +1171,39 @@ public v1DictRejectReasonDelete (id: string, options: RequestOptions & { observe
     })
 }
             /**
+ * @description Список ролей
+ *
+ * @tags Справочник. Роли
+ * @name V1DictRoleListList
+ * @summary Список ролей
+ * @request GET:/api/v1/dict/role/list
+ */
+public v1DictRoleListList (body: DictapimodelsCityData, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: (DictapimodelsRoleView)[],
+
+})>;
+public v1DictRoleListList (body: DictapimodelsCityData, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: (DictapimodelsRoleView)[],
+
+})>>;
+public v1DictRoleListList (body: DictapimodelsCityData, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: (DictapimodelsRoleView)[],
+
+})> | (ApimodelsResponse & {
+    data?: (DictapimodelsRoleView)[],
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: (DictapimodelsRoleView)[],
+
+})>(
+        'GET',
+        this.baseUrl + `/api/v1/dict/role/list`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Сгенерировать описание вакансии
  *
  * @tags GPT
@@ -1336,6 +1387,24 @@ public v1OrganizationsSuggestList (query?: {
     })
 }
             /**
+ * @description Получение информации о статусе AI
+ *
+ * @tags ВК
+ * @name V1PublicSurveyAiList
+ * @summary Информация об AI
+ * @request GET:/api/v1/public/survey/ai
+ */
+public v1PublicSurveyAiList (options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1PublicSurveyAiList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1PublicSurveyAiList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'GET',
+        this.baseUrl + `/api/v1/public/survey/ai`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description ВК. Шаг 0. Получение анкеты c типовыми вопросами
  *
  * @tags ВК
@@ -1414,6 +1483,24 @@ public v1PublicSurveyUploadAnswerCreate (id: string, questionId: string, data: {
         this.baseUrl + `/api/v1/public/survey/upload-answer/${id}/${questionId}`,
         {
                 body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description ВК. Шаг 8. Прохождение видео-интервью (потоковая загрузка видео ответа на сервер)
+ *
+ * @tags ВК
+ * @name V1PublicSurveyUploadStreamCreate
+ * @summary ВК. Шаг 8. Прохождение видео-интервью (потоковая загрузка видео ответа на сервер)
+ * @request POST:/api/v1/public/survey/upload-stream/{id}/{question_id}
+ */
+public v1PublicSurveyUploadStreamCreate (id: string, questionId: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1PublicSurveyUploadStreamCreate (id: string, questionId: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1PublicSurveyUploadStreamCreate (id: string, questionId: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'POST',
+        this.baseUrl + `/api/v1/public/survey/upload-stream/${id}/${questionId}`,
+        {
+                                ...options as unknown as {observe: "response"},
     })
 }
             /**
@@ -2302,6 +2389,105 @@ public v1SpaceApplicantUploadResumeCreate (id: string, data: {
         this.baseUrl + `/api/v1/space/applicant/${id}/upload-resume`,
         {
                 body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Данные лицензии
+ *
+ * @tags Лицензия
+ * @name V1SpaceBillingLicenseList
+ * @summary Данные лицензии
+ * @request GET:/api/v1/space/billing/license
+ */
+public v1SpaceBillingLicenseList (options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicense,
+
+})>;
+public v1SpaceBillingLicenseList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicense,
+
+})>>;
+public v1SpaceBillingLicenseList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicense,
+
+})> | (ApimodelsResponse & {
+    data?: LicenseapimodelsLicense,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicense,
+
+})>(
+        'GET',
+        this.baseUrl + `/api/v1/space/billing/license`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Информация о продлении
+ *
+ * @tags Лицензия
+ * @name V1SpaceBillingLicenseRenewList
+ * @summary Информация о продлении
+ * @request GET:/api/v1/space/billing/license/renew
+ */
+public v1SpaceBillingLicenseRenewList (options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewInfo,
+
+})>;
+public v1SpaceBillingLicenseRenewList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewInfo,
+
+})>>;
+public v1SpaceBillingLicenseRenewList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewInfo,
+
+})> | (ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewInfo,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewInfo,
+
+})>(
+        'GET',
+        this.baseUrl + `/api/v1/space/billing/license/renew`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Создать черновик продления
+ *
+ * @tags Лицензия
+ * @name V1SpaceBillingLicenseRenewCreate
+ * @summary Создать черновик продления
+ * @request POST:/api/v1/space/billing/license/renew
+ */
+public v1SpaceBillingLicenseRenewCreate (body: LicenseapimodelsLicenseRenew, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewResponse,
+
+})>;
+public v1SpaceBillingLicenseRenewCreate (body: LicenseapimodelsLicenseRenew, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewResponse,
+
+})>>;
+public v1SpaceBillingLicenseRenewCreate (body: LicenseapimodelsLicenseRenew, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewResponse,
+
+})> | (ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewResponse,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: LicenseapimodelsLicenseRenewResponse,
+
+})>(
+        'POST',
+        this.baseUrl + `/api/v1/space/billing/license/renew`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
     })
 }
             /**
@@ -4072,19 +4258,55 @@ public v1SpaceVacancyRequestDelete (id: string, options: RequestOptions & { obse
     })
 }
             /**
+ * @description История согласования
+ *
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalHistoryList
+ * @summary История согласования
+ * @request GET:/api/v1/space/vacancy_request/{id}/approval_history
+ */
+public v1SpaceVacancyRequestApprovalHistoryList (id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalHistoryList (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalHistoryList (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'GET',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approval_history`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Обновление цепочки согласования
  *
- * @tags Заявка
- * @name V1SpaceVacancyRequestApprovalStagesUpdate
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalsList
  * @summary Обновление цепочки согласования
- * @request PUT:/api/v1/space/vacancy_request/{id}/approval_stages
+ * @request GET:/api/v1/space/vacancy_request/{id}/approvals
  */
-public v1SpaceVacancyRequestApprovalStagesUpdate (id: string, body: (VacancyapimodelsApprovalStages)[], options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestApprovalStagesUpdate (id: string, body: (VacancyapimodelsApprovalStages)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestApprovalStagesUpdate (id: string, body: (VacancyapimodelsApprovalStages)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+public v1SpaceVacancyRequestApprovalsList (id: string, body: (VacancyapimodelsApprovalTaskView)[], options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsList (id: string, body: (VacancyapimodelsApprovalTaskView)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsList (id: string, body: (VacancyapimodelsApprovalTaskView)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'GET',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Обновление цепочки согласования
+ *
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalsUpdate
+ * @summary Обновление цепочки согласования
+ * @request PUT:/api/v1/space/vacancy_request/{id}/approvals
+ */
+public v1SpaceVacancyRequestApprovalsUpdate (id: string, body: VacancyapimodelsApprovalTasks, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsUpdate (id: string, body: VacancyapimodelsApprovalTasks, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsUpdate (id: string, body: VacancyapimodelsApprovalTasks, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
         'PUT',
-        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approval_stages`,
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals`,
         {
                 body: body,                ...options as unknown as {observe: "response"},
     })
@@ -4092,17 +4314,53 @@ public v1SpaceVacancyRequestApprovalStagesUpdate (id: string, body: (Vacancyapim
             /**
  * @description Согласовать
  *
- * @tags Заявка
- * @name V1SpaceVacancyRequestApproveUpdate
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalsApproveCreate
  * @summary Согласовать
- * @request PUT:/api/v1/space/vacancy_request/{id}/approve
+ * @request POST:/api/v1/space/vacancy_request/{id}/approvals/{taskId}/approve
  */
-public v1SpaceVacancyRequestApproveUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestApproveUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestApproveUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+public v1SpaceVacancyRequestApprovalsApproveCreate (id: string, taskId: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsApproveCreate (id: string, taskId: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsApproveCreate (id: string, taskId: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
-        'PUT',
-        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approve`,
+        'POST',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals/${taskId}/approve`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Отклонить
+ *
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalsRejectCreate
+ * @summary Отклонить
+ * @request POST:/api/v1/space/vacancy_request/{id}/approvals/{taskId}/reject
+ */
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'POST',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals/${taskId}/reject`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description На доработку
+ *
+ * @tags Согласование заявок
+ * @name V1SpaceVacancyRequestApprovalsRequestChangesCreate
+ * @summary На доработку
+ * @request POST:/api/v1/space/vacancy_request/{id}/approvals/{taskId}/request_changes
+ */
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'POST',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals/${taskId}/request_changes`,
         {
                 body: body,                ...options as unknown as {observe: "response"},
     })
@@ -4258,37 +4516,34 @@ public v1SpaceVacancyRequestPublishUpdate (id: string, options: RequestOptions &
     })
 }
             /**
- * @description Отклонить
+ * @description Получение списка связанных вакансий
  *
  * @tags Заявка
- * @name V1SpaceVacancyRequestRejectUpdate
- * @summary Отклонить
- * @request PUT:/api/v1/space/vacancy_request/{id}/reject
+ * @name V1SpaceVacancyRequestVacanciesList
+ * @summary Получение списка связанных вакансий
+ * @request GET:/api/v1/space/vacancy_request/{id}/vacancies
  */
-public v1SpaceVacancyRequestRejectUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestRejectUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestRejectUpdate (id: string, body: VacancyapimodelsVacancyRequestData, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>(
-        'PUT',
-        this.baseUrl + `/api/v1/space/vacancy_request/${id}/reject`,
-        {
-                body: body,                ...options as unknown as {observe: "response"},
-    })
-}
-            /**
- * @description На доработку
- *
- * @tags Заявка
- * @name V1SpaceVacancyRequestToRevisionUpdate
- * @summary На доработку
- * @request PUT:/api/v1/space/vacancy_request/{id}/to_revision
- */
-public v1SpaceVacancyRequestToRevisionUpdate (id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestToRevisionUpdate (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestToRevisionUpdate (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
-    return this.http.request<ApimodelsResponse>(
-        'PUT',
-        this.baseUrl + `/api/v1/space/vacancy_request/${id}/to_revision`,
+public v1SpaceVacancyRequestVacanciesList (id: string, options?: RequestOptions): Observable<(ApimodelsScrollerResponse & {
+    data?: (VacancyapimodelsVacancyView)[],
+
+})>;
+public v1SpaceVacancyRequestVacanciesList (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsScrollerResponse & {
+    data?: (VacancyapimodelsVacancyView)[],
+
+})>>;
+public v1SpaceVacancyRequestVacanciesList (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsScrollerResponse & {
+    data?: (VacancyapimodelsVacancyView)[],
+
+})> | (ApimodelsScrollerResponse & {
+    data?: (VacancyapimodelsVacancyView)[],
+
+})> {
+    return this.http.request<(ApimodelsScrollerResponse & {
+    data?: (VacancyapimodelsVacancyView)[],
+
+})>(
+        'GET',
+        this.baseUrl + `/api/v1/space/vacancy_request/${id}/vacancies`,
         {
                                 ...options as unknown as {observe: "response"},
     })
@@ -4627,6 +4882,39 @@ public v1UsersPhotoList (id: string, options: RequestOptions & { observe: 'respo
         this.baseUrl + `/api/v1/users/${id}/photo`,
         {
                                 ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Обновить статус пользователя
+ *
+ * @tags Пользователи space
+ * @name V1UsersStatusPartialUpdate
+ * @summary Обновить статус пользователя
+ * @request PATCH:/api/v1/users/{id}/status
+ */
+public v1UsersStatusPartialUpdate (id: string, body: SpaceapimodelsUpdateUserStatus, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: SpaceapimodelsSpaceUser,
+
+})>;
+public v1UsersStatusPartialUpdate (id: string, body: SpaceapimodelsUpdateUserStatus, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SpaceapimodelsSpaceUser,
+
+})>>;
+public v1UsersStatusPartialUpdate (id: string, body: SpaceapimodelsUpdateUserStatus, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: SpaceapimodelsSpaceUser,
+
+})> | (ApimodelsResponse & {
+    data?: SpaceapimodelsSpaceUser,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: SpaceapimodelsSpaceUser,
+
+})>(
+        'PATCH',
+        this.baseUrl + `/api/v1/users/${id}/status`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
     })
 }
     }

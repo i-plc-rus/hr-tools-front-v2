@@ -180,15 +180,15 @@
                   [matMenuTriggerFor]="statusContent"
                   class="cursor-pointer"
                   [status]="request.statusClass">
-                  <span>{{ request.status }}</span>
+                  <span>{{ getStatusDisplayName(request.status) }}</span>
                   <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
                 </app-status-tag>
                 <mat-menu #statusContent="matMenu">
                   @for (status of statuses; track $index) {
-                    @if (request.status !== status.value && status.value !== 'CREATED') {
+                    @if (request.status !== status.value && status.value !== ModelsVRStatus.VRStatusCreated) {
                       <button mat-menu-item (click)="changeStatus(request.id, status.value)">
                         <app-status-tag [status]="status.className">
-                          {{ status.value }}
+                          {{ getStatusDisplayName(status.value) }}
                         </app-status-tag>
                       </button>
                     }
@@ -253,7 +253,7 @@
                   </div>
                 }
               </div>
-              @if (request.status === ModelsVRStatus.VRStatusApproved && (!request.open_vacancies || request.open_vacancies < 1)) {
+              @if (request.status === ModelsVRStatus.VRStatusApproved) {
                 <button mat-flat-button class="btn-primary text-nowrap" (click)="publishVacancy(request.id)">Создать вакансию</button>
               }
             </div>

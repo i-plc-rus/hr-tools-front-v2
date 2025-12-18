@@ -346,7 +346,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.get('search_from')!.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        console.log(value)
         if (value) {
           if (this.filterForm.get('search_period')!.value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
             this.filterForm.get('search_period')!.setValue(VacancyapimodelsSearchPeriod.SearchByPeriod);
@@ -686,6 +685,21 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       'Отменена': ModelsVRStatus.VRStatusCancelled,
     };
     return statusMap[displayName] || null;
+  }
+
+  getStatusDisplayName(status: ModelsVRStatus | undefined): string {
+    if (!status) return '';
+    const statusMap: { [key in ModelsVRStatus]: string } = {
+      [ModelsVRStatus.VRStatusCreated]: 'Создана',
+      [ModelsVRStatus.VRStatusDraft]: 'На доработке',
+      [ModelsVRStatus.VRStatusInApproval]: 'На согласовании',
+      [ModelsVRStatus.VRStatusApproved]: 'Согласована',
+      [ModelsVRStatus.VRStatusRejected]: 'Не согласована',
+      [ModelsVRStatus.VRStatusCancelled]: 'Отменена',
+      [ModelsVRStatus.VRStatusInHr]: 'У HR',
+      [ModelsVRStatus.VRStatusDone]: 'Выполнена',
+    };
+    return statusMap[status] || status;
   }
 
 }

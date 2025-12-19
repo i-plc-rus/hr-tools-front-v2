@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../api/Api';
 import { VacancyModalService } from '../../../services/vacancy-modal.service';
+import { SnackBarService } from '../../../services/snackbar.service';
 import { Observable, forkJoin, map, startWith, switchMap } from 'rxjs';
 import {
   DictapimodelsCityView,
@@ -36,6 +37,8 @@ export class RequestApprovalComponent implements OnInit {
   /*cтатус заявки */
   status: string = '';
   isResponsible: boolean = false;
+  userId: string = '';
+  userApproval: any = null;
 
   experiences: { name: string; value: ModelsExperience }[] = [
     { name: 'Не имеет значения', value: ModelsExperience.ExperienceNoMatter },
@@ -117,7 +120,8 @@ export class RequestApprovalComponent implements OnInit {
     private route: ActivatedRoute,
     private api: ApiService,
     private router: Router,
-    private vacancyModalService: VacancyModalService
+    private vacancyModalService: VacancyModalService,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -127,12 +131,16 @@ export class RequestApprovalComponent implements OnInit {
         vacancyDetails: this.api.v1SpaceVacancyRequestDetail(this.id),
         companyStructure: this.api.v1DictCompanyStructFindCreate({}),
         city: this.api.v1DictCityFindCreate({}),
-        user: this.api.v1AuthMeList()
+        user: this.api.v1AuthMeList(),
+        approvals: this.api.v1SpaceVacancyRequestApprovalsList(this.id, [])
       }).subscribe({
         next: (response: any) => {
-          const { vacancyDetails, companyStructure, city, user } = response;
-          const approvalIds = vacancyDetails.body.data.approval_stages.map((item: any) => item.space_user_id)
-          this.isResponsible = approvalIds.some((item: string) => item === user.body.data.id)
+          const { vacancyDetails, companyStructure, city, user, approvals } = response;
+          this.userId = user.body.data.id;
+          const approvalIds = vacancyDetails.body.data.approval_stages?.map((item: any) => item.space_user_id)
+          this.isResponsible = approvalIds?.some((item: string) => item === user.body.data.id)
+          const approvalsList = approvals.body?.data || [];
+          this.userApproval = approvalsList.find((approval: any) => approval.assignee_user_id === this.userId);
           const obj = {
             id: vacancyDetails.body.data.city_id,
             address: vacancyDetails.body.data.city,
@@ -299,16 +307,67 @@ export class RequestApprovalComponent implements OnInit {
 
 
   rejectClaim() { 
-    this.api.v1SpaceVacancyRequestRejectUpdate(this.id, this.objectFormation()).subscribe(res => {
-      console.log(res)
-      this.router.navigate(['/user/request/list'])
+    const comment = this.form.controls['description'].value || '';
+    
+    if (!this.userApproval || !this.userApproval.id) {
+      this.snackBarService.snackBarMessageError('Не найдена задача согласования для текущего пользователя');
+      return;
+    }
+    
+    (this.api.v1SpaceVacancyRequestApprovalsRejectCreate as any)(this.id, this.userApproval.id, { comment }).subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.snackBarService.snackBarMessageSuccess('Заявка отклонена');
+        this.router.navigate(['/user/request/list'])
+      },
+      error: (error: any) => {
+        let errorMessage = 'Произошла ошибка при отклонении заявки';
+        
+        if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.message) {
+          try {
+            const parsedError = JSON.parse(error.message);
+            errorMessage = parsedError.error?.message || errorMessage;
+          } catch {
+            errorMessage = error.message;
+          }
+        }
+        
+        this.snackBarService.snackBarMessageError(errorMessage);
+      }
     })
   }
 
   approveClaim() {
-    this.api.v1SpaceVacancyRequestApproveUpdate(this.id, this.objectFormation()).subscribe(res => {
-      console.log(res)
-      this.router.navigate(['/user/request/list'])
+    if (!this.userApproval || !this.userApproval.id) {
+      this.snackBarService.snackBarMessageError('Не найдена задача согласования для текущего пользователя');
+      return;
+    }
+    
+    this.api.v1SpaceVacancyRequestApprovalsApproveCreate(this.id, this.userApproval.id).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.snackBarService.snackBarMessageSuccess('Заявка согласована');
+        this.router.navigate(['/user/request/list'])
+      },
+      error: (error) => {
+        console.error('Ошибка при согласовании заявки:', error);
+        let errorMessage = 'Произошла ошибка при согласовании заявки';
+        
+        if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.message) {
+          try {
+            const parsedError = JSON.parse(error.message);
+            errorMessage = parsedError.error?.message || errorMessage;
+          } catch {
+            errorMessage = error.message;
+          }
+        }
+        
+        this.snackBarService.snackBarMessageError(errorMessage);
+      }
     })
   }
 

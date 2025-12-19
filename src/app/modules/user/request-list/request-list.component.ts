@@ -7,7 +7,9 @@ import {
   ModelsVRSelectionType,
   ModelsVRStatus,
   SpaceapimodelsSpaceUser,
-  VacancyapimodelsSearchPeriod, VacancyapimodelsVacancyRequestData,
+  VacancyapimodelsApprovalTasks,
+  VacancyapimodelsSearchPeriod,
+  VacancyapimodelsVacancyRequestEditData,
   VacancyapimodelsVacancyRequestView,
   VacancyapimodelsVrFilter,
   VacancyapimodelsVrSort
@@ -40,6 +42,9 @@ import { RequestStateService, RequestFilterState } from '../../../services/reque
 //  ]
 })
 export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
+  // Expose enum to template
+  ModelsVRStatus = ModelsVRStatus;
+  
   // фильтр
   sortByDesc = true;
   filterForm = new FormGroup({
@@ -54,7 +59,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | '' | 'favorites'>('');
+  category = new FormControl<ModelsVRStatus | '' | 'favorites' | 'Создана' | 'На доработке' | 'На согласовании' | 'Согласована' | 'Не согласована' | 'Отменена'>('');
   searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
@@ -62,11 +67,11 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   // справочники
   statuses: {className: StatusTag; value: ModelsVRStatus}[] = [
     {className: 'info', value: ModelsVRStatus.VRStatusCreated},
-    {className: 'warning', value: ModelsVRStatus.VRStatusUnderRevision},
-    {className: 'warning', value: ModelsVRStatus.VRStatusUnderAccepted},
-    {className: 'success', value: ModelsVRStatus.VRStatusAccepted},
-    {className: 'danger', value: ModelsVRStatus.VRStatusCanceled},
-    {className: 'danger', value: ModelsVRStatus.VRStatusNotAccepted},
+    {className: 'warning', value: ModelsVRStatus.VRStatusDraft},
+    {className: 'warning', value: ModelsVRStatus.VRStatusInApproval},
+    {className: 'success', value: ModelsVRStatus.VRStatusApproved},
+    {className: 'danger', value: ModelsVRStatus.VRStatusCancelled},
+    {className: 'danger', value: ModelsVRStatus.VRStatusRejected},
   ];
   selectionTypes = Object.values(ModelsVRSelectionType);
   searchPeriodTypes: {label: string, value: VacancyapimodelsSearchPeriod}[] = [
@@ -338,8 +343,10 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.filterForm.controls.statuses.setValue([]);
         else if (category === 'favorites')
           this.filterForm.controls.favorite.setValue(true);
-        else
-          this.filterForm.controls.statuses.setValue([category]);
+        else {
+          const statusEnum = this.getStatusEnumFromDisplay(category);
+          this.filterForm.controls.statuses.setValue([statusEnum || category as ModelsVRStatus]);
+        }
       });
 
     this.searchCity.valueChanges
@@ -413,7 +420,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterForm.get('search_from')!.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        console.log(value)
         if (value) {
           if (this.filterForm.get('search_period')!.value !== VacancyapimodelsSearchPeriod.SearchByPeriod) {
             this.filterForm.get('search_period')!.setValue(VacancyapimodelsSearchPeriod.SearchByPeriod);
@@ -478,7 +484,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     const request = this.requestList.find(item => item.id === id);
     if (!request) return;
 
-    const body: VacancyapimodelsVacancyRequestData = {
+    const body: VacancyapimodelsVacancyRequestEditData = {
       vacancy_name: request.vacancy_name,
       opened_positions: request.opened_positions,
       urgency: request.urgency,
@@ -504,20 +510,25 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let observable;
     switch (status) {
-      case ModelsVRStatus.VRStatusAccepted:
-        observable = this.api.v1SpaceVacancyRequestApproveUpdate(id, body, {observe: 'response'});
+      case ModelsVRStatus.VRStatusApproved:
+        const approvalBody: VacancyapimodelsApprovalTasks = {
+          approval_stages: request.approval_stages?.map(stage => ({
+            assignee_user_id: stage.assignee_user_id
+          })) || []
+        };
+        observable = this.api.v1SpaceVacancyRequestApprovalsUpdate(id, approvalBody, {observe: 'response'});
         break;
-      case ModelsVRStatus.VRStatusNotAccepted:
-        observable = this.api.v1SpaceVacancyRequestRejectUpdate(id, body, {observe: 'response'});
+      case ModelsVRStatus.VRStatusRejected:
+        observable = this.api.v1SpaceVacancyRequestUpdate(id, body, {observe: 'response'});
         break;
-      case ModelsVRStatus.VRStatusCanceled:
+      case ModelsVRStatus.VRStatusCancelled:
         observable = this.api.v1SpaceVacancyRequestCancelUpdate(id, {observe: 'response'});
         break;
-      case ModelsVRStatus.VRStatusUnderAccepted:
+      case ModelsVRStatus.VRStatusInApproval:
         observable = this.api.v1SpaceVacancyRequestOnApprovalUpdate(id,  {observe: 'response'});
         break;
-      case ModelsVRStatus.VRStatusUnderRevision:
-        observable = this.api.v1SpaceVacancyRequestToRevisionUpdate(id,  {observe: 'response'});
+      case ModelsVRStatus.VRStatusDraft:
+        observable = this.api.v1SpaceVacancyRequestOnCreateUpdate(id,  {observe: 'response'});
         break;
     }
 
@@ -644,11 +655,11 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   private loadAllCounts() {
     const statuses = [
       { key: 'Создана', value: ModelsVRStatus.VRStatusCreated },
-      { key: 'На доработке', value: ModelsVRStatus.VRStatusUnderRevision },
-      { key: 'На согласовании', value: ModelsVRStatus.VRStatusUnderAccepted },
-      { key: 'Согласована', value: ModelsVRStatus.VRStatusAccepted },
-      { key: 'Не согласована', value: ModelsVRStatus.VRStatusNotAccepted },
-      { key: 'Отменена', value: ModelsVRStatus.VRStatusCanceled }
+      { key: 'На доработке', value: ModelsVRStatus.VRStatusDraft },
+      { key: 'На согласовании', value: ModelsVRStatus.VRStatusInApproval },
+      { key: 'Согласована', value: ModelsVRStatus.VRStatusApproved },
+      { key: 'Не согласована', value: ModelsVRStatus.VRStatusRejected },
+      { key: 'Отменена', value: ModelsVRStatus.VRStatusCancelled }
     ];
 
     // Создаем массив запросов для всех счетчиков
@@ -733,6 +744,36 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   trackByValue(index: number, item: { value: VacancyapimodelsSearchPeriod }) {
     return item.value;
+  }
+
+  private getStatusEnumFromDisplay(displayName: string | ModelsVRStatus): ModelsVRStatus | null {
+    if (typeof displayName !== 'string') {
+      return displayName;
+    }
+    const statusMap: { [key: string]: ModelsVRStatus } = {
+      'Создана': ModelsVRStatus.VRStatusCreated,
+      'На доработке': ModelsVRStatus.VRStatusDraft,
+      'На согласовании': ModelsVRStatus.VRStatusInApproval,
+      'Согласована': ModelsVRStatus.VRStatusApproved,
+      'Не согласована': ModelsVRStatus.VRStatusRejected,
+      'Отменена': ModelsVRStatus.VRStatusCancelled,
+    };
+    return statusMap[displayName] || null;
+  }
+
+  getStatusDisplayName(status: ModelsVRStatus | undefined): string {
+    if (!status) return '';
+    const statusMap: { [key in ModelsVRStatus]: string } = {
+      [ModelsVRStatus.VRStatusCreated]: 'Создана',
+      [ModelsVRStatus.VRStatusDraft]: 'На доработке',
+      [ModelsVRStatus.VRStatusInApproval]: 'На согласовании',
+      [ModelsVRStatus.VRStatusApproved]: 'Согласована',
+      [ModelsVRStatus.VRStatusRejected]: 'Не согласована',
+      [ModelsVRStatus.VRStatusCancelled]: 'Отменена',
+      [ModelsVRStatus.VRStatusInHr]: 'У HR',
+      [ModelsVRStatus.VRStatusDone]: 'Выполнена',
+    };
+    return statusMap[status] || status;
   }
 
 }

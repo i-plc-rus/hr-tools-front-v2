@@ -535,8 +535,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       description: description || undefined,
       approval_stages: step4?.interviewers?.map(
         (interviewer: { space_user_id: string | null; stage: number | null }) => ({
-          space_user_id: interviewer.space_user_id || undefined,
-          stage: interviewer.stage || undefined,
+          assignee_user_id: interviewer.space_user_id || undefined,
         })
       ) || [],
     };

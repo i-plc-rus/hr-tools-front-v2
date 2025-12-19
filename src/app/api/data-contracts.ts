@@ -51,13 +51,14 @@ export enum ModelsVRType {
 }
 
 export enum ModelsVRStatus {
-  VRStatusCreated = "Создана",
-  VRStatusCanceled = "Отменена",
-  VRStatusNotAccepted = "Не согласована",
-  VRStatusAccepted = "Согласована",
-  VRStatusUnderRevision = "На доработке",
-  VRStatusUnderAccepted = "На согласовании",
-  VRStatusTemplate = "Шаблон",
+  VRStatusDraft = "DRAFT",
+  VRStatusCreated = "CREATED",
+  VRStatusInApproval = "IN_APPROVAL",
+  VRStatusApproved = "APPROVED",
+  VRStatusRejected = "REJECTED",
+  VRStatusInHr = "IN_HR",
+  VRStatusCancelled = "CANCELLED",
+  VRStatusDone = "DONE",
 }
 
 export enum ModelsVRSelectionType {
@@ -66,9 +67,12 @@ export enum ModelsVRSelectionType {
 }
 
 export enum ModelsUserRole {
-  SpaceAdminRole = "SPACE_ADMIN_ROLE",
-  SpaceUserRole = "SPACE_USER_ROLE",
+  AdminRole = "ADMIN",
+  HRRole = "HR",
+  ManagerRole = "MANAGER",
+  SpecialistRole = "SPECIALIST",
   UserRoleSuperAdmin = "SUPER_ADMIN",
+  AllRoles = "ALL",
 }
 
 export enum ModelsTripReadinessType {
@@ -177,6 +181,18 @@ export enum ModelsRejectInitiator {
   ApplicantReject = "Кандидат",
 }
 
+export enum ModelsPermission {
+  CreatePermission = "CREATE",
+  EditPermission = "EDIT",
+  ViewPermission = "VIEW",
+  ManagePermission = "MANAGE",
+  FlowPermission = "FLOW",
+  StagesPermission = "STAGES",
+  TeamPermission = "TEAM",
+  FilesPermission = "FILES",
+  NotesPermission = "NOTES",
+}
+
 export enum ModelsNegotiationStatus {
   NegotiationStatusWait = "Рассмотреть позже",
   NegotiationStatusRejected = "Отклонен",
@@ -188,6 +204,19 @@ export enum ModelsLimitType {
   LimitTypeHour = "Часов",
   LimitTypDay = "Дней",
   LimitTypeWeek = "Недель",
+}
+
+export enum ModelsLicenseStatus {
+  LicenseStatusActive = "ACTIVE",
+  LicenseStatusExpiresSoon = "EXPIRES_SOON",
+  LicenseStatusExpired = "EXPIRED",
+  LicenseStatusGrace = "GRACE",
+}
+
+export enum ModelsLicensePaymentStatus {
+  LicensePaymentStatusPending = "PENDING",
+  LicensePaymentStatusPaid = "PAID",
+  LicensePaymentStatusFailed = "FAILED",
 }
 
 export enum ModelsLanguageLevelType {
@@ -283,10 +312,12 @@ export enum ModelsDriverLicenseType {
   DriverLicenseTB = "TB",
 }
 
-export enum ModelsApprovalStatus {
-  AStatusApproved = "Согласованно",
-  AStatusRejected = "Не согласованно",
-  AStatusAwaiting = "Ждет согласования",
+export enum ModelsApprovalState {
+  AStatePending = "PENDING",
+  AStateApproved = "APPROVED",
+  AStateRequestChanges = "REQUEST_CHANGES",
+  AStateRejected = "REJECTED",
+  AStateRemoved = "REMOVED",
 }
 
 export enum ModelsApplicantStatus {
@@ -950,6 +981,8 @@ export interface DbmodelsNegotiationFilter {
   search_label?: ModelsSearchLabelType;
   /** Источник */
   source?: ModelsApplicantSource;
+  /** этап */
+  step?: string;
   /** Готовность к командировкам */
   trip_readiness?: ModelsTripReadinessType;
   /** идентификатор вакансии */
@@ -1044,6 +1077,11 @@ export interface DictapimodelsRejectReasonView {
   name?: string;
 }
 
+export interface DictapimodelsRoleView {
+  code?: string;
+  name?: string;
+}
+
 export interface FilesapimodelsFileView {
   applicant_id?: string;
   content_type?: string;
@@ -1065,6 +1103,57 @@ export interface GptmodelsGenVacancyDescResponse {
 export interface HhapimodelsVacancyAttach {
   /** ссылка на вакансию в виде: https://izhevsk.hh.ru/vacancy/108984166 */
   url?: string;
+}
+
+export interface LicenseapimodelsLicense {
+  auto_renew?: boolean;
+  days_left?: number;
+  ends_at?: string;
+  id?: string;
+  license_payments?: LicenseapimodelsLicensePayment[];
+  plan?: LicenseapimodelsLicensePlan;
+  starts_at?: string;
+  status?: ModelsLicenseStatus;
+}
+
+export interface LicenseapimodelsLicensePayment {
+  amount?: number;
+  currency?: string;
+  id?: string;
+  meta?: string;
+  paid_at?: string;
+  provider?: string;
+  status?: ModelsLicensePaymentStatus;
+}
+
+export interface LicenseapimodelsLicensePlan {
+  cost?: number;
+  extension_period_days?: number;
+  id?: string;
+  plan?: string;
+}
+
+export interface LicenseapimodelsLicenseRenew {
+  offer_accepter?: boolean;
+}
+
+export interface LicenseapimodelsLicenseRenewConfirm {
+  id?: string;
+  meta?: string;
+  paid_at?: string;
+  provider?: string;
+}
+
+export interface LicenseapimodelsLicenseRenewInfo {
+  cost?: number;
+  ends_at?: string;
+  period_days?: number;
+  plan?: string;
+  starts_at?: string;
+}
+
+export interface LicenseapimodelsLicenseRenewResponse {
+  id?: string;
 }
 
 export interface MsgtemplateapimodelsMsgTemplateData {
@@ -1199,14 +1288,19 @@ export interface SpaceapimodelsCreateUser {
   /** Email пользователя */
   email?: string;
   first_name?: string;
-  is_admin?: boolean;
   /** Идентификатор должности */
   job_title_id?: string;
   last_name?: string;
   password?: string;
   phone_number?: string;
-  role?: string;
+  role?: ModelsUserRole;
   space_id?: string;
+  /** Статус пользователя */
+  status?: string;
+  /** Дата изменения статуса */
+  status_changed_at?: string;
+  /** Комментарий к статусу */
+  status_comment?: string;
   /** Текст подписи */
   text_sign?: string;
 }
@@ -1290,7 +1384,6 @@ export interface SpaceapimodelsSpaceUser {
   email?: string;
   first_name?: string;
   id?: string;
-  is_admin?: boolean;
   /** Email подтвержден */
   is_email_verified?: boolean;
   /** Идентификатор должности */
@@ -1301,8 +1394,48 @@ export interface SpaceapimodelsSpaceUser {
   /** Новый email, который станет основным после подтверждения */
   new_email?: string;
   phone_number?: string;
-  role?: string;
+  role?: ModelsUserRole;
+  role_name?: string;
   space_id?: string;
+  /** Статус пользователя */
+  status?: string;
+  /** Дата изменения статуса */
+  status_changed_at?: string;
+  /** Комментарий к статусу */
+  status_comment?: string;
+  /** Текст подписи */
+  text_sign?: string;
+}
+
+export interface SpaceapimodelsSpaceUserExt {
+  /** Email пользователя */
+  email?: string;
+  first_name?: string;
+  id?: string;
+  /** Email подтвержден */
+  is_email_verified?: boolean;
+  /** Идентификатор должности */
+  job_title_id?: string;
+  /** Навание должности */
+  job_title_name?: string;
+  last_name?: string;
+  /** Блокировка мутаций */
+  license_read_only?: boolean;
+  /** Статус лицензии */
+  license_status?: ModelsLicenseStatus;
+  /** Новый email, который станет основным после подтверждения */
+  new_email?: string;
+  permissions?: Record<string, ModelsPermission[]>;
+  phone_number?: string;
+  role?: ModelsUserRole;
+  role_name?: string;
+  space_id?: string;
+  /** Статус пользователя */
+  status?: string;
+  /** Дата изменения статуса */
+  status_changed_at?: string;
+  /** Комментарий к статусу */
+  status_comment?: string;
   /** Текст подписи */
   text_sign?: string;
 }
@@ -1316,6 +1449,8 @@ export interface SpaceapimodelsSpaceUserFilter {
   search?: string;
   /** Сортировка */
   sort?: SpaceapimodelsSpaceUserSort;
+  /** Статус пользователя */
+  status?: string;
 }
 
 export interface SpaceapimodelsSpaceUserProfileData {
@@ -1359,7 +1494,8 @@ export interface SpaceapimodelsSpaceUserProfileView {
   /** Телефон */
   phone_number?: string;
   /** Роль */
-  role?: string;
+  role?: ModelsUserRole;
+  role_name?: string;
   /** Текст подписи */
   text_sign?: string;
   /** Персональная подпись */
@@ -1384,7 +1520,6 @@ export interface SpaceapimodelsUpdateUser {
   /** Email пользователя */
   email?: string;
   first_name?: string;
-  is_admin?: boolean;
   /** Идентификатор должности */
   job_title_id?: string;
   last_name?: string;
@@ -1394,6 +1529,13 @@ export interface SpaceapimodelsUpdateUser {
   space_id?: string;
   /** Текст подписи */
   text_sign?: string;
+}
+
+export interface SpaceapimodelsUpdateUserStatus {
+  /** Комментарий к статусу (опционально) */
+  comment?: string;
+  /** Статус пользователя: WORKING, VACATION, DISMISSED */
+  status?: string;
 }
 
 export interface SupersetapimodelsGuestTokenResponse {
@@ -1504,21 +1646,29 @@ export interface SurveyapimodelsVkStep1View {
   url?: string;
 }
 
-export interface VacancyapimodelsApprovalStageData {
-  approval_status?: ModelsApprovalStatus;
-  space_user_id?: string;
-  stage?: number;
+export interface VacancyapimodelsApprovalReject {
+  comment?: string;
 }
 
-export interface VacancyapimodelsApprovalStageView {
-  approval_status?: ModelsApprovalStatus;
-  space_user_id?: string;
-  space_user_name?: string;
-  stage?: number;
+export interface VacancyapimodelsApprovalRequestChanges {
+  comment?: string;
 }
 
-export interface VacancyapimodelsApprovalStages {
-  approval_stages?: VacancyapimodelsApprovalStageData[];
+export interface VacancyapimodelsApprovalTaskData {
+  assignee_user_id?: string;
+}
+
+export interface VacancyapimodelsApprovalTaskView {
+  assignee_user_id?: string;
+  assignee_user_name?: string;
+  comment?: string;
+  decided_at?: string;
+  id?: string;
+  state?: ModelsApprovalState;
+}
+
+export interface VacancyapimodelsApprovalTasks {
+  approval_stages?: VacancyapimodelsApprovalTaskData[];
 }
 
 export interface VacancyapimodelsComment {
@@ -1687,7 +1837,7 @@ export interface VacancyapimodelsVacancyFilter {
 }
 
 export interface VacancyapimodelsVacancyRequestCreateData {
-  approval_stages?: VacancyapimodelsApprovalStageData[];
+  approval_stages?: VacancyapimodelsApprovalTaskData[];
   /** сохранить как шаблон */
   as_template?: boolean;
   /** фио непосредственного руководителя */
@@ -1738,7 +1888,8 @@ export interface VacancyapimodelsVacancyRequestCreateData {
   vacancy_name?: string;
 }
 
-export interface VacancyapimodelsVacancyRequestData {
+export interface VacancyapimodelsVacancyRequestEditData {
+  approval_stages?: VacancyapimodelsApprovalTaskData[];
   /** фио непосредственного руководителя */
   chief_fio?: string;
   /** ид города */
@@ -1787,60 +1938,13 @@ export interface VacancyapimodelsVacancyRequestData {
   vacancy_name?: string;
 }
 
-export interface VacancyapimodelsVacancyRequestEditData {
-  approval_stages?: VacancyapimodelsApprovalStageData[];
-  /** фио непосредственного руководителя */
-  chief_fio?: string;
-  /** ид города */
-  city_id?: string;
-  /** ид компании */
-  company_id?: string;
-  /** название компании */
-  company_name?: string;
-  /** ид структуры компании */
-  company_struct_id?: string;
-  /** конфиденциальная вакансия */
-  confidential?: boolean;
-  /** ид подразделения */
-  department_id?: string;
-  /** Коментарий к заявке */
-  description?: string;
-  /** Занятость */
-  employment?: ModelsEmployment;
-  /** Опыт работы */
-  experience?: ModelsExperience;
-  /** внутреннее взаимодействие */
-  in_interaction?: string;
-  /** сотрудник проводящий интервью */
-  interviewer?: string;
-  /** ид штатной должности */
-  job_title_id?: string;
-  /** кол-во открытых позиций */
-  opened_positions?: number;
-  /** внешнее взаимодействие */
-  out_interaction?: string;
-  /** адрес места работы */
-  place_of_work?: string;
-  /** тип вакансии */
-  request_type?: ModelsVRType;
-  /** требования/обязанности/условия */
-  requirements?: string;
-  /** Режим работы */
-  schedule?: ModelsSchedule;
-  /** вид подбора */
-  selection_type?: ModelsVRSelectionType;
-  /** краткая информация о комманде отдела */
-  short_info?: string;
-  /** срочность */
-  urgency?: ModelsVRUrgency;
-  /** название вакансии */
-  vacancy_name?: string;
+export interface VacancyapimodelsVacancyRequestPreView {
+  creation_date?: string;
+  id?: string;
+  status?: ModelsVRStatus;
 }
 
 export interface VacancyapimodelsVacancyRequestView {
-  approval_stage_current?: number;
-  approval_stage_is_last?: boolean;
-  approval_stages?: VacancyapimodelsApprovalStageView[];
   /** фио непосредственного руководителя */
   chief_fio?: string;
   city?: string;
@@ -1944,6 +2048,7 @@ export interface VacancyapimodelsVacancyView {
   pinned?: boolean;
   /** адрес места работы */
   place_of_work?: string;
+  request?: VacancyapimodelsVacancyRequestPreView;
   /** тип вакансии */
   request_type?: ModelsVRType;
   /** требования/обязанности/условия */

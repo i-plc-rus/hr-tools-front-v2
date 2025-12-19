@@ -12,7 +12,7 @@ export interface RequestFilterState {
   selection_type: ModelsVRSelectionType | null | undefined;
   sort: VacancyapimodelsVrSort | undefined;
   statuses: ModelsVRStatus[] | null;
-  category: ModelsVRStatus | '' | 'favorites' | null;
+  category: '' | ModelsVRStatus | "favorites" | "Создана" | "На доработке" | "На согласовании" | "Согласована" | "Не согласована" | "Отменена" | null;
   searchValue: string | null;
   searchCity: string | null;
   searchRequestAuthor: string | null;

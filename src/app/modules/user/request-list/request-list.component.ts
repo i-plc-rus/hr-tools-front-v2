@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
+import { RequestStateService, RequestFilterState } from '../../../services/request-state.service';
 // import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 // import { DateAdapterRus, RUS_DATE_FORMATS } from '../../../adapters/ru-date.adapter';
 
@@ -106,18 +107,25 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterCount = 0;
   private subscriptions: Subscription[] = [];
+  isFilterOpen: boolean = false;
 
   @ViewChild('requestContainer') requestContainer!: ElementRef;
+  @ViewChild('toggleFilter') toggleElement!: ElementRef;
 
   constructor(
     public screen: ScreenWidthService,
     private modalService: VacancyModalService,
     private api: ApiService,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private stateService: RequestStateService,
   ) { }
 
   ngOnInit(): void {
+    const savedState = this.stateService.getFilters();
+    this.patchForms(savedState);
+    this.subscribeToFormChanges();
+
     this.getRequests();
     this.loadAllCounts();
     this.getUsers();
@@ -131,6 +139,69 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
             this.filterCount = count;
           })
         );
+  }
+
+  private patchForms(state: RequestFilterState): void {
+    this.filterForm.patchValue(state, { emitEvent: false });
+    this.category.patchValue(state.category, { emitEvent: false });
+    this.searchValue.patchValue(state.searchValue, { emitEvent: false });
+    this.searchCity.patchValue(state.searchCity, { emitEvent: false });
+    this.searchRequestAuthor.patchValue(state.searchRequestAuthor, { emitEvent: false });
+    this.isFilterOpen = state.isFilterOpen ?? false;
+    this.filterCount = state.filterCount ?? 0;
+  }
+
+  private subscribeToFormChanges(): void {
+    this.filterForm.valueChanges.pipe(
+      debounceTime(300), 
+      takeUntil(this.destroy$)
+    ).subscribe(values => {
+      const combinedState: Partial<RequestFilterState> = {
+        ...values,
+        category: this.category.value,
+        searchValue: this.searchValue.value,
+        searchCity: this.searchCity.value,
+        searchRequestAuthor: this.searchRequestAuthor.value,
+        filterCount: this.filterCount,
+        isFilterOpen: this.isFilterOpen,
+      };
+      this.updateStateAndLoad(combinedState);
+    });
+
+    this.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+    this.searchValue.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+    this.searchCity.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+    this.searchRequestAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+  }
+  
+  private updateCombinedState(): void {
+    const combinedState: Partial<RequestFilterState> = {
+      ...this.filterForm.value,
+      category: this.category.value,
+      searchValue: this.searchValue.value,
+      searchCity: this.searchCity.value,
+      searchRequestAuthor: this.searchRequestAuthor.value,
+      filterCount: this.filterCount,
+      isFilterOpen: this.isFilterOpen,
+    };
+    this.updateStateAndLoad(combinedState);
+  }
+
+  private updateStateAndLoad(changes: Partial<RequestFilterState>): void {
+    this.stateService.setFilters(changes);
+    this.getRequests();
+    this.loadAllCounts();
+    this.getUsers();
+    this.setFormListeners();
+  }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
   }
 
   private isControlActive(control: AbstractControl): boolean {
@@ -172,6 +243,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
   ngAfterViewInit(): void {
+    if (this.filterCount > 0 && this.toggleElement) {
+      this.toggleElement.nativeElement.checked = true;
+    }
     if (this.requestContainer && this.requestContainer.nativeElement) {
       this.requestContainer.nativeElement.addEventListener('scroll', this.onScroll);
     }

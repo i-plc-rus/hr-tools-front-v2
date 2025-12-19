@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, DestroyRef, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import {
   VacancyapimodelsVacancyFilter,
   VacancyapimodelsVacancySort,
@@ -18,8 +18,9 @@ import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
-import {Subscription, forkJoin} from 'rxjs';
+import {Subject, Subscription, forkJoin} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { VacancyFilterState, VacancyStateService } from '../../../services/vacancy-state.service';
 
 @Component({
   selector: 'app-vacancy-list',
@@ -49,6 +50,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   searchAuthor = new FormControl('');
   searchRequestAuthor = new FormControl('');
   searchValue = new FormControl('');
+
+  private destroy$ = new Subject<void>();
 
   // справочники
   requestTypes = Object.values(ModelsVRType);
@@ -82,14 +85,20 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   private allDataLoaded = false;
 
   private destroyRef = inject(DestroyRef);
+  isFilterOpen: boolean = false;
 
 
   constructor(
     private modalService: VacancyModalService,
-    private api: ApiService
+    private api: ApiService,
+    private stateService: VacancyStateService,
   ) {}
 
   ngOnInit(): void {
+    const savedState = this.stateService.getFilters();
+    this.patchForms(savedState);
+    this.subscribeToFormChanges();
+
     this.getVacancyList();
     this.getDepartments();
     this.getUsers();
@@ -105,6 +114,74 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
+  }
+
+  private patchForms(state: VacancyFilterState): void {
+      this.filterForm.patchValue(state, { emitEvent: false });
+      this.category.patchValue(state.category, { emitEvent: false });
+      this.searchValue.patchValue(state.searchValue, { emitEvent: false });
+      this.searchCity.patchValue(state.searchCity, { emitEvent: false });
+      this.searchAuthor.patchValue(state.searchAuthor, { emitEvent: false })
+      this.searchRequestAuthor.patchValue(state.searchRequestAuthor, { emitEvent: false });
+      this.isFilterOpen = state.isFilterOpen ?? false;
+      this.filterCount = state.filterCount ?? 0;
+    }
+  
+    private subscribeToFormChanges(): void {
+      this.filterForm.valueChanges.pipe(
+        debounceTime(300), 
+        takeUntil(this.destroy$)
+      ).subscribe(values => {
+        const combinedState: Partial<VacancyFilterState> = {
+          ...values,
+          category: this.category.value,
+          searchValue: this.searchValue.value,
+          searchCity: this.searchCity.value,
+          searchRequestAuthor: this.searchRequestAuthor.value,
+          searchAuthor: this.searchAuthor.value,
+          filterCount: this.filterCount,
+          isFilterOpen: this.isFilterOpen,
+        };
+        this.updateStateAndLoad(combinedState);
+      });
+  
+      this.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+      this.searchValue.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+      this.searchAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+      this.searchCity.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+      this.searchRequestAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
+    }
+    
+    private updateCombinedState(): void {
+      const combinedState: Partial<VacancyFilterState> = {
+        ...this.filterForm.value,
+        category: this.category.value,
+        searchValue: this.searchValue.value,
+        searchCity: this.searchCity.value,
+        searchRequestAuthor: this.searchRequestAuthor.value,
+        searchAuthor: this.searchAuthor.value,
+        filterCount: this.filterCount,
+        isFilterOpen: this.isFilterOpen,
+      };
+      this.updateStateAndLoad(combinedState);
+    }
+  
+    private updateStateAndLoad(changes: Partial<VacancyFilterState>): void {
+      this.stateService.setFilters(changes);
+      this.getVacancyList();
+      this.getDepartments();
+      this.getUsers();
+      this.setFormListeners();
+      this.loadTabCounts();
+    }
 
   private isControlActive(control: AbstractControl): boolean {
     const value = control.value;

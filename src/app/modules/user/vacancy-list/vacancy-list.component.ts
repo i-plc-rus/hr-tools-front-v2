@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, DestroyRef, ElementRef, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import {
   VacancyapimodelsVacancyFilter,
   VacancyapimodelsVacancySort,
@@ -18,8 +18,9 @@ import {ApiService} from '../../../api/Api';
 import {VacancyView} from '../../../models/Vacancy';
 import {SpaceUser} from '../../../models/SpaceUser';
 import {vacancyStatuses} from '../user-consts';
-import {Subscription, forkJoin} from 'rxjs';
+import {Subject, Subscription, forkJoin} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { VacancyFilterState, VacancyStateService } from '../../../services/vacancy-state.service';
 
 @Component({
   selector: 'app-vacancy-list',
@@ -49,6 +50,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   searchAuthor = new FormControl('');
   searchRequestAuthor = new FormControl('');
   searchValue = new FormControl('');
+
+  private destroy$ = new Subject<void>();
 
   // справочники
   requestTypes = Object.values(ModelsVRType);
@@ -82,19 +85,39 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   private allDataLoaded = false;
 
   private destroyRef = inject(DestroyRef);
-
+  isFilterOpen: boolean = false;
 
   constructor(
     private modalService: VacancyModalService,
-    private api: ApiService
+    private api: ApiService,
+    private stateService: VacancyStateService,
   ) {}
 
   ngOnInit(): void {
-    this.getVacancyList();
-    this.getDepartments();
-    this.getUsers();
+    const saved = this.stateService.getFilters();
+
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.category.setValue(saved.category as any, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchRequestAuthor.setValue(saved.searchRequestAuthor, { emitEvent: false });
+
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getVacancyList();
+      this.getDepartments();
+      this.getUsers();
+      this.loadTabCounts();
+    } else {
+      this.getVacancyList();
+      this.getDepartments();
+      this.getUsers();
+      this.loadTabCounts();
+    }
+
     this.setFormListeners();
-    this.loadTabCounts();
     
     this.subscriptions.push(
       this.filterForm.valueChanges.pipe(
@@ -105,6 +128,36 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
+
+  private getCurrentFilterState(): VacancyFilterState {
+      return {
+        ...this.filterForm.getRawValue(),
+        category: this.category.value,
+        searchValue: this.searchValue.value,
+        searchCity: this.searchCity.value,
+        searchRequestAuthor: this.searchRequestAuthor.value,
+        searchAuthor: this.searchAuthor.value,
+        filterCount: this.filterCount,
+        isFilterOpen: this.isFilterOpen,
+      };
+    }
+  
+  updateCombinedState(): void {
+      const state = this.getCurrentFilterState();
+      this.stateService.setFilters(state);
+      this.getVacancyList();
+      this.getDepartments();
+      this.loadTabCounts();
+  }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
+  } 
 
   private isControlActive(control: AbstractControl): boolean {
     const value = control.value;
@@ -272,6 +325,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         const isMyVacancies = category === 'my' ? true : false;
         this.filterForm.controls.favorite.setValue(isFavorite);
         this.filterForm.controls.author_id.setValue(isMyVacancies ? this.userId : '');
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -283,6 +337,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.getCities(newValue);
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
     this.searchAuthor.valueChanges
@@ -294,6 +349,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.authors = [];
+        this.updateCombinedState();
       });
 
     this.searchRequestAuthor.valueChanges
@@ -305,6 +361,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -314,8 +371,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loading = false;
         this.currentPage = 1;
         this.vacancyList = [];
-        this.getVacancyList();
-        this.loadTabCounts();
+        this.updateCombinedState();
       });
 
     this.searchSubscription = this.searchValue.valueChanges

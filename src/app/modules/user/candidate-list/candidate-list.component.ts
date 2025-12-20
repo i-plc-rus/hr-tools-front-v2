@@ -41,6 +41,7 @@ import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators
 import {CandidateStatusComponent} from './candidate-status/candidate-status.component';
 import {Subject, Subscription} from 'rxjs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { CandidatesFilterState, CandidatesStateService } from '../../../services/candidates-state.service';
 
 @Component({
   selector: 'app-candidate-list',
@@ -223,12 +224,14 @@ export class СandidateListComponent implements OnDestroy{
   private subscriptions: Subscription[] = [];
   private selectedIds: string[] = [];
   private findedSelectedRows: number = 0;
+  isFilterOpen: boolean = false;
 
   constructor(
     private modalService: CandidateModalService,
     private api: ApiService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private stateService: CandidatesStateService,
   ) { }
 
   ngOnInit(): void { 
@@ -240,6 +243,32 @@ export class СandidateListComponent implements OnDestroy{
         this.filterCount = count;
       })
     );
+  }
+  
+  private getCurrentFilterState(): CandidatesFilterState {
+      return {
+        ...this.filterForm.getRawValue(),
+        searchValue: this.searchValue.value,
+        searchCity: this.searchCity.value,
+        searchVacancy: this.searchVacancy.value,
+        filterCount: this.filterCount,
+        isFilterOpen: this.isFilterOpen
+      };
+  }
+  
+  updateCombinedState(): void {
+      const state = this.getCurrentFilterState();
+      this.stateService.setFilters(state);
+      this.getApplicants();
+  }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
   }
 
   private isControlActive(control: AbstractControl): boolean {
@@ -315,8 +344,21 @@ export class СandidateListComponent implements OnDestroy{
           }
         }
       });
-    
-    this.getApplicants();
+
+    const saved = this.stateService.getFilters();
+
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchVacancy.setValue(saved.searchVacancy, { emitEvent: false });
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getApplicants();
+    } else {
+      this.getApplicants();
+    }
     this.setFormListeners();
   }
 
@@ -482,6 +524,7 @@ export class СandidateListComponent implements OnDestroy{
           this.getVacancyList(newValue);
         else
           this.vacancyList = [];
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -493,6 +536,7 @@ export class СandidateListComponent implements OnDestroy{
           this.getCities(newValue);
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -509,7 +553,7 @@ export class СandidateListComponent implements OnDestroy{
           this.applicantsList = [];
           this.gridApi.setGridOption('loading', true);
           this.gridApi.setGridOption('rowData', []);
-          this.getApplicants();
+          this.updateCombinedState();
         }
       });
 
@@ -529,7 +573,7 @@ export class СandidateListComponent implements OnDestroy{
         this.applicantsList = [];
         this.gridApi.setGridOption('loading', true);
         this.gridApi.setGridOption('rowData', []);
-        this.getApplicants();
+        this.updateCombinedState();
       });
   }
 

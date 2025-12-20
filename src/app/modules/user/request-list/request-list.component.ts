@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
+import { RequestStateService, RequestFilterState } from '../../../services/request-state.service';
 // import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 // import { DateAdapterRus, RUS_DATE_FORMATS } from '../../../adapters/ru-date.adapter';
 
@@ -111,6 +112,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterCount = 0;
   private subscriptions: Subscription[] = [];
+  isFilterOpen: boolean = false;
 
   @ViewChild('requestContainer') requestContainer!: ElementRef;
 
@@ -119,23 +121,70 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: VacancyModalService,
     private api: ApiService,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private stateService: RequestStateService,
   ) { }
 
   ngOnInit(): void {
-    this.getRequests();
-    this.loadAllCounts();
-    this.getUsers();
+    const saved = this.stateService.getFilters();
+
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.category.setValue(saved.category as any, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchRequestAuthor.setValue(saved.searchRequestAuthor, { emitEvent: false });
+
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getRequests();
+      this.loadAllCounts();
+      this.getUsers();
+    } else {
+      this.getRequests();
+      this.loadAllCounts();
+      this.getUsers();
+    }
+
     this.setFormListeners();
 
     this.subscriptions.push(
-          this.filterForm.valueChanges.pipe(
-            debounceTime(100),
-            map(() => this.countActiveFilters())
-          ).subscribe(count => {
-            this.filterCount = count;
-          })
-        );
+      this.filterForm.valueChanges.pipe(
+        debounceTime(100),
+        map(() => this.countActiveFilters())
+      ).subscribe(count => {
+        this.filterCount = count;
+      })
+    );
+  }
+
+  private getCurrentFilterState(): RequestFilterState {
+    return {
+      ...this.filterForm.getRawValue(),
+      category: this.category.value as any,
+      searchValue: this.searchValue.value,
+      searchCity: this.searchCity.value,
+      searchRequestAuthor: this.searchRequestAuthor.value,
+      filterCount: this.filterCount,
+      isFilterOpen: this.isFilterOpen
+    };
+  }
+
+  updateCombinedState(): void {
+    const state = this.getCurrentFilterState();
+    this.stateService.setFilters(state);
+    this.getRequests();
+    this.loadAllCounts();
+  }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
   }
 
   private isControlActive(control: AbstractControl): boolean {
@@ -258,7 +307,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
         },
       });
-  }
+  } 
+
   setFormListeners() {
     this.category.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -273,6 +323,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           const statusEnum = this.getStatusEnumFromDisplay(category);
           this.filterForm.controls.statuses.setValue([statusEnum || category as ModelsVRStatus]);
         }
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -283,10 +334,12 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       )      .subscribe((newValue) => {
         if (this.filterForm.controls.city_id.value !== '')
           this.filterForm.controls.city_id.setValue('');
-        if (newValue && newValue.length > 0)
+        if (newValue && newValue.length > 0) {
           this.getCities(newValue);
+        }
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
 
@@ -303,6 +356,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -312,7 +366,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loading = false;
         this.currentPage = 1;
         this.requestList = [];
-        this.getRequests();
+        this.updateCombinedState();
       });
 
 
@@ -325,6 +379,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(value => {
         this.filterForm.controls.search.setValue(value);
+        this.updateCombinedState();
         // this.allDataLoaded = false;
         // this.currentPage = 1;
         // this.requestList = [];

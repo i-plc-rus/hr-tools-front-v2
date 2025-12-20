@@ -115,7 +115,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   isFilterOpen: boolean = false;
 
   @ViewChild('requestContainer') requestContainer!: ElementRef;
-  @ViewChild('toggleFilter') toggleElement!: ElementRef;
 
   constructor(
     public screen: ScreenWidthService,
@@ -127,77 +126,56 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    const savedState = this.stateService.getFilters();
-    this.patchForms(savedState);
-    this.subscribeToFormChanges();
+    const saved = this.stateService.getFilters();
 
-    this.getRequests();
-    this.loadAllCounts();
-    this.getUsers();
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.category.setValue(saved.category as any, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchRequestAuthor.setValue(saved.searchRequestAuthor, { emitEvent: false });
+
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getRequests();
+      this.loadAllCounts();
+      this.getUsers();
+    } else {
+      this.getRequests();
+      this.loadAllCounts();
+      this.getUsers();
+    }
+
     this.setFormListeners();
 
     this.subscriptions.push(
-          this.filterForm.valueChanges.pipe(
-            debounceTime(100),
-            map(() => this.countActiveFilters())
-          ).subscribe(count => {
-            this.filterCount = count;
-          })
-        );
+      this.filterForm.valueChanges.pipe(
+        debounceTime(100),
+        map(() => this.countActiveFilters())
+      ).subscribe(count => {
+        this.filterCount = count;
+      })
+    );
   }
 
-  private patchForms(state: RequestFilterState): void {
-    this.filterForm.patchValue(state, { emitEvent: false });
-    this.category.patchValue(state.category, { emitEvent: false });
-    this.searchValue.patchValue(state.searchValue, { emitEvent: false });
-    this.searchCity.patchValue(state.searchCity, { emitEvent: false });
-    this.searchRequestAuthor.patchValue(state.searchRequestAuthor, { emitEvent: false });
-    this.isFilterOpen = state.isFilterOpen ?? false;
-    this.filterCount = state.filterCount ?? 0;
-  }
-
-  private subscribeToFormChanges(): void {
-    this.filterForm.valueChanges.pipe(
-      debounceTime(300), 
-      takeUntil(this.destroy$)
-    ).subscribe(values => {
-      const combinedState: Partial<RequestFilterState> = {
-        ...values,
-        category: this.category.value,
-        searchValue: this.searchValue.value,
-        searchCity: this.searchCity.value,
-        searchRequestAuthor: this.searchRequestAuthor.value,
-        filterCount: this.filterCount,
-        isFilterOpen: this.isFilterOpen,
-      };
-      this.updateStateAndLoad(combinedState);
-    });
-
-    this.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-    this.searchValue.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-    this.searchCity.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-    this.searchRequestAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-  }
-  
-  private updateCombinedState(): void {
-    const combinedState: Partial<RequestFilterState> = {
-      ...this.filterForm.value,
-      category: this.category.value,
+  private getCurrentFilterState(): RequestFilterState {
+    return {
+      ...this.filterForm.getRawValue(),
+      category: this.category.value as any,
       searchValue: this.searchValue.value,
       searchCity: this.searchCity.value,
       searchRequestAuthor: this.searchRequestAuthor.value,
       filterCount: this.filterCount,
-      isFilterOpen: this.isFilterOpen,
+      isFilterOpen: this.isFilterOpen
     };
-    this.updateStateAndLoad(combinedState);
   }
 
-  private updateStateAndLoad(changes: Partial<RequestFilterState>): void {
-    this.stateService.setFilters(changes);
+  updateCombinedState(): void {
+    const state = this.getCurrentFilterState();
+    this.stateService.setFilters(state);
     this.getRequests();
     this.loadAllCounts();
-    this.getUsers();
-    this.setFormListeners();
   }
 
   onToggleChange(): void {
@@ -248,9 +226,6 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
   ngAfterViewInit(): void {
-    if (this.filterCount > 0 && this.toggleElement) {
-      this.toggleElement.nativeElement.checked = true;
-    }
     if (this.requestContainer && this.requestContainer.nativeElement) {
       this.requestContainer.nativeElement.addEventListener('scroll', this.onScroll);
     }
@@ -332,7 +307,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
         },
       });
-  }
+  } 
+
   setFormListeners() {
     this.category.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -347,6 +323,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           const statusEnum = this.getStatusEnumFromDisplay(category);
           this.filterForm.controls.statuses.setValue([statusEnum || category as ModelsVRStatus]);
         }
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -357,10 +334,12 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       )      .subscribe((newValue) => {
         if (this.filterForm.controls.city_id.value !== '')
           this.filterForm.controls.city_id.setValue('');
-        if (newValue && newValue.length > 0)
+        if (newValue && newValue.length > 0) {
           this.getCities(newValue);
+        }
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
 
@@ -377,6 +356,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -386,7 +366,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loading = false;
         this.currentPage = 1;
         this.requestList = [];
-        this.getRequests();
+        this.updateCombinedState();
       });
 
 
@@ -399,6 +379,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(value => {
         this.filterForm.controls.search.setValue(value);
+        this.updateCombinedState();
         // this.allDataLoaded = false;
         // this.currentPage = 1;
         // this.requestList = [];

@@ -24,38 +24,13 @@ export interface RequestFilterState {
   providedIn: 'root'
 })
 export class RequestStateService {
-  private readonly initialState: RequestFilterState = {
-    search: '',
-    author_id: '',
-    city_id: '',
-    favorite: undefined,
-    search_from: '',
-    search_to: '',
-    search_period: undefined,
-    selection_type: undefined,
-    sort: { created_at_desc: true },
-    statuses: [],
-    category: '',
-    searchValue: '',
-    searchCity: '',
-    searchRequestAuthor: '',
-    filterCount: 0,
-    isFilterOpen: false,
-  };
+  private savedFilters: RequestFilterState | null = null;
 
-  private filters: RequestFilterState = { ...this.initialState };
-
-  constructor() { }
-
-  getFilters(): RequestFilterState {
-    return this.filters;
+  setFilters(state: RequestFilterState): void {
+    this.savedFilters = { ...state };
   }
 
-  setFilters(newFilters: Partial<RequestFilterState>): void {
-    this.filters = { ...this.filters, ...newFilters };
-  }
-
-  resetFilters(): void {
-    this.filters = { ...this.initialState };
+  getFilters(): RequestFilterState | null {
+    return this.savedFilters;
   }
 }

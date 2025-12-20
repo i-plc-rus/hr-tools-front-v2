@@ -35,48 +35,13 @@ export interface CandidatesFilterState {
   providedIn: 'root'
 })
 export class CandidatesStateService {
-  private readonly initialState: CandidatesFilterState = {
-    added_day: '',
-      added_period: undefined,
-      added_type: undefined,
-      age_from: null,
-      age_to: null,
-      city: '',
-      gender: undefined,
-      language: '',
-      relocation: undefined,
-      schedule: undefined,
-      search: '',
-      source: undefined,
-      stage_name: '',
-      status: undefined,
-      tag: '',
-      total_experience_from: null,
-      total_experience_to: null,
-      vacancy_id: '',
-      vacancy_name: '',
-      searchVacancy: '',
-      searchCity: '',
-      searchValue: '',
-      filterCount: 0,
-      isFilterOpen: false,
-  };
-
-  private filters: CandidatesFilterState = { ...this.initialState };
-
-  constructor() { }
-
-  getFilters(): CandidatesFilterState {
-    return this.filters;
+   private savedFilters: CandidatesFilterState | null = null;
+  
+  setFilters(state: CandidatesFilterState): void {
+    this.savedFilters = { ...state };
   }
-
-  setFilters(newFilters: Partial<CandidatesFilterState>): void {
-    // Используем Partial для возможности обновления части полей
-    this.filters = { ...this.filters, ...newFilters };
-  }
-
-  // Метод для сброса фильтров к исходному состоянию
-  resetFilters(): void {
-    this.filters = { ...this.initialState };
+  
+  getFilters(): CandidatesFilterState | null {
+    return this.savedFilters;
   }
 }

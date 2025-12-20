@@ -87,7 +87,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   isFilterOpen: boolean = false;
 
-
   constructor(
     private modalService: VacancyModalService,
     private api: ApiService,
@@ -95,15 +94,30 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const savedState = this.stateService.getFilters();
-    this.patchForms(savedState);
-    this.subscribeToFormChanges();
+    const saved = this.stateService.getFilters();
 
-    this.getVacancyList();
-    this.getDepartments();
-    this.getUsers();
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.category.setValue(saved.category as any, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchRequestAuthor.setValue(saved.searchRequestAuthor, { emitEvent: false });
+
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getVacancyList();
+      this.getDepartments();
+      this.getUsers();
+      this.loadTabCounts();
+    } else {
+      this.getVacancyList();
+      this.getDepartments();
+      this.getUsers();
+      this.loadTabCounts();
+    }
+
     this.setFormListeners();
-    this.loadTabCounts();
     
     this.subscriptions.push(
       this.filterForm.valueChanges.pipe(
@@ -115,54 +129,9 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  onToggleChange(): void {
-    this.updateCombinedState();
-  }
-
-  closePanel(): void {
-    this.isFilterOpen = false;
-    this.updateCombinedState();
-  }
-
-  private patchForms(state: VacancyFilterState): void {
-      this.filterForm.patchValue(state, { emitEvent: false });
-      this.category.patchValue(state.category, { emitEvent: false });
-      this.searchValue.patchValue(state.searchValue, { emitEvent: false });
-      this.searchCity.patchValue(state.searchCity, { emitEvent: false });
-      this.searchAuthor.patchValue(state.searchAuthor, { emitEvent: false })
-      this.searchRequestAuthor.patchValue(state.searchRequestAuthor, { emitEvent: false });
-      this.isFilterOpen = state.isFilterOpen ?? false;
-      this.filterCount = state.filterCount ?? 0;
-    }
-  
-    private subscribeToFormChanges(): void {
-      this.filterForm.valueChanges.pipe(
-        debounceTime(300), 
-        takeUntil(this.destroy$)
-      ).subscribe(values => {
-        const combinedState: Partial<VacancyFilterState> = {
-          ...values,
-          category: this.category.value,
-          searchValue: this.searchValue.value,
-          searchCity: this.searchCity.value,
-          searchRequestAuthor: this.searchRequestAuthor.value,
-          searchAuthor: this.searchAuthor.value,
-          filterCount: this.filterCount,
-          isFilterOpen: this.isFilterOpen,
-        };
-        this.updateStateAndLoad(combinedState);
-      });
-  
-      this.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchValue.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchCity.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchRequestAuthor.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-    }
-    
-    private updateCombinedState(): void {
-      const combinedState: Partial<VacancyFilterState> = {
-        ...this.filterForm.value,
+  private getCurrentFilterState(): VacancyFilterState {
+      return {
+        ...this.filterForm.getRawValue(),
         category: this.category.value,
         searchValue: this.searchValue.value,
         searchCity: this.searchCity.value,
@@ -171,17 +140,24 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         filterCount: this.filterCount,
         isFilterOpen: this.isFilterOpen,
       };
-      this.updateStateAndLoad(combinedState);
     }
   
-    private updateStateAndLoad(changes: Partial<VacancyFilterState>): void {
-      this.stateService.setFilters(changes);
+  updateCombinedState(): void {
+      const state = this.getCurrentFilterState();
+      this.stateService.setFilters(state);
       this.getVacancyList();
       this.getDepartments();
-      this.getUsers();
-      this.setFormListeners();
       this.loadTabCounts();
-    }
+  }
+
+  onToggleChange(): void {
+    this.updateCombinedState();
+  }
+
+  closePanel(): void {
+    this.isFilterOpen = false;
+    this.updateCombinedState();
+  } 
 
   private isControlActive(control: AbstractControl): boolean {
     const value = control.value;
@@ -349,6 +325,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         const isMyVacancies = category === 'my' ? true : false;
         this.filterForm.controls.favorite.setValue(isFavorite);
         this.filterForm.controls.author_id.setValue(isMyVacancies ? this.userId : '');
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -360,6 +337,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.getCities(newValue);
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
     this.searchAuthor.valueChanges
@@ -371,6 +349,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.authors = [];
+        this.updateCombinedState();
       });
 
     this.searchRequestAuthor.valueChanges
@@ -382,6 +361,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -391,8 +371,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loading = false;
         this.currentPage = 1;
         this.vacancyList = [];
-        this.getVacancyList();
-        this.loadTabCounts();
+        this.updateCombinedState();
       });
 
     this.searchSubscription = this.searchValue.valueChanges

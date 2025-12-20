@@ -235,10 +235,6 @@ export class СandidateListComponent implements OnDestroy{
   ) { }
 
   ngOnInit(): void { 
-    const savedState = this.stateService.getFilters();
-    this.patchForms(savedState);
-    this.subscribeToFormChanges();
-
     this.subscriptions.push(
       this.filterForm.valueChanges.pipe(
         debounceTime(100),
@@ -249,54 +245,22 @@ export class СandidateListComponent implements OnDestroy{
     );
   }
   
-
-  private patchForms(state: CandidatesFilterState): void {
-      this.filterForm.patchValue(state, { emitEvent: false });
-      this.searchValue.patchValue(state.searchValue, { emitEvent: false });
-      this.searchCity.patchValue(state.searchCity, { emitEvent: false });
-      this.searchVacancy.patchValue(state.searchVacancy, { emitEvent: false });
-      this.isFilterOpen = state.isFilterOpen ?? false;
-      this.filterCount = state.filterCount ?? 0;
-    }
-  
-    private subscribeToFormChanges(): void {
-      this.filterForm.valueChanges.pipe(
-        debounceTime(300), 
-        takeUntil(this.destroy$)
-      ).subscribe(values => {
-        const combinedState: Partial<CandidatesFilterState> = {
-          ...values,
-          searchValue: this.searchValue.value,
-          searchCity: this.searchCity.value,
-          searchVacancy: this.searchVacancy.value,
-          filterCount: this.filterCount,
-          isFilterOpen: this.isFilterOpen,
-        };
-        this.updateStateAndLoad(combinedState);
-      });
-  
-      this.searchValue.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchCity.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-      this.searchVacancy.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.updateCombinedState());
-    }
-    
-    private updateCombinedState(): void {
-      const combinedState: Partial<CandidatesFilterState> = {
-        ...this.filterForm.value,
+  private getCurrentFilterState(): CandidatesFilterState {
+      return {
+        ...this.filterForm.getRawValue(),
         searchValue: this.searchValue.value,
         searchCity: this.searchCity.value,
         searchVacancy: this.searchVacancy.value,
         filterCount: this.filterCount,
-        isFilterOpen: this.isFilterOpen,
+        isFilterOpen: this.isFilterOpen
       };
-      this.updateStateAndLoad(combinedState);
-    }
+  }
   
-    private updateStateAndLoad(changes: Partial<CandidatesFilterState>): void {
-      this.stateService.setFilters(changes);
+  updateCombinedState(): void {
+      const state = this.getCurrentFilterState();
+      this.stateService.setFilters(state);
       this.getApplicants();
-      this.setFormListeners();
-    }
+  }
 
   onToggleChange(): void {
     this.updateCombinedState();
@@ -380,8 +344,21 @@ export class СandidateListComponent implements OnDestroy{
           }
         }
       });
-    
-    this.getApplicants();
+
+    const saved = this.stateService.getFilters();
+
+    if (saved) {
+      this.filterForm.patchValue(saved, { emitEvent: false });
+      this.searchValue.setValue(saved.searchValue, { emitEvent: false });
+      this.searchCity.setValue(saved.searchCity, { emitEvent: false });
+      this.searchVacancy.setValue(saved.searchVacancy, { emitEvent: false });
+      this.filterCount = saved.filterCount;
+      setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
+
+      this.getApplicants();
+    } else {
+      this.getApplicants();
+    }
     this.setFormListeners();
   }
 
@@ -547,6 +524,7 @@ export class СandidateListComponent implements OnDestroy{
           this.getVacancyList(newValue);
         else
           this.vacancyList = [];
+        this.updateCombinedState();
       });
 
     this.searchCity.valueChanges
@@ -558,6 +536,7 @@ export class СandidateListComponent implements OnDestroy{
           this.getCities(newValue);
         else
           this.cities = [];
+        this.updateCombinedState();
       });
 
     this.filterForm.valueChanges
@@ -574,7 +553,7 @@ export class СandidateListComponent implements OnDestroy{
           this.applicantsList = [];
           this.gridApi.setGridOption('loading', true);
           this.gridApi.setGridOption('rowData', []);
-          this.getApplicants();
+          this.updateCombinedState();
         }
       });
 
@@ -594,7 +573,7 @@ export class СandidateListComponent implements OnDestroy{
         this.applicantsList = [];
         this.gridApi.setGridOption('loading', true);
         this.gridApi.setGridOption('rowData', []);
-        this.getApplicants();
+        this.updateCombinedState();
       });
   }
 

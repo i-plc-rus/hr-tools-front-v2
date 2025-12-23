@@ -347,7 +347,6 @@ export class RequestApprovalComponent implements OnInit {
     
     this.api.v1SpaceVacancyRequestApprovalsApproveCreate(this.id, this.userApproval.id).subscribe({
       next: (res) => {
-        console.log(res)
         this.snackBarService.snackBarMessageSuccess('Заявка согласована');
         this.router.navigate(['/user/request/list'])
       },

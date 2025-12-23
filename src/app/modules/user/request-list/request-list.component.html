@@ -16,7 +16,7 @@
         <mat-expansion-panel-header>Статус</mat-expansion-panel-header>
         <mat-chip-listbox hideSingleSelectionIndicator multiple formControlName="statuses">
           @for (status of statuses; track $index) {
-            <mat-chip-option [value]="status.value">{{ status.value }}</mat-chip-option>
+            <mat-chip-option [value]="status.value">{{ getStatusDisplayName(status.value) }}</mat-chip-option>
           }
         </mat-chip-listbox>
       </mat-expansion-panel>

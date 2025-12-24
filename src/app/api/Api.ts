@@ -1672,6 +1672,70 @@ public v1SpaceApplicantCreate (body: ApplicantapimodelsApplicantData, options: R
     })
 }
             /**
+ * @description Перезапустить анализ видео ответа Перезапустить анализ видео ответа
+ *
+ * @tags Кандидат
+ * @name V1SpaceApplicantAnalyzeRetryVideoUpdate
+ * @request PUT:/api/v1/space/applicant/analyze-retry/video/{id}
+ */
+public v1SpaceApplicantAnalyzeRetryVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: string,
+
+})>;
+public v1SpaceApplicantAnalyzeRetryVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: string,
+
+})>>;
+public v1SpaceApplicantAnalyzeRetryVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: string,
+
+})> | (ApimodelsResponse & {
+    data?: string,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: string,
+
+})>(
+        'PUT',
+        this.baseUrl + `/api/v1/space/applicant/analyze-retry/video/${id}`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Пропустить анализ видео ответа Пропустить анализ видео ответа
+ *
+ * @tags Кандидат
+ * @name V1SpaceApplicantAnalyzeSkipVideoUpdate
+ * @request PUT:/api/v1/space/applicant/analyze-skip/video/{id}
+ */
+public v1SpaceApplicantAnalyzeSkipVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options?: RequestOptions): Observable<(ApimodelsResponse & {
+    data?: string,
+
+})>;
+public v1SpaceApplicantAnalyzeSkipVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: string,
+
+})>>;
+public v1SpaceApplicantAnalyzeSkipVideoUpdate (id: string, body: ApplicantapimodelsApplicantData, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<(ApimodelsResponse & {
+    data?: string,
+
+})> | (ApimodelsResponse & {
+    data?: string,
+
+})> {
+    return this.http.request<(ApimodelsResponse & {
+    data?: string,
+
+})>(
+        'PUT',
+        this.baseUrl + `/api/v1/space/applicant/analyze-skip/video/${id}`,
+        {
+                body: body,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Скачать документ кандидата
  *
  * @tags Кандидат
@@ -4276,11 +4340,11 @@ public v1SpaceVacancyRequestApprovalHistoryList (id: string, options: RequestOpt
     })
 }
             /**
- * @description Обновление цепочки согласования
+ * @description Получить цепочку согласования
  *
  * @tags Согласование заявок
  * @name V1SpaceVacancyRequestApprovalsList
- * @summary Обновление цепочки согласования
+ * @summary Получить цепочку согласования
  * @request GET:/api/v1/space/vacancy_request/{id}/approvals
  */
 public v1SpaceVacancyRequestApprovalsList (id: string, body: (VacancyapimodelsApprovalTaskView)[], options?: RequestOptions): Observable<ApimodelsResponse>;
@@ -4337,9 +4401,9 @@ public v1SpaceVacancyRequestApprovalsApproveCreate (id: string, taskId: string, 
  * @summary Отклонить
  * @request POST:/api/v1/space/vacancy_request/{id}/approvals/{taskId}/reject
  */
-public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalReject)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: VacancyapimodelsApprovalReject, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: VacancyapimodelsApprovalReject, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, body: VacancyapimodelsApprovalReject, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
         'POST',
         this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals/${taskId}/reject`,

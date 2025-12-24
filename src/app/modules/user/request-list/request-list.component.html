@@ -230,27 +230,30 @@
             </div>
             <div class="flex flex-col lg:flex-row justify-between gap-4">
               <div class="flex gap-5 flex-grow flex-shrink flex-nowrap overflow-x-auto">
-                @for (stage of request.approval_stages; track $index) {
+                @for (task of request.approval_tasks; track task.id) {
                   <div class="flex gap-3 items-center">
                     <div class="flex justify-center items-center rounded-full bg-white w-14 h-14">
-                      <!-- @switch (stage.approval_status) {
-                        @case ('Согласованно') {
+                      @switch (task.state) {
+                        @case (ModelsApprovalState.AStateApproved) {
                           <mat-icon svgIcon="check-circle"></mat-icon>
                         }
-                        @case ('Не согласованно') {
+                        @case (ModelsApprovalState.AStateRejected) {
                           <mat-icon svgIcon="block-circle"></mat-icon>
                         }
-                        @case ('Ждет согласования') {
+                        @case (ModelsApprovalState.AStateRequestChanges) {
+                          <mat-icon svgIcon="block-circle"></mat-icon>
+                        }
+                        @case (ModelsApprovalState.AStatePending) {
                           <mat-icon svgIcon="hourglass"></mat-icon>
                         }
                         @default {
                           <mat-icon svgIcon="avg-pace"></mat-icon>
                         }
-                      } -->
+                      }
                     </div>
                     <div class="flex flex-col gap-0.5 text-[16px] leading-6">
-                      <!-- <span class="text-[var(--text-main)] text-nowrap">{{ stage.space_user_name }}</span>
-                      <span class="text-[var(--text-alter)] text-nowrap">{{ stage.approval_status }}</span> -->
+                      <span class="text-[var(--text-main)] text-nowrap">{{ task.assignee_user_name }}</span>
+                      <span class="text-[var(--text-alter)] text-nowrap">{{ getApprovalStateDisplayName(task.state) }}</span>
                     </div>
                   </div>
                 }

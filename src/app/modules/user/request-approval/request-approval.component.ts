@@ -36,7 +36,7 @@ export class RequestApprovalComponent implements OnInit {
   companyName: string = '';
   /*cтатус заявки */
   status: string = '';
-  isResponsible: boolean = false;
+  // isResponsible: boolean = false;
   userId: string = '';
   userApproval: any = null;
 
@@ -102,12 +102,6 @@ export class RequestApprovalComponent implements OnInit {
       undefined,
     ),
     job_title_name: new FormControl(''),
-    approval_stages: new FormArray([
-      new FormGroup({
-        space_user_id: new FormControl('', [Validators.required]),
-        stage: new FormControl(),
-      }),
-    ]),
     description: new FormControl(''),
   });
 
@@ -137,8 +131,6 @@ export class RequestApprovalComponent implements OnInit {
         next: (response: any) => {
           const { vacancyDetails, companyStructure, city, user, approvals } = response;
           this.userId = user.body.data.id;
-          const approvalIds = vacancyDetails.body.data.approval_stages?.map((item: any) => item.space_user_id)
-          this.isResponsible = approvalIds?.some((item: string) => item === user.body.data.id)
           const approvalsList = approvals.body?.data || [];
           this.userApproval = approvalsList.find((approval: any) => approval.assignee_user_id === this.userId);
           const obj = {
@@ -148,23 +140,9 @@ export class RequestApprovalComponent implements OnInit {
           this.companyName = vacancyDetails.body.data.company_name;
           this.status = vacancyDetails.body.data.status
           this.form.patchValue({ ...vacancyDetails.body.data, city_id: obj });
-          const approvalStagesArray = this.form.get(
-            'approval_stages',
-          ) as FormArray;
-          approvalStagesArray.clear();
-          if (vacancyDetails.body.data.approval_stages) {
-            vacancyDetails.body.data.approval_stages.forEach(
-              (stage: { space_user_id: string; stage: number }) => {
-                approvalStagesArray.push(
-                  new FormGroup({
-                    space_user_id: new FormControl(stage.space_user_id, [
-                      Validators.required,
-                    ]),
-                    stage: new FormControl(stage.stage),
-                  }),
-                );
-              },
-            );
+          this.form.disable();
+          if(this.userApproval.state === 'PENDING') {
+          this.form.controls.description.enable();
           }
           this.companyStructureArray = companyStructure?.body?.data || [];
           this.city = city?.body?.data || [];
@@ -291,14 +269,6 @@ export class RequestApprovalComponent implements OnInit {
       experience: this.form.controls.experience.value || undefined,
       schedule: this.form.controls.schedule.value || undefined,
       selection_type: this.form.controls.selection_type.value || undefined,
-      approval_stages:
-        this.form.controls.approval_stages.value?.map((interviewer) => ({
-          space_user_id:
-            interviewer.space_user_id !== null
-              ? interviewer.space_user_id
-              : undefined,
-          stage: interviewer.stage || undefined,
-        })) || [],
       description: this.form.controls.description.value || undefined
     };
 

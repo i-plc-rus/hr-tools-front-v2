@@ -64,6 +64,7 @@ export class VacancyRequestView implements VacancyapimodelsVacancyRequestView {
   approval_stage_current: number = 0;
   approval_stage_is_last: boolean = false;
   approval_stages?: VacancyapimodelsApprovalTaskView[];
+  approval_tasks?: VacancyapimodelsApprovalTaskView[];
   /** тип вакансии */
   request_type?: ModelsVRType;
   /** вид подбора */

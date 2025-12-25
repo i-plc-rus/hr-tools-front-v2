@@ -20,6 +20,9 @@ import {matchValidator} from '../../../../validators/match';
 export class PasswordResetComponent {
   form: FormGroup;
 
+  isPasswordVisible = false;
+  isConfirmPasswordVisible = false;
+
   constructor(
   ) {
     this.form = new FormGroup({

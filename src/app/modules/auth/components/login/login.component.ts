@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
 
   form: FormGroup;
   loading: boolean = false;
+  isPasswordVisible = false;
 
   constructor(
     private router: Router,

@@ -793,6 +793,8 @@ export interface ApplicantapimodelsScoreAI {
 }
 
 export interface ApplicantapimodelsScoreDetail {
+  /** Идентификатор записи для retry/skip */
+  analyze_id?: string;
   /** Комментарий к оценке */
   comment_for_similarity?: string;
   /** Идентификатор файла с изображением графика эмоциий */
@@ -803,6 +805,14 @@ export interface ApplicantapimodelsScoreDetail {
   file_id?: string;
   /** Идентификатор файла с изображением видео кадров */
   frames_file_id?: string;
+  /** Время последней попытки */
+  last_attempt_at?: string;
+  /** Включен руной ретрай */
+  manual_retry?: boolean;
+  /** Включено руное игнорирование анализа */
+  manual_skip?: boolean;
+  /** Идентификатор пользователя включившего ретрай/игнорирование анализа */
+  manual_user_id?: string;
   /** Идентификатор вопроса */
   question_id?: string;
   /** Текст вопроса */
@@ -1945,6 +1955,8 @@ export interface VacancyapimodelsVacancyRequestPreView {
 }
 
 export interface VacancyapimodelsVacancyRequestView {
+  /** список согласующих */
+  approval_tasks?: VacancyapimodelsApprovalTaskView[];
   /** фио непосредственного руководителя */
   chief_fio?: string;
   city?: string;

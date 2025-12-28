@@ -231,6 +231,12 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
       });
   }
 
+  preventNegative(event: KeyboardEvent) {
+    if (event.key === '-' || event.key === 'e') {
+      event.preventDefault();
+    }
+  }
+
   onVacancyScroll(event: any) {
     if (this.isLoadingMoreVacancies || this.vacancyAllDataLoaded) return;
 

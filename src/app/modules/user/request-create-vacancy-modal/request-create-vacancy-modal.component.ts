@@ -69,7 +69,6 @@ export class RequestCreateVacancyModalComponent implements OnInit {
     this.isLoading = true;
     this.api.v1SpaceVacancyRequestPublishUpdate(this.requestId).subscribe({
       next: (res) => {
-        console.log(res);
         this.onSubmit.emit(true);
         this.isLoading = false;
         this.closeModal();

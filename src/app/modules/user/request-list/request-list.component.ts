@@ -4,6 +4,7 @@ import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
 import {
   DictapimodelsCityView,
+  ModelsApprovalState,
   ModelsVRSelectionType,
   ModelsVRStatus,
   SpaceapimodelsSpaceUser,
@@ -44,6 +45,7 @@ import { RequestStateService, RequestFilterState } from '../../../services/reque
 export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   // Expose enum to template
   ModelsVRStatus = ModelsVRStatus;
+  ModelsApprovalState = ModelsApprovalState;
   
   // фильтр
   sortByDesc = true;
@@ -611,7 +613,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       showNumber,
     ).subscribe((result: boolean) => {
       if (result) {
-        this.getRequests();
+        this.router.navigate(['/user/vacancy/list']);
       }
     });
   }
@@ -755,6 +757,18 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       [ModelsVRStatus.VRStatusDone]: 'Выполнена',
     };
     return statusMap[status] || status;
+  }
+
+  getApprovalStateDisplayName(state: ModelsApprovalState | string | undefined): string {
+    if (!state) return '';
+    const stateMap: { [key in ModelsApprovalState]: string } = {
+      [ModelsApprovalState.AStatePending]: 'Ожидает согласования',
+      [ModelsApprovalState.AStateApproved]: 'Согласовано',
+      [ModelsApprovalState.AStateRequestChanges]: 'Запрошены изменения',
+      [ModelsApprovalState.AStateRejected]: 'Отклонено',
+      [ModelsApprovalState.AStateRemoved]: 'Удалено',
+    };
+    return stateMap[state as ModelsApprovalState] || state;
   }
 
 }

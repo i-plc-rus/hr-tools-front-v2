@@ -176,7 +176,7 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Опыт работы</mat-label>
-            <input type="number" matInput formControlName="total_experience" autocomplete="new-total-experience"/>
+            <input type="number" matInput formControlName="total_experience" autocomplete="new-total-experience" min="0" (keydown)="preventNegative($event)"/>
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">

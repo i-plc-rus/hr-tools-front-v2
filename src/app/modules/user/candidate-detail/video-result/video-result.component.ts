@@ -20,6 +20,7 @@ import {
 } from '../../../../api/data-contracts';
 import { ApiService } from '../../../../api/Api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { CommentRendererComponent } from './expand-comment/comment-renderer.component';
 
 @Component({
   selector: 'app-video-result',
@@ -35,7 +36,11 @@ export class VideoResultComponent {
   videoSrc: SafeUrl | undefined;
   videoLoading: boolean = true;
 
-  constructor(private renderer: Renderer2, private api: ApiService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private renderer: Renderer2,
+    private api: ApiService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     if (this.survey && this.survey.score_ai!.details) {
@@ -68,17 +73,19 @@ export class VideoResultComponent {
 
   openVideo(fileID: string) {
     this.videoLoading = true;
-    this.api.v1SpaceApplicantFileDetail(fileID, { responseType: 'blob' }).subscribe({
-      next: (data: any) => {
-        const objectURL = URL.createObjectURL(data as Blob);
-        this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        this.videoLoading = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.videoLoading = false;
-      }
-    })
+    this.api
+      .v1SpaceApplicantFileDetail(fileID, { responseType: 'blob' })
+      .subscribe({
+        next: (data: any) => {
+          const objectURL = URL.createObjectURL(data as Blob);
+          this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          this.videoLoading = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.videoLoading = false;
+        },
+      });
   }
 
   changeElementStyle() {
@@ -119,7 +126,10 @@ export class VideoResultComponent {
       field: 'commentGPT',
       flex: 1,
       headerName: 'Комментарий от GPT API',
+      cellRenderer: CommentRendererComponent,
+      autoHeight: true,
       headerClass: 'font-medium',
+      wrapText: false,
     },
     // {
     //   field: 'points',
@@ -137,5 +147,21 @@ export class VideoResultComponent {
     loading: false,
     suppressMovableColumns: true,
     suppressScrollOnNewData: true,
+    suppressRowHoverHighlight: true,
+
+    getRowHeight: (params) => {
+      if (params.data._isExpanded) {
+        return undefined;
+      }
+      return 48;
+    },
+
+    onColumnResized: (params) => {
+      params.api.onRowHeightChanged();
+    },
+
+    onGridReady: (params) => {
+      this.gridApi = params.api;
+    },
   };
 }

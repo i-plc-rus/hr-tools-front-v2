@@ -36,7 +36,11 @@ export class VideoResultComponent {
   videoSrc: SafeUrl | undefined;
   videoLoading: boolean = true;
 
-  constructor(private renderer: Renderer2, private api: ApiService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private renderer: Renderer2,
+    private api: ApiService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     if (this.survey && this.survey.score_ai!.details) {
@@ -69,17 +73,19 @@ export class VideoResultComponent {
 
   openVideo(fileID: string) {
     this.videoLoading = true;
-    this.api.v1SpaceApplicantFileDetail(fileID, { responseType: 'blob' }).subscribe({
-      next: (data: any) => {
-        const objectURL = URL.createObjectURL(data as Blob);
-        this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        this.videoLoading = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.videoLoading = false;
-      }
-    })
+    this.api
+      .v1SpaceApplicantFileDetail(fileID, { responseType: 'blob' })
+      .subscribe({
+        next: (data: any) => {
+          const objectURL = URL.createObjectURL(data as Blob);
+          this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          this.videoLoading = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.videoLoading = false;
+        },
+      });
   }
 
   changeElementStyle() {
@@ -123,6 +129,7 @@ export class VideoResultComponent {
       cellRenderer: CommentRendererComponent,
       autoHeight: true,
       headerClass: 'font-medium',
+      wrapText: false,
     },
     // {
     //   field: 'points',
@@ -135,21 +142,23 @@ export class VideoResultComponent {
   gridOptions: GridOptions = {
     columnDefs: this.colDefs,
     rowData: this.questionsList,
-    overlayNoRowsTemplate:
-      '<span class="text-[32px] leading-10">Кандидаты отсутствуют</span>',
-    loading: false,
-    suppressMovableColumns: true,
-    suppressScrollOnNewData: true,
-    
+    domLayout: 'autoHeight',
+    suppressRowHoverHighlight: true,
+
     getRowHeight: (params) => {
-      if (params.data && params.data._isExpanded) {
-        return undefined; // autoHeight: грид сам вычислит высоту по контенту
+      if (!params.data) return 48;
+      if (params.data._isExpanded) {
+        return undefined;
       }
-      return 48; // Стандартная высота строки для ag-theme-material
+      return 48;
+    },
+
+    onColumnResized: (params) => {
+      params.api.onRowHeightChanged();
     },
 
     onGridReady: (params) => {
       this.gridApi = params.api;
-    }
+    },
   };
 }

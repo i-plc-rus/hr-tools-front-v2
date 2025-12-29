@@ -112,6 +112,8 @@ export class AppComponent implements OnInit {
       .addSvgIcon('red-x', this.setPath(`${this.svgPath}/ic-red-x.svg`))
       .addSvgIcon('red-polygon', this.setPath(`${this.svgPath}/ic-red-polygon.svg`))
       .addSvgIcon('swap', this.setPath(`${this.svgPath}/ic-swap.svg`))
+      .addSvgIcon('hide-eye', this.setPath(`${this.svgPath}/ic-hide.svg`))
+      .addSvgIcon('show-eye', this.setPath(`${this.svgPath}/ic-show.svg`))
   }
 
   ngOnInit() {

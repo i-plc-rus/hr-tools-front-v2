@@ -20,16 +20,24 @@
         </app-text-input>
         <app-text-input
           label="Введите пароль"
-          class="w-full md:w-[400px]"
+          class="w-full md:w-[400px] relative block"
           formControlName="password"
-          type="password"
-          [showError]="
-          form.get('password')!.invalid && !form.get('password')!.untouched"
+          [type]="isPasswordVisible ? 'text' : 'password'"
+          [showError]="form.get('password')!.invalid && !form.get('password')!.untouched"
         >
+          <button
+            type="button"
+            (click)="isPasswordVisible = !isPasswordVisible"
+            class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center cursor-pointer z-10 text-gray-500"
+            tabindex="-1"
+          >
+            <mat-icon [svgIcon]="isPasswordVisible ? 'show-eye' : 'hide-eye'" class="password-toggle-icon"></mat-icon>
+          </button>
+
           @if (form.get('password')!.invalid && !form.get('password')!.untouched) {
-            <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                <mat-icon svgIcon="error"></mat-icon>
-              </span>
+            <span class="absolute right-10 top-1 w-12 h-12 flex justify-center items-center pointer-events-none">
+              <mat-icon svgIcon="error"></mat-icon>
+            </span>
           }
         </app-text-input>
         <button

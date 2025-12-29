@@ -50,20 +50,11 @@ export class CommentRendererComponent implements ICellRendererAngularComp, After
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         if (!this.textContainer) return;
-
-        const el = this.textContainer.nativeElement;
-        
-        // 1. Проверка на обрезание текса (многоточие)
+        const el = this.textContainer.nativeElement;       
         const isTruncated = el.scrollWidth > el.clientWidth;
-        
-        // 2. Проверка на переносы строк
-        const hasNewLines = String(this.params.value || '').includes('\n');
-        
-        // 3. Запасной вариант: если текста очень много (например, > 50 символов)
+        const hasNewLines = String(this.params.value || '').includes('\n');        
         const isLongText = String(this.params.value || '').length > 60;
-
-        this.shouldShowButton = isTruncated || hasNewLines || isLongText;
-        
+        this.shouldShowButton = isTruncated || hasNewLines || isLongText;        
         this.cdr.detectChanges();
       });
     });

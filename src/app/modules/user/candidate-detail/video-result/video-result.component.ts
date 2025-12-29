@@ -142,11 +142,14 @@ export class VideoResultComponent {
   gridOptions: GridOptions = {
     columnDefs: this.colDefs,
     rowData: this.questionsList,
-    domLayout: 'autoHeight',
+    overlayNoRowsTemplate:
+      '<span class="text-[32px] leading-10">Кандидаты отсутствуют</span>',
+    loading: false,
+    suppressMovableColumns: true,
+    suppressScrollOnNewData: true,
     suppressRowHoverHighlight: true,
 
     getRowHeight: (params) => {
-      if (!params.data) return 48;
       if (params.data._isExpanded) {
         return undefined;
       }

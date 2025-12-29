@@ -42,6 +42,9 @@ export class ChangePasswordModalComponent implements OnInit {
 
   isLoading = false;
   currentPasswordError: string | null = null;
+  isOldPasswordVisible = false;
+  isNewPasswordVisible = false;
+  isNewCopyPasswordVisible = false;
 
   changePasswordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),

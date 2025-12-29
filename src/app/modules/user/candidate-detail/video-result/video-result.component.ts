@@ -20,6 +20,7 @@ import {
 } from '../../../../api/data-contracts';
 import { ApiService } from '../../../../api/Api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { CommentRendererComponent } from './expand-comment/comment-renderer.component';
 
 @Component({
   selector: 'app-video-result',
@@ -119,6 +120,8 @@ export class VideoResultComponent {
       field: 'commentGPT',
       flex: 1,
       headerName: 'Комментарий от GPT API',
+      cellRenderer: CommentRendererComponent,
+      autoHeight: true,
       headerClass: 'font-medium',
     },
     // {
@@ -137,5 +140,16 @@ export class VideoResultComponent {
     loading: false,
     suppressMovableColumns: true,
     suppressScrollOnNewData: true,
+    
+    getRowHeight: (params) => {
+      if (params.data && params.data._isExpanded) {
+        return undefined; // autoHeight: грид сам вычислит высоту по контенту
+      }
+      return 48; // Стандартная высота строки для ag-theme-material
+    },
+
+    onGridReady: (params) => {
+      this.gridApi = params.api;
+    }
   };
 }

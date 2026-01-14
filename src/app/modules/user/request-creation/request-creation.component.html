@@ -301,12 +301,6 @@
                     <mat-icon svgIcon="error"></mat-icon>
                   </span>
                 }
-                @if (getControl(StepForm.Step3, Step3Fields.Requirements).hasError('valueNotChanged') && 
-                  getControl(StepForm.Step3, Step3Fields.Requirements).touched) {
-                  <span class="absolute right-0 top-[80px] w-12 h-12 flex justify-center items-center">
-                    <mat-icon matSuffix matTooltip="Пожалуйста, отредактируйте текст, чтобы он отличался от предзаполненного значения." svgIcon="error"></mat-icon>
-                  </span>
-                }
               </div>
             </div>
             @if (getControl(StepForm.Step3, Step3Fields.Requirements).invalid &&

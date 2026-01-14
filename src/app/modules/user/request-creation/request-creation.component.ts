@@ -34,7 +34,6 @@ import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {SnackBarService} from '../../../services/snackbar.service';
 import {MatSelect} from '@angular/material/select';
 import {takeUntil} from 'rxjs/operators';
-import { valueMustChangeValidator } from '../../../validators/requirements';
 
 export enum StepForm {
   Step1 = 'step1',
@@ -89,7 +88,6 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   isLastStep: boolean = false;
   users: any = [];
   ModelsVRSelectionType = ModelsVRSelectionType;
-  multiLinePlaceholder:string = 'Требования:\nОбязанности:'.replace(/\n/g, '<br>');
 
   experiences = experienceTypes;
 
@@ -124,7 +122,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
       [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
       [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
-      [Step3Fields.Requirements]: new FormControl(this.multiLinePlaceholder, [Validators.required, valueMustChangeValidator(this.multiLinePlaceholder)]),
+      [Step3Fields.Requirements]: new FormControl('', [Validators.required]),
       [Step3Fields.Employment]: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
       [Step3Fields.Experience]: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
       [Step3Fields.Schedule]: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),

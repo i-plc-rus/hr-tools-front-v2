@@ -635,7 +635,18 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/user/request', id, 'approval'])
    }
 
+  private buildBaseFilter(): VacancyapimodelsVrFilter {
+      const formFilter = this.filterForm.value as VacancyapimodelsVrFilter;
+      return {
+        ...formFilter,
+        page: 1,
+        limit: 1,
+      };
+  }
+
   private loadAllCounts() {
+    const base = this.buildBaseFilter();
+
     const statuses = [
       { key: 'Создана', value: ModelsVRStatus.VRStatusCreated },
       { key: 'На доработке', value: ModelsVRStatus.VRStatusDraft },
@@ -651,9 +662,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.api.v1SpaceVacancyRequestListCreate({
         page: 1,
         limit: 1,
-        author_id: '',
-        city_id: '',
-        search: '',
+        author_id: base.author_id,
+        city_id: base.city_id,
+        search: base.search,
         sort: { created_at_desc: this.sortByDesc }
       }, { observe: 'response' }),
       
@@ -662,9 +673,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         favorite: true,
         page: 1,
         limit: 1,
-        author_id: '',
-        city_id: '',
-        search: '',
+        author_id: base.author_id,
+        city_id: base.city_id,
+        search: base.search,
         statuses: [],
         sort: { created_at_desc: this.sortByDesc }
       }, { observe: 'response' }),
@@ -675,9 +686,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           statuses: [value],
           page: 1,
           limit: 1,
-          author_id: '',
-          city_id: '',
-          search: '',
+          author_id: base.author_id,
+          city_id: base.city_id,
+          search: base.search,
           sort: { created_at_desc: this.sortByDesc }
         }, { observe: 'response' })
       )

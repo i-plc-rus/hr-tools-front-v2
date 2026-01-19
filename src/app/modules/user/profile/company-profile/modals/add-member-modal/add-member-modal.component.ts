@@ -8,7 +8,8 @@ import {SnackBarService} from '../../../../../../services/snackbar.service';
 import {
   SpaceapimodelsCreateUser,
   SpaceapimodelsSpaceUser,
-  SpaceapimodelsUpdateUser
+  SpaceapimodelsUpdateUser,
+  ModelsUserRole
 } from '../../../../../../api/data-contracts';
 
 @Component({
@@ -20,9 +21,13 @@ export class AddMemberModalComponent {
   @Input() user?: User;
   onSubmit = new EventEmitter<SpaceapimodelsSpaceUser>();
 
-  roles: {name: string, value: boolean}[] = [
-    {name: 'Администратор', value: true},
-    {name: 'Пользователь', value: false},
+  roles: {name: string, value: ModelsUserRole}[] = [
+    {name: 'Администратор', value: ModelsUserRole.AdminRole},
+    {name: 'HR', value: ModelsUserRole.HRRole},
+    {name: 'Менеджер', value: ModelsUserRole.ManagerRole},
+    {name: 'Специалист', value: ModelsUserRole.SpecialistRole},
+    {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
+    {name: 'Все роли', value: ModelsUserRole.AllRoles},
   ];
   isEdit = false;
   isLoading = false;
@@ -37,13 +42,13 @@ export class AddMemberModalComponent {
     first_name: new FormControl('', [Validators.required]),
     last_name: new FormControl('', [Validators.required]),
     phone_number: new FormControl('', [Validators.required]),
-    is_admin: new FormControl<boolean>(false, [Validators.required]),
+    role: new FormControl<ModelsUserRole | null>(null, [Validators.required]),
   });
   spaceId: string;
   constructor(
     private modalService: UsersModalService,
     private api: ApiService,
-    private snackBar: SnackBarService
+    private snackBar: SnackBarService,
   ) {
 
     this.spaceId = localStorage.getItem('spaceId') || '';
@@ -81,6 +86,7 @@ export class AddMemberModalComponent {
       last_name: this.userForm.controls.last_name.value || undefined,
       phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || undefined,
       space_id: this.spaceId,
+      role: this.userForm.controls.role.value || undefined
     };
 
     if (!this.spaceId) {
@@ -97,6 +103,7 @@ export class AddMemberModalComponent {
           first_name: this.userForm.controls.first_name.value || '',
           last_name: this.userForm.controls.last_name.value || '',
           phone_number: this.userForm.controls.phone_number.value?.replace(/[^0-9]/g, '') || '',
+          role: this.userForm.controls.role.value || undefined
         };
         this.onSubmit.emit(mockCreatedUser);
         this.snackBar.snackBarMessageSuccess('Участник успешно создан');

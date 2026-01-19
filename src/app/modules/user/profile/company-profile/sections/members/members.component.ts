@@ -64,11 +64,18 @@ export class MembersComponent implements OnInit, OnDestroy {
       headerClass: 'font-medium',
       field: 'role',
       sortable: false,
+      valueFormatter: params => this.translateRole(params.value)
     },
     {
       headerName: 'Должность',
       headerClass: 'font-medium',
       field: 'job_title_name',
+      sortable: false,
+    },
+    {
+      headerName: 'Статус',
+      headerClass: 'font-medium',
+      field: 'status',
       sortable: false,
     },
     {
@@ -262,6 +269,16 @@ export class MembersComponent implements OnInit, OnDestroy {
         console.log('Получены данные формы:', formData);
       }
     });
+  }
+
+  translateRole(role: string): string {
+    const rolesMap: Record<string, string> = {
+      'ADMIN': 'Администратор',
+      'HR' : 'HR', 
+      'MANAGER': 'Менеджер',
+      'SPECIALIST': 'Специалист'
+    };
+    return rolesMap[role] || role;
   }
 
   ngOnDestroy(): void {

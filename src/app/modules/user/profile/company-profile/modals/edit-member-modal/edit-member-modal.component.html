@@ -35,14 +35,18 @@
           <mat-label>Должность</mat-label>
           <textarea matInput formControlName="job_title_name"></textarea>
         </mat-form-field>
-
-
+        
         <mat-form-field appearance="outline">
           <mat-label>Роль</mat-label>
           <mat-select formControlName="role" hideSingleSelectionIndicator>
-            <mat-option value="Администратор">Администратор</mat-option>
-            <mat-option value="Пользователь">Пользователь</mat-option>
+            @for (role of roles; track $index) {
+              <mat-option [value]="role.value">{{ role.name }}</mat-option>
+            }
           </mat-select>
+          @let isRoleErrorRequired = memberForm.get('role')?.hasError('required') && !memberForm.get('role')?.pristine;
+          @if (isRoleErrorRequired) {
+            <mat-icon matSuffix matTooltip="Обязательное поле" svgIcon="error"></mat-icon>
+          }
         </mat-form-field>
 
 

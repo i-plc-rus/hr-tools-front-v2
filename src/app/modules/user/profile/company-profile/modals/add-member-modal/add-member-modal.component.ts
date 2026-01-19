@@ -26,8 +26,8 @@ export class AddMemberModalComponent {
     {name: 'HR', value: ModelsUserRole.HRRole},
     {name: 'Менеджер', value: ModelsUserRole.ManagerRole},
     {name: 'Специалист', value: ModelsUserRole.SpecialistRole},
-    {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
-    {name: 'Все роли', value: ModelsUserRole.AllRoles},
+    // {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
+    // {name: 'Все роли', value: ModelsUserRole.AllRoles},
   ];
   isEdit = false;
   isLoading = false;

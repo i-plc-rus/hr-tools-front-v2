@@ -2,6 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@an
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
 import {ApiService} from '../../../../../../api/Api';
+import { ModelsUserRole } from '../../../../../../api/data-contracts';
 
 @Component({
   selector: 'app-edit-member-modal',
@@ -14,6 +15,15 @@ export class EditMemberModalComponent implements OnInit{
   @Input() user: string | null = null;
   @ViewChild('firstInput') firstInput!: ElementRef;
 
+  roles: {name: string, value: ModelsUserRole}[] = [
+    {name: 'Администратор', value: ModelsUserRole.AdminRole},
+    {name: 'HR', value: ModelsUserRole.HRRole},
+    {name: 'Менеджер', value: ModelsUserRole.ManagerRole},
+    {name: 'Специалист', value: ModelsUserRole.SpecialistRole},
+    // {name: 'Супер администратор', value: ModelsUserRole.UserRoleSuperAdmin},
+    // {name: 'Все роли', value: ModelsUserRole.AllRoles},
+  ];
+
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
@@ -25,7 +35,7 @@ export class EditMemberModalComponent implements OnInit{
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
-      role: ['', Validators.required],
+      role: [null as ModelsUserRole | null, Validators.required],
       job_title_name: [''],
       text_sign: ['']
     });
@@ -75,12 +85,6 @@ export class EditMemberModalComponent implements OnInit{
 
     if (responseBody?.data) {
       const userData = {...responseBody.data};
-
-      if ('is_admin' in userData) {
-        const role = userData.is_admin ? 'Администратор' : 'Пользователь';
-        userData.role = role;
-      }
-
       this.memberForm.patchValue(userData);
       this.memberForm.markAsPristine();
     }
@@ -88,21 +92,23 @@ export class EditMemberModalComponent implements OnInit{
 
   private updateUserData(): void {
     const formValues = {...this.memberForm.value};
-    const role = formValues.role;
-    const isAdmin = role === 'Администратор';
+    
+    const updateData = {
+      email: formValues.email,
+      first_name: formValues.first_name,
+      last_name: formValues.last_name,
+      phone_number: formValues.phone_number?.replace(/[^0-9]/g, '') || undefined,
+      role: formValues.role as ModelsUserRole,
+      job_title_name: formValues.job_title_name || undefined,
+      text_sign: formValues.text_sign || undefined
+    };
 
-    delete formValues.role;
-    formValues.is_admin = isAdmin;
-
-
-    this.api.v1UsersUpdate(this.user!, formValues).subscribe({
-      next: (response) => {
-
-        const updatedUser = {
+    this.api.v1UsersUpdate(this.user!, updateData).subscribe({
+      next: (response: any) => {
+        const responseBody = 'body' in response ? response.body : response;
+        const updatedUser = (responseBody?.data) ? responseBody.data : {
           id: this.user!,
-          ...formValues,
-          role: isAdmin ? 'Администратор' : 'Пользователь',
-          is_admin: isAdmin
+          ...updateData
         };
 
         this.onSubmit.emit(updatedUser);

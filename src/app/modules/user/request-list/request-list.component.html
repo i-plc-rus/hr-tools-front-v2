@@ -159,6 +159,12 @@
             }
             Отменена
           </mat-chip-option>
+          <mat-chip-option [value]="'У HR'" [selectable]="category.value !== 'У HR'">
+            @if (getStatusCount('У HR') > 0) {
+              <span class="chip-number">{{ getStatusCount('У HR') }}</span>
+            }
+            У HR
+          </mat-chip-option>
         </mat-chip-listbox>
       </div>
       <div class="flex gap-4">

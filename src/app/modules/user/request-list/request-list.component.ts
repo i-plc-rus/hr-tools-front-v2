@@ -668,6 +668,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         author_id: base.author_id,
         city_id: base.city_id,
         search: base.search,
+        search_from: base.search_from,
+        search_to: base.search_to,
+        search_period: base.search_period,
         sort: { created_at_desc: this.sortByDesc }
       }, { observe: 'response' }),
       
@@ -679,6 +682,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         author_id: base.author_id,
         city_id: base.city_id,
         search: base.search,
+        search_from: base.search_from,
+        search_to: base.search_to,
+        search_period: base.search_period,
         statuses: [],
         sort: { created_at_desc: this.sortByDesc }
       }, { observe: 'response' }),
@@ -692,6 +698,9 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           author_id: base.author_id,
           city_id: base.city_id,
           search: base.search,
+          search_from: base.search_from,
+          search_to: base.search_to,
+          search_period: base.search_period,
           sort: { created_at_desc: this.sortByDesc }
         }, { observe: 'response' })
       )

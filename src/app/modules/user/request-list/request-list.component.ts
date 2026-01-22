@@ -61,7 +61,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | '' | 'favorites' | 'Создана' | 'На доработке' | 'На согласовании' | 'Согласована' | 'Не согласована' | 'Отменена'>('');
+  category = new FormControl<ModelsVRStatus | '' | 'favorites' | 'Создана' | 'На доработке' | 'На согласовании' | 'Согласована' | 'Не согласована' | 'Отменена' | 'У HR'>('');
   searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
@@ -74,6 +74,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     {className: 'success', value: ModelsVRStatus.VRStatusApproved},
     {className: 'danger', value: ModelsVRStatus.VRStatusCancelled},
     {className: 'danger', value: ModelsVRStatus.VRStatusRejected},
+    {className: 'info', value: ModelsVRStatus.VRStatusInHr},
   ];
   selectionTypes = Object.values(ModelsVRSelectionType);
   searchPeriodTypes: {label: string, value: VacancyapimodelsSearchPeriod}[] = [
@@ -99,7 +100,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     'На согласовании': 0,
     'Согласована': 0,
     'Не согласована': 0,
-    'Отменена': 0
+    'Отменена': 0,
+    'У HR': 0
   };
   
   // Общее количество всех заявок
@@ -511,7 +513,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         observable = this.api.v1SpaceVacancyRequestOnApprovalUpdate(id,  {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusDraft:
-        observable = this.api.v1SpaceVacancyRequestOnCreateUpdate(id,  {observe: 'response'});
+        observable = this.api.v1SpaceVacancyRequestApprovalsRequestChangesCreate(id, '6fee7cdc-fbdb-4fc5-a49c-2470d450a573', [{comment: ''}], {observe: 'response'});
         break;
     }
 
@@ -653,7 +655,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       { key: 'На согласовании', value: ModelsVRStatus.VRStatusInApproval },
       { key: 'Согласована', value: ModelsVRStatus.VRStatusApproved },
       { key: 'Не согласована', value: ModelsVRStatus.VRStatusRejected },
-      { key: 'Отменена', value: ModelsVRStatus.VRStatusCancelled }
+      { key: 'Отменена', value: ModelsVRStatus.VRStatusCancelled },
+      { key: 'У HR', value: ModelsVRStatus.VRStatusInHr }
     ];
 
     // Создаем массив запросов для всех счетчиков
@@ -751,6 +754,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       'Согласована': ModelsVRStatus.VRStatusApproved,
       'Не согласована': ModelsVRStatus.VRStatusRejected,
       'Отменена': ModelsVRStatus.VRStatusCancelled,
+      'У HR': ModelsVRStatus.VRStatusInHr,
     };
     return statusMap[displayName] || null;
   }

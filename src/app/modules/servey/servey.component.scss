@@ -3,4 +3,8 @@
   overflow-y: auto;
   height: 100vh;
   background: var(--background-main);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

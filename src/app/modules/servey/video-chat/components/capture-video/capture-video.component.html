@@ -1,7 +1,9 @@
 <div class="question-number">Вопрос №{{questionNumber}} из {{questionsList.length}}</div>
 <h1 class="text-[22px] text-center leading-[28px] max-w-[710px]">
   @if (isCapturingVideo || videoFile) {
-    {{questionsList[questionNumber-1].text}}
+    <app-secure-text [text]="questionsList[questionNumber-1].text!">
+      {{ questionsList[questionNumber-1].text }}
+    </app-secure-text>
   } @else {
     Для начала интервью нажмите "Записать ответ"
   }

@@ -22,9 +22,10 @@ import {
 } from '../../../../../models/Questions';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { MediaDevicesService } from '../../../../../services/camera.service';
-import { Subject, combineLatest } from 'rxjs';
-import { takeUntil, map, catchError } from 'rxjs/operators';
+import { Subject, Subscription, combineLatest, fromEvent, of, timer } from 'rxjs';
+import { takeUntil, map, catchError, switchMap, filter, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SecureModalService } from '../../../../../services/secure-modal.service';
 declare var MediaRecorder: any;
 
 @Component({
@@ -63,13 +64,45 @@ export class CaptureVideoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private destroy$ = new Subject<void>();
   public sending: boolean = false;
+  private visibilitySub: Subscription;
+  private hiddenCount = 0;
+  private hasReturnedOnce = false;
 
   constructor(
     private renderer: Renderer2,
     private api: ApiService,
     private snackBar: SnackBarService,
-    private mediaDevicesService: MediaDevicesService
-  ) {}
+    private mediaDevicesService: MediaDevicesService,
+    private secureService: SecureModalService,
+  ) {
+    this.visibilitySub = fromEvent(document, 'visibilitychange')
+      .pipe(
+         tap(() => {
+          // Логика ПЕРВОГО возвращения
+          if (document.visibilityState === 'visible' && this.hiddenCount === 1 && !this.hasReturnedOnce && this.isCapturingVideo) {
+            
+            this.hasReturnedOnce = true; 
+            this.secureService.openConfirmModalComponent().subscribe(result => {
+              if (result) {
+                this.recordHandlre();
+                this.isInterviewOver.emit(true);
+              }
+            });
+          }
+        }),
+        // Переключаемся на таймер, только если вкладка скрыта
+        switchMap(() => {
+          if (document.visibilityState === 'hidden' && this.isCapturingVideo) {
+            this.hiddenCount++;
+            return timer(10000);
+          }
+          return of(null);
+        }),
+        // Выполняем действие, только если таймер дотикал (значение 0)
+        filter(val => val === 0 || this.hiddenCount > 1)
+      )
+      .subscribe(() => {this.recordHandlre(), this.isInterviewOver.emit(true);});
+  }
 
   ngOnInit(): void {
     this.videoRef = document.getElementById('recorder');
@@ -318,7 +351,13 @@ export class CaptureVideoComponent implements OnInit {
     this.videoButtonTitle = 'Start';
     this.isCapturingVideo = false;
   }
+
+  ngOnDestroy() {
+    this.visibilitySub.unsubscribe();
+  }
 }
+
+
 function throwError(arg0: () => Error): any {
   throw new Error('Function not implemented.');
 }

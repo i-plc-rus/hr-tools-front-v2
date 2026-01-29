@@ -12,6 +12,7 @@ import {
 import { MediaDevicesService } from '../../../../../services/camera.service';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { SecureModalService } from '../../../../../services/secure-modal.service';
 
 @Component({
   selector: 'app-camera',
@@ -37,7 +38,8 @@ export class CameraComponent implements OnInit, OnDestroy {
 
   constructor(
     private renderer: Renderer2,
-    private mediaDevicesService: MediaDevicesService
+    private mediaDevicesService: MediaDevicesService,
+    private secureService: SecureModalService,
   ) {}
 
   public videoContraints: MediaStreamConstraints = {
@@ -82,7 +84,13 @@ export class CameraComponent implements OnInit, OnDestroy {
   }
 
   startInterview() {
-    this.isCameraCheck.emit(false);
+    this.secureService.openAgreeModalComponent().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.isCameraCheck.emit(false);
+      }
+    });
+    // // this.isCameraCheck.emit(false);
   }
 
   async checkDevices(): Promise<void> {

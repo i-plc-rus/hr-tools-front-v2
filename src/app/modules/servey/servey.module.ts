@@ -23,6 +23,9 @@ import { CaptureVideoComponent } from './video-chat/components/capture-video/cap
 import { FinishInterviewComponent } from './video-chat/components/finish-interview/finish-interview.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { LayoutComponent } from '../../components/layout/layout.component';
+import { SecureTextComponent } from "./video-chat/components/capture-video/secure/secure-text.component";
+import { AgreeModalComponent } from './video-chat/components/capture-video/agree-modal/agree-modal.component';
+import { ConfirmModalComponent } from './video-chat/components/capture-video/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,8 @@ import { LayoutComponent } from '../../components/layout/layout.component';
     CameraComponent,
     CaptureVideoComponent,
     FinishInterviewComponent,
+    AgreeModalComponent,
+    ConfirmModalComponent,
   ],
   imports: [
     FormsModule,
@@ -54,6 +59,7 @@ import { LayoutComponent } from '../../components/layout/layout.component';
     MatCheckboxModule,
     LoaderComponent,
     LayoutComponent,
-  ],
+    SecureTextComponent
+],
 })
 export class ServeyModule {}

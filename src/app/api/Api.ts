@@ -4419,9 +4419,9 @@ public v1SpaceVacancyRequestApprovalsRejectCreate (id: string, taskId: string, b
  * @summary На доработку
  * @request POST:/api/v1/space/vacancy_request/{id}/approvals/{taskId}/request_changes
  */
-public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options?: RequestOptions): Observable<ApimodelsResponse>;
-public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
-public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: (VacancyapimodelsApprovalRequestChanges)[], options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: VacancyapimodelsApprovalRequestChanges, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: VacancyapimodelsApprovalRequestChanges, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceVacancyRequestApprovalsRequestChangesCreate (id: string, taskId: string, body: VacancyapimodelsApprovalRequestChanges, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
     return this.http.request<ApimodelsResponse>(
         'POST',
         this.baseUrl + `/api/v1/space/vacancy_request/${id}/approvals/${taskId}/request_changes`,

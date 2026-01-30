@@ -32,6 +32,10 @@ import {
   CompanyTemplatesComponent
 } from './profile/company-profile/sections/company-templates/company-templates.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { RequestCreatedComponent } from './requests/request-created/request-created.component';
+import { RequestInApprovalComponent } from './requests/request-in-approval/request-in-approval.component';
+import { RequestRejectedComponent } from './requests/request-rejected/request-rejected.component';
+import { RequestApprovedComponent } from './requests/request-approved/request-approved.component';
 
 export const routes: Routes = [
   {
@@ -99,8 +103,20 @@ export const routes: Routes = [
                 component: RequestDetailComponent,
               },
               {
-                path: 'approval',
-                component: RequestApprovalComponent,
+                path: 'created',
+                component: RequestCreatedComponent,
+              },
+              {
+                path: 'in_approval',
+                component: RequestInApprovalComponent,
+              },
+              {
+                path: 'approved',
+                component: RequestApprovedComponent,
+              },
+              {
+                path: 'rejected',
+                component: RequestRejectedComponent,
               },
               {
                 path: '**',

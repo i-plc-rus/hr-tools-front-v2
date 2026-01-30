@@ -513,7 +513,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
         observable = this.api.v1SpaceVacancyRequestOnApprovalUpdate(id,  {observe: 'response'});
         break;
       case ModelsVRStatus.VRStatusDraft:
-        observable = this.api.v1SpaceVacancyRequestApprovalsRequestChangesCreate(id, '6fee7cdc-fbdb-4fc5-a49c-2470d450a573', [{comment: ''}], {observe: 'response'});
+        observable = this.api.v1SpaceVacancyRequestApprovalsRequestChangesCreate(id, '2d3d2ffa-3316-485f-8396-07bfd49f3739', {comment: 'test'}, {observe: 'response'});
         break;
     }
 
@@ -633,9 +633,19 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  show(id: string): void {
-    this.router.navigate(['/user/request', id, 'approval'])
-   }
+  goToRequest(id: string, status: string | ModelsVRStatus | undefined): void {
+    let s = (status ?? '').toString();
+    if (s === ModelsVRStatus.VRStatusDraft) {
+      s = ModelsVRStatus.VRStatusCreated;
+    }
+    if (s === ModelsVRStatus.VRStatusCancelled) {
+      s = ModelsVRStatus.VRStatusRejected;
+    }
+    if (s === ModelsVRStatus.VRStatusInHr) {
+      s = ModelsVRStatus.VRStatusApproved;
+    }
+    this.router.navigate(['/user/request', id, s.toLowerCase()]);
+  }
 
   private buildBaseFilter(): VacancyapimodelsVrFilter {
       const formFilter = this.filterForm.value as VacancyapimodelsVrFilter;

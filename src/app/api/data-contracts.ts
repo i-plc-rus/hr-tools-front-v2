@@ -1957,6 +1957,8 @@ export interface VacancyapimodelsVacancyRequestPreView {
 export interface VacancyapimodelsVacancyRequestView {
   /** список согласующих */
   approval_tasks?: VacancyapimodelsApprovalTaskView[];
+  author_fio?: string;
+  author_id?: string;
   /** фио непосредственного руководителя */
   chief_fio?: string;
   city?: string;

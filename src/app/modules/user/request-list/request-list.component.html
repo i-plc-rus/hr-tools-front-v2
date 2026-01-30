@@ -185,13 +185,13 @@
             <div class="flex gap-4 w-full items-center justify-between">
               <div class="flex gap-4">
                 <app-status-tag
-                  [matMenuTriggerFor]="statusContent"
+                  
                   class="cursor-pointer"
                   [status]="request.statusClass">
                   <span>{{ getStatusDisplayName(request.status) }}</span>
-                  <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
+                  <!-- <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon> -->
                 </app-status-tag>
-                <mat-menu #statusContent="matMenu">
+                <!-- <mat-menu #statusContent="matMenu">
                   @for (status of statuses; track $index) {
                     @if (request.status !== status.value && status.value !== ModelsVRStatus.VRStatusCreated) {
                       <button mat-menu-item (click)="changeStatus(request.id, status.value)">
@@ -201,7 +201,7 @@
                       </button>
                     }
                   }
-                </mat-menu>
+                </mat-menu> -->
 
                 @if (request.urgency === 'Срочно') {
                   <div class="h-6 text-[var(--error-alter)]">
@@ -220,7 +220,7 @@
               </mat-menu>
             </div>
             <div class="flex flex-col lg:flex-row justify-between gap-3 mt-1">
-              <h2 class="text-[32px] leading-10 cursor-pointer" (click)="show(request.id)">{{ request.vacancy_name }}</h2>
+              <h2 class="text-[32px] leading-10 cursor-pointer" (click)="goToRequest(request.id, request.status)">{{ request.vacancy_name }}</h2>
               <span class="text-[22px] leading-7 lg:min-w-[200px] lg:text-right">
                 {{ request.city }}
               </span>

@@ -292,6 +292,12 @@
         <button mat-flat-button
                 class="btn-primary" (click)="goToNextStep()">Продолжить</button>
         }
+        @if(isLastStep && status === 'CREATED') {
+          <div class="flex gap-4">
+            <!-- <button mat-flat-button class="btn-danger" >Отклонить</button> -->
+            <button mat-flat-button class="btn-primary" (click)="updateClaim()">Обновить</button>
+          </div>
+        }
         @if(isLastStep && status === 'IN_APPROVAL' && userApproval.state === "PENDING") {
           <div class="flex gap-4">
             <button mat-flat-button class="btn-danger" (click)="rejectClaim()">Отклонить</button>

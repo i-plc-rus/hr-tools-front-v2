@@ -140,8 +140,8 @@ export class RequestApprovalComponent implements OnInit {
           this.companyName = vacancyDetails.body.data.company_name;
           this.status = vacancyDetails.body.data.status
           this.form.patchValue({ ...vacancyDetails.body.data, city_id: obj });
-          this.form.disable();
-          if(this.userApproval.state === 'PENDING') {
+          // this.form.disable(); //дизейбл формы (потом сделать дизейбл для всех, кроме создателя заявки)
+          if(this.userApproval?.state === 'PENDING') {
           this.form.controls.description.enable();
           }
           this.companyStructureArray = companyStructure?.body?.data || [];
@@ -273,6 +273,18 @@ export class RequestApprovalComponent implements OnInit {
     };
 
     return requestData;
+  }
+
+  updateClaim():void {
+    this.api.v1SpaceVacancyRequestUpdate(this.id, this.objectFormation()).subscribe({
+      next: (res) => {
+        this.snackBarService.snackBarMessageSuccess('Заявка обновлена');
+        // this.router.navigate(['/user/request/list'])
+      },
+      error: (error) => {
+        this.snackBarService.snackBarMessageError(error.message);
+      }
+    })
   }
 
 

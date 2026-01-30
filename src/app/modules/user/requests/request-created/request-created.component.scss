@@ -1,0 +1,7 @@
+.modal-content {
+  @apply bg-white p-10 rounded-lg max-w-md text-center;
+}
+
+.modal-actions {
+  @apply flex justify-center gap-4 mt-5;
+}

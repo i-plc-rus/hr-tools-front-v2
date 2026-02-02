@@ -1,5 +1,5 @@
 @if (!isLoading && applicant) {
-  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail h-[76vh]' : 'candidate-detail h-screen' }} overflow-hidden flex flex-col">
+  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail h-[75vh]' : 'candidate-detail h-screen' }} overflow-hidden flex flex-col">
     @if (!isVacancyCard) {
       <div class="flex gap-2 items-center py-6">
         <button mat-icon-button (click)="onBack()" class="btn-secondary">
@@ -255,7 +255,7 @@
     </div>
   </div>
 } @else {
-  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail' : 'candidate-detail' }}">
+  <div class="{{ isVacancyCard ? 'vacancy-candidate-detail h-[75vh]' : 'candidate-detail h-screen' }}">
     <app-loader></app-loader>
   </div>
 }

@@ -61,7 +61,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     sort: new FormControl<VacancyapimodelsVrSort>({created_at_desc: this.sortByDesc}, {nonNullable: true}),
     statuses: new FormControl<ModelsVRStatus[]>([]),
   })
-  category = new FormControl<ModelsVRStatus | '' | 'favorites' | 'Создана' | 'На доработке' | 'На согласовании' | 'Согласована' | 'Не согласована' | 'Отменена' | 'У HR'>('');
+  category = new FormControl<ModelsVRStatus | '' | 'favorites' | 'Создана' | 'На доработке' | 'На согласовании' | 'Согласована' | 'Отклонена' | 'Отменена' | 'У HR'>('');
   searchValue = new FormControl('');
   searchCity = new FormControl('');
   searchRequestAuthor = new FormControl('');
@@ -99,7 +99,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     'На доработке': 0,
     'На согласовании': 0,
     'Согласована': 0,
-    'Не согласована': 0,
+    'Отклонена': 0,
     'Отменена': 0,
     'У HR': 0
   };
@@ -664,7 +664,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       { key: 'На доработке', value: ModelsVRStatus.VRStatusDraft },
       { key: 'На согласовании', value: ModelsVRStatus.VRStatusInApproval },
       { key: 'Согласована', value: ModelsVRStatus.VRStatusApproved },
-      { key: 'Не согласована', value: ModelsVRStatus.VRStatusRejected },
+      { key: 'Отклонена', value: ModelsVRStatus.VRStatusRejected },
       { key: 'Отменена', value: ModelsVRStatus.VRStatusCancelled },
       { key: 'У HR', value: ModelsVRStatus.VRStatusInHr }
     ];
@@ -771,7 +771,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       'На доработке': ModelsVRStatus.VRStatusDraft,
       'На согласовании': ModelsVRStatus.VRStatusInApproval,
       'Согласована': ModelsVRStatus.VRStatusApproved,
-      'Не согласована': ModelsVRStatus.VRStatusRejected,
+      'Отклонена': ModelsVRStatus.VRStatusRejected,
       'Отменена': ModelsVRStatus.VRStatusCancelled,
       'У HR': ModelsVRStatus.VRStatusInHr,
     };
@@ -785,7 +785,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       [ModelsVRStatus.VRStatusDraft]: 'На доработке',
       [ModelsVRStatus.VRStatusInApproval]: 'На согласовании',
       [ModelsVRStatus.VRStatusApproved]: 'Согласована',
-      [ModelsVRStatus.VRStatusRejected]: 'Не согласована',
+      [ModelsVRStatus.VRStatusRejected]: 'Отклонена',
       [ModelsVRStatus.VRStatusCancelled]: 'Отменена',
       [ModelsVRStatus.VRStatusInHr]: 'У HR',
       [ModelsVRStatus.VRStatusDone]: 'Выполнена',

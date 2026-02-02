@@ -59,7 +59,7 @@ export class RequestCreateVacancyModalComponent implements OnInit {
   }
 
   navigateToRequest() {
-    this.router.navigate(['/user/request', this.requestId, 'approval']);
+    this.router.navigate(['/user/request', this.requestId, 'approved']);
     this.closeModal();
   }
 

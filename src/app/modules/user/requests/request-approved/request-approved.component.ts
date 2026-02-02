@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RequestTemplateComponent } from '../../templates/requests-templates/request-template/request-template.component';
 import { MatButtonModule } from '@angular/material/button';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
-import { VacancyModalService } from '../../../../services/vacancy-modal.service';
 import { SnackBarService } from '../../../../services/snackbar.service';
 import { ApiService } from '../../../../api/Api';
 import {
@@ -23,7 +22,6 @@ import {
 export class RequestApprovedComponent implements OnInit, AfterViewInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
-  private modalService = inject(VacancyModalService);
   private snackBarService = inject(SnackBarService);
   private api = inject(ApiService);
   private destroy$ = new Subject<void>();
@@ -90,41 +88,22 @@ export class RequestApprovedComponent implements OnInit, AfterViewInit, OnDestro
     return this.templateComponent?.isLastStep ?? false;
   }
 
-  openCreateVacancyModal(): void {
-    if (!this.requestId || !this.templateComponent?.form) return;
+  createVacancy(): void {
+    if (!this.requestId) {
+      this.snackBarService.snackBarMessageError('ID заявки не найден');
+      return;
+    }
 
-    const form = this.templateComponent.form;
-    const companyName = form.get('company_name')?.value ?? this.templateComponent.companyName ?? '';
-    const vacancyName = form.get('vacancy_name')?.value ?? '';
-
-    const structId = form.get('company_struct_id')?.value;
-    const deptId = form.get('department_id')?.value;
-    const jobId = form.get('job_title_id')?.value;
-
-    const companyStructName = structId
-      ? this.templateComponent.companyStructureArray.find((s) => s.id === structId)?.name ?? ''
-      : '';
-    const departmentName = deptId
-      ? this.templateComponent.companyDepartmentArray.find((d) => d.id === deptId)?.name ?? ''
-      : '';
-    const jobTitleName = jobId
-      ? this.templateComponent.companyJobsNamesArray.find((j) => j.id === jobId)?.name ?? ''
-      : '';
-
-    this.modalService
-      .openCreateVacancyModal(
-        this.requestId,
-        companyName,
-        vacancyName,
-        companyStructName,
-        departmentName,
-        jobTitleName,
-        true
-      )
+    this.api.v1SpaceVacancyRequestPublishUpdate(this.requestId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((result: boolean) => {
-        if (result) {
+      .subscribe({
+        next: () => {
+          this.snackBarService.snackBarMessageSuccess('Вакансия создана');
           this.router.navigate(['/user/vacancy/list']);
+        },
+        error: (err) => {
+          const msg = err?.error?.message ?? err?.message ?? 'Ошибка при создании вакансии';
+          this.snackBarService.snackBarMessageError(msg);
         }
       });
   }

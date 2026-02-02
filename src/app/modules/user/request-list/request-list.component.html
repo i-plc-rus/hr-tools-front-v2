@@ -147,11 +147,11 @@
             }
             Согласовано
           </mat-chip-option>
-          <mat-chip-option [value]="'Не согласована'" [selectable]="category.value !== 'Не согласована'">
-            @if (getStatusCount('Не согласована') > 0) {
-              <span class="chip-number">{{ getStatusCount('Не согласована') }}</span>
+          <mat-chip-option [value]="'Отклонена'" [selectable]="category.value !== 'Отклонена'">
+            @if (getStatusCount('Отклонена') > 0) {
+              <span class="chip-number">{{ getStatusCount('Отклонена') }}</span>
             }
-            Не согласовано
+            Отклонена
           </mat-chip-option>
           <mat-chip-option [value]="'Отменена'" [selectable]="category.value !== 'Отменена'">
             @if (getStatusCount('Отменена') > 0) {

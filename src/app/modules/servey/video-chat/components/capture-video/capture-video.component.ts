@@ -22,8 +22,8 @@ import {
 } from '../../../../../models/Questions';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { MediaDevicesService } from '../../../../../services/camera.service';
-import { Subject, Subscription, combineLatest, fromEvent, of, timer } from 'rxjs';
-import { takeUntil, map, catchError, switchMap, filter, tap } from 'rxjs/operators';
+import { Subject, Subscription, combineLatest, fromEvent, merge, of, timer } from 'rxjs';
+import { takeUntil, map, catchError, switchMap, filter, tap, distinctUntilChanged } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SecureModalService } from '../../../../../services/secure-modal.service';
 declare var MediaRecorder: any;
@@ -75,33 +75,36 @@ export class CaptureVideoComponent implements OnInit {
     private mediaDevicesService: MediaDevicesService,
     private secureService: SecureModalService,
   ) {
-    this.visibilitySub = fromEvent(document, 'visibilitychange')
+    this.visibilitySub = merge(
+      fromEvent(document, 'visibilitychange').pipe(map(() => document.visibilityState === 'hidden')),
+      fromEvent(window, 'blur').pipe(map(() => true)),
+      fromEvent(window, 'focus').pipe(map(() => false)))
       .pipe(
-         tap(() => {
-          // Логика ПЕРВОГО возвращения
-          if (document.visibilityState === 'visible' && this.hiddenCount === 1 && !this.hasReturnedOnce && this.isCapturingVideo) {
-            
-            this.hasReturnedOnce = true; 
+        distinctUntilChanged(), 
+        tap((isHidden) => {
+          if (!isHidden && this.hiddenCount === 1 && !this.hasReturnedOnce && this.isCapturingVideo) {
+            this.hasReturnedOnce = true;
             this.secureService.openConfirmModalComponent().subscribe(result => {
               if (result) {
                 this.recordHandlre();
-                this.isInterviewOver.emit(true);
-              }
+                    this.isInterviewOver.emit(true);
+              };
             });
           }
         }),
-        // Переключаемся на таймер, только если вкладка скрыта
-        switchMap(() => {
-          if (document.visibilityState === 'hidden' && this.isCapturingVideo) {
+        switchMap((isHidden) => {
+          if (isHidden && this.isCapturingVideo) {
             this.hiddenCount++;
-            return timer(10000);
+            return timer(30000);
           }
           return of(null);
         }),
-        // Выполняем действие, только если таймер дотикал (значение 0)
         filter(val => val === 0 || this.hiddenCount > 1)
-      )
-      .subscribe(() => {this.recordHandlre(), this.isInterviewOver.emit(true);});
+      ).subscribe(() => {
+        this.recordHandlre();
+        this.isInterviewOver.emit(true);
+      }
+    );
   }
 
   ngOnInit(): void {

@@ -14,11 +14,12 @@ import {
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-request-in-approval',
   standalone: true,
-  imports: [RequestTemplateComponent, MatButtonModule, CommonModule],
+  imports: [RequestTemplateComponent, MatButtonModule, CommonModule, MatIcon],
   templateUrl: './request-in-approval.component.html',
   styleUrl: './request-in-approval.component.scss'
 })
@@ -82,6 +83,10 @@ export class RequestInApprovalComponent implements OnInit, AfterViewInit, OnDest
         this.snackBarService.snackBarMessageError('Ошибка при загрузке данных заявки');
       }
     });
+  }
+
+  goBack() {
+    this.router.navigate(['/user/request/list'])
   }
 
   ngAfterViewInit(): void {

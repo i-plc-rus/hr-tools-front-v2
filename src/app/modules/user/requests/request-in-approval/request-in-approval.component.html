@@ -1,4 +1,11 @@
-<div class="py-8 px-4 w-full min-h-screen flex flex-col overflow-auto">
+<div class="flex gap-2 items-center pt-2 pl-4">
+    <button mat-icon-button class="btn-secondary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="text-[16px] leading-6 font-medium">Вернуться назад</span>
+</div>
+
+<div class="py-2 px-4 w-full min-h-[calc(100vh-50px)] flex flex-col overflow-auto">
     <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
         <app-request-template 
             [requestId]="requestId" 

@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: API_BASE_URL,
-      useValue: 'https://a.hr-tools.pro'
+      useValue: 'https://a-demo1.hr-tools.pro'
     },
     TokenService,
     CookieService,

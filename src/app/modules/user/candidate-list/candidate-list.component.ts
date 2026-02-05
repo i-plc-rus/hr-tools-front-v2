@@ -97,8 +97,21 @@ export class СandidateListComponent implements OnDestroy{
   applicantsList: ApplicantView[] = [];
   selectedApplicants: ApplicantView[] = [];
   selectedSameVacancy: boolean = false;
+
+  private readonly headerToSortKey: Record<string, keyof ApplicantapimodelsApplicantSort> = {
+    'ФИО': 'fio_desc',
+    'Вакансия': 'vacancy_name_desc',
+    'Должность': 'resume_title_desc',
+    'Источник кандидата': 'source_desc',
+    'Дата отбора': 'negotiation_date_desc',
+    'Ожидаемая ЗП': 'salary_desc',
+    'Дата выхода': 'start_date_desc',
+    'Статус': 'status_desc',
+  };
+
   colDefs: ColDef<ApplicantView>[] = [
     {
+      colId: 'fio',
       headerName: 'ФИО',
       headerClass: 'font-medium',
       width: 320,
@@ -107,6 +120,7 @@ export class СandidateListComponent implements OnDestroy{
       valueGetter: (params: ValueGetterParams<ApplicantView>) => params.data?.fio,
       pinned: 'left',
       unSortIcon: true,
+      sortable: true,
     },
     {
       headerName: 'Контакты',
@@ -115,28 +129,36 @@ export class СandidateListComponent implements OnDestroy{
       cellRenderer: CellCandidateContactsComponent,
     },
     {
+      colId: 'vacancy_name',
       field: 'vacancy_name',
       headerName: 'Вакансия',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
     },
     {
+      colId: 'resume_title',
       field: 'resume_title',
       headerName: 'Должность',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
     },
     {
+      colId: 'source',
       field: 'source',
       headerName: 'Источник кандидата',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
     },
     {
+      colId: 'negotiation_date',
       field: 'negotiation_date',
       headerName: 'Дата отбора',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.negotiation_date) {
           // Парсим дату в формате DD.MM.YYYY
@@ -154,16 +176,20 @@ export class СandidateListComponent implements OnDestroy{
       }
     },
     {
+      colId: 'salary',
       field: 'salary',
       headerName: 'Ожидаемая ЗП',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
     },
     {
+      colId: 'start_date',
       field: 'start_date',
       headerName: 'Дата выхода',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
       valueFormatter: function (params: ValueFormatterParams) {
         if (params.data?.start_date) {
           // Парсим дату в формате DD.MM.YYYY
@@ -181,10 +207,12 @@ export class СandidateListComponent implements OnDestroy{
       }
     },
     {
+      colId: 'status',
       field: 'status',
       headerName: 'Статус',
       headerClass: 'font-medium',
       unSortIcon: true,
+      sortable: true,
       cellRenderer: CandidateStatusComponent,
       cellRendererParams: {
         onChange: this.openRejectCandidateModal.bind(this),
@@ -210,9 +238,24 @@ export class СandidateListComponent implements OnDestroy{
       pinned: 'left',
     },
     suppressScrollOnNewData: true,
-    getRowId: (params) => params.data?.id || ''
+    getRowId: (params) => (params.data as { __rowId?: string })?.__rowId ?? params.data?.id ?? ''
   }
-  fioDesc: boolean | null = null;
+
+  /** Текущая сортировка: ключ API и направление (false = ASC, true = DESC). null = без сортировки */
+  currentSort: { key: keyof ApplicantapimodelsApplicantSort; value: boolean } | null = null;
+  private sortKeyToColId: Record<keyof ApplicantapimodelsApplicantSort, string> = {
+    accept_date_desc: 'accept_date',
+    fio_desc: 'fio',
+    negotiation_date_desc: 'negotiation_date',
+    resume_title_desc: 'resume_title',
+    salary_desc: 'salary',
+    source_desc: 'source',
+    start_date_desc: 'start_date',
+    status_desc: 'status',
+    vacancy_name_desc: 'vacancy_name',
+  };
+  private isApplyingSortState = false;
+
   private currentPage = 1;
   private pageSize = 50;
   private isLoading = false;
@@ -321,29 +364,8 @@ export class СandidateListComponent implements OnDestroy{
 
     this.gridApi = params.api;
     this.gridApi.addEventListener('bodyScroll', this.onGridScroll.bind(this));
-    
-      // Отслеживание клика по заголовку ФИО для сортировки на беке
-      const headerTexts = document.querySelectorAll('.ag-header-cell-text');
-      headerTexts.forEach((el: Element) => {
-        if (el.textContent?.trim() === 'ФИО') {
-          const headerCell = el.closest('.ag-header-cell');
-          if (headerCell) {
-            headerCell.addEventListener('click', () => {
-              switch(this.fioDesc) {
-                case null: this.fioDesc = false;
-                break;
-                case false: this.fioDesc = true;
-                break;
-                case true: this.fioDesc = null;
-                break;
-                default: this.fioDesc = null;
-              }
-              this.getApplicants();
-            });
-            (headerCell as HTMLElement).style.cursor = 'pointer';
-          }
-        }
-      });
+
+    this.setupSortHeaderListeners();
 
     const saved = this.stateService.getFilters();
 
@@ -362,6 +384,75 @@ export class СandidateListComponent implements OnDestroy{
     this.setFormListeners();
   }
 
+  /** Вешает клики по заголовкам для серверной сортировки (все колонки кроме "Контакты") */
+  private setupSortHeaderListeners(): void {
+    setTimeout(() => {
+      const headerTexts = document.querySelectorAll('.ag-header-cell-text');
+      headerTexts.forEach((el: Element) => {
+        const headerText = el.textContent?.trim() ?? '';
+        const sortKey = this.headerToSortKey[headerText];
+        if (!sortKey) return;
+
+        const headerCell = el.closest('.ag-header-cell');
+        if (!headerCell) return;
+
+        (headerCell as HTMLElement).addEventListener('click', (e: Event) => {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+
+          if (this.currentSort?.key === sortKey) {
+            if (this.currentSort.value === false) {
+              this.currentSort = { key: sortKey, value: true };
+            } else if (this.currentSort.value === true) {
+              this.currentSort = null;
+            } else {
+              this.currentSort = { key: sortKey, value: false };
+            }
+          } else {
+            this.currentSort = { key: sortKey, value: false };
+          }
+
+          this.applySortColumnState();
+          this.getApplicants();
+        }, true);
+        (headerCell as HTMLElement).style.cursor = 'pointer';
+      });
+      this.applySortColumnState();
+    }, 100);
+  }
+
+  /** Обновляет иконку сортировки в заголовке по currentSort */
+  private applySortColumnState(): void {
+    if (!this.gridApi) return;
+
+    this.isApplyingSortState = true;
+
+    const allColIds = Object.values(this.sortKeyToColId);
+    const resetState = allColIds.map(colId => ({
+      colId,
+      sort: null as 'asc' | 'desc' | null,
+    }));
+
+    if (this.currentSort) {
+      const colId = this.sortKeyToColId[this.currentSort.key];
+      const colState = resetState.find(s => s.colId === colId);
+      if (colState) {
+        colState.sort = this.currentSort.value ? 'desc' : 'asc';
+      }
+    }
+
+    this.gridApi.applyColumnState({
+      state: resetState,
+      defaultState: { sort: null },
+      applyOrder: false
+    });
+
+    setTimeout(() => {
+      this.isApplyingSortState = false;
+    }, 0);
+  }
+
   onGridScroll = (event: any) => {
     if (this.isLoading || this.allDataLoaded) return;
 
@@ -375,8 +466,8 @@ export class СandidateListComponent implements OnDestroy{
   }
 
   onCellClicked(event: CellClickedEvent) {
-    if (event.colDef.field !== 'status' && event.colDef.colId !== 'ag-Grid-ControlsColumn')
-      this.router.navigate([`user/candidates/${event.data?.id}`]);
+    if (event.colDef.field !== 'status' && event.colDef.colId !== 'ag-Grid-ControlsColumn' && event.data?.id)
+      this.router.navigate([`user/candidates/${event.data.id}`]);
   }
 
   onSelectionChanged(event: SelectionChangedEvent) {
@@ -414,7 +505,9 @@ export class СandidateListComponent implements OnDestroy{
     filter.age_to = filter.age_to || undefined;
     filter.total_experience_from = filter.total_experience_from || undefined;
     filter.total_experience_to = filter.total_experience_to || undefined;
-    filter.sort = { fio_desc: this.fioDesc } as ApplicantapimodelsApplicantSort;
+    filter.sort = this.currentSort
+      ? { [this.currentSort.key]: this.currentSort.value } as ApplicantapimodelsApplicantSort
+      : {} as ApplicantapimodelsApplicantSort;
     filter.page = this.currentPage;
     filter.limit = this.pageSize;
 
@@ -423,8 +516,19 @@ export class СandidateListComponent implements OnDestroy{
       .subscribe({
         next: (res) => {
           if (res.body?.data) {
+            const seenIds = new Set(this.applicantsList.map(a => a.id).filter(Boolean));
             const newApplicants = res.body.data.map(
-              (applicant: ApplicantapimodelsApplicantView) => new ApplicantView(applicant)
+              (applicant: ApplicantapimodelsApplicantView, index: number) => {
+                const view = new ApplicantView(applicant);
+                const needRowId = !view.id || seenIds.has(view.id);
+                if (needRowId) {
+                  (view as ApplicantView & { __rowId: string }).__rowId =
+                    `__row_${Date.now()}_${this.currentPage}_${index}`;
+                } else if (view.id) {
+                  seenIds.add(view.id);
+                }
+                return view;
+              }
             );
 
             this.applicantsList = [...this.applicantsList, ...newApplicants];

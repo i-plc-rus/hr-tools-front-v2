@@ -147,6 +147,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stateService.setFilters(state);
       this.getVacancyList();
       this.getDepartments();
+      this.getUsers();
       this.loadTabCounts();
   }
 

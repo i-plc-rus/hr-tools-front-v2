@@ -180,6 +180,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stateService.setFilters(state);
     this.getRequests();
     this.loadAllCounts();
+    this.getUsers();
   }
 
   onToggleChange(): void {

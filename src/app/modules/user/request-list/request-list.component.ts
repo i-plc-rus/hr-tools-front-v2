@@ -357,7 +357,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];
@@ -526,6 +526,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestList = [];
           this.getRequests();
           this.loadAllCounts();
+          this.getUsers();
         },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)

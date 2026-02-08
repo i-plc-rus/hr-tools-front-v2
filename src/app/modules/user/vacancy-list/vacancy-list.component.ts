@@ -346,7 +346,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.authors = [];
@@ -358,7 +358,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.request_author_id.value !== '')
           this.filterForm.controls.request_author_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0)
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         else
           this.requestAuthors = [];

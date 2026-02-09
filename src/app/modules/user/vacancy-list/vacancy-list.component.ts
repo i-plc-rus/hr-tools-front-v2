@@ -147,7 +147,6 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stateService.setFilters(state);
       this.getVacancyList();
       this.getDepartments();
-      this.getUsers();
       this.loadTabCounts();
   }
 
@@ -346,8 +345,10 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
-        if (newValue && newValue.length > 0)
+        if (newValue && newValue.length > 0) {
+          this.getUsers(newValue);
           this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+        }
         else
           this.authors = [];
         this.updateCombinedState();
@@ -358,8 +359,10 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.request_author_id.value !== '')
           this.filterForm.controls.request_author_id.setValue('');
-        if (newValue && newValue.length > 0)
+        if (newValue && newValue.length > 0) {
+          this.getUsers(newValue);
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+        }
         else
           this.requestAuthors = [];
         this.updateCombinedState();
@@ -452,8 +455,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getUsers() {
-    this.api.v1UsersListCreate({})
+  getUsers(name?: string) {
+    this.api.v1UsersListCreate({search: name})
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: (res: any) => {

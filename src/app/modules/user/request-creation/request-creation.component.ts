@@ -509,7 +509,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   }
 
   onSubmit(): void {
-    const step1 = this.form.get(StepForm.Step1)?.value;
+    const step1 = (this.form.get(StepForm.Step1) as FormGroup)?.getRawValue();
     const step2 = this.form.get(StepForm.Step2)?.value;
     const step3 = this.form.get(StepForm.Step3)?.value;
     const step4 = this.form.get(StepForm.Step4)?.value;

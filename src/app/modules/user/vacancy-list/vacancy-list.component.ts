@@ -346,8 +346,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
         if (newValue && newValue.length > 0) {
-          this.getUsers(newValue);
-          this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+          this.getAuthors(newValue);
+          // this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         }
         else
           this.authors = [];
@@ -360,8 +360,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.filterForm.controls.request_author_id.value !== '')
           this.filterForm.controls.request_author_id.setValue('');
         if (newValue && newValue.length > 0) {
-          this.getUsers(newValue);
-          this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+          this.getRequestUsers(newValue);
+          // this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
         }
         else
           this.requestAuthors = [];
@@ -455,13 +455,45 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getUsers(name?: string) {
+  getUsers() {
+    this.api.v1UsersListCreate({})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+      next: (res: any) => {
+        if (res.body.data) {
+          this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+   getAuthors(name?: string) {
     this.api.v1UsersListCreate({search: name})
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: (res: any) => {
         if (res.body.data) {
           this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));
+          this.authors = this.users.filter(user => user.fullName.toLowerCase().includes(name!.toLowerCase()));
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  getRequestUsers(name?: string) {
+    this.api.v1UsersListCreate({search: name})
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+      next: (res: any) => {
+        if (res.body.data) {
+          this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));
+          this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(name!.toLowerCase()));
         }
       },
       error: (error) => {

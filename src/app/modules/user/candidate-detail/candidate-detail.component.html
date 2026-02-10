@@ -195,7 +195,7 @@
                       } @else {
                         <span class="text-[14px] leading-5">
                           {{ logItem.changes?.description }}
-                          <span class="text-[14px] leading-5 text-[var(--link-default)]">
+                          <span class="text-[14px] leading-5 text-[var(--link-default)] cursor-pointer" [routerLink]="['/user/vacancy/', logItem.vacancy_id]">
                             {{ logItem.vacancy_name }}
                           </span>
                         </span>

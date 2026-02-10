@@ -540,32 +540,43 @@ export class СandidateListComponent implements OnDestroy{
             if (this.selectedIds.length > 0 && this.findedSelectedRows >= 0) {
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                 
-                  this.api.v1SpaceApplicantDetail(this.selectedIds[0], {observe: 'response'}).subscribe({
+                  const restoreFilter = {
+                    limit: 1000, 
+                    page: 1
+                  } as ApplicantapimodelsApplicantFilter;
+                  
+                  this.api.v1SpaceApplicantListCreate(restoreFilter, {observe: 'response'}).subscribe({
                     next: (res) => {
-
                       if (res.body?.data) {
-                        const newApplicant = new ApplicantView(res.body.data);
+                        const selectedApplicants = res.body.data.filter(
+                          (applicant: ApplicantapimodelsApplicantView) => this.selectedIds.includes(applicant.id || '')
+                        );
                         
-                        const exists = this.applicantsList.some(app => app.id === newApplicant.id);
-                        if (!exists) {
-                          this.applicantsList.push(newApplicant);
-                          console.log(this.applicantsList);
+                        selectedApplicants.forEach((applicant: ApplicantapimodelsApplicantView) => {
+                          const view = new ApplicantView(applicant);
+                          const exists = this.applicantsList.some(app => app.id === view.id);
+                          if (!exists) {
+                            this.applicantsList.push(view);
+                          }
+                        });
+                        
+                        if (selectedApplicants.length > 0) {
                           this.gridApi.setGridOption('rowData', this.applicantsList);
                         }
                       }
+                      
                       this.selectedIds.forEach(id => {
                         const rowNode = this.gridApi.getRowNode(id);
                         if (rowNode) {
                           rowNode.setSelected(true);
-                          -- this.findedSelectedRows;
+                          --this.findedSelectedRows;
                         }
                       });
                     },
                     error: (error) => {
-                      console.error('Ошибка при загрузке деталей кандидата:', error);
+                      console.error('Ошибка при загрузке кандидатов для восстановления выделения:', error);
                     }
-                  })
+                  });
                 });
               });
             }

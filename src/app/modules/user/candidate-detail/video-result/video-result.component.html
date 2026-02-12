@@ -49,16 +49,30 @@
 
     <h2 class="text-[22px] leading-[28px] mb-[12px] ">Краткий отчёт AI-ассистента</h2>
 
-    <div class="comment-container h-[148px] w-full bg-[var(--background-main)] mb-[24px] rounded-[16px] overflow-y-scroll">
+    <div class="comment-container h-[148px] w-full bg-[var(--background-alter)] mb-[24px] rounded-[16px] overflow-y-scroll">
       <p class="p-[12px] text-[16px] leading-[24px]">{{survey?.score_ai?.overall_comment}}</p>
     </div>
 
-    <div class="w-full rounded-[16px]">
-      <div class="record-video-container w-full h-full flex justify-center">
-        <video [src]="videoSrc" disablePictureInPicture [controls]="!videoLoading" controlsList="nodownload noplaybackrate" #recording class="video w-full rounded-[16px]"></video>
-        @if (videoLoading) {
-          <app-loader></app-loader>
-        }
+    <div class="w-full ">
+      <div class="record-video-container w-full h-full flex justify-center bg-[var(--background-alter)] rounded-[16px]">
+        @if (videoSrc) {
+          <video [src]="videoSrc" disablePictureInPicture [controls]="!videoLoading" controlsList="nodownload noplaybackrate" #recording class="video w-full rounded-[16px]"></video>
+          @if (videoLoading) {
+            <div class="flex flex-col justify-center items-center">
+              <div class="flex bg-[var(--background-main)] w-[56px] h-[56px] rounded-full justify-center items-center">
+                <app-loader class="!w-[24px] !h-[24px]"></app-loader>
+              </div>
+              <p class="text-[16px] leading-[24px]">Видео-интервью отсутствует</p>
+            </div>           
+          }
+        } @else {
+          <div class="flex flex-col justify-center items-center">
+            <div class="flex bg-[var(--background-main)] w-[56px] h-[56px] rounded-full justify-center items-center">
+              <mat-icon svgIcon="chat-info" class="!w-[24px] !h-[24px]"></mat-icon>
+            </div>
+            <p class="text-[16px] leading-[24px]">Видео-интервью отсутствует</p>
+          </div>
+        }        
       </div>
     </div>
   </div>

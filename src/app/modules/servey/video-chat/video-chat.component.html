@@ -1,6 +1,8 @@
 
 @if (isInterviewOver) {
   <app-interview-finish></app-interview-finish>
+} @else if (isInterviewFail) {
+  <app-interview-fail></app-interview-fail>
 } @else {
   <div class="max-h-[105.444vh] min-h-[91.222vh] flex flex-col items-center">
     <mat-icon svgIcon="logo-hr" class="!w-[5.288vh] !h-[6.25vh] flex-shrink-0"> </mat-icon>
@@ -10,7 +12,7 @@
         @if (isCameraCheck) {
           <app-camera (isCameraCheck)="listenForInterviewStart($event)" ></app-camera>
         } @else {
-          <app-capture-video [childInputId]="parentId" (isInterviewOver)="listenForInterviewOver($event)"></app-capture-video>
+          <app-capture-video [childInputId]="parentId" (isInterviewOver)="listenForInterviewOver($event)" (isInterviewFail)="listenForInterviewFail($event)"></app-capture-video>
        }
       </div>
     </div>

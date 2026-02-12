@@ -39,6 +39,8 @@ export class CaptureVideoComponent implements OnInit {
   public recordingElement!: ElementRef;
   @Output() isInterviewOver: EventEmitter<boolean> =
     new EventEmitter<boolean>();
+  @Output() isInterviewFail: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
   @Input() childInputId: string | null = null;
   public videoButtonTitle = 'Start';
   public isCapturingVideo: boolean = false;
@@ -87,7 +89,7 @@ export class CaptureVideoComponent implements OnInit {
             this.secureService.openConfirmModalComponent().subscribe(result => {
               if (result) {
                 this.recordHandlre();
-                    this.isInterviewOver.emit(true);
+                this.isInterviewFail.emit(true);
               };
             });
           }
@@ -102,7 +104,7 @@ export class CaptureVideoComponent implements OnInit {
         filter(val => val === 0 || this.hiddenCount > 1)
       ).subscribe(() => {
         this.recordHandlre();
-        this.isInterviewOver.emit(true);
+        this.isInterviewFail.emit(true);
       }
     );
   }

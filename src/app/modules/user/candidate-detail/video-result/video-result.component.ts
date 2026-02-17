@@ -114,7 +114,10 @@ export class VideoResultComponent {
       field: 'question',
       flex: 1,
       headerName: 'Вопрос',
+      cellRenderer: CommentRendererComponent,
+      autoHeight: true,
       headerClass: 'font-medium',
+      wrapText: false, 
     },
     {
       field: 'persentage',
@@ -143,7 +146,7 @@ export class VideoResultComponent {
     columnDefs: this.colDefs,
     rowData: this.questionsList,
     overlayNoRowsTemplate:
-      '<span class="text-[32px] leading-10">Кандидаты отсутствуют</span>',
+      '<span class="text-[32px] leading-10">Вопросы отсутствуют</span>',
     loading: false,
     suppressMovableColumns: true,
     suppressScrollOnNewData: true,

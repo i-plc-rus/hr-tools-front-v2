@@ -20,14 +20,15 @@
     </button>
   </mat-toolbar>
 
-  <div class="content-container">
+  <ag-grid-angular
+    class="ag-theme-material w-full"
+    style="height: calc(100% - 80px);"
+    [gridOptions]="gridOptions">
+  </ag-grid-angular>
 
-        <ag-grid-angular
-          class="ag-theme-material w-full"
-          style="height: calc(100% - 80px);"
+  <!-- <div class="content-container">
 
-          [gridOptions]="gridOptions">
-        </ag-grid-angular>
+        ag-grid-angular-----
 
     <mat-card class="license-card mat-elevation-z0">
       <mat-card-content class="license-container">
@@ -38,5 +39,5 @@
         <button mat-button class="btn-primary" (click)="openLicenseExtensionModal()" style="color: var(--link-default);">Написать</button>
       </mat-card-content>
     </mat-card>
-  </div>
+  </div> -->
 </div>

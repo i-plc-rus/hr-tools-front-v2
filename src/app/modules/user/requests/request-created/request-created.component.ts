@@ -15,11 +15,12 @@ import {
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-request-created',
   standalone: true,
-  imports: [RequestTemplateComponent, MatButtonModule, MatDialogModule, CommonModule],
+  imports: [RequestTemplateComponent, MatButtonModule, MatDialogModule, CommonModule, MatIcon],
   templateUrl: './request-created.component.html',
   styleUrl: './request-created.component.scss'
 })
@@ -84,6 +85,10 @@ export class RequestCreatedComponent implements OnInit, AfterViewInit, OnDestroy
         this.snackBarService.snackBarMessageError('Ошибка при загрузке данных заявки');
       }
     });
+  }
+
+  goBack() {
+    this.router.navigate(['/user/request/list'])
   }
 
   ngAfterViewInit(): void {

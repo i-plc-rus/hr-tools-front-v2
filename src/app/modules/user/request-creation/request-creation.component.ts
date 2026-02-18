@@ -87,6 +87,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   showForm: boolean = false;
   isLastStep: boolean = false;
   users: any = [];
+  organizationName: string = '';
   ModelsVRSelectionType = ModelsVRSelectionType;
 
   experiences = experienceTypes;
@@ -183,15 +184,16 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
         limit: this.userPageSize,
         sort: {fio_desc: false},
       }),
+      profile: this.api.v1SpaceProfileList()
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-      next: ({ companyName, companyStructure, city, user }: any) => {
+      next: ({ companyName, companyStructure, city, user, profile }: any) => {
         this.companyNameArray = companyName.body.data;
         this.companyStructureArray = companyStructure.body.data;
         this.city = city.body.data;
         this.users = user.body.data || [];
-      
+        this.organizationName = profile.body.data?.organization_name;
         if (this.users.length < this.userPageSize) {
           this.userAllDataLoaded = true;
         } else {
@@ -200,6 +202,12 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
         
         this.initializeCityAutocomplete();
         this.initializeCompanyAutocomplete();
+        
+        if (this.organizationName) {
+          const step1 = this.form.get(StepForm.Step1) as FormGroup;
+          step1.get(Step1Fields.CompanyName)?.setValue(this.organizationName);
+          step1.get(Step1Fields.CompanyName)?.disable();
+        }
       },
       error: (err) => {
         console.error('Ошибка при загрузке данных:', err);
@@ -501,7 +509,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   }
 
   onSubmit(): void {
-    const step1 = this.form.get(StepForm.Step1)?.value;
+    const step1 = (this.form.get(StepForm.Step1) as FormGroup)?.getRawValue();
     const step2 = this.form.get(StepForm.Step2)?.value;
     const step3 = this.form.get(StepForm.Step3)?.value;
     const step4 = this.form.get(StepForm.Step4)?.value;

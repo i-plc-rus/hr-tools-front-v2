@@ -11,11 +11,12 @@ import {
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-request-approved',
   standalone: true,
-  imports: [RequestTemplateComponent, MatButtonModule],
+  imports: [RequestTemplateComponent, MatButtonModule, MatIcon],
   templateUrl: './request-approved.component.html',
   styleUrl: './request-approved.component.scss'
 })
@@ -71,6 +72,11 @@ export class RequestApprovedComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
   }
+
+  goBack() {
+    this.router.navigate(['/user/request/list'])
+  }
+
 
   ngAfterViewInit(): void {
     if (!this.templateComponent) {

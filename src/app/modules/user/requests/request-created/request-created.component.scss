@@ -1,3 +1,7 @@
+:host{
+  @apply flex;
+}
+
 .modal-content {
   @apply bg-white p-10 rounded-lg max-w-md text-center;
 }

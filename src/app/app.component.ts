@@ -114,6 +114,7 @@ export class AppComponent implements OnInit {
       .addSvgIcon('swap', this.setPath(`${this.svgPath}/ic-swap.svg`))
       .addSvgIcon('hide-eye', this.setPath(`${this.svgPath}/ic-hide.svg`))
       .addSvgIcon('show-eye', this.setPath(`${this.svgPath}/ic-show.svg`))
+      .addSvgIcon('requests-comments', this.setPath(`${this.svgPath}/comments.svg`))
   }
 
   ngOnInit() {

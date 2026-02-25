@@ -1,6 +1,5 @@
 import {
   AfterContentChecked,
-  AfterViewChecked,
   AfterViewInit,
   Component,
   OnDestroy,
@@ -39,7 +38,6 @@ export enum StepForm {
   Step1 = 'step1',
   Step2 = 'step2',
   Step3 = 'step3',
-  Step4 = 'step4',
 }
 export enum Step1Fields {
   CompanyName = 'company_name',
@@ -47,45 +45,48 @@ export enum Step1Fields {
   CompanyStructId = 'company_struct_id',
   DepartmentId = 'department_id',
   JobTitleId = 'job_title_id',
+  PlaceOfWork = 'place_of_work',
+  RemoteWork = 'remote_work',
+  ChiefFio = 'chief_fio',
+  Probation = 'probation',
+  Schedule = 'schedule',
+  Employment = 'employment',
+  Salary = 'salary',
+  Bonus = 'bonus',
 }
 
 export enum Step2Fields {
-  CityId = 'cityId',
-  PlaceOfWork = 'place_of_work',
-  ChiefFio = 'chief_fio',
+  Requirements = 'requirements',
+  Skills = 'skills',
+  AdditionalInformation = 'additionalInformation',
 }
 
 export enum Step3Fields {
-  OpenedPositions = 'opened_positions',
-  Urgency = 'urgency',
-  RequestType = 'request_type',
-  Requirements = 'requirements',
-  Employment = 'employment',
-  Experience = 'experience',
-  Schedule = 'schedule',
-}
-
-export enum Step4Fields {
+  // OpenedPositions = 'opened_positions',
+  // Urgency = 'urgency',
+  // RequestType = 'request_type',
+  // Experience = 'experience',
   Interviewers = 'interviewers',
 }
+
+// export enum Step4Fields {
+//   Interviewers = 'interviewers',
+// }
 
 @Component({
   selector: 'app-request-creation',
   templateUrl: './request-creation.component.html',
   styleUrl: './request-creation.component.scss',
 })
-export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class RequestCreationComponent implements OnInit, OnDestroy {
   StepForm = StepForm;
   Step1Fields = Step1Fields;
   Step2Fields = Step2Fields;
   Step3Fields = Step3Fields;
-  Step4Fields = Step4Fields;
 
-  @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('saveDraftDialog') saveDraftDialog!: TemplateRef<any>;
   @ViewChild('draftDialog') draftDialog!: TemplateRef<any>;
   showForm: boolean = false;
-  isLastStep: boolean = false;
   users: any = [];
   organizationName: string = '';
   ModelsVRSelectionType = ModelsVRSelectionType;
@@ -111,26 +112,29 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       [Step1Fields.CompanyStructId]: new FormControl('', [Validators.required]),
       [Step1Fields.DepartmentId]: new FormControl('', [Validators.required]),
       [Step1Fields.JobTitleId]: new FormControl('', [Validators.required]),
+      [Step1Fields.PlaceOfWork]: new FormControl(''),
+      [Step1Fields.RemoteWork]: new FormControl(false),
+      [Step1Fields.ChiefFio]: new FormControl('', [Validators.required]),
+      [Step1Fields.Probation]: new FormControl('', [Validators.required]),
+      [Step1Fields.Schedule]: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),
+      [Step1Fields.Employment]: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
+      [Step1Fields.Salary]: new FormControl(''),
+      [Step1Fields.Bonus]: new FormControl(''),
     }),
 
     [StepForm.Step2]: new FormGroup({
-      [Step2Fields.CityId]: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
-      [Step2Fields.PlaceOfWork]: new FormControl('', [Validators.required]),
-      [Step2Fields.ChiefFio]: new FormControl('', [Validators.required]),
+      // [Step2Fields.CityId]: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
+      [Step2Fields.Requirements]: new FormControl('', [Validators.required]),
+      [Step2Fields.Skills]: new FormControl(''),
+      [Step2Fields.AdditionalInformation]: new FormControl(''),
     }),
 
     [StepForm.Step3]: new FormGroup({
-      [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
-      [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
-      [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
-      [Step3Fields.Requirements]: new FormControl('', [Validators.required]),
-      [Step3Fields.Employment]: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
-      [Step3Fields.Experience]: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
-      [Step3Fields.Schedule]: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),
-    }),
-
-    [StepForm.Step4]: new FormGroup({
-      [Step4Fields.Interviewers]: new FormArray([
+      // [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
+      // [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
+      // [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
+      // [Step3Fields.Experience]: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
+      [Step3Fields.Interviewers]: new FormArray([
         new FormGroup({
           space_user_id: new FormControl('', [Validators.required]),
           stage: new FormControl(1),
@@ -155,12 +159,6 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   @ViewChild('userSelect') userSelect!: MatSelect;
 
   searchUser = new FormControl<string | null>('');
-  isLoadingMoreUsers = false;
-  private userCurrentPage = 1;
-  private userPageSize = 9999;
-  private userAllDataLoaded = false;
-
-  private _selectInitialized = false;
 
   private destroy$ = new Subject<void>();
 
@@ -179,11 +177,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       companyName: this.api.v1DictCompanyFindCreate({}),
       companyStructure: this.api.v1DictCompanyStructFindCreate({}),
       city: this.api.v1DictCityFindCreate({}),
-      user: this.api.v1UsersListCreate({
-        page: this.userCurrentPage,
-        limit: this.userPageSize,
-        sort: {fio_desc: false},
-      }),
+      user: this.fetchAllUsers(),
       profile: this.api.v1SpaceProfileList()
     })
       .pipe(takeUntil(this.destroy$))
@@ -194,12 +188,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
         this.city = city.body.data;
         this.users = user.body.data || [];
         this.organizationName = profile.body.data?.organization_name;
-        if (this.users.length < this.userPageSize) {
-          this.userAllDataLoaded = true;
-        } else {
-          this.userCurrentPage++;
-        }
-        
+
         this.initializeCityAutocomplete();
         this.initializeCompanyAutocomplete();
         
@@ -265,70 +254,43 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.startForm();
   }
 
-  ngAfterViewChecked(): void {
-    if (!this._selectInitialized && this.userSelect) {
-      this._selectInitialized = true;
-
-      this.userSelect.openedChange
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(opened => {
-          if (opened && this.userSelect.panel) {
-            const panel = this.userSelect.panel.nativeElement;
-            panel.addEventListener('scroll', this.onUserScroll.bind(this));
-          }
-        });
-    }
-  }
-
-  onUserScroll(event: any) {
-    if (this.isLoadingMoreUsers || this.userAllDataLoaded) return;
-
-    const panel = event.target;
-    const scrollPosition = panel.scrollTop + panel.clientHeight;
-    const scrollThreshold = panel.scrollHeight * 0.8;
-
-    if (scrollPosition >= scrollThreshold) {
-      this.loadMoreUsers();
-    }
-  }
-
-  loadMoreUsers() {
-    this.isLoadingMoreUsers = true;
-
-    const filter = {
-      page: this.userCurrentPage,
-      limit: this.userPageSize,
-      search: this.searchUser.value || '',
-    };
-
-    this.api.v1UsersListCreate(filter, { observe: 'response' })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          console.log(res)
-          const newUsers = res.body?.data || [];
-
-          const existingIds = new Set(this.users.map((u: SpaceapimodelsSpaceUser) => u.id));
-          const uniqueNewUsers = newUsers.filter((u: SpaceapimodelsSpaceUser) => !existingIds.has(u.id));
-
-          this.users = [...this.users, ...uniqueNewUsers];
-
-          if (newUsers.length < this.userPageSize) {
-            this.userAllDataLoaded = true;
-          } else {
-            this.userCurrentPage++;
-          }
-        },
-        complete: () => (this.isLoadingMoreUsers = false),
-        error: () => (this.isLoadingMoreUsers = false),
-      });
-  }
-
   get interviewers(): FormArray {
-    return this.form.get(`${StepForm.Step4}.${Step4Fields.Interviewers}`) as unknown as FormArray;
+    return this.form.get(`${StepForm.Step3}.${Step3Fields.Interviewers}`) as unknown as FormArray;
   }
 
-
+ /** Загружает всех пользователей постранично (бэкенд отдаёт не более 100 за запрос). */
+ private fetchAllUsers(): Observable<{ body: { data: SpaceapimodelsSpaceUser[] } }> {
+  const pageSize = 100;
+  return this.api
+    .v1UsersListCreate(
+      { page: 1, limit: pageSize, sort: { fio_desc: false } },
+      { observe: 'response' }
+    )
+    .pipe(
+      switchMap((firstRes: any) => {
+        const firstData = firstRes.body?.data || [];
+        const rowCount = firstRes.body?.row_count ?? firstData.length;
+        if (firstData.length >= rowCount || firstData.length < pageSize) {
+          return of({ body: { data: firstData } });
+        }
+        const totalPages = Math.ceil(rowCount / pageSize);
+        const otherPages = Array.from({ length: totalPages - 1 }, (_, i) => i + 2);
+        return forkJoin(
+          otherPages.map((page) =>
+            this.api.v1UsersListCreate(
+              { page, limit: pageSize, sort: { fio_desc: false } },
+              { observe: 'response' }
+            )
+          )
+        ).pipe(
+          map((responses: any[]) => {
+            const rest = responses.flatMap((r) => r.body?.data || []);
+            return { body: { data: [...firstData, ...rest] } };
+          })
+        );
+      })
+    );
+}
 
   addInterviewer(): void {
     this.interviewers.push(
@@ -351,14 +313,14 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
   initializeCityAutocomplete(): void {
     const step2 = this.form.get(StepForm.Step2) as FormGroup;
 
-    this.filteredCity$ = step2.get(Step2Fields.CityId)!.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : value?.address)),
-      map((address) =>
-        address ? this._filterCities(address) : this.city.slice(),
-      ),
-    );
+    // this.filteredCity$ = step2.get(Step2Fields.CityId)!.valueChanges.pipe(
+    //   takeUntil(this.destroy$),
+    //   startWith(''),
+    //   map((value) => (typeof value === 'string' ? value : value?.address)),
+    //   map((address) =>
+    //     address ? this._filterCities(address) : this.city.slice(),
+    //   ),
+    // );
   }
 
 
@@ -397,7 +359,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     return company && company.name ? company.name : '';
   }
 
-  startForm() {
+  startForm(): void {
     this.dialog.open(this.draftDialog, {
       hasBackdrop: true,
       disableClose: false
@@ -418,7 +380,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.form.patchValue(draftData);
 
     const step1 = this.form.get(StepForm.Step1) as FormGroup<any>;
-    const step4 = this.form.get(StepForm.Step4) as FormGroup<any>;
+    const step3 = this.form.get(StepForm.Step3) as FormGroup<any>;
 
     if (draftData[StepForm.Step1]?.[Step1Fields.CompanyStructId]) {
       step1.get(Step1Fields.DepartmentId)?.setValue(draftData[StepForm.Step1][Step1Fields.DepartmentId]);
@@ -433,10 +395,10 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
       step1.get(Step1Fields.CompanyName)?.setValue({ name: companyRaw, id: null });
     }
 
-    const interviewersArray = step4.get(Step4Fields.Interviewers) as FormArray;
+    const interviewersArray = step3.get(Step3Fields.Interviewers) as FormArray;
     interviewersArray.clear();
 
-    draftData[StepForm.Step4]?.[Step4Fields.Interviewers]?.forEach(
+    draftData[StepForm.Step3]?.[Step3Fields.Interviewers]?.forEach(
       (interviewer: { space_user_id: string | null; stage: number | null }, index: number) => {
         interviewersArray.push(
           new FormGroup({
@@ -452,7 +414,7 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.dialog.closeAll();
   }
 
-  onOptionChange(event: any, index: number) {
+  onOptionChange(event: any, index: number): void {
     const selectedValue = event.value;
     const controlToUpdate = this.interviewers.at(index);
       
@@ -481,13 +443,6 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     this.dialog.closeAll();
   }
 
-  goToNextStep() {
-    this.stepper.next();
-  }
-
-  onStepChange(event: any) {
-    this.isLastStep = event.selectedIndex === this.stepper.steps.length - 1;
-  }
 
   openSaveDraftDialog(): void {
     this.dialog.open(this.saveDraftDialog);
@@ -499,70 +454,80 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
 
   saveDraftAndExit(): void {
     localStorage.setItem('draftFormData', JSON.stringify(this.form.value));
-    console.log(this.form);
     this.closeDialog();
     this.router.navigate(['/user/request/list'])
   }
 
-  goBack() {
+  goBack(): void {
     this.router.navigate(['/user/request/list'])
+  }
+
+  /** Форматирует число в строку с пробелами как разделитель тысяч (400000 → "400 000"). */
+  private formatThousands(value: string | number | null | undefined): string | undefined {
+    if (value == null || value === '') return undefined;
+    const digits = String(value).replace(/\D/g, '');
+    if (!digits) return undefined;
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   }
 
   onSubmit(): void {
     const step1 = (this.form.get(StepForm.Step1) as FormGroup)?.getRawValue();
     const step2 = this.form.get(StepForm.Step2)?.value;
     const step3 = this.form.get(StepForm.Step3)?.value;
-    const step4 = this.form.get(StepForm.Step4)?.value;
-
-    const description = this.form.get('description')?.value;
 
     const company = step1?.company_name;
     const companyName = typeof company === 'object' && company?.name
       ? company.name
       : String(company);
 
-    const requestData: VacancyapimodelsVacancyRequestCreateData = {
+    const requestData: /*VacancyapimodelsVacancyRequestCreateData*/ any  = {
       company_name: companyName || undefined,
       vacancy_name: step1?.vacancy_name || undefined,
       department_id: step1?.department_id || undefined,
       company_struct_id: step1?.company_struct_id || undefined,
       job_title_id: step1?.job_title_id || undefined,
-      chief_fio: step2?.chief_fio || undefined,
-      city_id: step2?.cityId?.id || undefined,
-      place_of_work: step2?.place_of_work || undefined,
-      opened_positions: Number(step3?.opened_positions) || undefined,
-      urgency: step3?.urgency as ModelsVRUrgency,
-      request_type: step3?.request_type as ModelsVRType,
-      requirements: step3?.requirements || undefined,
-      employment: step3?.employment as ModelsEmployment,
-      experience: step3?.experience as ModelsExperience,
-      schedule: step3?.schedule as ModelsSchedule,
-      selection_type: ModelsVRSelectionType.VRSelectionTypePersonal,
-      description: description || undefined,
-      approval_stages: step4?.interviewers?.map(
+      remote_work: step1?.remote_work || false,
+      chief_fio: step1?.chief_fio || undefined,
+      employment: step1?.employment as ModelsEmployment,
+      schedule: step1?.schedule as ModelsSchedule,
+      place_of_work: step1?.place_of_work || undefined,
+      probation: step1?.probation || undefined,
+      salary: this.formatThousands(step1?.salary),
+      bonus: this.formatThousands(step1?.bonus),
+      requirements: step2?.requirements || undefined,
+      skills: step2?.skills || undefined,
+      additionalInformation: step2?.additionalInformation || undefined,
+      approval_stages: step3?.interviewers?.map(
         (interviewer: { space_user_id: string | null; stage: number | null }) => ({
           assignee_user_id: interviewer.space_user_id || undefined,
         })
       ) || [],
+      // city_id: step2?.cityId?.id || undefined,
+      // opened_positions: Number(step3?.opened_positions) || undefined,
+      // urgency: step3?.urgency as ModelsVRUrgency,
+      // request_type: step3?.request_type as ModelsVRType,
+      // experience: step3?.experience as ModelsExperience,
+      
     };
 
-    if (this.form.valid) {
-      this.api.v1SpaceVacancyRequestCreate(requestData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-        next: (res) => {
-          this.router.navigate(['/user/request/list']);
-        },
-        error: (err) => {
-          console.error('Ошибка при создании заявки:', err);
-        },
-      });
-    } else {
-      this.snackBarService.snackBarMessageError('Не все обязательные поля заполнены');
-    }
+    // if (this.form.valid) {
+    //   this.api.v1SpaceVacancyRequestCreate(requestData)
+    //     .pipe(takeUntil(this.destroy$))
+    //     .subscribe({
+    //     next: (res) => {
+    //       this.router.navigate(['/user/request/list']);
+    //     },
+    //     error: (err) => {
+    //       console.error('Ошибка при создании заявки:', err);
+    //     },
+    //   });
+    // } else {
+    //   this.snackBarService.snackBarMessageError('Не все обязательные поля заполнены');
+    // }
+    console.log(requestData)
   }
 
-    openGenerateCommentModal() {
+    openGenerateCommentModal(): void {
     this.vacancyModal.openGenerateModal(this.form.controls['description'] as FormControl);
   }
 
@@ -577,24 +542,9 @@ export class RequestCreationComponent implements OnInit, AfterViewChecked, OnDes
     }
   }
 
-  getCurrentStepGroup(): FormGroup | null {
-    const stepIndex = this.stepper?.selectedIndex ?? 0;
-    const currentStepKey = Object.values(StepForm)[stepIndex];
-    return this.form.get(currentStepKey) as FormGroup;
-  }
-
-  getStepFormGroup(stepName: StepForm): FormGroup {
-    return this.form.get(stepName) as FormGroup;
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
-    const panel = this.userSelect?.panel?.nativeElement;
-    if (panel) {
-      panel.removeEventListener('scroll', this.onUserScroll.bind(this));
-    }
   }
 }
 

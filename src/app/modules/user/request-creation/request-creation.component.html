@@ -1,476 +1,449 @@
-<div class="py-8 px-4 w-full min-h-screen flex flex-col" style="overflow: hidden;">
-  <div class="relative w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
-  <p class="mb-10 text-[22px]">Создание заявки</p>
-  <!-- @if (!showForm) {
-    <h1 class="text-[32px] mb-2">Направление подбора</h1>
-    <p class="text-base mb-6">Выберите направление подбора к которому относится эта вакансия</p>
-    <div class="flex gap-3">
-      <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm()">
-        <mat-icon class="!w-10 !h-10" svgIcon="profile-in-circle"></mat-icon>
-        <span>Массовый</span>
-      </button>
-      <button class="w-[242px] py-6 flex flex-col items-center border-2 rounded-xl"
-              (click)="startForm()">
-        <mat-icon class="!w-10 !h-10" svgIcon="business-bag"></mat-icon>
-        <span>Профессиональный</span>
-      </button>
-    </div>
-  } -->
-  <!-- @if (showForm) { -->
-    <form [formGroup]="form" class="max-w-[580px] mb-[70px]">
-      <mat-stepper #stepper [linear]="true" class="!bg-transparent" (selectionChange)="onStepChange($event)">
-        <mat-step [stepControl]="getStepFormGroup(StepForm.Step1)">
-          <h2 class="text-3xl mb-4">Общая информация</h2>
-          <div class="flex flex-col gap-4">
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Название компании</mat-label>
-              <input type="text"
-                     matInput
-                     [formControl]="getControl(StepForm.Step1, Step1Fields.CompanyName)">
-              @if (getControl(StepForm.Step1, Step1Fields.CompanyName).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.CompanyName).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                 </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step1, Step1Fields.CompanyName).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.CompanyName).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Название вакансии</mat-label>
-              <input type="text"
-                     matInput
-                     [formControl]="getControl(StepForm.Step1, Step1Fields.VacancyName)">
-              @if (getControl(StepForm.Step1, Step1Fields.VacancyName).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.VacancyName).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step1, Step1Fields.VacancyName).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.VacancyName).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Структура</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.CompanyStructId)">
-                @for (item of companyStructureArray; track $index) {
-                  <mat-option [value]="item.id">{{ item.name }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step1, Step1Fields.CompanyStructId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.CompanyStructId).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step1, Step1Fields.CompanyStructId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.CompanyStructId).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Подразделение</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.DepartmentId)">
-                @for (item of companyDepartmentArray; track $index) {
-                  <mat-option [value]="item.id">{{ item.name }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step1, Step1Fields.DepartmentId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.DepartmentId).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step1, Step1Fields.DepartmentId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.DepartmentId).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Штатная должность</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step1, Step1Fields.JobTitleId)">
-                @for (item of companyJobsNamesArray; track $index) {
-                  <mat-option [value]="item.id">{{ item.name }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step1, Step1Fields.JobTitleId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.JobTitleId).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step1, Step1Fields.JobTitleId).invalid &&
-              !getControl(StepForm.Step1, Step1Fields.JobTitleId).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="getStepFormGroup(StepForm.Step2)">
-          <h2 class="text-3xl mb-4">Местоположение и контакты</h2>
-          <div class="flex flex-col gap-4">
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Город</mat-label>
-
-              <input type="text" matInput [formControl]="getControl(StepForm.Step2, Step2Fields.CityId)"
-                     [matAutocomplete]="cityAuto">
-
-              <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayCityName">
-                @for (item of (filteredCity$ | async); track item) {
-                  <mat-option [value]="item">
-                    {{ item.address }}
-                  </mat-option>
-                }
-              </mat-autocomplete>
-              @if (getControl(StepForm.Step2, Step2Fields.CityId).invalid &&
-              !getControl(StepForm.Step2, Step2Fields.CityId).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-             @if (getControl(StepForm.Step2, Step2Fields.CityId).invalid &&
-              !getControl(StepForm.Step2, Step2Fields.CityId).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Адрес офиса</mat-label>
-              <input type="text"
-                     matInput
-                     [formControl]="getControl(StepForm.Step2, Step2Fields.PlaceOfWork)">
-            </mat-form-field>
-            @if (getControl(StepForm.Step2, Step2Fields.PlaceOfWork).invalid &&
-              !getControl(StepForm.Step2, Step2Fields.PlaceOfWork).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>ФИО непосредственного руководителя</mat-label>
-              <input type="text"
-                     matInput
-                     [formControl]="getControl(StepForm.Step2, Step2Fields.ChiefFio)">
-              @if (getControl(StepForm.Step2, Step2Fields.ChiefFio).invalid &&
-              !getControl(StepForm.Step2, Step2Fields.ChiefFio).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step2, Step2Fields.ChiefFio).invalid &&
-              !getControl(StepForm.Step2, Step2Fields.ChiefFio).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-          </div>
-        </mat-step>
-        <mat-step [stepControl]="getStepFormGroup(StepForm.Step3)">
-          <div style="max-height: 60vh; overflow-y: auto; padding: 20px; padding-right: 20px;">
-          <h2 class="text-3xl mb-4">Детали вакансии</h2>
-          <div class="flex flex-col gap-4">
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Количество вакантных позиций</mat-label>
-              <input type="number"
-                     matInput
-                     [formControl]="getControl(StepForm.Step3, Step3Fields.OpenedPositions)">
-              @if (getControl(StepForm.Step3, Step3Fields.OpenedPositions).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.OpenedPositions).untouched) {
-                <span class="absolute right-4 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.OpenedPositions).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.OpenedPositions).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Срочность</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Urgency)">
-                @for (urgency of urgencys; track $index) {
-                  <mat-option value="{{ urgency.value }}">{{ urgency.name }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step3, Step3Fields.Urgency).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Urgency).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.Urgency).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Urgency).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Тип заявки</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.RequestType)">
-                @for (request_type of request_types; track $index) {
-                  <mat-option value="{{ request_type.value }}">{{ request_type.name }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step3, Step3Fields.RequestType).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.RequestType).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.RequestType).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.RequestType).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <div class="flex flex-col w-full relative">
-              <label class="text-[16px] leading-6 font-medium mb-2">Требования, обязанности</label>
-              <div class="flex flex-col w-full ">
-                <!-- (onActionBtnClick)="openGenerateCommentModal()" -->
-                <app-text-editor
-                  [formControl]="getControl(StepForm.Step3, Step3Fields.Requirements)"
-                  class="w-full"
-                  height="160px">
-                </app-text-editor>
-                @if (getControl(StepForm.Step3, Step3Fields.Requirements).invalid &&
-                  !getControl(StepForm.Step3, Step3Fields.Requirements).untouched) {
-                  <span class="absolute right-0 top-[80px] w-12 h-12 flex justify-center items-center">
-                    <mat-icon svgIcon="error"></mat-icon>
-                  </span>
-                }
-              </div>
-            </div>
-            @if (getControl(StepForm.Step3, Step3Fields.Requirements).invalid &&
-                  !getControl(StepForm.Step3, Step3Fields.Requirements).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <label>Условия</label>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Занятость</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Employment)">
-                @for (employment of employments; track $index) {
-                  <mat-option value="{{ employment.value }}">{{ employment.label }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step3, Step3Fields.Employment).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Employment).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.Employment).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Employment).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Опыт работы</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Experience)">
-                @for (experience of experiences; track $index) {
-                  <mat-option value="{{ experience.value }}">{{ experience.label }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step3, Step3Fields.Experience).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Experience).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.Experience).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Experience).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-
-            <div class="flex flex-col">
-            <mat-form-field appearance="outline">
-              <mat-label>Режим работы</mat-label>
-              <mat-select [formControl]="getControl(StepForm.Step3, Step3Fields.Schedule)">
-                @for (schedule of schedules; track $index) {
-                  <mat-option value="{{ schedule.value }}">{{ schedule.label }}</mat-option>
-                }
-              </mat-select>
-              @if (getControl(StepForm.Step3, Step3Fields.Schedule).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Schedule).untouched) {
-                <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                  <mat-icon svgIcon="error"></mat-icon>
-                </span>
-              }
-            </mat-form-field>
-            @if (getControl(StepForm.Step3, Step3Fields.Schedule).invalid &&
-              !getControl(StepForm.Step3, Step3Fields.Schedule).untouched) {
-                <span class="flex">
-                  <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
-                </span>
-            }
-            </div>
-          </div>
-        </div>
-        </mat-step>
-        <mat-step [stepControl]="getStepFormGroup(StepForm.Step4)">
-          <h2 class="text-3xl mb-4">Цепочка согласования</h2>
-          <div [formGroupName]="StepForm.Step4">
-            <div [formArrayName]="Step4Fields.Interviewers">
-              @for (interviewer of interviewers.controls; track interviewer) {
-                <div class="mb-2" [formGroupName]="$index">
-                  <div class="flex justify-between items-center">
-                    <h3 class="h-[40px]">{{ interviewer.get('stage')?.value }}-й этап согласования</h3>
-                    @if ($index > 0) {
-                      <span class="text-red-600 cursor-pointer" (click)="removeInterviewer(interviewers.controls.indexOf(interviewer))">
-                      Удалить
-                      </span>
-                    }
-                  </div>
-                  <div class="flex flex-col">
-                  <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Выберите сотрудника</mat-label>
-                    <mat-select #userSelect formControlName="space_user_id" (selectionChange)="onOptionChange($event, $index)">
-                      @for (item of getAvailableUsers($index); track item) {
-                        <mat-option [value]="item.id" >
-                          {{ item.last_name }} {{ item.first_name }}
-                        </mat-option>
-                      }
-                      @if (interviewer.get('space_user_id')?.invalid && !interviewer.get('space_user_id')?.untouched) {
-                        <span class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center">
-                          <mat-icon svgIcon="error"></mat-icon>
-                        </span>
-                      }
-                    </mat-select>
-                  </mat-form-field>
-                  @if (interviewer.get('space_user_id')?.invalid && !interviewer.get('space_user_id')?.untouched) {
-                    <span class="flex">
-                      <p class="text-[var(--error)] text-[13px]">{{errorText}}</p>
+<div
+  class="py-8 px-4 w-full min-h-screen flex flex-col"
+  style="overflow: hidden"
+>
+  <div
+    class="relative w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col"
+  >
+    <form [formGroup]="form" class="mb-[70px]">
+      <mat-tab-group class="!bg-transparent">
+        <mat-tab label="Условия найма">
+          <div class="flex flex-col gap-6 py-4 overflow-y-auto pr-2">
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Общая информация</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <app-text-input
+                  type="text"
+                  [formControl]="
+                    getControl(StepForm.Step1, Step1Fields.VacancyName)
+                  "
+                  label="Название вакансии*"
+                  class="w-full relative"
+                >
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.VacancyName)
+                      .invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.VacancyName)
+                      .untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
                     </span>
                   }
-                  </div>
-                </div>
+                </app-text-input>
+
+                <mat-form-field class="relative bg-white" appearance="outline">
+                  <mat-label>Структура</mat-label>
+                  <mat-select
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.CompanyStructId)
+                    "
+                  >
+                    @for (item of companyStructureArray; track $index) {
+                      <mat-option [value]="item.id">{{ item.name }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.CompanyStructId)
+                      .invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.CompanyStructId)
+                      .untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </mat-form-field>
+
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>Подразделение</mat-label>
+                  <mat-select
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.DepartmentId)
+                    "
+                  >
+                    @for (item of companyDepartmentArray; track $index) {
+                      <mat-option [value]="item.id">{{ item.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>Штатная должность</mat-label>
+                  <mat-select
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.JobTitleId)
+                    "
+                  >
+                    @for (item of companyJobsNamesArray; track $index) {
+                      <mat-option [value]="item.id">{{ item.name }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.JobTitleId)
+                      .invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.JobTitleId)
+                      .untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </mat-form-field>
+              </div>
+            </section>
+
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Условия</h2>
+              <div class="flex items-center gap-3 mb-4">
+                <mat-slide-toggle
+                  [formControl]="
+                    getControl(StepForm.Step1, Step1Fields.RemoteWork)
+                  "
+                  color="primary"
+                  class="conditions-remote-toggle"
+                >
+                  Удаленная работа
+                </mat-slide-toggle>
+              </div>
+              @if (!getControl(StepForm.Step1, Step1Fields.RemoteWork).value) {
+                <mat-form-field
+                  class="w-full mb-4 bg-white"
+                  appearance="outline"
+                >
+                  <mat-label>Офис</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.PlaceOfWork)
+                    "
+                  />
+                </mat-form-field>
               }
-              <button class="w-[243px]" mat-flat-button class="btn-primary" (click)="addInterviewer()">
-                Добавить этап согласования
-              </button>
-            </div>
+              <div class="grid grid-cols-2 gap-4">
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>ФИО непосредственного руководителя</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.ChiefFio)
+                    "
+                  />
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.ChiefFio).invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.ChiefFio).untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </mat-form-field>
+
+                <app-text-input
+                  type="text"
+                  label="Испытательный срок (мес)"
+                  [formControl]="
+                    getControl(StepForm.Step1, Step1Fields.Probation)
+                  "
+                  class="w-full bg-white"
+                >
+                </app-text-input>
+
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>График работы</mat-label>
+                  <mat-select
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.Schedule)
+                    "
+                  >
+                    @for (schedule of schedules; track $index) {
+                      <mat-option value="{{ schedule.value }}">{{
+                        schedule.label
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.Schedule).invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.Schedule).untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </mat-form-field>
+
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>Занятость</mat-label>
+                  <mat-select
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.Employment)
+                    "
+                  >
+                    @for (employment of employments; track $index) {
+                      <mat-option value="{{ employment.value }}">{{
+                        employment.label
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (
+                    getControl(StepForm.Step1, Step1Fields.Employment)
+                      .invalid &&
+                    !getControl(StepForm.Step1, Step1Fields.Employment)
+                      .untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </mat-form-field>
+              </div>
+            </section>
+
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Ожидаемая ЗП</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>Оклад</mat-label>
+                  <input
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.Salary)
+                    "
+                    matInput
+                    type="text"
+                    mask="separator.0"
+                    thousandSeparator=" "
+                  />
+                </mat-form-field>
+
+                <mat-form-field class="bg-white" appearance="outline">
+                  <mat-label>Премия</mat-label>
+                  <input
+                    [formControl]="
+                      getControl(StepForm.Step1, Step1Fields.Bonus)
+                    "
+                    matInput
+                    type="text"
+                    mask="separator.0"
+                    thousandSeparator=" "
+                  />
+                </mat-form-field>
+              </div>
+            </section>
           </div>
-        </mat-step>
-      </mat-stepper>
+        </mat-tab>
 
+        <mat-tab label="Требования к соискателю">
+          <div class="flex flex-col gap-6 py-4 overflow-y-auto pr-2">
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Требования и обязанности</h2>
+              <div class="flex flex-col w-full relative">
+                <div class="flex flex-col w-full">
+                  <app-text-editor
+                    [formControl]="
+                      getControl(StepForm.Step2, Step2Fields.Requirements)
+                    "
+                    class="w-full bg-white"
+                    height="160px"
+                  >
+                  </app-text-editor>
+                  @if (
+                    getControl(StepForm.Step2, Step2Fields.Requirements)
+                      .invalid &&
+                    !getControl(StepForm.Step2, Step2Fields.Requirements)
+                      .untouched
+                  ) {
+                    <span
+                      class="absolute right-0 top-[80px] w-12 h-12 flex justify-center items-center"
+                    >
+                      <mat-icon svgIcon="error"></mat-icon>
+                    </span>
+                  }
+                </div>
+              </div>
+            </section>
+
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Навыки</h2>
+              <app-text-input
+                [formControl]="getControl(StepForm.Step2, Step2Fields.Skills)"
+                type="text"
+                label="Навыки"
+                class="w-full relative"
+              >
+              </app-text-input>
+            </section>
+
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Дополнительная информация</h2>
+              <app-text-input
+                [formControl]="
+                  getControl(StepForm.Step2, Step2Fields.AdditionalInformation)
+                "
+                type="text"
+                label="Дополнительная информация"
+                class="w-full relative"
+              >
+              </app-text-input>
+            </section>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Согласование">
+          <div class="flex flex-col gap-6 py-4 overflow-y-auto pr-2">
+            <section class="p-5 rounded-2xl bg-[#f8fbff]">
+              <h2 class="text-3xl mb-4">Cписок согласущих</h2>
+              <div [formGroupName]="StepForm.Step3">
+                <div [formArrayName]="Step3Fields.Interviewers">
+                  <div class="grid grid-cols-2 gap-4">
+                    @for (
+                      interviewer of interviewers.controls;
+                      track interviewer
+                    ) {
+                      <div class="mb-2" [formGroupName]="$index">
+                        <div class="flex items-center">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Выберите сотрудника</mat-label>
+                            <mat-select
+                              #userSelect
+                              formControlName="space_user_id"
+                              (selectionChange)="onOptionChange($event, $index)"
+                            >
+                              @for (
+                                item of getAvailableUsers($index);
+                                track item
+                              ) {
+                                <mat-option [value]="item.id">
+                                  {{ item.last_name }} {{ item.first_name }}
+                                </mat-option>
+                              }
+                              @if (
+                                interviewer.get("space_user_id")?.invalid &&
+                                !interviewer.get("space_user_id")?.untouched
+                              ) {
+                                <span
+                                  class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
+                                >
+                                  <mat-icon svgIcon="error"></mat-icon>
+                                </span>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                          @if ($index > 0) {
+                            <button
+                              type="button"
+                              mat-icon-button
+                              class="text-red-600"
+                              [attr.aria-label]="'Удалить'"
+                              (click)="
+                                removeInterviewer(
+                                  interviewers.controls.indexOf(interviewer)
+                                )
+                              "
+                            >
+                              <mat-icon svgIcon="delete"></mat-icon>
+                            </button>
+                          } @else {
+                            <button
+                              type="button"
+                              mat-icon-button
+                              class="opacity-0"
+                              disabled="true"
+                            >
+                              <mat-icon svgIcon="delete"></mat-icon>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                  <button
+                    class="w-[243px]"
+                    mat-flat-button
+                    class="btn-primary"
+                    (click)="addInterviewer()"
+                  >
+                    Добавить этап согласования
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </form>
-  <!-- } -->
 
-    <div class="absolute bottom-10 left-30 bg-white  py-3 px-4 flex justify-left items-center">
-    <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">Отменить</button>
-    <!-- @if (showForm) { -->
-      <button mat-flat-button class="btn-primary mr-[130px]"
-              [disabled]="getCurrentStepGroup()?.invalid"
-              (click)="openSaveDraftDialog()">Сохранить черновик
+    <div
+      class="absolute bottom-10 left-30 bg-white py-3 px-4 flex justify-left items-center"
+    >
+      <button class="btn-secondary mr-4" mat-flat-button (click)="goBack()">
+        Отменить
       </button>
-      @if (!isLastStep) {
-        <button mat-flat-button
-                class="btn-primary"
-                [disabled]="getCurrentStepGroup()?.invalid"
-                (click)="goToNextStep()">Продолжить
-        </button>
-      }
-      @if (isLastStep) {
-        <button mat-flat-button class="btn-primary" (click)="onSubmit()">Отправить на согласование</button>
-      }
-    <!-- } -->
-  </div>
-  <ng-template #saveDraftDialog>
-    <div class="modal-overlay">
-      <div class="modal-content">
-        <h2>Вы действительно хотите завершить создание заявки?</h2>
-        <div class="modal-actions">
-          <button mat-flat-button class="btn-secondary" (click)="closeDialog()">Отмена</button>
-          <button mat-flat-button class="btn-primary" (click)="saveDraftAndExit()">Сохранить черновик и выйти</button>
+      <button
+        mat-flat-button
+        class="btn-primary mr-[130px]"
+        (click)="openSaveDraftDialog()"
+      >
+        Сохранить черновик
+      </button>
+      <button mat-flat-button class="btn-primary" (click)="onSubmit()">
+        Отправить на согласование
+      </button>
+    </div>
+    <ng-template #saveDraftDialog>
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <h2>Вы действительно хотите завершить создание заявки?</h2>
+          <div class="modal-actions">
+            <button
+              mat-flat-button
+              class="btn-secondary"
+              (click)="closeDialog()"
+            >
+              Отмена
+            </button>
+            <button
+              mat-flat-button
+              class="btn-primary"
+              (click)="saveDraftAndExit()"
+            >
+              Сохранить черновик и выйти
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-template>
+    </ng-template>
 
-  <ng-template #draftDialog>
-    <div class="modal-content">
-      <h2>Вы хотите использовать черновик или создать новую заявку?</h2>
-      <div class="modal-actions">
-        <button mat-flat-button
-                class="btn-secondary"
-                [disabled]="!hasDraft()"
-                (click)="useDraft()">Использовать черновик
-        </button>
-        <button mat-flat-button class="btn-primary" (click)="newRequest()">Новая заявка</button>
+    <ng-template #draftDialog>
+      <div class="modal-content">
+        <h2>Вы хотите использовать черновик или создать новую заявку?</h2>
+        <div class="modal-actions">
+          <button
+            mat-flat-button
+            class="btn-secondary"
+            [disabled]="!hasDraft()"
+            (click)="useDraft()"
+          >
+            Использовать черновик
+          </button>
+          <button mat-flat-button class="btn-primary" (click)="newRequest()">
+            Новая заявка
+          </button>
+        </div>
       </div>
-    </div>
-  </ng-template>
-
-</div>
+    </ng-template>
+  </div>
 </div>

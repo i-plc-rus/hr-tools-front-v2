@@ -1,6 +1,53 @@
-// mat-stepper {
-//     background-color: transparent;
-// }
+:host ::ng-deep .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs>.mat-mdc-tab-header .mat-mdc-tab {
+  flex-grow: 0;
+}
+
+:host ::ng-deep .mat-mdc-tab-labels {
+  gap: 16px;
+}
+
+:host ::ng-deep .mat-mdc-tab-label-container {
+  border-bottom: none;
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-header {
+  border-bottom: none;
+  margin-bottom: 1rem;
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-list {
+  gap: 8px;
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab {
+  min-width: 0;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+
+  .mdc-tab__text-label {
+    color: var(--text-main);
+  }
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab.mdc-tab--active {
+  background-color: var(--link-default);
+  border-color: var(--link-default);
+
+  .mdc-tab__text-label {
+    color: #fff;
+  }
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-header .mdc-tab-indicator {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab .mdc-tab__ripple::before {
+  border-radius: 8px;
+}
 
 ::ng-deep .mat-horizontal-content-container {
     @apply p-0;
@@ -57,48 +104,10 @@
   color: var(--link-default) !important;
 }
 
-
-::ng-deep .mat-step-label {
-  min-width: 0 !important;
-}
-
-::ng-deep .mat-step-label {
-  width: 0;
-}
-
-::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
-  margin-right: 0;
-}
-::ng-deep .mat-horizontal-stepper-header:hover,
-::ng-deep .mat-step-header:hover,
-::ng-deep .mat-horizontal-stepper-header-active,
-::ng-deep .mat-step-header.mat-step-header-active,
-::ng-deep .mat-step-header.cdk-keyboard-focused,
-::ng-deep .mat-step-header.cdk-program-focused,
-::ng-deep .mat-step-header.mat-active,
-::ng-deep .mat-step-header:active,
-::ng-deep .mat-step-header.mat-focused {
-  background: transparent !important;
-}
-
-::ng-deep .mat-ripple-element {
-  display: none !important;
-}
-
 ::ng-deep .mat-mdc-option:focus.mdc-list-item, .mat-mdc-option.mat-mdc-option-active.mdc-list-item {
     background-color: transparent;
     outline: 0;
 }
-
-::ng-deep .mat-step-header {
-  background-color: transparent !important;
-  transition: none !important;
-}
-
-::ng-deep .mat-horizontal-stepper-header .mat-step-icon {
-  margin-right: 0 !important;
-}
-
 
 ::ng-deep .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
    background-color: transparent !important;
@@ -108,17 +117,12 @@ app-text-editor {
   white-space: pre;
 }
 
-::ng-deep .mat-step-icon {
-  background-color: var(--background-main) !important;
-  color:  var(--link-default) !important;
-}
-
-::ng-deep .mat-mdc-stepper {
-  --mat-stepper-header-selected-state-icon-background-color: var(--link-default);
-  --mat-stepper-header-selected-state-icon-foreground-color: white;
-}
-
-::ng-deep .mat-step-icon-selected {
-  background-color: var(--link-default) !important;
-  color: white !important;
+:host ::ng-deep .conditions-remote-toggle.mat-mdc-slide-toggle.mat-primary {
+  &.mat-checked .mdc-switch__track {
+    background-color: var(--link-default) !important;
+    border-color: var(--link-default) !important;
+  }
+  &.mat-checked .mdc-switch__handle::before {
+    background-color: var(--link-default) !important;
+  }
 }

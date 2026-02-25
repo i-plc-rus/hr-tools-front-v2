@@ -12,15 +12,19 @@ import {
   DictapimodelsCityView,
   DictapimodelsCompanyStructView,
   ModelsUserRole,
+  ModelsVRStatus,
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
 import { MatIcon } from '@angular/material/icon';
+import { StatusTagComponent } from "../../../../components/status-tag/status-tag.component";
+import { NotificationBubbleComponent } from "../../../../components/notification-bubble/notification-bubble.component";
+import { StatusTag } from "../../../../models/StatusTag";
 
 @Component({
   selector: 'app-request-created',
   standalone: true,
-  imports: [RequestTemplateComponent, MatButtonModule, MatDialogModule, CommonModule, MatIcon],
+  imports: [RequestTemplateComponent, MatButtonModule, MatDialogModule, CommonModule, MatIcon, StatusTagComponent, NotificationBubbleComponent],
   templateUrl: './request-created.component.html',
   styleUrl: './request-created.component.scss'
 })
@@ -44,6 +48,8 @@ export class RequestCreatedComponent implements OnInit, AfterViewInit, OnDestroy
   users: SpaceapimodelsSpaceUser[] = [];
   formDisabled: boolean = true;
   isDataLoaded = false;
+  history: any = [];
+  showCommentsPanel = false;
   readonly ModelsUserRole = ModelsUserRole;
   
   ngOnInit(): void {
@@ -59,6 +65,7 @@ export class RequestCreatedComponent implements OnInit, AfterViewInit, OnDestroy
       companyStructure: this.api.v1DictCompanyStructFindCreate({}, { observe: 'response' }),
       city: this.api.v1DictCityFindCreate({}, { observe: 'response' }),
       user: this.api.v1AuthMeList({ observe: 'response' }),
+      history: this.api.v1SpaceVacancyRequestApprovalHistoryList(this.requestId!, { observe: 'response' }),
       users: this.api.v1UsersListCreate({
         page: 1,
         limit: 9999,
@@ -67,10 +74,11 @@ export class RequestCreatedComponent implements OnInit, AfterViewInit, OnDestroy
     }).pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response: any) => {
-        this.vacancyDetails = response.vacancyDetails.body?.data || null;
+        this.vacancyDetails = response.vacancyDetails.body?.data as VacancyapimodelsVacancyRequestView || null;
         this.companyStructure = response.companyStructure?.body?.data || [];
         this.city = response.city?.body?.data || [];
         this.user = response.user.body?.data || null;
+        this.history = response.history?.body?.data?.filter((item: any) => !!item.comment) || [];
         this.users = response.users.body?.data || [];
         if (this.user && this.user.role === ModelsUserRole.AdminRole) {
           this.formDisabled = false;
@@ -85,6 +93,47 @@ export class RequestCreatedComponent implements OnInit, AfterViewInit, OnDestroy
         this.snackBarService.snackBarMessageError('Ошибка при загрузке данных заявки');
       }
     });
+  }
+
+  showDateHeader(index: number): boolean {
+    if (index === 0) return true;
+    const prev = this.history[index - 1]?.created_at;
+    const curr = this.history[index]?.created_at;
+    if (!prev || !curr) return false;
+    return prev.split('T')[0] !== curr.split('T')[0];
+  }
+
+  formatDateHeader(createdAt: string): string {
+    if (!createdAt) return '';
+    return new Date(createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  }
+
+  get status(): string {
+    switch (this.vacancyDetails?.status) {
+      case ModelsVRStatus.VRStatusDraft:
+        return 'На доработке';
+      case ModelsVRStatus.VRStatusCreated:
+        return 'Создана';
+      default:
+        return '';
+    }
+  }
+
+  get statusClass(): StatusTag {
+    switch (this.vacancyDetails?.status) {
+      case ModelsVRStatus.VRStatusCreated:
+        return 'info';
+      case ModelsVRStatus.VRStatusCancelled:
+      case ModelsVRStatus.VRStatusRejected:
+        return 'danger';
+      case ModelsVRStatus.VRStatusApproved:
+        return 'success';
+      case ModelsVRStatus.VRStatusDraft:
+      case ModelsVRStatus.VRStatusInApproval:
+        return 'warning';
+      default:
+        return 'success';
+    }
   }
 
   goBack() {

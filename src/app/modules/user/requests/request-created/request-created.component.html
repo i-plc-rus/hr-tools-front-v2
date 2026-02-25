@@ -1,43 +1,119 @@
-<div class="flex gap-2 items-center pt-2 pl-4">
-  <button mat-icon-button class="btn-secondary" (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span class="text-[16px] leading-6 font-medium">Вернуться назад</span>
-</div>
+<div class="w-[100%]">
+  <div class="flex justify-between gap-2 items-center pt-4 px-4">
+    <div class="flex flex-col">
+      <div class="flex items-center mb-3">
+        <button mat-icon-button class="btn-secondary" (click)="goBack()">
+          <mat-icon class="cursor-pointer">arrow_back</mat-icon>
+        </button>
+        <span class="text-3xl max-w-[90%]">{{
+          vacancyDetails?.vacancy_name
+        }}</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <app-status-tag [status]="statusClass" class="cursor-pointer">
+          <span>{{ status }}</span>
+        </app-status-tag>
+        <span class="text-sm">{{ vacancyDetails?.author_fio }}</span>
+      </div>
+    </div>
+    <div class="relative w-[56px] min-w-[56px] h-[56px]">
+      <button
+        type="button"
+        class="w-[56px] min-w-[56px] h-[56px] bg-white rounded-[50%] flex items-center justify-center"
+        [disabled]="!history.length"
+        (click)="showCommentsPanel = !showCommentsPanel"
+      >
+        @if (history.length > 0) {
+          <app-notification-bubble
+            class="absolute top-0 right-0 z-[2]"
+            [value]="history.length"
+          />
+        }
+        <mat-icon svgIcon="requests-comments"></mat-icon>
+      </button>
+    </div>
+  </div>
 
-<div class="py-2 px-4 w-full min-h-[calc(100vh-50px)] flex flex-col overflow-auto">
+  <div
+    class="py-2 px-4 w-full min-h-[calc(100vh-50px)] flex flex-col overflow-auto"
+  >
     <div class="w-full flex-1 bg-white rounded-3xl p-5 shadow-md flex flex-col">
-        <app-request-template 
-            [requestId]="requestId"
-            [vacancyDetails]="vacancyDetails"
-            [companyStructure]="companyStructure"
-            [city]="city"
-            [user]="user"
-            [users]="users"
-            [formDisabled]="formDisabled">
-        </app-request-template>
+      <app-request-template
+        [requestId]="requestId"
+        [vacancyDetails]="vacancyDetails"
+        [companyStructure]="companyStructure"
+        [city]="city"
+        [user]="user"
+        [users]="users"
+        [formDisabled]="formDisabled"
+      >
+      </app-request-template>
 
-        @if ((isLastStep && user?.id === vacancyDetails?.author_id) || (isLastStep && user?.role === ModelsUserRole.AdminRole)) {
-          <div class="flex justify-left items-center mt-[auto] gap-3 pt-4 shrink-0">
-            <button mat-flat-button class="btn-primary" (click)="openSendToApprovalConfirm()">
-              На согласование
-            </button>
-            <button mat-flat-button class="btn-primary" (click)="sendToUpdate()">
-              Обновить
-            </button>
-            <button mat-flat-button class="btn-primary" (click)="cancelClaim()">
-              Отменить заявку
-            </button>
+      @if (
+        (isLastStep && user?.id === vacancyDetails?.author_id) ||
+        (isLastStep && user?.role === ModelsUserRole.AdminRole)
+      ) {
+        <div
+          class="flex justify-left items-center mt-[auto] gap-3 pt-4 shrink-0"
+        >
+          <button
+            mat-flat-button
+            class="btn-primary"
+            (click)="openSendToApprovalConfirm()"
+          >
+            На согласование
+          </button>
+          <button mat-flat-button class="btn-primary" (click)="sendToUpdate()">
+            Обновить
+          </button>
+          <button mat-flat-button class="btn-primary" (click)="cancelClaim()">
+            Отменить заявку
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+@if (showCommentsPanel) {
+  <div class="min-w-[400px] flex flex-col py-[40px] px-4 bg-[#f8fbff]">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl w-[max-content]">Комментарии к заявке</h2>
+      <mat-icon
+        (click)="showCommentsPanel = !showCommentsPanel"
+        class="cursor-pointer"
+        >close</mat-icon
+      >
+    </div>
+    <div class="h-[calc(100vh-100px)] overflow-auto">
+      @for (comment of history; track $index) {
+        @if (showDateHeader($index)) {
+          <div class="text-center text-[16px] text-[#625B71] mb-3">
+            {{ formatDateHeader(comment.created_at) }}
           </div>
         }
+        <div class="bg-white mb-4 p-3 rounded-[1rem] flex flex-col">
+          <span class="text-[14px] text-[#625B71] mb-1">{{
+            comment.assignee_user_name
+          }}</span>
+          <p class="break-words text-[16px] flex-1">{{ comment.comment }}</p>
+          <span class="text-[14px] text-[#625B71] text-right self-end">{{
+            comment.created_at | date: "HH:mm"
+          }}</span>
+        </div>
+      }
     </div>
-</div>
+  </div>
+}
 
 <ng-template #confirmSendDialog>
   <div class="modal-content">
     <h2>Вы уверены?</h2>
     <div class="modal-actions">
-      <button mat-flat-button class="btn-primary" (click)="confirmSendToApproval()">
+      <button
+        mat-flat-button
+        class="btn-primary"
+        (click)="confirmSendToApproval()"
+      >
         Отправить
       </button>
       <button mat-flat-button class="btn-secondary" (click)="closeDialog()">

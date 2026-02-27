@@ -1,12 +1,26 @@
-<div class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:w-[950px] lg:max-h-[1200px]">
+<div
+  class="bg-[white] overflow-y-auto w-full h-full rounded-[28px] lg:w-[950px] lg:max-h-[1200px]"
+>
   <div class="flex flex-col justify-center items-stretch py-16 px-2 lg:p-16">
     <div class="flex justify-between items-center">
-      <input type="file" #photoUpload accept="image/png, image/jpeg" (change)="onPhotoSelected($event)" class="hidden" />
+      <input
+        type="file"
+        #photoUpload
+        accept="image/png, image/jpeg"
+        (change)="onPhotoSelected($event)"
+        class="hidden"
+      />
       <div class="flex gap-2 items-center">
-        <div class="flex w-14 h-14 items-center justify-center bg-[var(--background-main)] rounded-full"
-          (click)="!photo ? photoUpload.click() : null" [class.cursor-pointer]="!photo">
+        <div
+          class="flex w-14 h-14 items-center justify-center bg-[var(--background-main)] rounded-full"
+          (click)="!photo ? photoUpload.click() : null"
+          [class.cursor-pointer]="!photo"
+        >
           @if (!photo) {
-            <mat-icon class="text-[var(--link-default)]" svgIcon="add-a-photo" />
+            <mat-icon
+              class="text-[var(--link-default)]"
+              svgIcon="add-a-photo"
+            />
           } @else {
             <img class="min-w-14 min-h-14 rounded-full" [src]="photo" />
           }
@@ -18,9 +32,19 @@
         }
       </div>
 
-      <input type="file" accept="application/pdf" (change)="onResumeSelected($event)" class="hidden" #resumeUpload />
+      <input
+        type="file"
+        accept="application/pdf"
+        (change)="onResumeSelected($event)"
+        class="hidden"
+        #resumeUpload
+      />
       @if (!newCandidateResume && !resumeName) {
-        <button mat-flat-button class="btn-secondary" (click)="resumeUpload.click()">
+        <button
+          mat-flat-button
+          class="btn-secondary"
+          (click)="resumeUpload.click()"
+        >
           <mat-icon svgIcon="article-shortcut" />
           Загрузить резюме
         </button>
@@ -37,54 +61,76 @@
         </div>
       }
     </div>
-    <div class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-8">
+    <div
+      class="flex justify-start items-center flex-col grow-0 shrink-0 basis-auto mt-8"
+    >
       <form
         [formGroup]="applicantForm"
-        class="flex justify-center items-stretch flex-col w-full box-border grow-0 shrink-0 basis-auto gap-4">
+        class="flex justify-center items-stretch flex-col w-full box-border grow-0 shrink-0 basis-auto gap-4"
+      >
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Фамилия</mat-label>
-            <input matInput formControlName="last_name" autocomplete="new-last-name" />
+            <input
+              matInput
+              formControlName="last_name"
+              autocomplete="new-last-name"
+            />
 
             @let isLastNameErrorValue =
-              applicantForm.controls['last_name'].hasError('pattern') || applicantForm.controls['last_name'].hasError('invalidFIO');
+              applicantForm.controls["last_name"].hasError("pattern") ||
+              applicantForm.controls["last_name"].hasError("invalidFIO");
 
             @let isLastNameErrorRequired =
-              applicantForm.controls['last_name'].hasError('required') &&
-              !applicantForm.controls['last_name'].untouched;
+              applicantForm.controls["last_name"].hasError("required") &&
+              !applicantForm.controls["last_name"].untouched;
 
             @if (isLastNameErrorValue || isLastNameErrorRequired) {
-              <mat-icon matSuffix [matTooltip]="isLastNameErrorValue ? errorMessage : 'Обязательное поле'" svgIcon="error"></mat-icon>
+              <mat-icon
+                matSuffix
+                [matTooltip]="
+                  isLastNameErrorValue ? errorMessage : 'Обязательное поле'
+                "
+                svgIcon="error"
+              ></mat-icon>
             }
           </mat-form-field>
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Имя</mat-label>
-            <input matInput formControlName="first_name" autocomplete="new-first-name"/>
+            <input
+              matInput
+              formControlName="first_name"
+              autocomplete="new-first-name"
+            />
 
             @let isFirstNameErrorValue =
-              applicantForm.controls['first_name'].hasError('pattern') || applicantForm.controls['first_name'].hasError('invalidFIO');
+              applicantForm.controls["first_name"].hasError("pattern") ||
+              applicantForm.controls["first_name"].hasError("invalidFIO");
 
             @let isFirstNameErrorRequired =
-              applicantForm.controls['first_name'].hasError('required') &&
-              !applicantForm.controls['first_name'].untouched;
-            
+              applicantForm.controls["first_name"].hasError("required") &&
+              !applicantForm.controls["first_name"].untouched;
+
             @if (isFirstNameErrorValue || isFirstNameErrorRequired) {
-              <mat-icon matSuffix [matTooltip]="isFirstNameErrorValue ? errorMessage : 'Обязательное поле'" svgIcon="error"></mat-icon>
+              <mat-icon
+                matSuffix
+                [matTooltip]="
+                  isFirstNameErrorValue ? errorMessage : 'Обязательное поле'
+                "
+                svgIcon="error"
+              ></mat-icon>
             }
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Отчество</mat-label>
-            <input matInput [formControl]="applicantForm.controls['middle_name']" autocomplete="new-middle-name" />
-            
-            @let isMiddleNameErrorValue =
-              applicantForm.controls['middle_name'].hasError('pattern') || applicantForm.controls['middle_name'].hasError('invalidFIO');
-
-            @if (isMiddleNameErrorValue) {
-              <mat-icon matSuffix [matTooltip]="errorMessage" svgIcon="error"></mat-icon>
-            }
+            <input
+              matInput
+              [formControl]="applicantForm.controls['middle_name']"
+              autocomplete="new-middle-name"
+            />
           </mat-form-field>
 
           <!-- <mat-form-field class="w-full" appearance="outline">
@@ -98,8 +144,13 @@
               (focus)="getCities('')"
               (input)="onCityInput($event)"
               [matAutocomplete]="cityAutocomplete"
-              formControlName="address" />
-            <mat-autocomplete autoActiveFirstOption #cityAutocomplete="matAutocomplete" requireSelection>
+              formControlName="address"
+            />
+            <mat-autocomplete
+              autoActiveFirstOption
+              #cityAutocomplete="matAutocomplete"
+              requireSelection
+            >
               @for (city of filteredCitiesList; track city.id) {
                 <mat-option [value]="city.address">
                   {{ city.address }}
@@ -111,8 +162,18 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Дата рождения</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="birth_date"  autocomplete="new-birth-date" [min]="minDate" [max]="maxDate" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="birth_date"
+              autocomplete="new-birth-date"
+              [min]="minDate"
+              [max]="maxDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
 
@@ -121,78 +182,140 @@
             <mat-select formControlName="gender" hideSingleSelectionIndicator>
               <!-- <mat-option [value]="undefined">Не указан</mat-option> -->
               @for (gender of genderTypes; track $index) {
-                <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
+                <mat-option [value]="gender.value">{{
+                  gender.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Гражданство</mat-label>
-            <input matInput formControlName="citizenship" autocomplete="new-citizenship" />
+            <input
+              matInput
+              formControlName="citizenship"
+              autocomplete="new-citizenship"
+            />
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Телефон</mat-label>
-            <input matInput [formControl]="applicantForm.controls['phone']" placeholder="+_ (___) ___-__-__" mask="+0 (000) 000-00-00" />
+            <input
+              matInput
+              [formControl]="applicantForm.controls['phone']"
+              placeholder="+_ (___) ___-__-__"
+              mask="+0 (000) 000-00-00"
+            />
 
             @let isPhoneErrorValue =
-              applicantForm.controls['phone'].errors?.['forbiddenPhoneNumber'];
+              applicantForm.controls["phone"].errors?.["forbiddenPhoneNumber"];
 
             @let isPhoneErrorRequired =
-              applicantForm.controls['phone'].hasError('required') && !applicantForm.controls['phone'].untouched;
+              applicantForm.controls["phone"].hasError("required") &&
+              !applicantForm.controls["phone"].untouched;
 
             @if (isPhoneErrorValue || isPhoneErrorRequired) {
-              <mat-icon matSuffix [matTooltip]="isPhoneErrorValue ? 'Укажите корректный номер телефона' : 'Обязательное поле'" svgIcon="error"></mat-icon>
+              <mat-icon
+                matSuffix
+                [matTooltip]="
+                  isPhoneErrorValue
+                    ? 'Укажите корректный номер телефона'
+                    : 'Обязательное поле'
+                "
+                svgIcon="error"
+              ></mat-icon>
             }
           </mat-form-field>
 
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>E-mail</mat-label>
-            <input matInput formControlName="email" autocomplete="new-email"  placeholder="example@domain.com" />
+            <input
+              matInput
+              formControlName="email"
+              autocomplete="new-email"
+              placeholder="example@domain.com"
+            />
 
             @let isEmailErrorEmail =
-              applicantForm.controls['email'].hasError('email') && !applicantForm.controls['email'].untouched;
+              applicantForm.controls["email"].hasError("email") &&
+              !applicantForm.controls["email"].untouched;
             @let isEmailErrorRequired =
-              applicantForm.controls['email'].hasError('required') && !applicantForm.controls['email'].untouched;
+              applicantForm.controls["email"].hasError("required") &&
+              !applicantForm.controls["email"].untouched;
 
             @if (isEmailErrorEmail || isEmailErrorRequired) {
               <mat-icon
                 matSuffix
-                [matTooltip]="isEmailErrorEmail ? 'Некорректный адрес электронной почты' : 'Обязательное поле'"
-                svgIcon="error"></mat-icon>
+                [matTooltip]="
+                  isEmailErrorEmail
+                    ? 'Некорректный адрес электронной почты'
+                    : 'Обязательное поле'
+                "
+                svgIcon="error"
+              ></mat-icon>
             }
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Образование</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['education']" hideSingleSelectionIndicator>
+            <mat-select
+              [formControl]="
+                applicantForm.controls.params.controls['education']
+              "
+              hideSingleSelectionIndicator
+            >
               <mat-option [value]="''">Не указано</mat-option>
               @for (education of educationTypes; track $index) {
-                <mat-option [value]="education.value">{{ education.label }}</mat-option>
+                <mat-option [value]="education.value">{{
+                  education.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Опыт работы</mat-label>
-            <input type="number" matInput formControlName="total_experience" autocomplete="new-total-experience" min="0" (keydown)="preventNegative($event)"/>
+            <input
+              type="number"
+              matInput
+              formControlName="total_experience"
+              autocomplete="new-total-experience"
+              min="0"
+              (keydown)="preventNegative($event)"
+            />
           </mat-form-field>
         </div>
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Занятость</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['employments']" hideSingleSelectionIndicator>
+            <mat-select
+              multiple
+              [formControl]="
+                applicantForm.controls.params.controls['employments']
+              "
+              hideSingleSelectionIndicator
+            >
               @for (employment of employmentTypes; track $index) {
-                <mat-option [value]="employment.value">{{ employment.label }}</mat-option>
+                <mat-option [value]="employment.value">{{
+                  employment.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>График работы</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['schedules']" hideSingleSelectionIndicator>
+            <mat-select
+              multiple
+              [formControl]="
+                applicantForm.controls.params.controls['schedules']
+              "
+              hideSingleSelectionIndicator
+            >
               @for (schedule of scheduleTypes; track $index) {
-                <mat-option [value]="schedule.value">{{ schedule.label }}</mat-option>
+                <mat-option [value]="schedule.value">{{
+                  schedule.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -200,27 +323,47 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Командировки</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['trip_readiness']" hideSingleSelectionIndicator>
+            <mat-select
+              [formControl]="
+                applicantForm.controls.params.controls['trip_readiness']
+              "
+              hideSingleSelectionIndicator
+            >
               <mat-option [value]="''">Не указано</mat-option>
               @for (tripReadiness of tripReadinessTypes; track $index) {
-                <mat-option [value]="tripReadiness.value">{{ tripReadiness.label }}</mat-option>
+                <mat-option [value]="tripReadiness.value">{{
+                  tripReadiness.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Готовность к переезду</mat-label>
-            <mat-select formControlName="relocation" hideSingleSelectionIndicator>
+            <mat-select
+              formControlName="relocation"
+              hideSingleSelectionIndicator
+            >
               <mat-option [value]="''">Не указано</mat-option>
               @for (relocation of relocationTypes; track $index) {
-                <mat-option [value]="relocation.value">{{ relocation.label }}</mat-option>
+                <mat-option [value]="relocation.value">{{
+                  relocation.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Водительские права</mat-label>
-            <mat-select multiple [formControl]="applicantForm.controls.params.controls['driver_license_types']" hideSingleSelectionIndicator>
+            <mat-select
+              multiple
+              [formControl]="
+                applicantForm.controls.params.controls['driver_license_types']
+              "
+              hideSingleSelectionIndicator
+            >
               @for (driverLicense of driverLicenseTypes; track $index) {
-                <mat-option [value]="driverLicense">{{ driverLicense }}</mat-option>
+                <mat-option [value]="driverLicense">{{
+                  driverLicense
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -233,11 +376,16 @@
             }
           </mat-select>
         </mat-form-field>
-        <span class="text-[16px] leading-5 font-medium mb-3">Знание языков</span>
+        <span class="text-[16px] leading-5 font-medium mb-3"
+          >Знание языков</span
+        >
         <div [formGroup]="params">
           <ul class="flex flex-col" formArrayName="languages">
             @for (languageForm of languages.controls; track $index) {
-              <li class="flex flex-col items-center gap-x-4 lg:flex-row" [formGroup]="languageForm">
+              <li
+                class="flex flex-col items-center gap-x-4 lg:flex-row"
+                [formGroup]="languageForm"
+              >
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Язык</mat-label>
                   <input
@@ -246,8 +394,13 @@
                     (input)="onLanguageInput($event)"
                     (blur)="languageForm.markAsTouched()"
                     [matAutocomplete]="languageAutocomplete"
-                    formControlName="name" />
-                  <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" requireSelection>
+                    formControlName="name"
+                  />
+                  <mat-autocomplete
+                    autoActiveFirstOption
+                    #languageAutocomplete="matAutocomplete"
+                    requireSelection
+                  >
                     @for (language of filteredLanguages; track language.id) {
                       <mat-option [value]="language.name">
                         {{ language.name }}
@@ -257,24 +410,43 @@
                 </mat-form-field>
                 <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Уровень</mat-label>
-                  <mat-select formControlName="language_level" hideSingleSelectionIndicator>
+                  <mat-select
+                    formControlName="language_level"
+                    hideSingleSelectionIndicator
+                  >
                     @for (languageLevel of languageLevelTypes; track $index) {
-                      <mat-option [value]="languageLevel.value">{{ languageLevel.label }}</mat-option>
+                      <mat-option [value]="languageLevel.value">{{
+                        languageLevel.label
+                      }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
                 <div class="w-full mb-5">
-                  <button mat-icon-button class="btn-danger" (click)="languages.removeAt($index)">
+                  <button
+                    mat-icon-button
+                    class="btn-danger"
+                    (click)="languages.removeAt($index)"
+                  >
                     <mat-icon svgIcon="delete" />
                   </button>
                 </div>
               </li>
             }
           </ul>
-          <div class="mb-4" [ngClass]="{ 'mt-[-10px]': languages.controls.length === 0, 'mt-0': languages.controls.length > 0 }">
+          <div
+            class="mb-4"
+            [ngClass]="{
+              'mt-[-10px]': languages.controls.length === 0,
+              'mt-0': languages.controls.length > 0,
+            }"
+          >
             <button mat-button class="btn-secondary" (click)="addLanguage()">
               <mat-icon>add</mat-icon>
-              {{ languages.controls.length > 0 ? 'Указать еще один язык' : 'Указать язык' }}
+              {{
+                languages.controls.length > 0
+                  ? "Указать еще один язык"
+                  : "Указать язык"
+              }}
             </button>
           </div>
         </div>
@@ -282,8 +454,20 @@
         <div class="flex flex-col gap-x-4 lg:flex-row">
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Выбор вакансии</mat-label>
-            <mat-select formControlName="vacancy_id" panelClass="fit-content" #vacancySelect hideSingleSelectionIndicator>
-              <mat-option *ngFor="let vacancy of vacancyList; let i = index; trackBy: trackByVacancyAndIndex" [value]="vacancy.id">
+            <mat-select
+              formControlName="vacancy_id"
+              panelClass="fit-content"
+              #vacancySelect
+              hideSingleSelectionIndicator
+            >
+              <mat-option
+                *ngFor="
+                  let vacancy of vacancyList;
+                  let i = index;
+                  trackBy: trackByVacancyAndIndex
+                "
+                [value]="vacancy.id"
+              >
                 {{ vacancy.vacancy_name }}
               </mat-option>
 
@@ -300,10 +484,17 @@
           </mat-form-field>
           <mat-form-field class="w-full" appearance="outline">
             <mat-label>Статус поиска работы</mat-label>
-            <mat-select [formControl]="applicantForm.controls.params.controls['search_status']" hideSingleSelectionIndicator>
+            <mat-select
+              [formControl]="
+                applicantForm.controls.params.controls['search_status']
+              "
+              hideSingleSelectionIndicator
+            >
               <mat-option [value]="''">Не указано</mat-option>
               @for (searchStatus of searchStatusTypes; track $index) {
-                <mat-option [value]="searchStatus.value">{{ searchStatus.label }}</mat-option>
+                <mat-option [value]="searchStatus.value">{{
+                  searchStatus.label
+                }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -315,15 +506,22 @@
             <textarea matInput formControlName="comment"></textarea>
           </mat-form-field>
         }
-
       </form>
 
       <div
-        class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max">
-        <button mat-flat-button class="btn-primary" [disabled]="applicantForm.invalid || isLoading" (click)="submit()">
-          {{ isEdit ? 'Сохранить' : 'Добавить' }}
+        class="flex flex-col grow-0 shrink-0 items-stretch justify-center basis-auto max-w-44 mt-6 gap-4 lg:flex-row-reverse lg:max-w-max"
+      >
+        <button
+          mat-flat-button
+          class="btn-primary"
+          [disabled]="applicantForm.invalid || isLoading"
+          (click)="submit()"
+        >
+          {{ isEdit ? "Сохранить" : "Добавить" }}
         </button>
-        <button mat-flat-button class="btn-secondary" (click)="closeModal()">Отмена</button>
+        <button mat-flat-button class="btn-secondary" (click)="closeModal()">
+          Отмена
+        </button>
       </div>
     </div>
   </div>

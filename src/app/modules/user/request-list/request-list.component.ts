@@ -356,8 +356,10 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((newValue) => {
         if (this.filterForm.controls.author_id.value !== '')
           this.filterForm.controls.author_id.setValue('');
-        if (newValue && newValue.length > 3)
+        if (newValue && newValue.length > 0) {
+          this.getUsers(newValue);
           this.requestAuthors = this.users.filter(user => user.fullName.toLowerCase().includes(newValue.toLowerCase()));
+        }
         else
           this.requestAuthors = [];
         this.updateCombinedState();
@@ -525,6 +527,7 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.requestList = [];
           this.getRequests();
           this.loadAllCounts();
+          this.getUsers();
         },
         error: (error) => {
           this.snackBarService.snackBarMessageError(JSON.parse(error.message).error.message)
@@ -620,8 +623,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getUsers() {
-    this.api.v1UsersListCreate({}).pipe(takeUntil(this.destroy$)).subscribe({
+  getUsers(name?: string) {
+    this.api.v1UsersListCreate({search: name}).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         if (res.body.data) {
           this.users = res.body.data.map((user: SpaceapimodelsSpaceUser) => new SpaceUser(user));

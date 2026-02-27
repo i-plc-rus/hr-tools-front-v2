@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RequestTemplateComponent } from '../../templates/requests-templates/request-template/request-template.component';
 import { ApiService } from '../../../../api/Api';
 import { SnackBarService } from '../../../../services/snackbar.service';
@@ -10,17 +10,19 @@ import {
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-request-rejected',
   standalone: true,
-  imports: [RequestTemplateComponent],
+  imports: [RequestTemplateComponent, MatIcon],
   templateUrl: './request-rejected.component.html',
   styleUrl: './request-rejected.component.scss'
 })
 export class RequestRejectedComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private api = inject(ApiService);
+  private router = inject(Router);
   private snackBarService = inject(SnackBarService);
   private destroy$ = new Subject<void>();
   protected requestId!: string | null;
@@ -66,6 +68,10 @@ export class RequestRejectedComponent implements OnInit, OnDestroy {
         this.snackBarService.snackBarMessageError('Ошибка при загрузке данных заявки');
       }
     });
+  }
+
+  goBack() {
+    this.router.navigate(['/user/request/list'])
   }
 
   ngOnDestroy(): void {

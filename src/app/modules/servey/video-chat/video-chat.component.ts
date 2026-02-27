@@ -12,6 +12,7 @@ export class VideoChatComponent {
   parentId: string | null = null;
   isCameraCheck: boolean | undefined = true;
   isInterviewOver: boolean | undefined = false;
+  isInterviewFail: boolean | undefined = false;
 
   constructor(private activatedRoute: ActivatedRoute) {}
 
@@ -28,5 +29,9 @@ export class VideoChatComponent {
 
   listenForInterviewOver(event: any) {
     this.isInterviewOver = event;
+  }
+
+  listenForInterviewFail(event: any) {
+    this.isInterviewFail = event;
   }
 }

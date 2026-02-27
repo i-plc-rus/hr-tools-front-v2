@@ -26,6 +26,7 @@ import { LayoutComponent } from '../../components/layout/layout.component';
 import { SecureTextComponent } from "./video-chat/components/capture-video/secure/secure-text.component";
 import { AgreeModalComponent } from './video-chat/components/capture-video/agree-modal/agree-modal.component';
 import { ConfirmModalComponent } from './video-chat/components/capture-video/confirm-modal/confirm-modal.component';
+import { InterviewFailComponent } from './video-chat/components/interview-fail/interview-fail.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ConfirmModalComponent } from './video-chat/components/capture-video/con
     FinishInterviewComponent,
     AgreeModalComponent,
     ConfirmModalComponent,
+    InterviewFailComponent,
   ],
   imports: [
     FormsModule,

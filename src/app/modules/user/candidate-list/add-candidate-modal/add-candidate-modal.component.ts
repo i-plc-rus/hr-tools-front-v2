@@ -75,7 +75,7 @@ export class AddCandidateModalComponent implements OnInit, AfterViewInit, OnDest
     ]),
     first_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
     last_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
-    middle_name: new FormControl('', [Validators.required, Validators.pattern(this.allowedPattern), fioValidator()]),
+    middle_name: new FormControl(''),
     gender: new FormControl<ModelsGenderType | null>(null, Validators.required),
 
     params: new FormGroup({

@@ -32,7 +32,6 @@ export class MembersComponent implements OnInit, OnDestroy {
     {
       headerName: 'ФИО',
       headerClass: 'font-medium custom-sort-header',
-      width: 368,
       cellRenderer: CellMemberAvatarComponent,
       sortable: true,
       comparator: (valueA, valueB, nodeA, nodeB) => {
@@ -81,7 +80,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     {
       headerName: '',
       cellClass: 'flex justify-center items-center',
-      width: 150,
+      flex: 0.4,
       sortable: false,
       cellRenderer: TableButtonComponent,
       cellRendererParams: {
@@ -103,7 +102,11 @@ export class MembersComponent implements OnInit, OnDestroy {
     headerHeight: 48,
     suppressMovableColumns: true,
     suppressMenuHide: false,
-    unSortIcon: true
+    unSortIcon: true,
+    defaultColDef: {
+      flex: 1,
+      minWidth: 100,
+    }
   };
 
   rowCount= 0

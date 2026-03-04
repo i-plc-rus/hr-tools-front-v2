@@ -7,7 +7,7 @@
         </h1>
         @if (requestNumber) {
           <button mat-flat-button class="btn-secondary flex flex-row-reverse" (click)="navigateToRequest()">
-            <span class="mr-4">Создано из заявки №{{requestId}}</span>
+            <span class="mr-4">Создано из заявки "{{vacancyName}}"</span>
             <mat-icon>keyboard_arrow_right</mat-icon>
           </button>
         }

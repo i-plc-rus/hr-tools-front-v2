@@ -56,14 +56,15 @@
     <div class="w-full ">
       <div class="record-video-container w-full h-full flex justify-center bg-[var(--background-alter)] rounded-[16px]">
         @if (videoSrc) {
-          <video [src]="videoSrc" disablePictureInPicture [controls]="!videoLoading" controlsList="nodownload noplaybackrate" #recording class="video w-full rounded-[16px]"></video>
           @if (videoLoading) {
             <div class="flex flex-col justify-center items-center">
               <div class="flex bg-[var(--background-main)] w-[56px] h-[56px] rounded-full justify-center items-center">
                 <app-loader class="!w-[24px] !h-[24px]"></app-loader>
               </div>
-              <p class="text-[16px] leading-[24px]">Видео-интервью отсутствует</p>
+              <p class="text-[16px] leading-[24px]">Обрабатываем видео..</p>
             </div>           
+          } @else {
+            <video [src]="videoSrc" disablePictureInPicture [controls]="!videoLoading" controlsList="nodownload noplaybackrate" #recording class="video w-full rounded-[16px]"></video>
           }
         } @else {
           <div class="flex flex-col justify-center items-center">

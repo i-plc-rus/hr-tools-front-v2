@@ -70,6 +70,8 @@ export class CaptureVideoComponent implements OnInit {
   private hiddenCount = 0;
   private hasReturnedOnce = false;
 
+  private mediaRecorder: MediaRecorder | null = null;
+
   constructor(
     private renderer: Renderer2,
     private api: ApiService,
@@ -224,12 +226,8 @@ export class CaptureVideoComponent implements OnInit {
       .getUserMedia(this.videoContraints)
       .then((stream) => {
         this.bindStream(stream);
+        return this.startRecordingVideo(stream);
       })
-      .then(() =>
-        this.startRecordingVideo(
-          this.previewElement.nativeElement.captureStream()
-        )
-      )
       .then((recordedChunks) => {
         this.recordChunks(recordedChunks);
       });
@@ -314,18 +312,23 @@ export class CaptureVideoComponent implements OnInit {
 
   startRecordingVideo(stream: any) {
     this.videoButtonTitle = 'Stop';
-    let recorder = new MediaRecorder(stream);
+    const options = { mimeType: 'video/webm;codecs=vp8,opus' };
+    this.mediaRecorder = new MediaRecorder(stream, options);
     let data: any = [];
 
-    recorder.ondataavailable = (event: any) => data.push(event.data);
-    recorder.start();
+    this.mediaRecorder!.ondataavailable = (event: any) => data.push(event.data);
+    if (stream.active) {
+        this.mediaRecorder!.start();
+    } else {
+        console.error("Поток неактивен. Возможно, доступ к камере/микрофону был закрыт.");
+    }
 
     let stopped = new Promise((resolve, reject) => {
-      recorder.onstop = resolve;
-      recorder.onerror = (event: any) => reject(event);
+      this.mediaRecorder!.onstop = resolve;
+      this.mediaRecorder!.onerror = (event: any) => reject(event);
     });
 
-    let recorded = () => recorder.state == 'recording' && recorder.stop();
+    let recorded = () => this.mediaRecorder!.state == 'recording' && this.mediaRecorder!.stop();
 
     return Promise.all([stopped, recorded]).then(() => data);
   }
@@ -350,11 +353,27 @@ export class CaptureVideoComponent implements OnInit {
   };
 
   stop(stream: any) {
-    stream.getTracks().forEach(function (track: any) {
-      track.stop();
-    });
+    // 1. Сначала останавливаем MediaRecorder
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      // ВАЖНО: onstop сработает асинхронно и завершит Promise из startRecordingVideo
+      this.mediaRecorder.stop();
+    }
+
+    // 2. Затем останавливаем физические треки камеры
+    if (stream && stream.getTracks) {
+      stream.getTracks().forEach((track: any) => {
+        track.stop();
+      });
+    }
+
+    // 3. Сбрасываем UI
     this.videoButtonTitle = 'Start';
     this.isCapturingVideo = false;
+
+    // 4. Очищаем таймаут, чтобы он не сработал повторно через 5 минут
+    if (this.durationTimeout) {
+      clearTimeout(this.durationTimeout);
+    }
   }
 
   ngOnDestroy() {

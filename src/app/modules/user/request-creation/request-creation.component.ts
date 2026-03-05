@@ -481,7 +481,7 @@ export class RequestCreationComponent implements OnInit, OnDestroy {
       : String(company);
 
     const requestData: /*VacancyapimodelsVacancyRequestCreateData*/ any  = {
-      company_name: companyName || undefined,
+      // company_name: companyName || undefined,
       vacancy_name: step1?.vacancy_name || undefined,
       department_id: step1?.department_id || undefined,
       company_struct_id: step1?.company_struct_id || undefined,

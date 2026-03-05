@@ -107,7 +107,7 @@ export class RequestCreationComponent implements OnInit, OnDestroy {
   schedules = scheduleTypes;
   form = new FormGroup({
     [StepForm.Step1]: new FormGroup({
-      [Step1Fields.CompanyName]: new FormControl<DictapimodelsCompanyData | null>(null, [Validators.required]),
+      // [Step1Fields.CompanyName]: new FormControl<DictapimodelsCompanyData | null>(null, [Validators.required]),
       [Step1Fields.VacancyName]: new FormControl('', [Validators.required]),
       [Step1Fields.CompanyStructId]: new FormControl('', [Validators.required]),
       [Step1Fields.DepartmentId]: new FormControl('', [Validators.required]),

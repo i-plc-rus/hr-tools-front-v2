@@ -1,6 +1,6 @@
-import { Component, inject, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, forwardRef, inject, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../../../../api/Api';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   DictapimodelsCityView,
   DictapimodelsCompanyStructView,
@@ -34,6 +34,43 @@ import { EMPTY, map, Observable, startWith, switchMap } from 'rxjs';
 import { LoaderComponent } from '../../../../../components/loader/loader.component';
 import { MatStep, MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
+import { employmentTypes, scheduleTypes } from '../../../user-consts';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+
+export enum StepForm {
+  Step1 = 'step1',
+  Step2 = 'step2',
+  Step3 = 'step3',
+}
+export enum Step1Fields {
+  CompanyName = 'company_name',
+  VacancyName = 'vacancy_name',
+  CompanyStructId = 'company_struct_id',
+  DepartmentId = 'department_id',
+  JobTitleId = 'job_title_id',
+  PlaceOfWork = 'place_of_work',
+  RemoteWork = 'remote_work',
+  ChiefFio = 'chief_fio',
+  Probation = 'probation',
+  Schedule = 'schedule',
+  Employment = 'employment',
+  Salary = 'salary',
+  Bonus = 'bonus',
+}
+
+export enum Step2Fields {
+  Requirements = 'requirements',
+  Skills = 'skills',
+  AdditionalInformation = 'additionalInformation',
+}
+
+export enum Step3Fields {
+  // OpenedPositions = 'opened_positions',
+  // Urgency = 'urgency',
+  // RequestType = 'request_type',
+  // Experience = 'experience',
+  Interviewers = 'interviewers',
+}
 
 @Component({
   selector: 'app-request-template',
@@ -51,11 +88,25 @@ import { Router } from '@angular/router';
     TextInputComponent,
     TextEditorComponent,
     LoaderComponent,
+    MatSlideToggle,
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RequestTemplateComponent),
+      multi: true // Позволяет регистрировать несколько аксессоров
+    }
   ],
   templateUrl: './request-template.component.html',
   styleUrl: './request-template.component.scss'
 })
 export class RequestTemplateComponent implements OnInit, OnChanges {
+  StepForm = StepForm;
+  Step1Fields = Step1Fields;
+  Step2Fields = Step2Fields;
+  Step3Fields = Step3Fields;
+
+  @Input() control!: FormControl;
   @Input() requestId!: string | null;
   @Input() formDisabled = false;
   @Input() commentDisabled? = false;
@@ -113,42 +164,48 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     { name: 'Новая позиция', value: ModelsVRType.VRTypeNew },
     { name: 'Замена', value: ModelsVRType.VRTypeReplace },
   ];
-
-  employments: { name: string; value: ModelsEmployment }[] = [
-    { name: 'Временная', value: ModelsEmployment.EmploymentTemporary },
-    { name: 'Постоянная', value: ModelsEmployment.EmploymentFull },
-    { name: 'Стажировка', value: ModelsEmployment.EmploymentInternship },
-    { name: 'Частичная', value: ModelsEmployment.EmploymentPartial },
-  ];
-
-  schedules: { name: string; value: ModelsSchedule }[] = [
-    { name: 'Гибкий', value: ModelsSchedule.ScheduleFlexible },
-    { name: 'Сменный', value: ModelsSchedule.ScheduleFlyInFlyOut },
-    { name: 'Неполный день', value: ModelsSchedule.SchedulePartTime },
-    { name: 'Полный день', value: ModelsSchedule.ScheduleFullDay },
-    { name: 'Вахта', value: ModelsSchedule.ScheduleShift },
-  ];
-
+  
+  employments = employmentTypes;
+  schedules = scheduleTypes;
   form = new FormGroup({
-    company_id: new FormControl(''),
-    company_name: new FormControl('', [Validators.required]),
-    vacancy_name: new FormControl('', [Validators.required]),
-    department_id: new FormControl('', [Validators.required]),
-    company_struct_id: new FormControl('', [Validators.required]),
-    job_title_id: new FormControl('', [Validators.required]),
-    place_of_work: new FormControl(''),
-    chief_fio: new FormControl('', [Validators.required]),
-    city_id: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
-    opened_positions: new FormControl(null, [Validators.required, Validators.min(1)]),
-    urgency: new FormControl<ModelsVRUrgency | undefined>(undefined),
-    request_type: new FormControl<ModelsVRType | undefined>(undefined),
-    requirements: new FormControl(''),
-    employment: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
-    experience: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
-    schedule: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),
-    selection_type: new FormControl<ModelsVRSelectionType | undefined>(undefined),
+    [StepForm.Step1]: new FormGroup({
+      // [Step1Fields.CompanyName]: new FormControl<DictapimodelsCompanyData | null>(null, [Validators.required]),
+      [Step1Fields.VacancyName]: new FormControl('', [Validators.required]),
+      [Step1Fields.CompanyStructId]: new FormControl('', [Validators.required]),
+      [Step1Fields.DepartmentId]: new FormControl('', [Validators.required]),
+      [Step1Fields.JobTitleId]: new FormControl('', [Validators.required]),
+      [Step1Fields.PlaceOfWork]: new FormControl(''),
+      [Step1Fields.RemoteWork]: new FormControl(false),
+      [Step1Fields.ChiefFio]: new FormControl('', [Validators.required]),
+      [Step1Fields.Probation]: new FormControl('', [Validators.required]),
+      [Step1Fields.Schedule]: new FormControl<ModelsSchedule | undefined>(undefined, [Validators.required]),
+      [Step1Fields.Employment]: new FormControl<ModelsEmployment | undefined>(undefined, [Validators.required]),
+      [Step1Fields.Salary]: new FormControl(''),
+      [Step1Fields.Bonus]: new FormControl(''),
+    }),
+
+    [StepForm.Step2]: new FormGroup({
+      // [Step2Fields.CityId]: new FormControl<DictapimodelsCityView | null>(null, [Validators.required]),
+      [Step2Fields.Requirements]: new FormControl('', [Validators.required]),
+      [Step2Fields.Skills]: new FormControl(''),
+      [Step2Fields.AdditionalInformation]: new FormControl(''),
+    }),
+
+    [StepForm.Step3]: new FormGroup({
+      // [Step3Fields.OpenedPositions]: new FormControl(null, [Validators.required, Validators.min(1)]),
+      // [Step3Fields.Urgency]: new FormControl<ModelsVRUrgency | undefined>(undefined, [Validators.required]),
+      // [Step3Fields.RequestType]: new FormControl<ModelsVRType | undefined>(undefined, [Validators.required]),
+      // [Step3Fields.Experience]: new FormControl<ModelsExperience | undefined>(undefined, [Validators.required]),
+      [Step3Fields.Interviewers]: new FormArray([
+        new FormGroup({
+          space_user_id: new FormControl('', [Validators.required]),
+          stage: new FormControl(1),
+        }),
+      ])
+    }),
+
     description: new FormControl(''),
-    approval_stages: new FormArray([]),
+    selection_type: new FormControl<ModelsVRSelectionType | undefined>(ModelsVRSelectionType.VRSelectionTypePersonal),
   });
 
   ngOnInit(): void {
@@ -188,7 +245,7 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     this.form.patchValue(formData);
     this.companyStructureArray = this.companyStructure;
 
-    this.initializeApprovalStages();
+    // this.initializeApprovalStages();
 
     if (companyStructId) {
       this.api
@@ -200,7 +257,7 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
             this.companyDepartmentArray = departmentResponse.body.data || [];
             
             if (departmentId) {
-              this.form.patchValue({ department_id: departmentId });
+              this.form.patchValue({  });
             }
 
             if (departmentId) {
@@ -217,7 +274,7 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
             if (response && response.body) {
               this.companyJobsNamesArray = response.body.data || [];
               if (jobTitleId) {
-                this.form.patchValue({ job_title_id: jobTitleId });
+                // this.form.patchValue({  });
               }
             }
             this.isLoaded = true;
@@ -274,11 +331,7 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
   }
 
   initializeCityAutocomplete(): void {
-    this.filteredCity$ = this.form.controls['city_id'].valueChanges.pipe(
-      startWith(''),
-      map((value) => (typeof value === 'string' ? value : value?.address)),
-      map((address) => (address ? this._filterCities(address) : this.city.slice()))
-    );
+   const step2 = this.form.get(StepForm.Step2) as FormGroup;
   }
 
   private _filterCities(address: string): DictapimodelsCityView[] {
@@ -299,59 +352,59 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     this.isLastStep = index === 2;
   }
 
-  get approvalStages(): FormArray {
-    return this.form.get('approval_stages') as FormArray;
-  }
+  // get approvalStages(): FormArray {
+  //   return this.form.get('approval_stages') as FormArray;
+  // }
 
-  initializeApprovalStages(): void {
-    const approvalStagesArray = this.approvalStages;
-    approvalStagesArray.clear();
+  // initializeApprovalStages(): void {
+  //   const approvalStagesArray = this.approvalStages;
+  //   approvalStagesArray.clear();
 
-    if (this.approvalsList && this.approvalsList.length > 0) {
-      this.approvalsList.forEach((task: any, index: number) => {
-        approvalStagesArray.push(
-          new FormGroup({
-            space_user_id: new FormControl(task.assignee_user_id || '', [Validators.required]),
-            stage: new FormControl(index + 1),
-          })
-        );
-      });
-    } else {
-      approvalStagesArray.push(
-        new FormGroup({
-          space_user_id: new FormControl('', [Validators.required]),
-          stage: new FormControl(1),
-        })
-      );
-    }
-  }
+  //   if (this.approvalsList && this.approvalsList.length > 0) {
+  //     this.approvalsList.forEach((task: any, index: number) => {
+  //       approvalStagesArray.push(
+  //         new FormGroup({
+  //           space_user_id: new FormControl(task.assignee_user_id || '', [Validators.required]),
+  //           stage: new FormControl(index + 1),
+  //         })
+  //       );
+  //     });
+  //   } else {
+  //     approvalStagesArray.push(
+  //       new FormGroup({
+  //         space_user_id: new FormControl('', [Validators.required]),
+  //         stage: new FormControl(1),
+  //       })
+  //     );
+  //   }
+  // }
 
-  addInterviewer(): void {
-    this.approvalStages.push(
-      new FormGroup({
-        space_user_id: new FormControl('', [Validators.required]),
-        stage: new FormControl(this.approvalStages.length + 1),
-      })
-    );
-  }
+  // addInterviewer(): void {
+  //   this.approvalStages.push(
+  //     new FormGroup({
+  //       space_user_id: new FormControl('', [Validators.required]),
+  //       stage: new FormControl(this.approvalStages.length + 1),
+  //     })
+  //   );
+  // }
 
-  removeInterviewer(index: number): void {
-    if (this.approvalStages.length > 1) {
-      this.approvalStages.removeAt(index);
-      for (let i = index; i < this.approvalStages.length; i++) {
-        this.approvalStages.at(i)?.get('stage')?.setValue(i + 1);
-      }
-    }
-  }
+  // removeInterviewer(index: number): void {
+  //   if (this.approvalStages.length > 1) {
+  //     this.approvalStages.removeAt(index);
+  //     for (let i = index; i < this.approvalStages.length; i++) {
+  //       this.approvalStages.at(i)?.get('stage')?.setValue(i + 1);
+  //     }
+  //   }
+  // }
 
-  onOptionChange(event: any, index: number) {
-    const selectedValue = event.value;
-    const controlToUpdate = this.approvalStages.at(index);
+  // onOptionChange(event: any, index: number) {
+  //   const selectedValue = event.value;
+  //   const controlToUpdate = this.approvalStages.at(index);
 
-    controlToUpdate.patchValue({
-      space_user_id: selectedValue,
-    });
-  }
+  //   controlToUpdate.patchValue({
+  //     space_user_id: selectedValue,
+  //   });
+  // }
 
   goToNextStep() {
     this.stepper.next();
@@ -361,15 +414,15 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     this.router.navigate(['/user/request/list'])
   }
 
-  getAvailableUsers(excludedInterviewerIndex: number): SpaceapimodelsSpaceUser[] {
-    const selectedIds = new Set<string>();
-    for (let i = 0; i < this.approvalStages.length; i++) {
-      if (i === excludedInterviewerIndex) continue;
-      const id = this.approvalStages.at(i)?.get('space_user_id')?.value;
-      if (id) selectedIds.add(String(id));
-    }
-    return this.users.filter((u) => !selectedIds.has(String(u.id)));
-  }
+  // getAvailableUsers(excludedInterviewerIndex: number): SpaceapimodelsSpaceUser[] {
+  //   const selectedIds = new Set<string>();
+  //   for (let i = 0; i < this.approvalStages.length; i++) {
+  //     if (i === excludedInterviewerIndex) continue;
+  //     const id = this.approvalStages.at(i)?.get('space_user_id')?.value;
+  //     if (id) selectedIds.add(String(id));
+  //   }
+  //   return this.users.filter((u) => !selectedIds.has(String(u.id)));
+  // }
 
   getApprovalStateDisplayName(state: ModelsApprovalState | string | undefined): string {
     if (!state) return '';
@@ -382,40 +435,51 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     };
     return stateMap[state] ?? state;
   }
+  
+  getControl(step: StepForm, field: string): FormControl<any> {
+    const control = this.form.get(`${step}.${field}`);
+
+    if (control instanceof FormControl) {
+      return control as FormControl<any>;
+    } else {
+      console.warn(`Control ${step}.${field} is not a FormControl`);
+      return new FormControl();
+    }
+  }
 
   getFormData(): VacancyapimodelsVacancyRequestEditData {
     const formValue = this.form.value;
 
     return {
-      company_name: formValue.company_name || undefined,
-      company_id: formValue.company_id || undefined,
-      vacancy_name: formValue.vacancy_name || undefined,
-      department_id: formValue.department_id || undefined,
-      company_struct_id: formValue.company_struct_id || undefined,
-      job_title_id: formValue.job_title_id || undefined,
-      city_id:
-        typeof formValue.city_id === 'object' && formValue.city_id?.id
-          ? formValue.city_id.id
-          : typeof formValue.city_id === 'string'
-            ? formValue.city_id
-            : undefined,
-      place_of_work: formValue.place_of_work || undefined,
-      chief_fio: formValue.chief_fio || undefined,
-      opened_positions: formValue.opened_positions ? Number(formValue.opened_positions) : undefined,
-      urgency: formValue.urgency || undefined,
-      request_type: formValue.request_type || undefined,
-      requirements: formValue.requirements || undefined,
-      employment: formValue.employment || undefined,
-      experience: formValue.experience || undefined,
-      schedule: formValue.schedule || undefined,
-      selection_type: formValue.selection_type || undefined,
-      description: formValue.description || undefined,
-      approval_stages:
-        this.approvalStages.value.map(
-          (stage: { space_user_id: string | null; stage: number | null }) => ({
-            assignee_user_id: stage.space_user_id || undefined,
-          })
-        ) || [],
+      // company_name: formValue.company_name || undefined,
+      // company_id: formValue.company_id || undefined,
+      // vacancy_name: formValue.vacancy_name || undefined,
+      // department_id: formValue.department_id || undefined,
+      // company_struct_id: formValue.company_struct_id || undefined,
+      // job_title_id: formValue.job_title_id || undefined,
+      // city_id:
+      //   typeof formValue.city_id === 'object' && formValue.city_id?.id
+      //     ? formValue.city_id.id
+      //     : typeof formValue.city_id === 'string'
+      //       ? formValue.city_id
+      //       : undefined,
+      // place_of_work: formValue.place_of_work || undefined,
+      // chief_fio: formValue.chief_fio || undefined,
+      // opened_positions: formValue.opened_positions ? Number(formValue.opened_positions) : undefined,
+      // urgency: formValue.urgency || undefined,
+      // request_type: formValue.request_type || undefined,
+      // requirements: formValue.requirements || undefined,
+      // employment: formValue.employment || undefined,
+      // experience: formValue.experience || undefined,
+      // schedule: formValue.schedule || undefined,
+      // selection_type: formValue.selection_type || undefined,
+      // description: formValue.description || undefined,
+      // approval_stages:
+      //   this.approvalStages.value.map(
+      //     (stage: { space_user_id: string | null; stage: number | null }) => ({
+      //       assignee_user_id: stage.space_user_id || undefined,
+      //     })
+      //   ) || [],
     };
   }
 }

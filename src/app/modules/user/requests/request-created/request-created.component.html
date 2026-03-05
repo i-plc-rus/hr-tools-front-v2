@@ -78,11 +78,11 @@
   <div class="min-w-[400px] flex flex-col py-[40px] px-4 bg-[#f8fbff]">
     <div class="flex items-center justify-between mb-8">
       <h2 class="text-2xl w-[max-content]">Комментарии к заявке</h2>
-      <mat-icon
+      <!-- <mat-icon
         (click)="showCommentsPanel = !showCommentsPanel"
         class="cursor-pointer"
         >close</mat-icon
-      >
+      > -->
     </div>
     <div class="h-[calc(100vh-100px)] overflow-auto">
       @for (comment of history; track $index) {

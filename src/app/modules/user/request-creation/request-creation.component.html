@@ -278,18 +278,34 @@
 
             <section class="p-5 rounded-2xl bg-[#f8fbff]">
               <h2 class="text-3xl mb-4">Навыки</h2>
-              <app-text-input
+              <app-text-editor
+                [formControl]="
+                  getControl(StepForm.Step2, Step2Fields.Skills)
+                "
+                class="w-full bg-white"
+                height="160px"
+              >
+              </app-text-editor>
+              <!-- <app-text-input
                 [formControl]="getControl(StepForm.Step2, Step2Fields.Skills)"
                 type="text"
                 label="Навыки"
                 class="w-full relative"
               >
-              </app-text-input>
+              </app-text-input> -->
             </section>
 
             <section class="p-5 rounded-2xl bg-[#f8fbff]">
               <h2 class="text-3xl mb-4">Дополнительная информация</h2>
-              <app-text-input
+              <app-text-editor
+                [formControl]="
+                  getControl(StepForm.Step2, Step2Fields.AdditionalInformation)
+                "
+                class="w-full bg-white"
+                height="160px"
+              >
+              </app-text-editor>
+              <!-- <app-text-input
                 [formControl]="
                   getControl(StepForm.Step2, Step2Fields.AdditionalInformation)
                 "
@@ -297,7 +313,7 @@
                 label="Дополнительная информация"
                 class="w-full relative"
               >
-              </app-text-input>
+              </app-text-input> -->
             </section>
           </div>
         </mat-tab>
@@ -399,7 +415,7 @@
       >
         Сохранить черновик
       </button>
-      <button mat-flat-button class="btn-primary" (click)="onSubmit()">
+      <button mat-flat-button class="btn-primary" (click)="onSubmit()" [disabled]="form.invalid">
         Отправить на согласование
       </button>
     </div>

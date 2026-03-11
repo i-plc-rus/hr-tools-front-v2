@@ -92,6 +92,7 @@ export class RequestCreationComponent implements OnInit, OnDestroy {
   ModelsVRSelectionType = ModelsVRSelectionType;
 
   experiences = experienceTypes;
+  searchText: string = '';
 
   urgencys: {name: string; value: ModelsVRUrgency}[] = [
     {name: 'Срочно', value: ModelsVRUrgency.VRTypeUrgent},
@@ -307,6 +308,8 @@ export class RequestCreationComponent implements OnInit, OnDestroy {
       for (let i = index; i < this.interviewers.length; i++) {
         this.interviewers.at(i)?.get('stage')?.setValue(i + 1);
       }
+    } else {
+      this.interviewers.at(0).get('space_user_id')?.reset();
     }
   }
 
@@ -345,6 +348,30 @@ export class RequestCreationComponent implements OnInit, OnDestroy {
       map((name) =>
         name ? this._filterCompanies(name) : this.companyNameArray.slice(),
       ),
+    );
+  }
+
+  displayFn(userId: any): string {
+    if (!userId || !this.users) return '';
+    const user = this.users.find((u: SpaceapimodelsSpaceUser) => u.id === userId);
+    return user ? `${user.last_name} ${user.first_name}` : '';
+  }
+
+  getFilteredUsers(index: number) {
+    const control = this.interviewers.at(index).get('space_user_id');
+    const searchValue = control?.value;
+
+    // Получаем список еще не выбранных пользователей (ваша существующая логика)
+    const availableUsers = this.getAvailableUsers(index);
+
+    // Если значение не строка (т.е. уже выбран ID или пусто), показываем всех доступных
+    if (typeof searchValue !== 'string') {
+      return availableUsers;
+    }
+
+    const filterValue = searchValue.toLowerCase();
+    return availableUsers.filter(user =>
+      `${user.last_name} ${user.first_name}`.toLowerCase().includes(filterValue)
     );
   }
 

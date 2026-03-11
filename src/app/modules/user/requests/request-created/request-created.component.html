@@ -50,24 +50,26 @@
       </app-request-template>
 
       @if (
-        (isLastStep && user?.id === vacancyDetails?.author_id) ||
-        (isLastStep && user?.role === ModelsUserRole.AdminRole)
+        (user?.id === vacancyDetails?.author_id) ||
+        (user?.role === ModelsUserRole.AdminRole)
       ) {
         <div
-          class="flex justify-left items-center mt-[auto] gap-3 pt-4 shrink-0"
+          class="flex justify-left items-center mt-[auto] gap-3 shrink-0"
         >
+          
+          <button mat-flat-button class="btn-primary" (click)="sendToUpdate()">
+            На доработку
+          </button>
           <button
             mat-flat-button
             class="btn-primary"
             (click)="openSendToApprovalConfirm()"
           >
-            На согласование
+            Согласовать
           </button>
-          <button mat-flat-button class="btn-primary" (click)="sendToUpdate()">
-            Обновить
-          </button>
+          <div class="w-12"></div>
           <button mat-flat-button class="btn-primary" (click)="cancelClaim()">
-            Отменить заявку
+            Отклонить заявку
           </button>
         </div>
       }

@@ -447,39 +447,40 @@ export class RequestTemplateComponent implements OnInit, OnChanges {
     }
   }
 
-  getFormData(): VacancyapimodelsVacancyRequestEditData {
-    const formValue = this.form.value;
+  private formatThousands(value: string | number | null | undefined): string | undefined {
+    if (value == null || value === '') return undefined;
+    const digits = String(value).replace(/\D/g, '');
+    if (!digits) return undefined;
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+
+  getFormData(): /*VacancyapimodelsVacancyRequestEditData*/ any {
+    const step1 = (this.form.get(StepForm.Step1) as FormGroup)?.getRawValue();
+    const step2 = this.form.get(StepForm.Step2)?.value;
+    const step3 = this.form.get(StepForm.Step3)?.value;
+    
 
     return {
-      // company_name: formValue.company_name || undefined,
-      // company_id: formValue.company_id || undefined,
-      // vacancy_name: formValue.vacancy_name || undefined,
-      // department_id: formValue.department_id || undefined,
-      // company_struct_id: formValue.company_struct_id || undefined,
-      // job_title_id: formValue.job_title_id || undefined,
-      // city_id:
-      //   typeof formValue.city_id === 'object' && formValue.city_id?.id
-      //     ? formValue.city_id.id
-      //     : typeof formValue.city_id === 'string'
-      //       ? formValue.city_id
-      //       : undefined,
-      // place_of_work: formValue.place_of_work || undefined,
-      // chief_fio: formValue.chief_fio || undefined,
-      // opened_positions: formValue.opened_positions ? Number(formValue.opened_positions) : undefined,
-      // urgency: formValue.urgency || undefined,
-      // request_type: formValue.request_type || undefined,
-      // requirements: formValue.requirements || undefined,
-      // employment: formValue.employment || undefined,
-      // experience: formValue.experience || undefined,
-      // schedule: formValue.schedule || undefined,
-      // selection_type: formValue.selection_type || undefined,
-      // description: formValue.description || undefined,
-      // approval_stages:
-      //   this.approvalStages.value.map(
-      //     (stage: { space_user_id: string | null; stage: number | null }) => ({
-      //       assignee_user_id: stage.space_user_id || undefined,
-      //     })
-      //   ) || [],
+      vacancy_name: step1?.vacancy_name || undefined,
+      department_id: step1?.department_id || undefined,
+      company_struct_id: step1?.company_struct_id || undefined,
+      job_title_id: step1?.job_title_id || undefined,
+      remote_work: step1?.remote_work || false,
+      chief_fio: step1?.chief_fio || undefined,
+      employment: step1?.employment as ModelsEmployment,
+      schedule: step1?.schedule as ModelsSchedule,
+      place_of_work: step1?.place_of_work || undefined,
+      probation: step1?.probation || undefined,
+      salary: this.formatThousands(step1?.salary),
+      bonus: this.formatThousands(step1?.bonus),
+      requirements: step2?.requirements || undefined,
+      skills: step2?.skills || undefined,
+      additionalInformation: step2?.additionalInformation || undefined,
+      approval_stages: step3?.interviewers?.map(
+        (interviewer: { space_user_id: string | null; stage: number | null }) => ({
+          assignee_user_id: interviewer.space_user_id || undefined,
+        })
+      ) || [],
     };
   }
 }

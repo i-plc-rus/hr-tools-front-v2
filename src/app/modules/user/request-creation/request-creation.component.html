@@ -341,32 +341,27 @@
                         <div class="flex items-center">
                           <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Выберите сотрудника</mat-label>
-                            <mat-select
-                              #userSelect
-                              formControlName="space_user_id"
-                              (selectionChange)="onOptionChange($event, $index)"
-                            >
-                              @for (
-                                item of getAvailableUsers($index);
-                                track item
-                              ) {
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="space_user_id" 
+                              [matAutocomplete]="auto"
+                              placeholder="Введите имя..."
+                            />
+                            
+                            @if (interviewer.get("space_user_id")?.invalid && !interviewer.get("space_user_id")?.untouched) {
+                              <mat-icon matSuffix svgIcon="error" class="text-red-500"></mat-icon>
+                            }
+
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                              @for (item of getFilteredUsers($index); track item.id) {
                                 <mat-option [value]="item.id">
                                   {{ item.last_name }} {{ item.first_name }}
                                 </mat-option>
                               }
-                              @if (
-                                interviewer.get("space_user_id")?.invalid &&
-                                !interviewer.get("space_user_id")?.untouched
-                              ) {
-                                <span
-                                  class="absolute right-0 top-1 w-12 h-12 flex justify-center items-center"
-                                >
-                                  <mat-icon svgIcon="error"></mat-icon>
-                                </span>
-                              }
-                            </mat-select>
+                            </mat-autocomplete>
                           </mat-form-field>
-                          @if ($index > 0) {
+                          @if (interviewers.length > 1 || interviewers.at(0).get('space_user_id')?.value) {
                             <button
                               type="button"
                               mat-icon-button
@@ -380,7 +375,8 @@
                             >
                               <mat-icon svgIcon="delete"></mat-icon>
                             </button>
-                          } @else {
+                          }
+                          <!-- } @else {
                             <button
                               type="button"
                               mat-icon-button
@@ -389,7 +385,7 @@
                             >
                               <mat-icon svgIcon="delete"></mat-icon>
                             </button>
-                          }
+                          } -->
                         </div>
                       </div>
                     }

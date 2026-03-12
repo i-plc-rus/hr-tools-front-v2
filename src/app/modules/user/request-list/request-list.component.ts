@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ScreenWidthService} from '../../../services/screen-width.service';
 import {VacancyRequestView} from '../../../models/VacancyRequest';
 import {ApiService} from '../../../api/Api';
 import {
   DictapimodelsCityView,
   ModelsApprovalState,
+  ModelsUserRole,
   ModelsVRSelectionType,
   ModelsVRStatus,
   SpaceapimodelsSpaceUser,
@@ -26,6 +27,7 @@ import {forkJoin, Subject, Subscription, switchMap} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {SnackBarService} from '../../../services/snackbar.service';
 import { RequestStateService, RequestFilterState } from '../../../services/request-state.service';
+import { UserService } from '../../../services/user.service';
 // import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 // import { DateAdapterRus, RUS_DATE_FORMATS } from '../../../adapters/ru-date.adapter';
 
@@ -117,6 +119,8 @@ export class RequestListComponent implements OnInit, AfterViewInit, OnDestroy {
   filterCount = 0;
   private subscriptions: Subscription[] = [];
   isFilterOpen: boolean = false;
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   @ViewChild('requestContainer') requestContainer!: ElementRef;
 

@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {Router} from '@angular/router';
-import {SpaceapimodelsSpaceUser} from '../api/data-contracts';
+import {ModelsUserRole, SpaceapimodelsSpaceUser} from '../api/data-contracts';
 import {TokenService} from './token.service';
 
 @Injectable({
@@ -13,6 +13,8 @@ export class UserService {
     private router: Router
   ) { }
 
+  private userSignal = signal<SpaceapimodelsSpaceUser | null>(null);
+
   logout() {
     this.tokenService.clearToken();
     this.clearUserData();
@@ -20,9 +22,15 @@ export class UserService {
   }
 
   setUserData(data: SpaceapimodelsSpaceUser) {
+    this.userSignal.set(data);
     localStorage.setItem('spaceId', data.space_id || '');
     localStorage.setItem('userId', data.id || '');
     // localStorage.setItem('isAdmin', data.is_admin ? 'true' : 'false');
+  }
+
+  hasRole(role: ModelsUserRole): boolean {
+    const currentUser = this.userSignal();
+    return currentUser?.role === role;
   }
 
   clearUserData() {
@@ -30,5 +38,4 @@ export class UserService {
     localStorage.removeItem('userId');
     localStorage.removeItem('isAdmin');
   }
-
 }

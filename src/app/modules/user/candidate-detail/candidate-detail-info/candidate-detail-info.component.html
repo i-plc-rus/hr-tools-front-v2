@@ -51,7 +51,7 @@
             <mat-icon svgIcon="assignment-ind" />
           </button>
         } @else {
-          <button mat-icon-button class="btn-primary" (click)="openEditModal()">
+          <button mat-icon-button class="btn-primary" [disabled]="userService.hasRole(Roles.ManagerRole)" (click)="openEditModal()">
             <mat-icon svgIcon="edit" />
           </button>
         }

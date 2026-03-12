@@ -160,7 +160,7 @@
             filter_list
           </mat-icon>
         </button>
-        <button mat-flat-button class="btn-secondary" [routerLink]="['..', 'create']">
+        <button mat-flat-button class="btn-secondary" [routerLink]="['..', 'create']" [disabled]="userService.hasRole(Roles.SpecialistRole) || userService.hasRole(Roles.ManagerRole)">
           <mat-icon>add</mat-icon>
           <span>Создать вакансию</span>
         </button>

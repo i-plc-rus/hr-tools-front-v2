@@ -101,7 +101,7 @@
         </button>
         <h1 class="text-[32px] leading-10 whitespace-normal">
           {{ vacancy?.vacancy_name }}
-          <button mat-icon-button [routerLink]="['..']" class="btn-primary">
+          <button mat-icon-button [routerLink]="['..']" [disabled]="userService.hasRole(Roles.ManagerRole)" class="btn-primary">
             <mat-icon svgIcon="border-color" />
           </button>
         </h1>

@@ -163,7 +163,7 @@
           <mat-icon svgIcon="article-shortcut" />
           Выгрузить в Excel
         </button>
-        <button mat-flat-button class="btn-secondary" (click)="openAddApplicantModal()">
+        <button mat-flat-button class="btn-secondary" [disabled]="userService.hasRole(Roles.ManagerRole) || userService.hasRole(Roles.SpecialistRole)" (click)="openAddApplicantModal()">
           <mat-icon>add</mat-icon>
           Добавить кандидата
         </button>

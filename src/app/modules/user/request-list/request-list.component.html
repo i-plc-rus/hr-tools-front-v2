@@ -171,7 +171,7 @@
         <button mat-icon-button (click)="sort()" class="btn-secondary">
           <mat-icon [class.rotate-180]="!sortByDesc" class="transition-all"> filter_list </mat-icon>
         </button>
-        <button mat-flat-button class="btn-secondary" [routerLink]="['..', 'create']">
+        <button mat-flat-button class="btn-secondary" [disabled]="userService.hasRole(Roles.HRRole)" [routerLink]="['..', 'create']">
           <mat-icon>add</mat-icon>
           <span>Создать заявку</span>
         </button>

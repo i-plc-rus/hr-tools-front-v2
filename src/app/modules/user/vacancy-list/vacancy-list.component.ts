@@ -103,6 +103,8 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searchCity.setValue(saved.searchCity, { emitEvent: false });
       this.searchRequestAuthor.setValue(saved.searchRequestAuthor, { emitEvent: false });
 
+      this.sortByDesc = saved.sort?.created_at_desc ?? true;
+
       this.filterCount = saved.filterCount;
       setTimeout(() => this.isFilterOpen = saved.isFilterOpen);
 

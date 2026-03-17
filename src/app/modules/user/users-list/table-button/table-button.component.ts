@@ -1,7 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 import {ICellRendererParams} from 'ag-grid-community';
 import {SpaceUser as User} from '../../../../models/SpaceUser';
+import { UserService } from '../../../../services/user.service';
+import { ModelsUserRole } from '../../../../api/data-contracts';
 
 
 type Params = ICellRendererParams<User> & {
@@ -18,6 +20,9 @@ export class TableButtonComponent implements ICellRendererAngularComp {
   params!: Params;
 
   constructor() { }
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   agInit(params: Params): void {
     this.params = params;

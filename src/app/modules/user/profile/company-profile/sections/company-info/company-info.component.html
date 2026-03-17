@@ -58,7 +58,7 @@
       </div>
 
   <div class="mt-4">
-    <button mat-flat-button class="btn-primary" (click)="saveCompanySettings()" [disabled]="companyForm.pristine || companyForm.invalid">
+    <button mat-flat-button class="btn-primary" (click)="saveCompanySettings()" [disabled]="companyForm.pristine || companyForm.invalid || userService.hasRole(Roles.SpecialistRole) || userService.hasRole(Roles.HRRole)">
       Сохранить
     </button>
   </div>

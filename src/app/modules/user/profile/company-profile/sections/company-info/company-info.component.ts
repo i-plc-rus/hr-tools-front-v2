@@ -1,10 +1,12 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../../../../../api/Api';
 import {LoadingWrapperService} from '../../../services/loading-wrapper.service';
 import {SnackBarService} from '../../../../../../services/snackbar.service';
 import {TIMEZONES} from './timezones';
 import {first} from 'rxjs';
+import { UserService } from '../../../../../../services/user.service';
+import { ModelsUserRole } from '../../../../../../api/data-contracts';
 
 @Component({
   selector: 'app-company-info',
@@ -17,6 +19,9 @@ export class CompanyInfoComponent implements OnInit {
   quillConfig = {
     toolbar: [['bold', 'italic', 'underline']] // Жирный, курсив, подчёркнутый
   };
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   timezones = TIMEZONES;
@@ -35,10 +40,10 @@ export class CompanyInfoComponent implements OnInit {
 
   private initForm(): void {
     this.companyForm = this.fb.group({
-      companyName: ['', Validators.required],
-      website: ['', Validators.required],
-      timezone: [{value: ''}],
-      description: ['']
+      companyName: [{value: '', disabled: this.userService.hasRole(this.Roles.SpecialistRole) || this.userService.hasRole(this.Roles.HRRole)}, Validators.required],
+      website: [{value: '', disabled: this.userService.hasRole(this.Roles.SpecialistRole) || this.userService.hasRole(this.Roles.HRRole)}, Validators.required],
+      timezone: [{value: '', disabled: this.userService.hasRole(this.Roles.SpecialistRole) || this.userService.hasRole(this.Roles.HRRole)}],
+      description: [{value: '', disabled: this.userService.hasRole(this.Roles.SpecialistRole) || this.userService.hasRole(this.Roles.HRRole)}]
     });
   }
 

@@ -1,6 +1,8 @@
-<button mat-icon-button class="btn-primary" (click)="onEdit()">
-  <mat-icon svgIcon="edit"></mat-icon>
-</button>
-<button mat-icon-button class="btn-primary" (click)="onDelete()">
-  <mat-icon svgIcon="delete"></mat-icon>
-</button>
+@if (!userService.hasRole(Roles.SpecialistRole)) {
+  <button mat-icon-button class="btn-primary" (click)="onEdit()">
+    <mat-icon svgIcon="edit"></mat-icon>
+  </button>
+  <button mat-icon-button class="btn-primary" (click)="onDelete()">
+    <mat-icon svgIcon="delete"></mat-icon>
+  </button>
+}

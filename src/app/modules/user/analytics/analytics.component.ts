@@ -28,7 +28,8 @@ export class AnalyticsComponent implements AfterViewInit {
 
         embedDashboard({
           id: this.dashboardId,
-          supersetDomain: 'https://superset.hr-tools.pro',
+          // supersetDomain: 'https://superset.hr-tools.pro',
+          supersetDomain: 'https://superset-demo1.hr-tools.pro',          
           mountPoint,
           fetchGuestToken: async () => token,
           dashboardUiConfig: {

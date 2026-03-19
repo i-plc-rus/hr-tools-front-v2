@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {MobileMenuService} from '../../services/mobile-menu.service';
 import {UserService} from '../../services/user.service';
+import { ModelsUserRole } from '../../api/data-contracts';
 
 @Component({
   selector: 'app-user',
@@ -11,8 +12,10 @@ export class UserComponent {
 
   constructor(
     private menuService: MobileMenuService,
-    private userService: UserService
+    public userService: UserService
   ) { }
+
+  public readonly Roles = ModelsUserRole;
 
   openMobileMenu() {
     this.menuService.open();

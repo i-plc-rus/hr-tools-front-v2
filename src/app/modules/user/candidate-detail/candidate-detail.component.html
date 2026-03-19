@@ -19,13 +19,13 @@
               <mat-icon>arrow_back</mat-icon>
             </button>
           }
-          <button mat-button class="btn-danger" (click)="openRejectModal()">
+          <button mat-button class="btn-danger" (click)="openRejectModal()" [disabled]="userService.hasRole(Roles.ManagerRole)">
             <mat-icon svgIcon="cancel"/>
             <span>Отменить</span>
           </button>
-          <button mat-button class="btn-primary" [matMenuTriggerFor]="changeStageContent">
+          <button mat-button class="btn-primary" [matMenuTriggerFor]="changeStageContent" [disabled]="userService.hasRole(Roles.ManagerRole)">
             <mat-icon>arrow_forward</mat-icon>
-            <span class="text-[var(--text-main)]">Перевести</span>
+            <span>Перевести</span>
           </button>
           <mat-menu #changeStageContent="matMenu">
             @for (stage of stages; track $index) {

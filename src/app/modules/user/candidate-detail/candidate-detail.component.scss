@@ -13,3 +13,11 @@
 .candidate-detail {
   @apply flex h-full justify-center py-4 px-6;
 }
+
+.btn-primary span {
+    color: var(--text-main);
+}
+
+.btn-primary:disabled span {
+    --text-main: #999;
+}

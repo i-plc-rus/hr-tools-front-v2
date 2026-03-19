@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  inject,
   Input,
   OnChanges, OnDestroy,
   OnInit,
@@ -18,12 +19,14 @@ import {
   ApplicantapimodelsApplicantHistoryFilter,
   ApplicantapimodelsApplicantHistoryView,
   FilesapimodelsFileView,
+  ModelsUserRole,
   VacancyapimodelsSelectionStageView
 } from '../../../api/data-contracts';
 import {ApplicantHistoryView} from '../../../models/ApplicantHistory';
 import {MatTabGroup} from '@angular/material/tabs';
 import {SnackBarService} from '../../../services/snackbar.service';
 import { PDFDocumentProxy } from 'ng2-pdf-viewer';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-candidate-detail',
@@ -46,6 +49,9 @@ export class CandidateDetailComponent implements OnInit,AfterViewInit, OnChanges
   comment = new FormControl('');
   @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   selectedTabIndex = 0;
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   private tabIndexTimeoutId?: number;
   private printTimeoutId?: number;

@@ -8,10 +8,12 @@ import { ApiService } from '../../../../api/Api';
 import {
   DictapimodelsCityView,
   DictapimodelsCompanyStructView,
+  ModelsUserRole,
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyRequestView
 } from '../../../../api/data-contracts';
 import { MatIcon } from '@angular/material/icon';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-request-approved',
@@ -26,6 +28,8 @@ export class RequestApprovedComponent implements OnInit, AfterViewInit, OnDestro
   private snackBarService = inject(SnackBarService);
   private api = inject(ApiService);
   private destroy$ = new Subject<void>();
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   @ViewChild(RequestTemplateComponent) templateComponent!: RequestTemplateComponent;
   protected requestId!: string | null;

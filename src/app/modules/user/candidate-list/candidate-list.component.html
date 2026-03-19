@@ -153,8 +153,8 @@
             <mat-icon class="!text-[16px] !w-4 !h-4">arrow_drop_down</mat-icon>
           </div>
           <mat-menu #filterCandidateContent="matMenu">
-            <button mat-menu-item (click)="openRejectCandidateModal(selectedApplicants)">Отклонить</button>
-            <button mat-menu-item [disabled]="!selectedSameVacancy" (click)="openChangeStageModal(selectedApplicants)">Перевести на этап</button>
+            <button mat-menu-item [disabled]="userService.hasRole(Roles.ManagerRole)" (click)="openRejectCandidateModal(selectedApplicants)">Отклонить</button>
+            <button mat-menu-item [disabled]="!selectedSameVacancy || userService.hasRole(Roles.ManagerRole)" (click)="openChangeStageModal(selectedApplicants)">Перевести на этап</button>
           </mat-menu>
         }
       </div>

@@ -160,18 +160,36 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    this.api
-      .v1SpaceExtHhPublishUpdate(this.vacancy.id, { observe: 'response' })
-      .subscribe({
-        next: () => {
-          this.getStatuses();
-          this.isLoading = false;
-        },
-        error: (error) => {
-          this.errorMessageHH = JSON.parse(error.message).error.message;
-          this.isLoading = false;
-        },
+    const isUpdate = this.vacancy.hh?.status === "Черновик" || !!this.vacancy.hh?.draft_id;
+
+    if (isUpdate) {
+      this.api.v1SpaceExtHhDraftDelete(this.vacancy.id, { observe: 'response'}).subscribe({
+        next: () => this.createDraft(), 
+        error: (error) => this.handleError(error)
       });
+    } else {
+      this.createDraft();
+    }
+  }
+
+  private createDraft() {
+    this.api.v1SpaceExtHhDraftUpdate(this.vacancy!.id, { observe: 'response' }).subscribe({
+      next: () => {
+        this.isLoading = false;
+        window.location.href = 'https://hh.ru/employer/vacancies/drafts';
+      },
+      error: (error) => this.handleError(error)
+    });
+  }
+
+  private handleError(error: any) {
+    this.isLoading = false;
+    try {
+      const errorData = JSON.parse(error.message);
+      this.errorMessageHH = errorData.error?.message || errorData.message;
+    } catch {
+      this.errorMessageHH = "Произошла ошибка при работе с hh";
+    }
   }
 
   publishAvitoVacancy() {

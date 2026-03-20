@@ -196,6 +196,174 @@ public v1AdminPanelUserUpdateUpdate (userId: string, body: AdminpanelapimodelsUs
     })
 }
             /**
+ * @description Отправка чистого промпта, без проверок и преобразований
+ *
+ * @tags ИИ
+ * @name V1AiPromptCreate
+ * @summary Отправка промпта в ИИ
+ * @request POST:/api/v1/ai/prompt
+ */
+public v1AiPromptCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options?: RequestOptions): Observable<void>;
+public v1AiPromptCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiPromptCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'POST',
+        this.baseUrl + `/api/v1/ai/prompt`,
+        {
+                body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Отправка промпта в ИИ с проверкой ответа на соответствие ожидаемой структуре
+ *
+ * @tags ИИ
+ * @name V1AiQuestionsPromptCheckCreate
+ * @summary Отправка промпта в ИИ (генерация вопросов шаг 1)
+ * @request POST:/api/v1/ai/questions_prompt/check
+ */
+public v1AiQuestionsPromptCheckCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options?: RequestOptions): Observable<void>;
+public v1AiQuestionsPromptCheckCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiQuestionsPromptCheckCreate (data: {
+  /** Промпт */
+    prompt: string,
+
+}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'POST',
+        this.baseUrl + `/api/v1/ai/questions_prompt/check`,
+        {
+                body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Заполение шаблона промпта данными кандидата/вакансии, отправка результата в ИИ, проверка ответа на соответствие ожидаемой структуре
+ *
+ * @tags ИИ
+ * @name V1AiQuestionsPromptCheckOnApplicantCreate
+ * @summary Отправка промпта в ИИ (генерация вопросов шаг 1 (для кандидата))
+ * @request POST:/api/v1/ai/questions_prompt/check_on_applicant
+ */
+public v1AiQuestionsPromptCheckOnApplicantCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options?: RequestOptions): Observable<void>;
+public v1AiQuestionsPromptCheckOnApplicantCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiQuestionsPromptCheckOnApplicantCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'POST',
+        this.baseUrl + `/api/v1/ai/questions_prompt/check_on_applicant`,
+        {
+                body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Проверка шаблона промпта, формирование конечного промпта из шаблона с данными по вакансии, кандидату и тп
+ *
+ * @tags ИИ
+ * @name V1AiQuestionsPromptValidateTemplateCreate
+ * @summary Проверка шаблона промпта (генерация вопросов шаг 1 (для кандидата))
+ * @request POST:/api/v1/ai/questions_prompt/validate_template
+ */
+public v1AiQuestionsPromptValidateTemplateCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options?: RequestOptions): Observable<void>;
+public v1AiQuestionsPromptValidateTemplateCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiQuestionsPromptValidateTemplateCreate (data: {
+  /** Шиблон промпта, содержащий тэги {{}} */
+    prompt_template: string,
+  /** Ид кандидата */
+    applicant_id: string,
+
+}, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'POST',
+        this.baseUrl + `/api/v1/ai/questions_prompt/validate_template`,
+        {
+                body: data,                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * No description
+ *
+ * @tags ИИ
+ * @name V1AiStatusList
+ * @summary Проверка наличия выполняемых запросов
+ * @request GET:/api/v1/ai/status
+ */
+public v1AiStatusList (id: string, options?: RequestOptions): Observable<void>;
+public v1AiStatusList (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiStatusList (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'GET',
+        this.baseUrl + `/api/v1/ai/status`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * No description
+ *
+ * @tags ИИ
+ * @name V1AiResultList
+ * @summary Результат отправки промпта в ИИ
+ * @request GET:/api/v1/ai/{id}/result
+ */
+public v1AiResultList (id: string, options?: RequestOptions): Observable<void>;
+public v1AiResultList (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<void>>;
+public v1AiResultList (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<void> | void> {
+    return this.http.request<void>(
+        'GET',
+        this.baseUrl + `/api/v1/ai/${id}/result`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Проверить почту
  *
  * @tags Регистрация_организации
@@ -2591,6 +2759,24 @@ public v1SpaceExtAvitoConnectUriList (options: RequestOptions & { observe: 'resp
     })
 }
             /**
+ * @description Удаление авторизации
+ *
+ * @tags Интеграция Avito
+ * @name V1SpaceExtAvitoRemoveList
+ * @summary Удаление авторизации
+ * @request GET:/api/v1/space/ext/avito/remove
+ */
+public v1SpaceExtAvitoRemoveList (options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceExtAvitoRemoveList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceExtAvitoRemoveList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'GET',
+        this.baseUrl + `/api/v1/space/ext/avito/remove`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Привязать существующую вакансию
  *
  * @tags Интеграция Avito
@@ -2732,6 +2918,24 @@ public v1SpaceExtHhConnectUriList (options: RequestOptions & { observe: 'respons
     })
 }
             /**
+ * @description Удаление авторизации
+ *
+ * @tags Интеграция HeadHunter
+ * @name V1SpaceExtHhRemoveList
+ * @summary Удаление авторизации
+ * @request GET:/api/v1/space/ext/hh/remove
+ */
+public v1SpaceExtHhRemoveList (options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceExtHhRemoveList (options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceExtHhRemoveList (options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'GET',
+        this.baseUrl + `/api/v1/space/ext/hh/remove`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
  * @description Привязать существующую вакансию
  *
  * @tags Интеграция HeadHunter
@@ -2763,6 +2967,42 @@ public v1SpaceExtHhCloseUpdate (id: string, options: RequestOptions & { observe:
     return this.http.request<ApimodelsResponse>(
         'PUT',
         this.baseUrl + `/api/v1/space/ext/hh/${id}/close`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Публикация черновика вакансии
+ *
+ * @tags Интеграция HeadHunter
+ * @name V1SpaceExtHhDraftUpdate
+ * @summary Публикация черновика вакансии
+ * @request PUT:/api/v1/space/ext/hh/{id}/draft
+ */
+public v1SpaceExtHhDraftUpdate (id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceExtHhDraftUpdate (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceExtHhDraftUpdate (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'PUT',
+        this.baseUrl + `/api/v1/space/ext/hh/${id}/draft`,
+        {
+                                ...options as unknown as {observe: "response"},
+    })
+}
+            /**
+ * @description Удаление черновика вакансии
+ *
+ * @tags Интеграция HeadHunter
+ * @name V1SpaceExtHhDraftDelete
+ * @summary Удаление черновика вакансии
+ * @request DELETE:/api/v1/space/ext/hh/{id}/draft
+ */
+public v1SpaceExtHhDraftDelete (id: string, options?: RequestOptions): Observable<ApimodelsResponse>;
+public v1SpaceExtHhDraftDelete (id: string, options?: RequestOptions & { observe: 'response' }): Observable<HttpResponse<ApimodelsResponse>>;
+public v1SpaceExtHhDraftDelete (id: string, options: RequestOptions & { observe: 'response' } = {observe: 'response'}): Observable<HttpResponse<ApimodelsResponse> | ApimodelsResponse> {
+    return this.http.request<ApimodelsResponse>(
+        'DELETE',
+        this.baseUrl + `/api/v1/space/ext/hh/${id}/draft`,
         {
                                 ...options as unknown as {observe: "response"},
     })

@@ -176,7 +176,7 @@ export class VacancyPublicationComponent implements OnInit {
     this.api.v1SpaceExtHhDraftUpdate(this.vacancy!.id, { observe: 'response' }).subscribe({
       next: () => {
         this.isLoading = false;
-        window.location.href = 'https://hh.ru/employer/vacancies/drafts';
+        window.open('https://hh.ru/employer/vacancies/drafts', '_blank');
       },
       error: (error) => this.handleError(error)
     });

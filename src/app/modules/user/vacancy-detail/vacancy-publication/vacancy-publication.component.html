@@ -38,7 +38,7 @@
               <button mat-flat-button class="btn-secondary" (click)="connectHH()">Подключить</button>
             }
             @case ('Не размещена') {
-              <button mat-flat-button class="btn-primary" (click)="publishHHVacancy()">{{ (vacancy?.hh?.status === 'Черновик') ? 'Обновить черновик' : 'Опубликовать черновик' }}</button>
+              <button mat-flat-button class="btn-primary" (click)="publishHHVacancy()">{{ (vacancy?.external?.head_hunter?.status === 'Черновик') ? 'Обновить черновик' : 'Опубликовать черновик' }}</button>
             }
             @case ('Опубликована') {
               <div class="flex flex-col gap-4">

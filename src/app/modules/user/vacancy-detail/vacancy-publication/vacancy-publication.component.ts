@@ -160,7 +160,7 @@ export class VacancyPublicationComponent implements OnInit {
     this.isLoading = true;
     this.clearErrors();
 
-    const isUpdate = this.vacancy.hh?.status === "Черновик" || !!this.vacancy.hh?.draft_id;
+    const isUpdate = this.vacancy.external?.head_hunter?.status === "Черновик" || !!this.vacancy.external?.head_hunter?.draft_id;
 
     if (isUpdate) {
       this.api.v1SpaceExtHhDraftDelete(this.vacancy.id, { observe: 'response'}).subscribe({

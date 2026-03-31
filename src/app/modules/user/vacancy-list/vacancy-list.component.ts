@@ -81,6 +81,7 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public userService = inject(UserService);
   public readonly Roles = ModelsUserRole; 
+  public modelsVacancyStatus = ModelsVacancyStatus;
 
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 

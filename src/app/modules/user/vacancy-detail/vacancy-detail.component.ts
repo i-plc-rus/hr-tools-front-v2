@@ -58,6 +58,8 @@ export class VacancyDetailComponent implements OnInit {
   });
   statuses = vacancyStatuses;
 
+  public modelsVacancyStatus = ModelsVacancyStatus;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private api: ApiService,
@@ -70,6 +72,14 @@ export class VacancyDetailComponent implements OnInit {
       if (params['id']) {
         this.getVacancyById(params['id']);
       } else this.isNewVacancy = true;
+    });
+
+    this.activatedRoute.queryParams.subscribe((queryParams) => {
+      const targetCategory = queryParams['category'];
+      
+      if (targetCategory && this.category.value !== targetCategory) {
+        this.category.setValue(targetCategory);
+      }
     });
   }
 

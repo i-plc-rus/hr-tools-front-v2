@@ -9,7 +9,7 @@ import { embedDashboard } from '@superset-ui/embedded-sdk';
   styleUrls: ['./analytics.component.scss']
 })
 export class AnalyticsComponent implements AfterViewInit {
-  private dashboardId = '99713cac-98b4-4784-884f-9f73613462c4';
+  // private dashboardId = '99713cac-98b4-4784-884f-9f73613462c4';
 
   @ViewChild('supersetContainer', { static: false })
   supersetContainer!: ElementRef<HTMLDivElement>;
@@ -21,13 +21,14 @@ export class AnalyticsComponent implements AfterViewInit {
     this.api.v1SpaceSupersetGuestTokenList({ dashboard_code: 'pen_dash' }).subscribe({
       next: (res: any) => {
         const token = res.body?.data?.token;
+        const dashboardId = res.body?.data?.dashboard_id;
         if (!token) return;
 
         const mountPoint = document.getElementById('superset-container');
         if (!mountPoint) return;
 
         embedDashboard({
-          id: this.dashboardId,
+          id: dashboardId,
           // supersetDomain: 'https://superset.hr-tools.pro',
           supersetDomain: 'https://superset-demo1.hr-tools.pro',          
           mountPoint,

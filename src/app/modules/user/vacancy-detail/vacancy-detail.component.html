@@ -37,7 +37,7 @@
             Описание вакансии
           </mat-chip-option>
           <mat-chip-option value="publication" [selectable]="category.value !== 'publication'"
-                           [disabled]="isNewVacancy">
+                           [disabled]="isNewVacancy || vacancy!.status !== modelsVacancyStatus.VacancyStatusOpened">
             Публикация
           </mat-chip-option>
           <mat-chip-option value="stages" [selectable]="category.value !== 'stages'" [disabled]="isNewVacancy">

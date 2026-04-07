@@ -233,6 +233,12 @@
                     </span>
                   </div>
                 }
+                @if (vacancy.status === modelsVacancyStatus.VacancyStatusOpened && (userService.hasRole(Roles.AdminRole) || userService.hasRole(Roles.HRRole))) {             
+                  <div class="flex-grow"></div> 
+                  <button mat-flat-button [routerLink]="['..', vacancy.id]" [queryParams]="{ category: 'publication' }" class="publish-button btn-primary text-nowrap mt-3">
+                    Публикация
+                  </button>
+                } 
               </div>
               <div class="flex justify-between items-center">
                 <div class="flex gap-4">

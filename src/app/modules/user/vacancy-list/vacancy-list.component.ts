@@ -12,6 +12,7 @@ import {
   ModelsVRUrgency,
   SpaceapimodelsSpaceUser,
   VacancyapimodelsVacancyView,
+  ModelsUserRole,
 } from '../../../api/data-contracts';
 import {VacancyModalService} from '../../../services/vacancy-modal.service';
 import {ApiService} from '../../../api/Api';
@@ -21,6 +22,7 @@ import {vacancyStatuses} from '../user-consts';
 import {Subject, Subscription, forkJoin} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { VacancyFilterState, VacancyStateService } from '../../../services/vacancy-state.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-vacancy-list',
@@ -76,6 +78,10 @@ export class VacancyListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterCount = 0;
   private subscriptions: Subscription[] = [];
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole; 
+  public modelsVacancyStatus = ModelsVacancyStatus;
 
   @ViewChild('vacancyContainer', { static: false }) vacancyContainer!: ElementRef;
 

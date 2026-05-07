@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {UsersModalService} from '../../../services/users-modal.service';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams} from 'ag-grid-community';
 import {TableButtonComponent} from './table-button/table-button.component';
 import {LoaderComponent} from '../../../components/loader/loader.component';
 import {SpaceUser as User} from '../../../models/SpaceUser';
 import {ApiService} from '../../../api/Api';
-import {SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
+import {ModelsUserRole, SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
+import { UserService } from '../../../services/user.service';
 
 
 @Component({
@@ -14,6 +15,9 @@ import {SpaceapimodelsSpaceUser} from '../../../api/data-contracts';
   styleUrl: './users-list.component.scss'
 })
 export class UsersListComponent implements OnInit, OnDestroy {
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
   private gridApi!: GridApi<User>;
   searchValue: string = '';
 

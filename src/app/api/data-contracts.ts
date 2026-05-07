@@ -25,6 +25,14 @@ export enum VacancyapimodelsSearchPeriod {
   SearchByPeriod = 5,
 }
 
+export enum ModelsVideoInterviewStatus {
+  VideoInterviewStatusAbsent = "ABSENT",
+  VideoInterviewStatusUploading = "UPLOADING",
+  VideoInterviewStatusProcessing = "PROCESSING",
+  VideoInterviewStatusReady = "READY",
+  VideoInterviewStatusError = "ERROR",
+}
+
 export enum ModelsVacancyStatus {
   VacancyStatusOpened = "Открыта",
   VacancyStatusCanceled = "Отменена",
@@ -38,6 +46,7 @@ export enum ModelsVacancyPubStatus {
   VacancyPubStatusPublished = "Опубликована",
   VacancyPubStatusRejected = "Отклонена",
   VacancyPubStatusClosed = "Закрыта",
+  VacancyPubStatusDraft = "Черновик",
 }
 
 export enum ModelsVRUrgency {
@@ -671,6 +680,7 @@ export interface ApplicantapimodelsApplicantView {
   vacancy_id?: string;
   /** Название вакансии */
   vacancy_name?: string;
+  videoInterview?: ApplicantapimodelsVideoInterview;
 }
 
 export interface ApplicantapimodelsApplicantViewExt {
@@ -741,6 +751,7 @@ export interface ApplicantapimodelsApplicantViewExt {
   vacancy_id?: string;
   /** Название вакансии */
   vacancy_name?: string;
+  videoInterview?: ApplicantapimodelsVideoInterview;
 }
 
 export interface ApplicantapimodelsApplicantVkSurvey {
@@ -836,6 +847,10 @@ export interface ApplicantapimodelsSourceItem {
   count?: number;
   name?: string;
   percent?: number;
+}
+
+export interface ApplicantapimodelsVideoInterview {
+  status?: ModelsVideoInterviewStatus;
 }
 
 export interface ApplicantapimodelsXlsExportRequest {
@@ -1285,13 +1300,26 @@ export interface NegotiationapimodelsStatusData {
 }
 
 export interface SpaceapimodelsCreateOrganization {
-  admin_data?: SpaceapimodelsCreateUser;
+  admin_data?: SpaceapimodelsCreateSpaceAdmin;
   director_name?: string;
   full_name?: string;
   inn?: string;
   kpp?: string;
   ogrn?: string;
   organization_name?: string;
+}
+
+export interface SpaceapimodelsCreateSpaceAdmin {
+  /** Email пользователя */
+  email?: string;
+  /** Имя */
+  first_name?: string;
+  /** Фамилия */
+  last_name?: string;
+  /** Пароль */
+  password?: string;
+  /** Телефон */
+  phone_number?: string;
 }
 
 export interface SpaceapimodelsCreateUser {
@@ -1305,12 +1333,6 @@ export interface SpaceapimodelsCreateUser {
   phone_number?: string;
   role?: ModelsUserRole;
   space_id?: string;
-  /** Статус пользователя */
-  status?: string;
-  /** Дата изменения статуса */
-  status_changed_at?: string;
-  /** Комментарий к статусу */
-  status_comment?: string;
   /** Текст подписи */
   text_sign?: string;
 }
@@ -1708,7 +1730,9 @@ export interface VacancyapimodelsExternalData {
 }
 
 export interface VacancyapimodelsExternalLink {
+  draft_id?: string;
   id?: string;
+  status?: ModelsVacancyPubStatus;
   url?: string;
 }
 

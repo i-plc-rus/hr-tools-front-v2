@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantSort, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsVacancyStatus} from '../../../api/data-contracts';
+import {ApplicantapimodelsApplicantFilter, ApplicantapimodelsApplicantSort, ApplicantapimodelsApplicantView, DictapimodelsCityView, ModelsAddedType, ModelsApAddedPeriodType, ModelsApplicantSource, ModelsApplicantStatus, ModelsGenderType, ModelsRelocationType, ModelsSchedule, ModelsUserRole, ModelsVacancyStatus} from '../../../api/data-contracts';
 import {ApiService} from '../../../api/Api';
 import {ApplicantView} from '../../../models/Applicant';
 import {ColDef, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueFormatterParams, ValueGetterParams} from 'ag-grid-community';
@@ -12,6 +12,7 @@ import {VacancyView} from '../../../models/Vacancy';
 import {relocationTypes, vacancyStatuses} from '../user-consts';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-vacancy-candidates',
@@ -140,6 +141,9 @@ export class VacancyСandidatesComponent implements OnInit, OnDestroy {
   private loading = false;
   private allDataLoaded = false;
   private destroy$ = new Subject<void>();
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   constructor(
     private activatedRoute: ActivatedRoute,

@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {
   ApplicantapimodelsApplicantFilter,
@@ -13,6 +13,7 @@ import {
   ModelsGenderType,
   ModelsRelocationType,
   ModelsSchedule,
+  ModelsUserRole,
   VacancyapimodelsVacancyFilter,
   VacancyapimodelsVacancyView
 } from '../../../api/data-contracts';
@@ -42,6 +43,7 @@ import {CandidateStatusComponent} from './candidate-status/candidate-status.comp
 import {Subject, Subscription} from 'rxjs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { CandidatesFilterState, CandidatesStateService } from '../../../services/candidates-state.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-candidate-list',
@@ -80,6 +82,9 @@ export class СandidateListComponent implements OnDestroy{
   searchVacancy = new FormControl('');
   searchCity = new FormControl('');
   searchValue = new FormControl('');
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   public customIcons = {
     sortUnSort: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

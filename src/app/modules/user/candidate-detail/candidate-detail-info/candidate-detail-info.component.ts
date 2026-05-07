@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {ApiService} from '../../../../api/Api';
 import {ApplicantViewExt} from '../../../../models/Applicant';
 import {CandidateModalService} from '../../../../services/candidate-modal.service';
+import { UserService } from '../../../../services/user.service';
+import { ModelsUserRole } from '../../../../api/data-contracts';
 
 @Component({
   selector: 'app-candidate-detail-info',
@@ -15,6 +17,9 @@ export class CandidateDetailInfoComponent {
   @Input() photo?: string;
   @Input() resume?: File;
   @Output() onSubmit = new EventEmitter();
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   constructor(
     private modalService: CandidateModalService,

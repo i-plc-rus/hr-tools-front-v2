@@ -79,13 +79,15 @@
         <span class="tracking-[0.5px] font-[500] text-xs">Календарь</span>
       </a> -->
 
-      <a matTooltip="Аналитика" matTooltipPosition="right" [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
-         class="flex flex-col items-center justify-center">
-        <span class="icon-container px-4 py-1 rounded-2xl inline-block">
-          <mat-icon svgIcon="z-arrow"></mat-icon>
-        </span>
-        <span class="tracking-[0.5px] font-[500] text-xs">Аналитика</span>
-      </a>
+      @if (!userService.hasRole(Roles.SpecialistRole)) {
+        <a matTooltip="Аналитика" matTooltipPosition="right" [routerLink]="['/user', 'analytics']" [routerLinkActive]="['active-link']"
+          class="flex flex-col items-center justify-center">
+          <span class="icon-container px-4 py-1 rounded-2xl inline-block">
+            <mat-icon svgIcon="z-arrow"></mat-icon>
+          </span>
+          <span class="tracking-[0.5px] font-[500] text-xs">Аналитика</span>
+        </a>
+      }
     </div>
 
     <div class="fixed bottom-6 inset-x-0 flex flex-col items-center gap-y-4"

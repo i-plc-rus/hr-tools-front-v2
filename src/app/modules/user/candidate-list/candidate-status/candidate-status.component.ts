@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 import {ICellRendererParams} from 'ag-grid-community';
-import {ModelsApplicantStatus} from '../../../../api/data-contracts';
+import {ModelsApplicantStatus, ModelsUserRole} from '../../../../api/data-contracts';
 import {StatusTag} from '../../../../models/StatusTag';
 import {ApplicantView} from '../../../../models/Applicant';
+import { UserService } from '../../../../services/user.service';
 
 type Params = ICellRendererParams<ApplicantView> & {
   onChange: (applicant?: ApplicantView) => void;
@@ -24,6 +25,9 @@ export class CandidateStatusComponent implements ICellRendererAngularComp, OnCha
   statuses: {className: StatusTag, value: ModelsApplicantStatus}[] = [
     {className: 'danger', value: ModelsApplicantStatus.ApplicantStatusRejected},
   ];
+
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole;
 
   constructor() { }
 

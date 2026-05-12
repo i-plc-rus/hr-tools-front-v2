@@ -15,9 +15,11 @@
       <div class="badge">{{ rowCount }}</div>
     </div>
     <span class="spacer"></span>
-    <button mat-flat-button class="btn-secondary" (click)="openAddMemberModal()">
-      + Добавить участника
-    </button>
+    @if (!userService.hasRole(Roles.SpecialistRole)) {
+      <button mat-flat-button class="btn-secondary" (click)="openAddMemberModal()">
+        + Добавить участника
+      </button>
+    }
   </mat-toolbar>
 
   <ag-grid-angular

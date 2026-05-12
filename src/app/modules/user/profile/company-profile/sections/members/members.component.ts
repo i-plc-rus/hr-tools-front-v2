@@ -2,7 +2,7 @@ import {computed, Component, DestroyRef, inject, OnDestroy, OnInit} from '@angul
 import {FormControl} from '@angular/forms';
 import {ColDef, GridApi, GridOptions, GridReadyEvent} from 'ag-grid-community';
 import {ApiService} from '../../../../../../api/Api';
-import {SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
+import {ModelsUserRole, SpaceapimodelsSpaceUser} from '../../../../../../api/data-contracts';
 import {UsersModalService} from '../../../../../../services/users-modal.service';
 import {LoaderComponent} from '../../../../../../components/loader/loader.component';
 import {CellMemberAvatarComponent} from './ag-grid-cells/cell-member-avatar/cell-member-avatar.component';
@@ -12,6 +12,7 @@ import {SpaceUser as User} from '../../../../../../models/SpaceUser';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {FilterStateService} from '../../../services/filter-state.service';
+import { UserService } from '../../../../../../services/user.service';
 
 @Component({
   selector: 'app-members',
@@ -26,6 +27,8 @@ export class MembersComponent implements OnInit, OnDestroy {
   private searchValue = '';
   filterStateService = inject(FilterStateService);
   isFilterOpened = computed(() => this.filterStateService.getFilterOpenedSignal()());
+  public userService = inject(UserService);
+  public readonly Roles = ModelsUserRole; 
 
   colDefs: ColDef<SpaceapimodelsSpaceUser>[] = [
 
